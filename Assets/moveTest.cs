@@ -10,7 +10,7 @@ public class moveTest : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slidingCoolTime;
-    private float currentSlidingCoolTime;
+    [SerializeField] private float currentSlidingCoolTime;
     [SerializeField] private bool isSlide;
     [SerializeField] private bool isSlope;
     [SerializeField] private bool isRun;
@@ -30,7 +30,8 @@ public class moveTest : MonoBehaviour
     private Rigidbody rigid;
     private Vector3 moveDirection;
     private Vector3 slidingDirection;
-    private float headBobValue;
+    private float headBobValue_x;
+    private float headBobValue_y;
     private float headOriginY;
 
     [SerializeField] private PhysicMaterial walk_defaultPm;
@@ -44,7 +45,8 @@ public class moveTest : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody>();
         currentSlidingCoolTime = 0;
-        headBobValue = 0;
+        headBobValue_x = 0;
+        headBobValue_y = 0;
         headOriginY = camPos.localPosition.y;
     }
 
@@ -84,11 +86,11 @@ public class moveTest : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        isSlide = true;
                         mainCam.GetComponent<FPPCamController>().FovMove(70, 0.1f, 1000);
 
                         if (currentSlidingCoolTime <= 0)
                         {
+                            isSlide = true;
                             rigid.AddForce(slopeResult.normalized * (new Vector3(rigid.velocity.x, rigid.velocity.z).magnitude), ForceMode.VelocityChange);
                         }
 
@@ -175,12 +177,10 @@ public class moveTest : MonoBehaviour
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
                     }
                 }
-
             }
         }
         else
         {
-
             groundCollider.enabled = false;
 
             if (isGrounded)
@@ -256,7 +256,8 @@ public class moveTest : MonoBehaviour
                 }
             }
 
-            if (!isJump)
+            if (!isJump && !isClimbing)
+            {
                 if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
@@ -273,6 +274,7 @@ public class moveTest : MonoBehaviour
                             rigid.velocity = (result.normalized * rigid.velocity.magnitude);
                     }
                 }
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
@@ -298,13 +300,11 @@ public class moveTest : MonoBehaviour
             isClimbing = false;
         }
 
-
         if (isClimbUp)
         {
             isSlide = false;
             isClimbing = false;
             isJump = false;
-            //groundCollider.material = sliding_slopePm;
 
             rigid.velocity = (climbUpPos - this.transform.position).normalized * Vector3.Distance(climbUpPos, this.transform.position) * 9f;
 
@@ -344,7 +344,10 @@ public class moveTest : MonoBehaviour
 
         if (isSlide)
         {
-            headBobValue = 0;
+            currentSlidingCoolTime = slidingCoolTime;
+
+            headBobValue_x = 0;
+            headBobValue_y = 0;
             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
 
             if (moveDirection != Vector3.zero)
@@ -364,6 +367,11 @@ public class moveTest : MonoBehaviour
         }
         else
         {
+            if (currentSlidingCoolTime > 0)
+            {
+                currentSlidingCoolTime -= Time.deltaTime;
+            }
+
             mainCam.GetComponent<FPPCamController>().FovReset();
 
             if (isGrounded)
@@ -372,40 +380,43 @@ public class moveTest : MonoBehaviour
                 {
                     groundCollider.material = walk_defaultPm;
 
-                    headBobValue += Time.deltaTime * 1.0f;
-                    if (Mathf.Sin(headBobValue) < 0)
+                    headBobValue_x = 0;
+                    headBobValue_y += Time.deltaTime * 1.0f;
+                    if (Mathf.Sin(headBobValue_y) < 0)
                     {
-                        headBobValue = 0;
+                        headBobValue_y = 0;
                     }
                     if (isCrouch)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue) / 10, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue_y) / 10, 0), Time.deltaTime * 8);
                     else
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Sin(headBobValue) / 10, 0), Time.deltaTime * 8);
-                    //headBobValue = 0;
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Sin(headBobValue_y) / 10, 0), Time.deltaTime * 8);
                 }
                 else
                 {
                     if (isRun)
-                        headBobValue += Time.deltaTime * runSpeed * 0.8f;
+                    {
+                        headBobValue_x += Time.deltaTime * runSpeed * 0.8f;
+                        headBobValue_y += Time.deltaTime * runSpeed * 0.8f;
+                    }
                     else
                     {
-                        headBobValue += Time.deltaTime * walkSpeed * 1.0f;
+                        headBobValue_x += Time.deltaTime * walkSpeed * 1.0f;
+                        headBobValue_y += Time.deltaTime * walkSpeed * 1.0f;
                     }
-                    if (Mathf.Sin(headBobValue) < 0)
+                    if (Mathf.Sin(headBobValue_y) < 0)
                     {
-                        headBobValue = 0;
+                        headBobValue_y = 0;
                     }
 
                     if (isCrouch)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue) / 6, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue_y) / 6, 0), Time.deltaTime * 8);
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Sin(headBobValue) / 3, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue_x) / 12, headOriginY + Mathf.Sin(headBobValue_y) / 3, 0), Time.deltaTime * 8);
                         else
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Sin(headBobValue) / 6, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue_x) / 15, headOriginY + Mathf.Sin(headBobValue_y) / 6, 0), Time.deltaTime * 8);
                     }
-
                 }
             }
             else
@@ -413,14 +424,14 @@ public class moveTest : MonoBehaviour
                 if (!isCrouch && !isSlide)
                 {
                     camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, 0), Time.deltaTime * 8);
-                    headBobValue = 0;
+                    headBobValue_x = 0;
+                    headBobValue_y = 0;
                 }
             }
 
             isSlope = false;
         }
 
-        if (currentSlidingCoolTime > 0)
-            currentSlidingCoolTime -= Time.deltaTime;
+        this.transform.rotation = Quaternion.LookRotation(forward);
     }
 }
