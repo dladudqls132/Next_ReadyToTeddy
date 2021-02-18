@@ -77,25 +77,7 @@ public class moveTest : MonoBehaviour
             canClimb = true;
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
             Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
-            //if (Input.GetKeyDown(KeyCode.LeftControl))
-            //{
-            //    Debug.Log(rigid.velocity.magnitude);
-            //    if (rigid.velocity.magnitude > walkSpeed)
-            //    {
-            //        if (Vector3.Dot(moveDirection, forward) > 0)
-            //        {
-            //            isSlide = true;
-            //            mainCam.GetComponent<FPPCamController>().FovMove(70, 0.1f, 1000);
 
-            //            if (currentSlidingCoolTime <= 0)
-            //            {
-            //                rigid.AddForce(slopeResult.normalized * (new Vector3(rigid.velocity.x, rigid.velocity.z).magnitude), ForceMode.VelocityChange);
-            //            }
-
-            //            slidingDirection = moveDirection;
-            //        }
-            //    }
-            //}
             if (Input.GetKey(KeyCode.LeftControl))
             {
                 if (rigid.velocity.magnitude > walkSpeed && !isSlide)
@@ -274,14 +256,22 @@ public class moveTest : MonoBehaviour
                 }
             }
 
-
             if (!isJump)
                 if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
+                    Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
 
-                    if (rigid.velocity.y >= 0 && !isSlide)
-                        rigid.velocity = (result.normalized * rigid.velocity.magnitude);
+                    if (isSlide)
+                    {
+                        if (rigid.velocity.y >= 0)
+                            rigid.velocity = (slopeResult.normalized * rigid.velocity.magnitude);
+                    }
+                    else
+                    {
+                        if (rigid.velocity.y >= 0)
+                            rigid.velocity = (result.normalized * rigid.velocity.magnitude);
+                    }
                 }
         }
 
