@@ -88,10 +88,10 @@ public class moveTest : MonoBehaviour
                     {
                         mainCam.GetComponent<FPPCamController>().FovMove(70, 0.1f, 1000);
 
-                        if (currentSlidingCoolTime <= 0)
+                        if (currentSlidingCoolTime <= 0 && !isCrouch)
                         {
                             isSlide = true;
-                            rigid.AddForce(slopeResult.normalized * (new Vector3(rigid.velocity.x, rigid.velocity.z).magnitude), ForceMode.VelocityChange);
+                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude, ForceMode.VelocityChange);
                         }
 
                         slidingDirection = moveDirection;
@@ -215,11 +215,12 @@ public class moveTest : MonoBehaviour
                         {
                             isJump = false;
                             isClimbing = true;
+                            isSlide = false;
                             rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
                         }
                     }
                 }
-                else
+                else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
                     if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
@@ -286,7 +287,7 @@ public class moveTest : MonoBehaviour
         {
             isSlide = false;
 
-            currentSlidingCoolTime = slidingCoolTime;
+            //currentSlidingCoolTime = slidingCoolTime;
             isCrouch = false;
         }
 
