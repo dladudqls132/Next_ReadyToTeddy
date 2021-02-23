@@ -30,8 +30,7 @@ public class moveTest : MonoBehaviour
     private Rigidbody rigid;
     private Vector3 moveDirection;
     private Vector3 slidingDirection;
-    private float headBobValue_x;
-    private float headBobValue_y;
+    private float headBobValue;
     private float headOriginY;
 
     [SerializeField] private PhysicMaterial walk_defaultPm;
@@ -45,8 +44,7 @@ public class moveTest : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody>();
         currentSlidingCoolTime = 0;
-        headBobValue_x = 0;
-        headBobValue_y = 0;
+        headBobValue = 0;
         headOriginY = camPos.localPosition.y;
     }
 
@@ -86,12 +84,12 @@ public class moveTest : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        mainCam.GetComponent<FPPCamController>().FovMove(70, 0.1f, 1000);
+                        mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
 
                         if (currentSlidingCoolTime <= 0 && !isCrouch)
                         {
                             isSlide = true;
-                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude, ForceMode.VelocityChange);
+                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.85f, ForceMode.VelocityChange);
                         }
 
                         slidingDirection = moveDirection;
@@ -347,8 +345,7 @@ public class moveTest : MonoBehaviour
         {
             currentSlidingCoolTime = slidingCoolTime;
 
-            headBobValue_x = 0;
-            headBobValue_y = 0;
+            headBobValue = 0;
             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
 
             if (moveDirection != Vector3.zero)
@@ -381,42 +378,32 @@ public class moveTest : MonoBehaviour
                 {
                     groundCollider.material = walk_defaultPm;
 
-                    headBobValue_x = 0;
-                    headBobValue_y += Time.deltaTime * 1.0f;
-                    if (Mathf.Sin(headBobValue_y) < 0)
-                    {
-                        headBobValue_y = 0;
-                    }
+                    headBobValue += Time.deltaTime * 1.0f;
+
                     if (isCrouch)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue_y) / 10, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
                     else
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Sin(headBobValue_y) / 10, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
                 }
                 else
                 {
                     if (isRun)
                     {
-                        headBobValue_x += Time.deltaTime * runSpeed * 0.8f;
-                        headBobValue_y += Time.deltaTime * runSpeed * 0.8f;
+                        headBobValue += Time.deltaTime * runSpeed * 0.8f;
                     }
                     else
                     {
-                        headBobValue_x += Time.deltaTime * walkSpeed * 1.0f;
-                        headBobValue_y += Time.deltaTime * walkSpeed * 1.0f;
-                    }
-                    if (Mathf.Sin(headBobValue_y) < 0)
-                    {
-                        headBobValue_y = 0;
+                        headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                     }
 
                     if (isCrouch)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Sin(headBobValue_y) / 6, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue_x) / 12, headOriginY + Mathf.Sin(headBobValue_y) / 3, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, 0), Time.deltaTime * 8);
                         else
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue_x) / 15, headOriginY + Mathf.Sin(headBobValue_y) / 6, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
                     }
                 }
             }
@@ -425,8 +412,7 @@ public class moveTest : MonoBehaviour
                 if (!isCrouch && !isSlide)
                 {
                     camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, 0), Time.deltaTime * 8);
-                    headBobValue_x = 0;
-                    headBobValue_y = 0;
+                    headBobValue = 0;
                 }
             }
 

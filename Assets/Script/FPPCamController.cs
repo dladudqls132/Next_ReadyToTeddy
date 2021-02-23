@@ -23,6 +23,8 @@ public class FPPCamController : MonoBehaviour
     private float destFov;
     private float fovStopTime;
 
+    public float GetOriginFov() { return originFov; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,14 +40,6 @@ public class FPPCamController : MonoBehaviour
 
     private void Update()
     {
-        //mouseX = Input.GetAxis("Mouse X");
-        //mouseY = Input.GetAxis("Mouse Y");
-
-        //rotY += mouseX * cameraMoveSpeed * Time.deltaTime;
-        //rotX += mouseY * cameraMoveSpeed * Time.deltaTime;
-
-        //rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
-
         if (isFovMove)
         {
             if (Mathf.Abs(Camera.main.fieldOfView - destFov) <= 0.1f)
@@ -69,7 +63,6 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-
             mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 10);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
