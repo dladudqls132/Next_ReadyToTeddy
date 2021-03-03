@@ -381,9 +381,9 @@ public class PlayerController : MonoBehaviour
                     headBobValue += Time.deltaTime * 1.0f;
 
                     if (isCrouch)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, camPos.localPosition.z), Time.deltaTime * 8);
                     else
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, camPos.localPosition.z), Time.deltaTime * 8);
                 }
                 else
                 {
@@ -401,9 +401,9 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 8);
                         else
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, camPos.localPosition.z), Time.deltaTime * 8);
                     }
                 }
             }
@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!isCrouch && !isSlide)
                 {
-                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, 0), Time.deltaTime * 8);
+                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, camPos.localPosition.z), Time.deltaTime * 8);
                     headBobValue = 0;
                 }
             }
