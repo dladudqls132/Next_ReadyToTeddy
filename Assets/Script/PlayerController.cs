@@ -5,33 +5,47 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Transform mainCam;
-
+    [SerializeField] private Transform camPos;
+    [SerializeField] private CapsuleCollider groundCollider;
     [SerializeField] private float walkSpeed;
-    [SerializeField] private float sprintSpeed;
-    [SerializeField] private float gravity;
-
-    [SerializeField] private bool isSprint;
-    [SerializeField] private bool isCrouch;
-    [SerializeField] private bool isSliding;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float slidingCoolTime;
+    [SerializeField] private float currentSlidingCoolTime;
     [SerializeField] private bool isSlide;
+    [SerializeField] private bool isSlope;
+    [SerializeField] private bool isRun;
+    [SerializeField] private bool isCrouch;
+    [SerializeField] private bool isJump;
+    [SerializeField] private bool isGrounded;
+    [SerializeField] private float jumpPower;
+    private float currentJumpPower;
+    [SerializeField] private bool isClimbing;
+    [SerializeField] private float climbPower;
+    private float currentClimbPower;
+    [SerializeField] private bool canClimb;
+    [SerializeField] private bool isClimbUp;
 
+    private Vector3 climbUpPos;
     private Vector2 moveInput;
-    private Vector3 moveDirection;
-    private Vector3 destSpeedToDirection;
-    private Vector3 tempDirection;
-    [SerializeField] private Vector3 currentSpeedToDirection;
-    private Vector2 anim_destMoveValue;
-    private Vector2 anim_currentMoveValue;
-    private Vector3 slidingDirection;
-
     private Rigidbody rigid;
-    private Animator anim;
+    private Vector3 moveDirection;
+    private Vector3 slidingDirection;
+    private float headBobValue;
+    private float headOriginY;
+
+    [SerializeField] private PhysicMaterial walk_defaultPm;
+    [SerializeField] private PhysicMaterial sliding_groundPm;
+    [SerializeField] private PhysicMaterial sliding_slopePm;
+
+    public void SetIsGrounded(bool value) { isGrounded = value; }
 
     // Start is called before the first frame update
     void Start()
     {
         rigid = this.GetComponent<Rigidbody>();
-        anim = this.GetComponent<Animator>();
+        currentSlidingCoolTime = 0;
+        headBobValue = 0;
+        headOriginY = camPos.localPosition.y;
     }
 
     // Update is called once per frame
@@ -47,179 +61,364 @@ public class PlayerController : MonoBehaviour
 
         moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        if (Input.GetKey(KeyCode.LeftControl))
+        moveDirection = (forward * moveInput.y + right * moveInput.x).normalized;
+
+        RaycastHit hit;
+
+        //Debug.DrawLine(this.transform.position, this.transform.position + Vector3.down * 0.2f);
+        //Debug.DrawLine(this.transform.position + moveDirection * 0.2f, this.transform.position + moveDirection * 0.2f + Vector3.down * 0.5f);
+        if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
-            if (currentSpeedToDirection.magnitude > sprintSpeed - 1.0f)
+            groundCollider.enabled = true;
+            if (currentJumpPower <= 0)
+                isJump = false;
+            isGrounded = true;
+            isClimbing = false;
+            canClimb = true;
+            Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
+            Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
+
+            if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (!isSlide)
+                if (rigid.velocity.magnitude > walkSpeed && !isSlide)
                 {
-                    currentSpeedToDirection = currentSpeedToDirection * 1.5f;
-                    isSliding = true;
-                    isSlide = true;
+                    if (Vector3.Dot(moveDirection, forward) > 0)
+                    {
+                        mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
+
+                        if (currentSlidingCoolTime <= 0 && !isCrouch)
+                        {
+                            isSlide = true;
+                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.85f, ForceMode.VelocityChange);
+                        }
+
+                        slidingDirection = moveDirection;
+                    }
+                }
+
+                if (!isSlide)
+                    isCrouch = true;
+
+            }
+
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide)
+            {
+                isRun = true;
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isJump = true;
+                currentJumpPower = rigid.velocity.y / 2 + jumpPower;
+            }
+
+            if (isCrouch)
+            {
+                isRun = false;
+            }
+
+            if (Vector3.Dot(forward, moveDirection) < 0.5f)
+            {
+                isRun = false;
+            }
+
+            if (isSlide)
+            {
+                if (slopeResult.y < 0)
+                {
+                    groundCollider.material = sliding_slopePm;
+                    isSlope = true;
+                }
+                else
+                {
+                    groundCollider.material = sliding_groundPm;
+                    isSlope = false;
+                }
+
+                if (moveDirection != Vector3.zero)
+                {
+                    if (Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), slidingDirection) < 0 || Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), moveDirection) < -0.75f)
+                    {
+                        isSlide = false;
+                    }
+                    else
+                    {
+                        rigid.velocity = rigid.velocity + moveDirection * 0.01f;
+                    }
+                }
+            }
+            else
+            {
+                groundCollider.material = walk_defaultPm;
+
+                if (rigid.velocity.magnitude > walkSpeed)
+                {
+                    if (isRun)
+                    {
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
+                    }
+                    else
+                    {
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
+                    }
+                }
+                else
+                {
+                    if (isRun)
+                    {
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
+                    }
+                    else
+                    {
+                        if (isCrouch)
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
+                        else
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
+                    }
                 }
             }
         }
         else
         {
-            if (isSliding)
-            {
-                isSliding = false;
-            }
-        }
+            groundCollider.enabled = false;
 
-        anim.SetBool("slide_start", isSliding);
-        //움직일때
-        if (moveInput != Vector2.zero)
-        {
-            moveDirection = (forward * moveInput.y + right * moveInput.x).normalized;
+            if (isGrounded)
+                rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
 
-            if(!isSlide)
+            isGrounded = false;
+
+            if (!isClimbUp)
             {
-                if (Input.GetKey(KeyCode.LeftShift) && moveInput.y >= 0)
+                if (!isClimbing)
                 {
-                    isSprint = true;
-
-                    destSpeedToDirection = moveDirection * sprintSpeed;
-                    anim_destMoveValue = new Vector2(0, 1);
+                    if (rigid.velocity.magnitude >= walkSpeed)
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude, rigid.velocity.y, moveDirection.z * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude), Time.deltaTime * 6);
+                    else
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, rigid.velocity.y, moveDirection.z * walkSpeed), Time.deltaTime * 4);
                 }
                 else
                 {
-                    isSprint = false;
-
-                    destSpeedToDirection = moveDirection * walkSpeed;
-                    anim_destMoveValue = new Vector2(moveInput.x / 2, moveInput.y / 2);
+                    rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed / 4, rigid.velocity.y, moveDirection.z * walkSpeed / 3), Time.deltaTime * 4);
                 }
+            }
 
-                if (Vector3.Dot(this.transform.forward, forward) > 0)
+            RaycastHit wallHit;
+            for (int i = 0; i < 12; i++)
+            {
+                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward * 0.32f);
+                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward, out wallHit, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
-                    currentSpeedToDirection = Vector3.MoveTowards(currentSpeedToDirection, destSpeedToDirection, Time.deltaTime * 50);
+                    if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
+                    {
+                        if (Input.GetKey(KeyCode.Space))
+                        {
+                            isJump = false;
+                            isClimbing = true;
+                            isSlide = false;
+                            rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
+                        }
+                    }
+                }
+                else if(moveDirection != Vector3.zero)
+                {
+                    bool isCheckObject = false;
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    {
+                        isCheckObject = true;
+                    }
+
+                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    {
+                        isCheckObject = true;
+                    }
+
+                    for (int j = 0; j < 20; j++)
+                    {
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        {
+                            isCheckObject = true;
+                        }
+                    }
+
+                    if (!isCheckObject)
+                    {
+                        isClimbUp = true;
+                        rigid.velocity = Vector3.zero;
+                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + forward * 0.45f;
+                    }
+
+                    if (isClimbing)
+                    {
+                        canClimb = false;
+                    }
+
+                    isClimbing = false;
+                }
+            }
+
+            if (!isJump && !isClimbing)
+            {
+                if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                {
+                    Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
+                    Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
+
+                    if (isSlide)
+                    {
+                        if (rigid.velocity.y >= 0)
+                            rigid.velocity = (slopeResult.normalized * rigid.velocity.magnitude);
+                    }
+                    else
+                    {
+                        if (rigid.velocity.y >= 0)
+                            rigid.velocity = (result.normalized * rigid.velocity.magnitude);
+                    }
+                }
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
+        {
+            isRun = false;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            isSlide = false;
+
+            //currentSlidingCoolTime = slidingCoolTime;
+            isCrouch = false;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (isClimbing)
+            {
+                canClimb = false;
+            }
+
+            isClimbing = false;
+        }
+
+        if (isClimbUp)
+        {
+            isSlide = false;
+            isClimbing = false;
+            isJump = false;
+
+            rigid.velocity = (climbUpPos - this.transform.position).normalized * Vector3.Distance(climbUpPos, this.transform.position) * 9f;
+
+            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.15f)
+            {
+                isClimbUp = false;
+                rigid.velocity = Vector3.zero;
+            }
+        }
+
+        if (isClimbing)
+        {
+            currentClimbPower += Time.deltaTime * (Physics.gravity.y / 3.2f);
+        }
+        else
+        {
+            if (canClimb)
+            {
+                if (rigid.velocity.y >= 0)
+                {
+                    currentClimbPower = climbPower;
                 }
                 else
-                {
-                    currentSpeedToDirection = Vector3.MoveTowards(currentSpeedToDirection, destSpeedToDirection, Time.deltaTime * 10);
-                }
+                    currentClimbPower = rigid.velocity.y / 4 + climbPower;
             }
-
-            anim_currentMoveValue = Vector2.MoveTowards(anim_currentMoveValue, anim_destMoveValue, Time.deltaTime * 6.0f);
-        }
-        else //안움직일때
-        {
-            if (!isSlide)
+            else
             {
-                isSprint = false;
-
-                destSpeedToDirection = Vector3.zero;
-                anim_destMoveValue = Vector2.zero;
-
-                currentSpeedToDirection = Vector3.MoveTowards(currentSpeedToDirection, destSpeedToDirection, Time.deltaTime * 30);
+                currentClimbPower = rigid.velocity.y;
             }
+        }
 
-            anim_currentMoveValue = Vector2.MoveTowards(anim_currentMoveValue, anim_destMoveValue, Time.deltaTime * 5);
+        if (isJump)
+        {
+            rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
+            currentJumpPower += Time.deltaTime * Physics.gravity.y;
         }
 
         if (isSlide)
         {
-            destSpeedToDirection = moveDirection + forward;
-            anim_destMoveValue = new Vector2(0, 0.5f);
-            
-            if (currentSpeedToDirection.magnitude > 1.0f)
-                currentSpeedToDirection = Vector3.MoveTowards(currentSpeedToDirection, destSpeedToDirection.normalized, Time.deltaTime * 4);
+            currentSlidingCoolTime = slidingCoolTime;
+
+            headBobValue = 0;
+            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
+
+            if (moveDirection != Vector3.zero)
+            {
+                if (rigid.velocity.magnitude <= walkSpeed)
+                {
+                    isSlide = false;
+                }
+            }
             else
             {
-
-                isSliding = false;
+                if (rigid.velocity.magnitude <= 0.5f)
+                {
+                    isSlide = false;
+                }
+            }
+        }
+        else
+        {
+            if (currentSlidingCoolTime > 0)
+            {
+                currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            isSprint = false;
-        }
+            mainCam.GetComponent<FPPCamController>().FovReset();
 
-        anim.SetFloat("horizontal", anim_currentMoveValue.x);
-        anim.SetFloat("vertical", anim_currentMoveValue.y);
-
-        if (!isSlide)
-        {
-            if (!isSprint)
+            if (isGrounded)
             {
-                if (moveInput != Vector2.zero)
+                if (moveDirection == Vector3.zero)
                 {
-                    if(moveInput.y <= 0)
-                    tempDirection = forward;
+                    groundCollider.material = walk_defaultPm;
+
+                    headBobValue += Time.deltaTime * 1.0f;
+
+                    if (isCrouch)
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
                     else
-                        tempDirection = destSpeedToDirection;
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
                 }
                 else
                 {
-                    if(Vector3.Dot(this.transform.forward, forward) < 0)
+                    if (isRun)
                     {
-                        tempDirection = forward;
+                        headBobValue += Time.deltaTime * runSpeed * 0.8f;
+                    }
+                    else
+                    {
+                        headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                     }
 
+                    if (isCrouch)
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                    else
+                    {
+                        if (isRun)
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, 0), Time.deltaTime * 8);
+                        else
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                    }
                 }
-
-         
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(tempDirection), Time.deltaTime * 8);
             }
             else
             {
-                if (destSpeedToDirection != Vector3.zero)
+                if (!isCrouch && !isSlide)
                 {
-                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(destSpeedToDirection), Time.deltaTime * 10);
+                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, 0), Time.deltaTime * 8);
+                    headBobValue = 0;
                 }
             }
-        }
-        else
-        {
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(forward), Time.deltaTime * 8);
-        }
-    }
 
-    private void FixedUpdate()
-    {
-        CalculateVelocity();
-        //rigid.velocity = new Vector3(currentSpeedToDirection.x, currentSpeedToDirection.y + gravity, currentSpeedToDirection.z);
-    }
-
-    private void OnAnimatorIK(int layerIndex)
-    {
-        anim.SetLookAtWeight(1, 0, 0.5f, 0.5f, 0.7f);
-        anim.SetLookAtPosition(mainCam.position + mainCam.forward);
-    }
-
-    void CalculateVelocity()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(rigid.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Ground")))
-        {
-            Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(currentSpeedToDirection.normalized, hit.normal));
-            result = result * currentSpeedToDirection.magnitude;
-
-            gravity = 0;
-
-            rigid.velocity = new Vector3(result.x, result.y + gravity, result.z);
-        }
-        else
-        {
-            gravity += Physics.gravity.y * Time.deltaTime;
-
-            rigid.velocity = new Vector3(currentSpeedToDirection.x, currentSpeedToDirection.y + gravity, currentSpeedToDirection.z); 
+            isSlope = false;
         }
 
-    }
-
-    void SlidingFalse()
-    {
-        Vector3 forward = mainCam.forward;
-        Vector3 right = mainCam.right;
-
-        forward.y = 0; right.y = 0;
-
-        forward.Normalize();
-        right.Normalize();
-
-        isSlide = false;
-        //currentSpeedToDirection = forward;
-        destSpeedToDirection = forward;
-        tempDirection = forward;
+        this.transform.rotation = Quaternion.LookRotation(forward);
     }
 }
