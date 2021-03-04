@@ -5,7 +5,10 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] protected Transform shotPos;
-    [SerializeField] protected bool isHitScan;
+    [SerializeField] protected bool isShot;
+    [SerializeField] protected bool canShot;
+    [SerializeField] protected float shotDelay;
+    [SerializeField] protected float currentShotDelay;
     [SerializeField] protected bool isReload;
     [SerializeField] protected float reloadTime;
     [SerializeField] protected float currentReloadTime;
@@ -14,9 +17,14 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float minDamage;
     [SerializeField] protected float maxDamage;
     [SerializeField] protected float speed;
+    protected Vector3 direction;
 
     protected virtual void Start()
     {
+        currentAmmo = maxAmmo;
         currentReloadTime = reloadTime;
+        currentShotDelay = shotDelay;
     }
+
+    public int GetAmmoCount() { return currentAmmo; }
 }
