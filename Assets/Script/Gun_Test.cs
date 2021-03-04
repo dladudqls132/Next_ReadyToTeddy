@@ -31,7 +31,7 @@ public class Gun_Test : Gun
                     Vector3 direction = (hit.point - shotPos.position).normalized;
                     float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
-                    Vector3 moveDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle * Mathf.Deg2Rad);
+                    Vector3 moveDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
 
                     RaycastHit hit2;
                     if(Physics.Raycast(shotPos.position, moveDir, out hit2, Mathf.Infinity))
