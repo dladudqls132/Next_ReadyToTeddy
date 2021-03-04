@@ -338,6 +338,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &504021922 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2299939836593854976, guid: d879bd20754f3b848b417f10e278e0c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2299939836778553517}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &504021923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504021922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d86dbdb8fc0ca4ab2373d3c2a8da3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCam: {fileID: 963194228}
+  camPos: {fileID: 911909017}
+  groundCollider: {fileID: 504021925}
+  walkSpeed: 7
+  runSpeed: 12
+  slidingCoolTime: 1.5
+  currentSlidingCoolTime: 0
+  isSlide: 0
+  isSlope: 0
+  isRun: 0
+  isCrouch: 0
+  isJump: 0
+  isGrounded: 1
+  jumpPower: 6.5
+  isClimbing: 0
+  climbPower: 5.35
+  canClimb: 0
+  isClimbUp: 0
+  walk_defaultPm: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
+  sliding_groundPm: {fileID: 13400000, guid: 6c0865cd32034ba45b7bc880840ab76e, type: 2}
+  sliding_slopePm: {fileID: 13400000, guid: c1b17bda80ff76549831a93abff4f3be, type: 2}
+--- !u!136 &504021925 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 2299939836593854978, guid: d879bd20754f3b848b417f10e278e0c6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2299939836778553517}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &612469913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1394,7 +1439,7 @@ MonoBehaviour:
   maxDamage: 0
   speed: 500
   ammoHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef, type: 3}
-  spreadAngle: 7.44
+  spreadAngle: 10
   fireNum: 15
 --- !u!23 &1311041640
 MeshRenderer:
@@ -2436,5 +2481,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2299939836593854979, guid: d879bd20754f3b848b417f10e278e0c6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d879bd20754f3b848b417f10e278e0c6, type: 3}
