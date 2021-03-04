@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform mainCam;
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
+    [SerializeField] private Transform hand;
+    [SerializeField] private GameObject weapon;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slidingCoolTime;
@@ -37,20 +39,45 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PhysicMaterial sliding_groundPm;
     [SerializeField] private PhysicMaterial sliding_slopePm;
 
+    private bool isInit;
+
     public void SetIsGrounded(bool value) { isGrounded = value; }
+    public GameObject GetWeapon() { return weapon; }
 
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         rigid = this.GetComponent<Rigidbody>();
         currentSlidingCoolTime = 0;
         headBobValue = 0;
         headOriginY = camPos.localPosition.y;
+        mainCam = Camera.main.transform;
+        hand = mainCam.Find("HandPos").Find("Hand");
+        isInit = true;
+    }
+
+    void Start()
+    {
+        if (!isInit)
+        {
+            rigid = this.GetComponent<Rigidbody>();
+            currentSlidingCoolTime = 0;
+            headBobValue = 0;
+            headOriginY = camPos.localPosition.y;
+            mainCam = Camera.main.transform;
+            hand = mainCam.Find("HandPos").Find("Hand");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(hand.GetChild(0) != null)
+        {
+            if(hand.GetChild(0) != weapon)
+                weapon = hand.GetChild(0).gameObject;
+        }
+
         Vector3 forward = mainCam.forward;
         Vector3 right = mainCam.right;
 
@@ -89,7 +116,7 @@ public class PlayerController : MonoBehaviour
                         if (currentSlidingCoolTime <= 0 && !isCrouch)
                         {
                             isSlide = true;
-                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.85f, ForceMode.VelocityChange);
+                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.7f, ForceMode.VelocityChange);
                         }
 
                         slidingDirection = moveDirection;
