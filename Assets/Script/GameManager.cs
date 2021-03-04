@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    private Pool_Bullet bulletManager;
+    private PlayerController player;
 
-    public Pool_Bullet GetBulletManager() { return bulletManager; }
+    public PlayerController GetPlayer() { return player; }
 
     // Start is called before the first frame update
     void Awake()
@@ -17,8 +17,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        bulletManager = GameObject.FindGameObjectWithTag("BulletManager").GetComponent<Pool_Bullet>();
-        bulletManager.Init();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        player.Init();
     }
-
 }
