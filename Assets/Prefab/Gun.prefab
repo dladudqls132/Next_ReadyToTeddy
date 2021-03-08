@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3434137777221342400}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ShotPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 3434137778523165887}
   - component: {fileID: 3434137778523165886}
   - component: {fileID: 3434137778523165873}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shotPos: {fileID: 3434137777221342400}
-  isHitScan: 0
+  isShot: 0
+  canShot: 0
+  shotDelay: 0
+  currentShotDelay: 0
   isReload: 0
   reloadTime: 0
   currentReloadTime: 0

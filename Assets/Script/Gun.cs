@@ -27,4 +27,6 @@ public class Gun : MonoBehaviour
     }
 
     public int GetAmmoCount() { return currentAmmo; }
+    public bool GetIsReload() { return isReload; }
+    public bool GetIsShot() { return isShot; }
 }

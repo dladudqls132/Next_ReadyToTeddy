@@ -90,6 +90,11 @@ public class PlayerController : MonoBehaviour
 
         moveDirection = (forward * moveInput.y + right * moveInput.x).normalized;
 
+        if(!weapon.GetComponent<Gun>().GetIsReload())
+            hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, -moveInput.x * 1.7f),Time.deltaTime * 8);
+        else
+            hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, 23), Time.deltaTime * 12);
+
         RaycastHit hit;
 
         //Debug.DrawLine(this.transform.position, this.transform.position + Vector3.down * 0.2f);
