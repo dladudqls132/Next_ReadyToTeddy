@@ -497,7 +497,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 10);
                         else
                             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, camPos.localPosition.z), Time.deltaTime * 8);
                     }
