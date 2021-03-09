@@ -322,7 +322,8 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(0))
         {
             weapon.Fire();
-            isCombat = true;
+            if(isGrounded)
+                isCombat = true;
             isRun = false;
             currentCombatTime = combatTime;
         }
