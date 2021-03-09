@@ -17,55 +17,6 @@ public class Gun_Test : Gun
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && canShot)
-        {
-            isReload = false;
-
-            for (int i = 0; i < fireNum; i++)
-            {
-                float rndDmg = Random.Range(minDamage, maxDamage);
-
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-                {
-                    direction = (hit.point - shotPos.position).normalized;
-
-                    //float temp = Random.Range(-Mathf.PI, Mathf.PI);
-                    //Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
-
-                    //RaycastHit hit2;
-                    //if(Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity))
-                    //{
-                    //    Instantiate(ammoHit, hit2.point, Quaternion.identity);
-                    //}
-                }
-                else
-                {
-                    direction = Camera.main.transform.forward;
-                }
-
-                float temp = Random.Range(-Mathf.PI, Mathf.PI);
-                Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
-
-                RaycastHit hit2;
-                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity))
-                {
-                    Instantiate(ammoHit, hit2.point, Quaternion.identity);
-                }
-
-                isShot = true;
-            }
-
-            currentAmmo--;
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            isReload = true;
-        }
-
         if(isShot)
         {
             currentShotDelay -= Time.deltaTime;
@@ -106,5 +57,52 @@ public class Gun_Test : Gun
             canShot = true;
         else
             canShot = false;
+    }
+
+    override public void Fire()
+    {
+        if (canShot)
+        {
+            isReload = false;
+
+            for (int i = 0; i < fireNum; i++)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+                {
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    {
+                        direction = (hit.point - shotPos.position).normalized;
+                    }
+                    else
+                    {
+                        direction = Camera.main.transform.forward;
+                    }
+                }
+
+                float temp = Random.Range(-Mathf.PI, Mathf.PI);
+                Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
+
+                RaycastHit hit2;
+                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+                {
+
+                    GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
+                    tempObect.transform.SetParent(hit2.transform, true);
+
+                    if (hit2.transform.CompareTag("Enemy"))
+                    {
+                        Enemy enemy = hit2.transform.GetComponent<Enemy>();
+                        enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                    }
+                }
+
+                isShot = true;
+            }
+
+            currentAmmo--;
+        }
     }
 }

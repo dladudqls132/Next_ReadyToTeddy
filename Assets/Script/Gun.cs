@@ -14,8 +14,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int currentAmmo;
-    [SerializeField] protected float minDamage;
-    [SerializeField] protected float maxDamage;
+    [SerializeField] protected float damagePerBullet;
     [SerializeField] protected float speed;
     protected Vector3 direction;
 
@@ -29,4 +28,9 @@ public class Gun : MonoBehaviour
     public int GetAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
+
+    public void SetIsReload(bool value) { isReload = value; }
+
+    virtual public void Fire() { }
+    public bool CanReload() { if (currentAmmo < maxAmmo) return true; return false; }
 }
