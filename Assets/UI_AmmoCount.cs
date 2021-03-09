@@ -16,11 +16,11 @@ public class UI_AmmoCount : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.Instance.GetPlayer().GetWeapon() != null)
+        if(GameManager.Instance.GetPlayer().GetWeaponGameObject() != null)
         {
-            if(GameManager.Instance.GetPlayer().GetWeapon() != gun)
+            if(GameManager.Instance.GetPlayer().GetWeaponGameObject() != gun)
             {
-                gun = GameManager.Instance.GetPlayer().GetWeapon();
+                gun = GameManager.Instance.GetPlayer().GetWeaponGameObject();
             }
         }
 
