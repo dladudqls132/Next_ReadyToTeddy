@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
     [SerializeField] private Transform hand;
+    [SerializeField] private Transform hand_Origin;
     [SerializeField] private GameObject weapon_gameObject;
     [SerializeField] private Gun weapon;
     [SerializeField] private float walkSpeed;
@@ -60,8 +61,9 @@ public class PlayerController : MonoBehaviour
         headOriginY = camPos.localPosition.y;
         mainCam = Camera.main.transform;
         hand = mainCam.Find("HandPos").Find("Hand");
-        handOriginPos = hand.localPosition;
-        handOriginRot = hand.localRotation;
+        hand_Origin = mainCam.Find("HandPos");
+        handOriginPos = hand.parent.localPosition;
+        handOriginRot = hand.parent.localRotation;
         currentCombatTime = combatTime;
         isInit = true;
     }
@@ -76,6 +78,7 @@ public class PlayerController : MonoBehaviour
             headOriginY = camPos.localPosition.y;
             mainCam = Camera.main.transform;
             hand = mainCam.Find("HandPos").Find("Hand");
+            hand_Origin = mainCam.Find("HandPos");
             handOriginPos = hand.localPosition;
             handOriginRot = hand.localRotation;
             currentCombatTime = combatTime;
@@ -368,16 +371,16 @@ public class PlayerController : MonoBehaviour
         if (isRun)
         {
             if (!weapon.GetIsReload())
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
             else
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
         }
         else
         {
             if (!weapon.GetIsReload())
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 8);
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
             else
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
         }
 
         if (isCombat)
