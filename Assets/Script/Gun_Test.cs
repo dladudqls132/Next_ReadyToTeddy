@@ -90,6 +90,7 @@ public class Gun_Test : Gun
                 {
 
                     GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
+                    tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                     tempObect.transform.SetParent(hit2.transform, true);
 
                     if (hit2.transform.CompareTag("Enemy"))
