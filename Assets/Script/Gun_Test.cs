@@ -88,7 +88,6 @@ public class Gun_Test : Gun
                 RaycastHit hit2;
                 if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player"))))
                 {
-                    Debug.Log(shotDir);
                     GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                     tempObect.transform.SetParent(hit2.transform, true);
