@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isJump;
     [SerializeField] private bool isGrounded;
     [SerializeField] private float jumpPower;
-    //[SerializeField] private float currentJumpPower;
+    private float currentJumpPower;
     [SerializeField] private bool isClimbing;
     [SerializeField] private float climbPower;
     private float currentClimbPower;
@@ -116,10 +116,8 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
             groundCollider.enabled = true;
-            if (rigid.velocity.y <= 0)
+            if (currentJumpPower <= 0)
                 isJump = false;
-            //if (currentJumpPower <= 0)
-            //    isJump = false;
             isGrounded = true;
             isClimbing = false;
             canClimb = true;
@@ -156,9 +154,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isJump = true;
-                
-                //currentJumpPower = rigid.velocity.y / 2 + jumpPower;
-                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                currentJumpPower = rigid.velocity.y / 2 + jumpPower;
             }
 
             if (isCrouch)
@@ -222,7 +218,9 @@ public class PlayerController : MonoBehaviour
                         if (isCrouch)
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
+                        {
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(0, rigid.velocity.y, 0) + result.normalized * walkSpeed, Time.deltaTime * 20);
+                        }
                     }
                 }
             }
@@ -232,7 +230,9 @@ public class PlayerController : MonoBehaviour
             groundCollider.enabled = false;
 
             if (isGrounded && !isJump)
+            {
                 rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
+            }
 
             isGrounded = false;
 
@@ -271,7 +271,7 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.45f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
@@ -283,7 +283,7 @@ public class PlayerController : MonoBehaviour
 
                     for (int j = 0; j < 20; j++)
                     {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.45f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
                             isCheckObject = true;
                         }
@@ -307,7 +307,7 @@ public class PlayerController : MonoBehaviour
 
             if (!isJump && !isClimbing)
             {
-                if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.4f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
                     Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
@@ -436,8 +436,8 @@ public class PlayerController : MonoBehaviour
 
         if (isJump)
         {
-            //rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
-            //currentJumpPower += Time.deltaTime * Physics.gravity.y;
+            rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
+            currentJumpPower += Time.deltaTime * Physics.gravity.y;
         }
 
         if (isSlide)

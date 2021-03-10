@@ -83,12 +83,12 @@ public class Gun_Test : Gun
                 }
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
-                Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)) * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up) * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
+                Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)).normalized * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up).normalized * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Player"))))
                 {
-
+                    Debug.Log(shotDir);
                     GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                     tempObect.transform.SetParent(hit2.transform, true);
