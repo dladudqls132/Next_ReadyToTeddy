@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit wallHit;
             for (int i = 0; i < 12; i++)
             {
-                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward * 0.32f);
+                Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward * 0.35f);
                 if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward, out wallHit, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
@@ -267,7 +267,7 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
@@ -279,7 +279,7 @@ public class PlayerController : MonoBehaviour
 
                     for (int j = 0; j < 20; j++)
                     {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
                             isCheckObject = true;
                         }
