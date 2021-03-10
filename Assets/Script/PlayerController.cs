@@ -8,7 +8,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
     [SerializeField] private Transform hand;
-    [SerializeField] private GameObject weapon;
+    [SerializeField] private Transform hand_Origin;
+    [SerializeField] private GameObject weapon_gameObject;
+    [SerializeField] private Gun weapon;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slidingCoolTime;
@@ -26,6 +28,9 @@ public class PlayerController : MonoBehaviour
     private float currentClimbPower;
     [SerializeField] private bool canClimb;
     [SerializeField] private bool isClimbUp;
+    [SerializeField] private bool isCombat;
+    [SerializeField] private float combatTime;
+    [SerializeField] private float currentCombatTime;
 
     private Vector3 climbUpPos;
     private Vector2 moveInput;
@@ -34,6 +39,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 slidingDirection;
     private float headBobValue;
     private float headOriginY;
+    private Vector3 handOriginPos;
+    private Quaternion handOriginRot;
 
     [SerializeField] private PhysicMaterial walk_defaultPm;
     [SerializeField] private PhysicMaterial sliding_groundPm;
@@ -42,7 +49,8 @@ public class PlayerController : MonoBehaviour
     private bool isInit;
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
-    public GameObject GetWeapon() { return weapon; }
+    public GameObject GetWeaponGameObject() { return weapon_gameObject; }
+    public Gun GetWeapon() { return weapon; }
 
     // Start is called before the first frame update
     public void Init()
@@ -53,6 +61,10 @@ public class PlayerController : MonoBehaviour
         headOriginY = camPos.localPosition.y;
         mainCam = Camera.main.transform;
         hand = mainCam.Find("HandPos").Find("Hand");
+        hand_Origin = mainCam.Find("HandPos");
+        handOriginPos = hand.parent.localPosition;
+        handOriginRot = hand.parent.localRotation;
+        currentCombatTime = combatTime;
         isInit = true;
     }
 
@@ -66,6 +78,10 @@ public class PlayerController : MonoBehaviour
             headOriginY = camPos.localPosition.y;
             mainCam = Camera.main.transform;
             hand = mainCam.Find("HandPos").Find("Hand");
+            hand_Origin = mainCam.Find("HandPos");
+            handOriginPos = hand.localPosition;
+            handOriginRot = hand.localRotation;
+            currentCombatTime = combatTime;
         }
     }
 
@@ -74,8 +90,11 @@ public class PlayerController : MonoBehaviour
     {
         if(hand.GetChild(0) != null)
         {
-            if(hand.GetChild(0) != weapon)
-                weapon = hand.GetChild(0).gameObject;
+            if (hand.GetChild(0) != weapon)
+            {
+                weapon_gameObject = hand.GetChild(0).gameObject;
+                weapon = weapon_gameObject.GetComponent<Gun>();
+            }
         }
 
         Vector3 forward = mainCam.forward;
@@ -128,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if (Input.GetKey(KeyCode.LeftShift) && !isSlide)
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat)
             {
                 isRun = true;
             }
@@ -303,6 +322,21 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        if(Input.GetMouseButtonDown(0))
+        {
+            weapon.Fire();
+            if(isGrounded)
+                isCombat = true;
+            isRun = false;
+            currentCombatTime = combatTime;
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            if(weapon.CanReload())
+                weapon.SetIsReload(true);
+        }
+
         if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
         {
             isRun = false;
@@ -324,6 +358,40 @@ public class PlayerController : MonoBehaviour
             }
 
             isClimbing = false;
+        }
+
+        //if (isRun)
+        //{
+        //    if (weapon.GetIsReload())
+        //    {
+        //        weapon.SetIsReload(false);
+        //    }
+        //}
+
+        if (isRun)
+        {
+            if (!weapon.GetIsReload())
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+            else
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+        }
+        else
+        {
+            if (!weapon.GetIsReload())
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+            else
+                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+        }
+
+        if (isCombat)
+        {
+            currentCombatTime -= Time.deltaTime;
+
+            if(currentCombatTime <= 0)
+            {
+                isCombat = false;
+                currentCombatTime = combatTime;
+            }
         }
 
         if (isClimbUp)
@@ -370,6 +438,7 @@ public class PlayerController : MonoBehaviour
 
         if (isSlide)
         {
+            isRun = false;
             currentSlidingCoolTime = slidingCoolTime;
 
             headBobValue = 0;
@@ -428,7 +497,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 10);
                         else
                             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, camPos.localPosition.z), Time.deltaTime * 8);
                     }
