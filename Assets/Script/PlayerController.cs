@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isJump;
     [SerializeField] private bool isGrounded;
     [SerializeField] private float jumpPower;
-    private float currentJumpPower;
+    //[SerializeField] private float currentJumpPower;
     [SerializeField] private bool isClimbing;
     [SerializeField] private float climbPower;
     private float currentClimbPower;
@@ -116,8 +116,10 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
             groundCollider.enabled = true;
-            if (currentJumpPower <= 0)
+            if (rigid.velocity.y <= 0)
                 isJump = false;
+            //if (currentJumpPower <= 0)
+            //    isJump = false;
             isGrounded = true;
             isClimbing = false;
             canClimb = true;
@@ -154,7 +156,9 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isJump = true;
-                currentJumpPower = rigid.velocity.y / 2 + jumpPower;
+                
+                //currentJumpPower = rigid.velocity.y / 2 + jumpPower;
+                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
             }
 
             if (isCrouch)
@@ -227,7 +231,7 @@ public class PlayerController : MonoBehaviour
         {
             groundCollider.enabled = false;
 
-            if (isGrounded)
+            if (isGrounded && !isJump)
                 rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
 
             isGrounded = false;
@@ -267,7 +271,7 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.45f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
@@ -279,7 +283,7 @@ public class PlayerController : MonoBehaviour
 
                     for (int j = 0; j < 20; j++)
                     {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.45f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
                             isCheckObject = true;
                         }
@@ -432,8 +436,8 @@ public class PlayerController : MonoBehaviour
 
         if (isJump)
         {
-            rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
-            currentJumpPower += Time.deltaTime * Physics.gravity.y;
+            //rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
+            //currentJumpPower += Time.deltaTime * Physics.gravity.y;
         }
 
         if (isSlide)
