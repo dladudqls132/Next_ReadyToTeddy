@@ -88,14 +88,16 @@ public class Gun_Test : Gun
                 RaycastHit hit2;
                 if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
                 {
-                    GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
-                    tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                    tempObect.transform.SetParent(hit2.transform, true);
-
                     if (hit2.transform.CompareTag("Enemy"))
                     {
                         Enemy enemy = hit2.transform.GetComponent<Enemy>();
                         enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                    }
+                    else
+                    {
+                        GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
+                        tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
+                        tempObect.transform.SetParent(hit2.transform, true);
                     }
                 }
 
