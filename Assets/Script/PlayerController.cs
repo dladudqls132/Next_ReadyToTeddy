@@ -126,23 +126,25 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (rigid.velocity.magnitude > walkSpeed && !isSlide)
+                if (rigid.velocity.magnitude > walkSpeed && !isSlide && !isJump)
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
                         mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
 
-                        if (currentSlidingCoolTime <= 0 && !isCrouch)
+                        if (!isCrouch)
                         {
                             isSlide = true;
-                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.7f, ForceMode.VelocityChange);
+
+                            if(currentSlidingCoolTime <= 0)
+                                rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.7f, ForceMode.VelocityChange);
                         }
 
                         slidingDirection = moveDirection;
                     }
                 }
 
-                if (!isSlide)
+                if (!isSlide && !isJump)
                     isCrouch = true;
 
             }
@@ -153,6 +155,7 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                isSlide = false;
                 isJump = true;
                 currentJumpPower = rigid.velocity.y / 2 + jumpPower;
             }
@@ -271,7 +274,7 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.3f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
@@ -372,7 +375,7 @@ public class PlayerController : MonoBehaviour
         //    }
         //}
 
-        if (isRun)
+        if (isRun && !isJump && isGrounded)
         {
             if (!weapon.GetIsReload())
                 hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
@@ -436,6 +439,9 @@ public class PlayerController : MonoBehaviour
 
         if (isJump)
         {
+            if (Physics.Raycast(mainCam.position, Vector3.up, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                isJump = false;
+
             rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
             currentJumpPower += Time.deltaTime * Physics.gravity.y;
         }
@@ -518,6 +524,8 @@ public class PlayerController : MonoBehaviour
 
             isSlope = false;
         }
+
+        rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
         this.transform.rotation = Quaternion.LookRotation(forward);
     }
