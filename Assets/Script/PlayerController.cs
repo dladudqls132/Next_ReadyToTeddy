@@ -329,7 +329,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
         {
             weapon.Fire();
             if(isGrounded)
