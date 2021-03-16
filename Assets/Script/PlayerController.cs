@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat)
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat && !isRun)
             {
                 isRun = true;
             }
@@ -332,9 +332,12 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
         {
             weapon.Fire();
-            if(isGrounded)
+            if (isGrounded)
+            {
                 isCombat = true;
-            isRun = false;
+                isRun = false;
+            }
+            
             currentCombatTime = combatTime;
         }
 
@@ -344,7 +347,11 @@ public class PlayerController : MonoBehaviour
                 weapon.SetIsReload(true);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
+        //if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
+        //{
+        //    isRun = false;
+        //}
+        if(moveDirection == Vector3.zero)
         {
             isRun = false;
         }
@@ -375,7 +382,7 @@ public class PlayerController : MonoBehaviour
         //    }
         //}
 
-        if (isRun && !isJump && isGrounded)
+        if (isRun && !isJump && isGrounded && !isSlide)
         {
             if (!weapon.GetIsReload())
                 hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
@@ -448,7 +455,7 @@ public class PlayerController : MonoBehaviour
 
         if (isSlide)
         {
-            isRun = false;
+            //isRun = false;
             currentSlidingCoolTime = slidingCoolTime;
 
             headBobValue = 0;
