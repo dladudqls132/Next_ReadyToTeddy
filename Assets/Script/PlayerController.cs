@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isCombat;
     [SerializeField] private float combatTime;
     [SerializeField] private float currentCombatTime;
+    [SerializeField] private bool isAiming;
 
     private Vector3 climbUpPos;
     private Vector2 moveInput;
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
         headBobValue = 0;
         headOriginY = camPos.localPosition.y;
         mainCam = Camera.main.transform;
-        hand = mainCam.Find("HandPos").Find("Hand");
+        hand = mainCam.Find("HandPos").Find("WeaponPos");
         hand_Origin = mainCam.Find("HandPos");
         handOriginPos = hand.parent.localPosition;
         handOriginRot = hand.parent.localRotation;
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
             headBobValue = 0;
             headOriginY = camPos.localPosition.y;
             mainCam = Camera.main.transform;
-            hand = mainCam.Find("HandPos").Find("Hand");
+            hand = mainCam.Find("HandPos").Find("WeaponPos");
             hand_Origin = mainCam.Find("HandPos");
             handOriginPos = hand.localPosition;
             handOriginRot = hand.localRotation;
@@ -150,29 +151,13 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat)
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat && !isAiming)
             {
                 if (!isRun)
                 {
                     firstRun = true;
                     isRun = true;
                 }
-
-            }
-            if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
-            {
-                if (firstRun)
-                {
-                    firstRun = false;
-                }
-                else
-                {
-                    isRun = false;
-                }
-            }
-            if (moveDirection == Vector3.zero)
-            {
-                isRun = false;
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -223,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
                 if (rigid.velocity.magnitude > walkSpeed)
                 {
-                    if (isRun)
+                    if (isRun && !isCombat)
                     {
                         rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
                     }
@@ -234,7 +219,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (isRun)
+                    if (isRun && !isCombat)
                     {
                         rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
                     }
@@ -279,7 +264,7 @@ public class PlayerController : MonoBehaviour
             RaycastHit wallHit;
             for (int i = 0; i < 12; i++)
             {
-                Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
+                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
                 if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
@@ -354,10 +339,9 @@ public class PlayerController : MonoBehaviour
         if(Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
         {
             weapon.Fire();
-            if (isGrounded)
+            if (isGrounded && !isSlide)
             {
                 isCombat = true;
-                isRun = false;
             }
             
             currentCombatTime = combatTime;
@@ -369,14 +353,28 @@ public class PlayerController : MonoBehaviour
                 weapon.SetIsReload(true);
         }
 
-        //if (Input.GetKeyDown(KeyCode.LeftShift) || moveDirection == Vector3.zero)
-        //{
-        //    isRun = false;
-        //}
-        //if (moveDirection == Vector3.zero)
-        //{
-        //    isRun = false;
-        //}
+        if(Input.GetMouseButtonDown(1))
+        {
+            isAiming = !isAiming;
+
+            if(isAiming)
+                weapon.SetIsReload(false);
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
+        {
+            if (firstRun)
+            {
+                firstRun = false;
+            }
+            else
+            {
+                isRun = false;
+            }
+        }
+        if (moveDirection == Vector3.zero)
+        {
+            isRun = false;
+        }
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
@@ -396,40 +394,54 @@ public class PlayerController : MonoBehaviour
             isClimbing = false;
         }
 
-        //if (isRun && !isJump && isGrounded && !isSlide)
-        //{
-        //    if (!weapon.GetIsReload())
-        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
-        //    else
-        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
-        //}
-        //else
-        //{
-        //    if (!weapon.GetIsReload())
-        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-        //    else
-        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
-        //}
+        if (isAiming)
+        {
+            if (isGrounded)
+                isRun = false;
 
-        if(weapon.GetIsReload())
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 30);
+        }
+        else
+        {
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, handOriginPos, Time.deltaTime * 20);
+        }
+
+        if (weapon.GetIsReload())
         {
             hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
         }
         else
         {
-            if(weapon.GetIsShot() || isCombat)
+            if(isCombat || isAiming)
             {
-                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                if(isAiming)
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.2f), Time.deltaTime * 12);
+                else
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
             }
             else
             {
-                if(isRun)
+                if (weapon.GetIsShot())
                 {
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                    if (!isGrounded)
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
+                    else
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
                 }
                 else
                 {
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    if (isRun)
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                    }
+                    else
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
                 }
             }
         }
@@ -453,7 +465,7 @@ public class PlayerController : MonoBehaviour
 
             rigid.velocity = (climbUpPos - this.transform.position).normalized * Vector3.Distance(climbUpPos, this.transform.position) * 9f;
 
-            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.15f)
+            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.1f)
             {
                 isClimbUp = false;
                 rigid.velocity = Vector3.zero;
