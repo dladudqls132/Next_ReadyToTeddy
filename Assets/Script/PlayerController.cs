@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isSlide;
     [SerializeField] private bool isSlope;
     [SerializeField] private bool isRun;
+    private bool firstRun;
     [SerializeField] private bool isCrouch;
     [SerializeField] private bool isJump;
     [SerializeField] private bool isGrounded;
@@ -149,10 +150,31 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat && !isRun)
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat)
             {
-                isRun = true;
+                if (!isRun)
+                {
+                    firstRun = true;
+                    isRun = true;
+                }
+
             }
+            if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
+            {
+                if (firstRun)
+                {
+                    firstRun = false;
+                }
+                else
+                {
+                    isRun = false;
+                }
+            }
+            if (moveDirection == Vector3.zero)
+            {
+                isRun = false;
+            }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 isSlide = false;
@@ -347,14 +369,14 @@ public class PlayerController : MonoBehaviour
                 weapon.SetIsReload(true);
         }
 
-        //if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
+        //if (Input.GetKeyDown(KeyCode.LeftShift) || moveDirection == Vector3.zero)
         //{
         //    isRun = false;
         //}
-        if(moveDirection == Vector3.zero)
-        {
-            isRun = false;
-        }
+        //if (moveDirection == Vector3.zero)
+        //{
+        //    isRun = false;
+        //}
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
