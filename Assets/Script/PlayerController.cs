@@ -279,8 +279,8 @@ public class PlayerController : MonoBehaviour
             RaycastHit wallHit;
             for (int i = 0; i < 12; i++)
             {
-                Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward * 0.35f);
-                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward, out wallHit, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
+                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
                     {
@@ -296,19 +296,19 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.3f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
 
-                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
 
                     for (int j = 0; j < 20; j++)
                     {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
                             isCheckObject = true;
                         }
@@ -318,7 +318,7 @@ public class PlayerController : MonoBehaviour
                     {
                         isClimbUp = true;
                         rigid.velocity = Vector3.zero;
-                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + forward * 0.45f;
+                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
                     }
 
                     if (isClimbing)
@@ -396,27 +396,42 @@ public class PlayerController : MonoBehaviour
             isClimbing = false;
         }
 
-        //if (isRun)
+        //if (isRun && !isJump && isGrounded && !isSlide)
         //{
-        //    if (weapon.GetIsReload())
-        //    {
-        //        weapon.SetIsReload(false);
-        //    }
+        //    if (!weapon.GetIsReload())
+        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+        //    else
+        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
+        //}
+        //else
+        //{
+        //    if (!weapon.GetIsReload())
+        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+        //    else
+        //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
         //}
 
-        if (isRun && !isJump && isGrounded && !isSlide)
+        if(weapon.GetIsReload())
         {
-            if (!weapon.GetIsReload())
-                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
-            else
-                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
+            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
         }
         else
         {
-            if (!weapon.GetIsReload())
+            if(weapon.GetIsShot() || isCombat)
+            {
                 hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+            }
             else
-                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
+            {
+                if(isRun)
+                {
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                }
+                else
+                {
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                }
+            }
         }
 
         if (isCombat)

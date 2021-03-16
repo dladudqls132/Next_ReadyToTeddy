@@ -79,8 +79,8 @@ public class FPPCamController : MonoBehaviour
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
-        rotY += mouseX * cameraMoveSpeed * Time.deltaTime;
-        rotX += mouseY * cameraMoveSpeed * Time.deltaTime;
+        rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
+        rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
         Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
