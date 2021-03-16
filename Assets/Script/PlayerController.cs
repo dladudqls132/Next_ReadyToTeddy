@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
     [SerializeField] private Transform hand;
+    [SerializeField] private Transform hand_Origin;
     [SerializeField] private GameObject weapon_gameObject;
     [SerializeField] private Gun weapon;
     [SerializeField] private float walkSpeed;
@@ -17,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isSlide;
     [SerializeField] private bool isSlope;
     [SerializeField] private bool isRun;
+    private bool firstRun;
     [SerializeField] private bool isCrouch;
     [SerializeField] private bool isJump;
     [SerializeField] private bool isGrounded;
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isCombat;
     [SerializeField] private float combatTime;
     [SerializeField] private float currentCombatTime;
+    [SerializeField] private bool isAiming;
 
     private Vector3 climbUpPos;
     private Vector2 moveInput;
@@ -59,9 +62,10 @@ public class PlayerController : MonoBehaviour
         headBobValue = 0;
         headOriginY = camPos.localPosition.y;
         mainCam = Camera.main.transform;
-        hand = mainCam.Find("HandPos").Find("Hand");
-        handOriginPos = hand.localPosition;
-        handOriginRot = hand.localRotation;
+        hand = mainCam.Find("HandPos").Find("WeaponPos");
+        hand_Origin = mainCam.Find("HandPos");
+        handOriginPos = hand.parent.localPosition;
+        handOriginRot = hand.parent.localRotation;
         currentCombatTime = combatTime;
         isInit = true;
     }
@@ -75,7 +79,8 @@ public class PlayerController : MonoBehaviour
             headBobValue = 0;
             headOriginY = camPos.localPosition.y;
             mainCam = Camera.main.transform;
-            hand = mainCam.Find("HandPos").Find("Hand");
+            hand = mainCam.Find("HandPos").Find("WeaponPos");
+            hand_Origin = mainCam.Find("HandPos");
             handOriginPos = hand.localPosition;
             handOriginRot = hand.localRotation;
             currentCombatTime = combatTime;
@@ -123,33 +128,41 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                if (rigid.velocity.magnitude > walkSpeed && !isSlide)
+                if (rigid.velocity.magnitude > walkSpeed && !isSlide && !isJump)
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
                         mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
 
-                        if (currentSlidingCoolTime <= 0 && !isCrouch)
+                        if (!isCrouch)
                         {
                             isSlide = true;
-                            rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.7f, ForceMode.VelocityChange);
+
+                            if(currentSlidingCoolTime <= 0)
+                                rigid.AddForce(slopeResult.normalized * rigid.velocity.magnitude * 0.7f, ForceMode.VelocityChange);
                         }
 
                         slidingDirection = moveDirection;
                     }
                 }
 
-                if (!isSlide)
+                if (!isSlide && !isJump)
                     isCrouch = true;
 
             }
 
-            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat)
+            if (Input.GetKey(KeyCode.LeftShift) && !isSlide && !isCombat && !isAiming)
             {
-                isRun = true;
+                if (!isRun)
+                {
+                    firstRun = true;
+                    isRun = true;
+                }
             }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                isSlide = false;
                 isJump = true;
                 currentJumpPower = rigid.velocity.y / 2 + jumpPower;
             }
@@ -195,7 +208,7 @@ public class PlayerController : MonoBehaviour
 
                 if (rigid.velocity.magnitude > walkSpeed)
                 {
-                    if (isRun)
+                    if (isRun && !isCombat)
                     {
                         rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
                     }
@@ -206,7 +219,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (isRun)
+                    if (isRun && !isCombat)
                     {
                         rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
                     }
@@ -215,7 +228,9 @@ public class PlayerController : MonoBehaviour
                         if (isCrouch)
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
+                        {
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(0, rigid.velocity.y, 0) + result.normalized * walkSpeed, Time.deltaTime * 20);
+                        }
                     }
                 }
             }
@@ -224,8 +239,10 @@ public class PlayerController : MonoBehaviour
         {
             groundCollider.enabled = false;
 
-            if (isGrounded)
+            if (isGrounded && !isJump)
+            {
                 rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
+            }
 
             isGrounded = false;
 
@@ -247,8 +264,8 @@ public class PlayerController : MonoBehaviour
             RaycastHit wallHit;
             for (int i = 0; i < 12; i++)
             {
-                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward * 0.32f);
-                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, forward, out wallHit, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
+                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
                     {
@@ -264,19 +281,19 @@ public class PlayerController : MonoBehaviour
                 else if(moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.5f, forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
 
-                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         isCheckObject = true;
                     }
 
                     for (int j = 0; j < 20; j++)
                     {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + (Vector3.up * 0.1f * j), forward, 0.32f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + (Vector3.up * 0.1f * j), forward, 0.35f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
                             isCheckObject = true;
                         }
@@ -286,7 +303,7 @@ public class PlayerController : MonoBehaviour
                     {
                         isClimbUp = true;
                         rigid.velocity = Vector3.zero;
-                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.5f + forward * 0.45f;
+                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
                     }
 
                     if (isClimbing)
@@ -300,7 +317,7 @@ public class PlayerController : MonoBehaviour
 
             if (!isJump && !isClimbing)
             {
-                if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(this.transform.position + moveDirection * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude * Time.deltaTime, Vector3.down, out hit, 0.4f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
                     Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
@@ -319,12 +336,14 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
         {
             weapon.Fire();
-            if(isGrounded)
+            if (isGrounded && !isSlide)
+            {
                 isCombat = true;
-            isRun = false;
+            }
+            
             currentCombatTime = combatTime;
         }
 
@@ -334,7 +353,25 @@ public class PlayerController : MonoBehaviour
                 weapon.SetIsReload(true);
         }
 
-        if (Input.GetKeyUp(KeyCode.LeftShift) || moveDirection == Vector3.zero)
+        if(Input.GetMouseButtonDown(1))
+        {
+            isAiming = !isAiming;
+
+            if(isAiming)
+                weapon.SetIsReload(false);
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
+        {
+            if (firstRun)
+            {
+                firstRun = false;
+            }
+            else
+            {
+                isRun = false;
+            }
+        }
+        if (moveDirection == Vector3.zero)
         {
             isRun = false;
         }
@@ -357,27 +394,56 @@ public class PlayerController : MonoBehaviour
             isClimbing = false;
         }
 
-        //if (isRun)
-        //{
-        //    if (weapon.GetIsReload())
-        //    {
-        //        weapon.SetIsReload(false);
-        //    }
-        //}
-
-        if (isRun)
+        if (isAiming)
         {
-            if (!weapon.GetIsReload())
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
-            else
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+            if (isGrounded)
+                isRun = false;
+
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 30);
         }
         else
         {
-            if (!weapon.GetIsReload())
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 8);
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, handOriginPos, Time.deltaTime * 20);
+        }
+
+        if (weapon.GetIsReload())
+        {
+            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
+        }
+        else
+        {
+            if(isCombat || isAiming)
+            {
+                if(isAiming)
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.2f), Time.deltaTime * 12);
+                else
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+            }
             else
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, 23), Time.deltaTime * 12);
+            {
+                if (weapon.GetIsShot())
+                {
+                    if (!isGrounded)
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
+                    else
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
+                }
+                else
+                {
+                    if (isRun)
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                    }
+                    else
+                    {
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    }
+                }
+            }
         }
 
         if (isCombat)
@@ -399,7 +465,7 @@ public class PlayerController : MonoBehaviour
 
             rigid.velocity = (climbUpPos - this.transform.position).normalized * Vector3.Distance(climbUpPos, this.transform.position) * 9f;
 
-            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.15f)
+            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.1f)
             {
                 isClimbUp = false;
                 rigid.velocity = Vector3.zero;
@@ -429,13 +495,16 @@ public class PlayerController : MonoBehaviour
 
         if (isJump)
         {
+            if (Physics.Raycast(mainCam.position, Vector3.up, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                isJump = false;
+
             rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
             currentJumpPower += Time.deltaTime * Physics.gravity.y;
         }
 
         if (isSlide)
         {
-            isRun = false;
+            //isRun = false;
             currentSlidingCoolTime = slidingCoolTime;
 
             headBobValue = 0;
@@ -494,7 +563,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         if (isRun)
-                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 8);
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 10);
                         else
                             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, camPos.localPosition.z), Time.deltaTime * 8);
                     }
@@ -511,6 +580,8 @@ public class PlayerController : MonoBehaviour
 
             isSlope = false;
         }
+
+        rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
         this.transform.rotation = Quaternion.LookRotation(forward);
     }
