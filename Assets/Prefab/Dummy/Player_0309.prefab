@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8404995892510735342}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: CamPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8404995892916541650}
   - component: {fileID: 8404995892916541651}
   - component: {fileID: 8404995892916541652}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Player_0309
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ MonoBehaviour:
   weapon_gameObject: {fileID: 0}
   weapon: {fileID: 0}
   walkSpeed: 7
-  runSpeed: 12
+  runSpeed: 11
   slidingCoolTime: 1.5
   currentSlidingCoolTime: 0
   isSlide: 0
@@ -146,6 +146,7 @@ MonoBehaviour:
   isCombat: 0
   combatTime: 0.8
   currentCombatTime: 0
+  isAiming: 0
   walk_defaultPm: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
   sliding_groundPm: {fileID: 13400000, guid: 6c0865cd32034ba45b7bc880840ab76e, type: 2}
   sliding_slopePm: {fileID: 13400000, guid: c1b17bda80ff76549831a93abff4f3be, type: 2}
