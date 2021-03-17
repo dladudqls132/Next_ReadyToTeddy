@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slidingCoolTime;
-    [SerializeField] private float currentSlidingCoolTime;
+    private float currentSlidingCoolTime;
     [SerializeField] private bool isSlide;
     [SerializeField] private bool isSlope;
     [SerializeField] private bool isRun;
@@ -27,12 +27,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isClimbing;
     [SerializeField] private float climbPower;
     private float currentClimbPower;
-    [SerializeField] private bool canClimb;
+    private bool canClimb;
     [SerializeField] private bool isClimbUp;
     [SerializeField] private bool isCombat;
-    [SerializeField] private float combatTime;
-    [SerializeField] private float currentCombatTime;
     [SerializeField] private bool isAiming;
+    [SerializeField] private float combatTime;
+     private float currentCombatTime;
 
     private Vector3 climbUpPos;
     private Vector2 moveInput;
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
     public Gun GetWeapon() { return weapon; }
+    public bool GetIsAiming() { return isAiming; }
 
     // Start is called before the first frame update
     public void Init()
@@ -132,7 +133,8 @@ public class PlayerController : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
+                        if(!isAiming)
+                            mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
 
                         if (!isCrouch)
                         {
@@ -357,8 +359,15 @@ public class PlayerController : MonoBehaviour
         {
             isAiming = !isAiming;
 
-            if(isAiming)
+            if (isAiming)
+            {
                 weapon.SetIsReload(false);
+                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10, 0.1f, 1000);
+            }
+            else
+            {
+                mainCam.GetComponent<FPPCamController>().FovReset();
+            }
         }
         if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
         {
@@ -399,11 +408,11 @@ public class PlayerController : MonoBehaviour
             if (isGrounded)
                 isRun = false;
 
-            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 30);
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
         }
         else
         {
-            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, handOriginPos, Time.deltaTime * 20);
+            hand_Origin.localPosition = Vector3.Lerp(hand_Origin.localPosition, handOriginPos, Time.deltaTime * 16);
         }
 
         if (weapon.GetIsReload())
@@ -415,7 +424,7 @@ public class PlayerController : MonoBehaviour
             if(isCombat || isAiming)
             {
                 if(isAiming)
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.2f), Time.deltaTime * 12);
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
                 else
                     hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
             }
@@ -532,7 +541,8 @@ public class PlayerController : MonoBehaviour
                 currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            mainCam.GetComponent<FPPCamController>().FovReset();
+            if (!isAiming)
+                mainCam.GetComponent<FPPCamController>().FovReset();
 
             if (isGrounded)
             {
