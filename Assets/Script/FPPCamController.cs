@@ -63,7 +63,7 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 10);
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 13);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
             {

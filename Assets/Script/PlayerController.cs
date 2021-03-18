@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashPower;
     [SerializeField] private float dashTime;
     private float currentDashTime;
+    [SerializeField] private float currentDashPower;
     [SerializeField]  private bool useGravity;
 
     private Vector3 climbUpPos;
@@ -52,10 +53,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rigid;
     private Vector3 moveDirection;
     private Vector3 slidingDirection;
+    private Vector3 dashDirection;
     private float headBobValue;
     private float headOriginY;
     private Vector3 handOriginPos;
     private Quaternion handOriginRot;
+    Vector3 result;
 
     private bool isInit;
 
@@ -80,6 +83,7 @@ public class PlayerController : MonoBehaviour
         currentCombatTime = combatTime;
         currentWPressTime = WPressTime;
         currentDashTime = dashTime;
+        currentDashPower = dashPower;
         isInit = true;
     }
 
@@ -99,6 +103,7 @@ public class PlayerController : MonoBehaviour
             currentCombatTime = combatTime;
             currentWPressTime = WPressTime;
             currentDashTime = dashTime;
+            currentDashPower = dashPower;
         }
     }
 
@@ -144,7 +149,7 @@ public class PlayerController : MonoBehaviour
             canClimb = true;
             useGravity = false;
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
-            Vector3 result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
+            result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -201,8 +206,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-
-
             if (isCrouch)
             {
                 isRun = false;
@@ -243,24 +246,27 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-            else
+            else if (!isDash)
             {
                 if (rigid.velocity.magnitude > walkSpeed)
                 {
                     if (isRun && !isCombat)
                     {
-                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
+                  
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
                     }
                     else
                     {
-                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
+              
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
                     }
                 }
                 else
                 {
                     if (isRun && !isCombat)
                     {
-                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
+                   
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
                     }
                     else
                     {
@@ -268,7 +274,7 @@ public class PlayerController : MonoBehaviour
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
                         {
-                            if(!isDash)
+               
                                 rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
                         }
                     }
@@ -294,13 +300,15 @@ public class PlayerController : MonoBehaviour
                 {
                     if (rigid.velocity.magnitude >= walkSpeed)
                     {
-                        if(!isDash)
+
                             rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude, rigid.velocity.y, moveDirection.z * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude), Time.deltaTime * 6);
-                        else
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, 0, moveDirection.z * walkSpeed), Time.deltaTime * 10);
                     }
                     else
-                        rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, rigid.velocity.y, moveDirection.z * walkSpeed), Time.deltaTime * 4);
+                    {
+               
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, rigid.velocity.y, moveDirection.z * walkSpeed), Time.deltaTime * 4);
+
+                    }
                 }
                 else
                 {
@@ -386,17 +394,27 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp && moveDirection != Vector3.zero)
         {
             isDash = true;
-            if(isJump)
+            if (Vector3.Dot(forward, moveDirection) > 0.5f)
+                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 2.0f, 0.1f, 1000);
+            if (Vector3.Dot(forward, moveDirection) < 0)
+                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 2.0f, 0.1f, 1000);
+
+            if (isJump)
             {
                 canJump = false;
             }
             isJump = false;
             isJumpByObject = false;
-            
-            rigid.AddForce(moveDirection * dashPower, ForceMode.VelocityChange);
+
+            if(isGrounded)
+                dashDirection = result;
+            else
+                dashDirection = moveDirection;
+
+            // rigid.AddForce(moveDirection * dashPower, ForceMode.VelocityChange);
         }
 
         if(useGravity)
@@ -407,15 +425,23 @@ public class PlayerController : MonoBehaviour
 
         if (isDash)
         {
-            if(!isGrounded)
-                rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
+            if (!isGrounded)
+                rigid.velocity = new Vector3(dashDirection.x * currentDashPower, 0, dashDirection.z * currentDashPower);
+            else
+                rigid.velocity = dashDirection * currentDashPower;
+
             useGravity = false;
             currentDashTime -= Time.deltaTime;
+            currentDashPower -= (Time.deltaTime * dashPower)/ dashTime;
 
-            if (currentDashTime <= 0)
+            if(currentDashPower <= walkSpeed + 1.5f)
+                mainCam.GetComponent<FPPCamController>().FovReset();
+
+            if (currentDashPower <= walkSpeed)
             {
                 isDash = false;
                 currentDashTime = dashTime;
+                currentDashPower = dashPower;
             }
         }
 
@@ -444,10 +470,6 @@ public class PlayerController : MonoBehaviour
             {
                 weapon.SetIsReload(false);
                 mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10, 0.1f, 1000);
-            }
-            else
-            {
-                mainCam.GetComponent<FPPCamController>().FovReset();
             }
         }
 
@@ -592,7 +614,7 @@ public class PlayerController : MonoBehaviour
                 currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            if (!isAiming)
+            if (!isAiming && !isDash)
                 mainCam.GetComponent<FPPCamController>().FovReset();
 
             HeadBob();
