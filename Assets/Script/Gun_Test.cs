@@ -92,7 +92,8 @@ public class Gun_Test : Gun
                     if (hit2.transform.CompareTag("Enemy"))
                     {
                         Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                        enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                        //enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                        enemy.DecreaseHp(damagePerBullet, hit2.point);
                     }
                     else
                     {
@@ -102,6 +103,8 @@ public class Gun_Test : Gun
                     }
                 }
 
+      
+                muzzleFlash.Play();
                 isShot = true;
             }
 

@@ -16,6 +16,8 @@ public class Gun : MonoBehaviour
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
     [SerializeField] protected float speed;
+    [SerializeField] protected ParticleSystem muzzleFlash;
+
     protected Vector3 direction;
 
     protected virtual void Start()
