@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private float currentWPressTime;
     private bool isPressW;
     [SerializeField] private bool isCrouch;
+    [SerializeField] private bool canJump;
     [SerializeField] private bool isJump;
     [SerializeField] private bool isJumpByObject;
     [SerializeField] private bool isGrounded;
@@ -137,6 +138,7 @@ public class PlayerController : MonoBehaviour
                 isJump = false;
                 isJumpByObject = false;
             }
+            canJump = true;
             isGrounded = true;
             isClimbing = false;
             canClimb = true;
@@ -384,9 +386,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp)
         {
             isDash = true;
+            if(isJump)
+            {
+                canJump = false;
+            }
             isJump = false;
             isJumpByObject = false;
             
@@ -456,10 +462,11 @@ public class PlayerController : MonoBehaviour
 
             isCrouch = false;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump)
+        if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
         {
             isSlide = false;
             isJump = true;
+            canJump = false;
 
             if (isJumpByObject)
             {
