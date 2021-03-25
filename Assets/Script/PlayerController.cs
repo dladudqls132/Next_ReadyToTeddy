@@ -7,11 +7,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform mainCam;
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
-
     [SerializeField] private Transform hand;
     [SerializeField] private Transform hand_Origin;
     [SerializeField] private GameObject weapon_gameObject;
     [SerializeField] private Gun weapon;
+
+    [SerializeField] private float maxHP;
+    [SerializeField] private float currentHP;
+    [SerializeField] private float decreaseHpValuePerSecond;
+    [SerializeField] private bool isDead;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float slidingCoolTime;
@@ -35,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private float currentClimbPower;
     private bool canClimb;
     private float climbUpPower;
-    
+
     [SerializeField] private bool isClimbUp;
     [SerializeField] private bool isCombat;
     [SerializeField] private bool isAiming;
@@ -44,9 +48,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isDash;
     [SerializeField] private float dashPower;
     [SerializeField] private float dashTime;
-    private float currentDashTime;
     [SerializeField] private float currentDashPower;
-    [SerializeField]  private bool useGravity;
+    [SerializeField] private bool useGravity;
 
     private Vector3 climbUpPos;
     private Vector2 moveInput;
@@ -67,6 +70,8 @@ public class PlayerController : MonoBehaviour
     public Gun GetWeapon() { return weapon; }
     public bool GetIsAiming() { return isAiming; }
     public void SetIsJumpByObject(bool value, float power) { isJumpByObject = value; currentJumpPower = power; }
+    public float GetMaxHp() { return maxHP; }
+    public float GetCurrentHp() { return currentHP; }
 
     // Start is called before the first frame update
     public void Init()
@@ -78,11 +83,11 @@ public class PlayerController : MonoBehaviour
         mainCam = Camera.main.transform;
         hand = mainCam.Find("HandPos").Find("WeaponPos");
         hand_Origin = mainCam.Find("HandPos");
+        currentHP = maxHP;
         handOriginPos = hand.parent.localPosition;
         handOriginRot = hand.parent.localRotation;
         currentCombatTime = combatTime;
         currentWPressTime = WPressTime;
-        currentDashTime = dashTime;
         currentDashPower = dashPower;
         isInit = true;
     }
@@ -98,11 +103,11 @@ public class PlayerController : MonoBehaviour
             mainCam = Camera.main.transform;
             hand = mainCam.Find("HandPos").Find("WeaponPos");
             hand_Origin = mainCam.Find("HandPos");
+            currentHP = maxHP;
             handOriginPos = hand.localPosition;
             handOriginRot = hand.localRotation;
             currentCombatTime = combatTime;
             currentWPressTime = WPressTime;
-            currentDashTime = dashTime;
             currentDashPower = dashPower;
         }
     }
@@ -110,12 +115,13 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(hand.GetChild(0) != null)
+        if (hand.GetChild(0) != null)
         {
             if (hand.GetChild(0) != weapon)
             {
                 weapon_gameObject = hand.GetChild(0).gameObject;
                 weapon = weapon_gameObject.GetComponent<Gun>();
+                weapon.SetOwner(this.gameObject);
             }
         }
 
@@ -157,7 +163,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        if(!isAiming)
+                        if (!isAiming)
                             mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
 
                         if (!isCrouch)
@@ -180,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if(Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W))
             {
                 if (isPressW)
                 {
@@ -195,11 +201,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if(isPressW)
+            if (isPressW)
             {
                 currentWPressTime -= Time.deltaTime;
 
-                if(currentWPressTime <= 0)
+                if (currentWPressTime <= 0)
                 {
                     currentWPressTime = WPressTime;
                     isPressW = false;
@@ -239,7 +245,7 @@ public class PlayerController : MonoBehaviour
                             slideSpeed += Time.deltaTime * Mathf.Abs(slopeResult.y) * 4;
 
                             rigid.velocity = Vector3.Lerp(rigid.velocity, slopeResult.normalized * slideSpeed + (right * moveInput.x).normalized, Time.deltaTime * 3);
-                            
+
                         }
                         else
                             rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime);
@@ -252,21 +258,21 @@ public class PlayerController : MonoBehaviour
                 {
                     if (isRun && !isCombat)
                     {
-                  
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
+
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 8);
                     }
                     else
                     {
-              
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
+
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
                     }
                 }
                 else
                 {
                     if (isRun && !isCombat)
                     {
-                   
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
+
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * runSpeed, Time.deltaTime * 20);
                     }
                     else
                     {
@@ -274,8 +280,8 @@ public class PlayerController : MonoBehaviour
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
                         {
-               
-                                rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
+
+                            rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 20);
                         }
                     }
                 }
@@ -284,8 +290,8 @@ public class PlayerController : MonoBehaviour
         else
         {
 
-            if(!isDash)
-            useGravity = true;
+            if (!isDash)
+                useGravity = true;
             groundCollider.enabled = false;
             if (isGrounded && !isJump && !isJumpByObject)
             {
@@ -301,12 +307,12 @@ public class PlayerController : MonoBehaviour
                     if (rigid.velocity.magnitude >= walkSpeed)
                     {
 
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude, rigid.velocity.y, moveDirection.z * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude), Time.deltaTime * 6);
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude, rigid.velocity.y, moveDirection.z * new Vector2(rigid.velocity.x, rigid.velocity.z).magnitude), Time.deltaTime * 6);
                     }
                     else
                     {
-               
-                            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, rigid.velocity.y, moveDirection.z * walkSpeed), Time.deltaTime * 4);
+
+                        rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(moveDirection.x * walkSpeed, rigid.velocity.y, moveDirection.z * walkSpeed), Time.deltaTime * 4);
 
                     }
                 }
@@ -335,7 +341,7 @@ public class PlayerController : MonoBehaviour
                         }
                     }
                 }
-                else if(moveDirection != Vector3.zero)
+                else if (moveDirection != Vector3.zero)
                 {
                     bool isCheckObject = false;
                     if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
@@ -409,7 +415,7 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             isJumpByObject = false;
 
-            if(isGrounded)
+            if (isGrounded)
                 dashDirection = result;
             else
                 dashDirection = moveDirection;
@@ -417,10 +423,10 @@ public class PlayerController : MonoBehaviour
             // rigid.AddForce(moveDirection * dashPower, ForceMode.VelocityChange);
         }
 
-        if(useGravity)
+        if (useGravity)
         {
-            if(!isJump && !isJumpByObject)
-            rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y, rigid.velocity.z), Time.deltaTime);
+            if (!isJump && !isJumpByObject)
+                rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y, rigid.velocity.z), Time.deltaTime);
         }
 
         if (isDash)
@@ -431,16 +437,14 @@ public class PlayerController : MonoBehaviour
                 rigid.velocity = dashDirection * currentDashPower;
 
             useGravity = false;
-            currentDashTime -= Time.deltaTime;
-            currentDashPower -= (Time.deltaTime * dashPower)/ dashTime;
+            currentDashPower -= (Time.deltaTime * dashPower) / dashTime;
 
-            if(currentDashPower <= walkSpeed + 1.5f)
+            if (currentDashPower <= walkSpeed + 1.5f)
                 mainCam.GetComponent<FPPCamController>().FovReset();
 
             if (currentDashPower <= walkSpeed)
             {
                 isDash = false;
-                currentDashTime = dashTime;
                 currentDashPower = dashPower;
             }
         }
@@ -452,17 +456,17 @@ public class PlayerController : MonoBehaviour
             {
                 isCombat = true;
             }
-            
+
             currentCombatTime = combatTime;
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            if(weapon.CanReload())
+            if (weapon.CanReload())
                 weapon.SetIsReload(true);
         }
 
-        if(Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1))
         {
             isAiming = !isAiming;
 
@@ -497,7 +501,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if(!isSlope)
+                if (!isSlope)
                     rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
 
                 currentJumpPower = rigid.velocity.y / 2 + jumpPower;
@@ -518,7 +522,7 @@ public class PlayerController : MonoBehaviour
         {
             currentCombatTime -= Time.deltaTime;
 
-            if(currentCombatTime <= 0)
+            if (currentCombatTime <= 0)
             {
                 isCombat = false;
                 currentCombatTime = combatTime;
@@ -532,8 +536,8 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             isJumpByObject = false;
             isDash = false;
-            
-            if(climbUpPower <= 2)
+
+            if (climbUpPower <= 2)
             {
                 climbUpPower = 2;
             }
@@ -542,7 +546,7 @@ public class PlayerController : MonoBehaviour
                 climbUpPower -= Time.deltaTime * 15;
             }
 
-            rigid.velocity = (climbUpPos - this.transform.position).normalized  * Mathf.Clamp(Vector3.Distance(this.transform.position, climbUpPos) * 9, 2, 100);
+            rigid.velocity = (climbUpPos - this.transform.position).normalized * Mathf.Clamp(Vector3.Distance(this.transform.position, climbUpPos) * 9, 2, 100);
 
             if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.1f)
             {
@@ -623,6 +627,7 @@ public class PlayerController : MonoBehaviour
         }
 
         HandAnimation();
+        DecreaseHpPerSecond();
 
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
@@ -642,7 +647,7 @@ public class PlayerController : MonoBehaviour
                 else
                     camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, camPos.localPosition.z), Time.deltaTime * 8);
             }
-            else if(!isDash)
+            else if (!isDash)
             {
                 if (isRun)
                 {
@@ -727,5 +732,40 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void CheckingHp()
+    {
+        if (currentHP <= 0)
+        {
+            currentHP = 0;
+
+            isDead = true;
+        }
+        else if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
+
+    private void DecreaseHpPerSecond()
+    {
+        currentHP -= decreaseHpValuePerSecond * Time.deltaTime;
+
+        CheckingHp();
+    }
+
+    public void DecreaseHp(float value)
+    {
+        currentHP -= value;
+
+        CheckingHp();
+    }
+
+    public void IncreaseHp(float value)
+    {
+        currentHP += value;
+
+        CheckingHp();
     }
 }

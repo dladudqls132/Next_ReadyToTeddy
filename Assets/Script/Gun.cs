@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform shotPos;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
@@ -30,6 +31,7 @@ public class Gun : MonoBehaviour
     public int GetAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
+    public void SetOwner(GameObject who) { owner = who; }
 
     public void SetIsReload(bool value) { isReload = value; }
 

@@ -5,23 +5,37 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] protected bool isDead;
-    [SerializeField] protected float maxHP;
-    [SerializeField] protected float currentHP;
-    [SerializeField] protected ParticleSystem damagedEffect;
+    [SerializeField] protected float maxHp;
+    [SerializeField] protected float currentHp;
+    [SerializeField] protected float increaseHp;
+    [SerializeField] protected Pool_DamagedEffect pool_damagedEffect;
+    [SerializeField] protected GameObject spreadBlood;
+    private GameObject whoAttackThis;
 
-    public float GetCurrentHP() { return currentHP; }
-    public void SetCurrentHP(float value) { currentHP = value; }
+    public float GetCurrentHP() { return currentHp; }
+    public void SetCurrentHP(float value) { currentHp = value; }
 
     virtual protected void Start()
     {
-        currentHP = maxHP;
+        currentHp = maxHp;
+
+        if (this.transform.Find("Pool_DamagedEffect") != null)
+            pool_damagedEffect = this.transform.Find("Pool_DamagedEffect").GetComponent<Pool_DamagedEffect>();
     }
 
     protected void CheckingHp()
     {
-        if(currentHP <= 0)
+        if(currentHp <= 0)
         {
             isDead = true;
+            GameObject temp = Instantiate(spreadBlood, this.transform.position, Quaternion.identity);
+            temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
+            temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseHp) });
+
+            if(whoAttackThis.CompareTag("Player"))
+            {
+                whoAttackThis.GetComponent<PlayerController>().IncreaseHp(increaseHp);
+            }
 
             this.gameObject.SetActive(false);
         }
@@ -29,15 +43,25 @@ public class Enemy : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
-        currentHP -= value;
+        currentHp -= value;
+
+        whoAttackThis = null;
 
         CheckingHp();
     }
 
-    public void DecreaseHp(float value, Vector3 damagedPos)
+    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos)
     {
-        currentHP -= value;
-        Instantiate(damagedEffect, damagedPos, Quaternion.identity);
+        currentHp -= value;
+        //Instantiate(damagedEffect, damagedPos, Quaternion.identity);
+        GameObject effect = pool_damagedEffect.GetDamagedEffect();
+
+        effect.transform.SetParent(null);
+        effect.transform.position = damagedPos;
+        effect.transform.rotation = Quaternion.identity;
+        effect.SetActive(true);
+
+        whoAttackThis = attackObj;
 
         CheckingHp();
     }
