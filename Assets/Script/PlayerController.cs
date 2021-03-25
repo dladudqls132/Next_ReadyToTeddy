@@ -164,7 +164,10 @@ public class PlayerController : MonoBehaviour
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
                         if (!isAiming)
+                        {
                             mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
+                            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10);
+                        }
 
                         if (!isCrouch)
                         {
@@ -237,6 +240,8 @@ public class PlayerController : MonoBehaviour
                     if (Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), slidingDirection) < 0 || Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), moveDirection) < -0.75f)
                     {
                         isSlide = false;
+                        mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+                        mainCam.GetComponent<FPPCamController>().FovReset();
                     }
                     else
                     {
@@ -338,6 +343,8 @@ public class PlayerController : MonoBehaviour
                             isSlide = false;
                             isDash = false;
                             rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
+                            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+                            mainCam.GetComponent<FPPCamController>().FovReset();
                         }
                     }
                 }
@@ -404,9 +411,9 @@ public class PlayerController : MonoBehaviour
         {
             isDash = true;
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
-                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 2.0f, 0.1f, 1000);
+                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 2.0f, 0.1f, 0.1f);
             if (Vector3.Dot(forward, moveDirection) < 0)
-                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 2.0f, 0.1f, 1000);
+                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 2.0f, 0.1f, 0.1f);
 
             if (isJump)
             {
@@ -439,8 +446,8 @@ public class PlayerController : MonoBehaviour
             useGravity = false;
             currentDashPower -= (Time.deltaTime * dashPower) / dashTime;
 
-            if (currentDashPower <= walkSpeed + 1.5f)
-                mainCam.GetComponent<FPPCamController>().FovReset();
+            //if (currentDashPower <= walkSpeed + 1.5f)
+            //    mainCam.GetComponent<FPPCamController>().FovReset();
 
             if (currentDashPower <= walkSpeed)
             {
@@ -455,10 +462,18 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
         {
-            weapon.Fire();
+            if (weapon.Fire())
+            {
+                if (!isDash)
+                {
+                    mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 1.8f, 0.005f, 0.01f);
+                }
+            }
+
             if (isGrounded && !isSlide)
             {
                 isCombat = true;
+                isRun = false;
             }
 
             currentCombatTime = combatTime;
@@ -478,6 +493,12 @@ public class PlayerController : MonoBehaviour
             {
                 weapon.SetIsReload(false);
                 mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10, 0.1f, 1000);
+                mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10);
+            }
+            else
+            {
+                mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+                mainCam.GetComponent<FPPCamController>().FovReset();
             }
         }
 
@@ -489,12 +510,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             isSlide = false;
-
             isCrouch = false;
+            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+            mainCam.GetComponent<FPPCamController>().FovReset();
         }
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
         {
             isSlide = false;
+            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+            mainCam.GetComponent<FPPCamController>().FovReset();
             isJump = true;
             canJump = false;
 
@@ -540,6 +564,8 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             isJumpByObject = false;
             isDash = false;
+            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+            mainCam.GetComponent<FPPCamController>().FovReset();
 
             if (climbUpPower <= 2)
             {
@@ -605,6 +631,8 @@ public class PlayerController : MonoBehaviour
                 if (rigid.velocity.magnitude <= walkSpeed)
                 {
                     isSlide = false;
+                    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+                    mainCam.GetComponent<FPPCamController>().FovReset();
                 }
             }
             else
@@ -612,6 +640,8 @@ public class PlayerController : MonoBehaviour
                 if (rigid.velocity.magnitude <= 0.5f)
                 {
                     isSlide = false;
+                    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+                    mainCam.GetComponent<FPPCamController>().FovReset();
                 }
             }
         }
@@ -622,8 +652,11 @@ public class PlayerController : MonoBehaviour
                 currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            if (!isAiming && !isDash)
-                mainCam.GetComponent<FPPCamController>().FovReset();
+            //if (!isAiming && !isDash &&!weapon.GetIsShot())
+            //{
+            //    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
+            //    mainCam.GetComponent<FPPCamController>().FovReset();
+            //}
 
             HeadBob();
 
@@ -699,25 +732,19 @@ public class PlayerController : MonoBehaviour
 
         if (weapon.GetIsReload())
         {
-            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -23), Time.deltaTime * 12);
+            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -30), Time.deltaTime * 12);
         }
         else
         {
-            if (isCombat || isAiming)
+            if (isAiming)
             {
-                if (isAiming)
+                if (weapon.GetIsShot() && !weapon.GetIsRecoil())
                 {
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-0.5f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
                 }
                 else
                 {
-                    if (!weapon.GetIsRecoil())
-                    {
-                        if (weapon.GetIsShot())
-                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
-                    }
-                    else
-                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
                 }
             }
             else
@@ -728,16 +755,91 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if (isRun && !weapon.GetIsRecoil() && !weapon.GetIsShot())
+                    if (weapon.GetIsRecoil())
                     {
-                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
+                        if (isRun)
+                        {
+                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 5);
+                            if (Quaternion.Angle(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0)) < 0.5f)
+                                weapon.SetIsRecoil(false);
+                        }
+                        else
+                        {
+                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 5f);
+                            if (Quaternion.Angle(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f)) < 0.5f)
+                                weapon.SetIsRecoil(false);
+                        }
                     }
                     else
                     {
-                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                        if (isSlide)
+                        {
+                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(0, 0, 56.788f), Time.deltaTime * 14);
+                        }
+                        else
+                        {
+                            if (isRun)
+                            {
+                                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 14);
+                            }
+                            else
+                            {
+                                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                            }
+                        }
                     }
                 }
             }
+            //if (isCombat || isAiming)
+            //{
+            //    if (isAiming)
+            //    {
+            //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
+            //    }
+            //    else
+            //    {
+            //        if (!weapon.GetIsRecoil())
+            //        {
+            //            if (weapon.GetIsShot())
+            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
+            //        }
+            //        else
+            //            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+            //    }
+            //}
+            //else
+            //{
+            
+            //    if (weapon.GetIsShot() && !weapon.GetIsRecoil())
+            //    {
+            //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
+            //    }
+            //    else
+            //    {
+            //        if (weapon.GetIsRecoil())
+            //        {
+            //            if (isRun)
+            //            {
+            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 14);
+            //            }
+            //            else
+            //            {
+            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 5);
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (isRun)
+            //            {
+            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 14);
+            //            }
+            //            else
+            //            {
+            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+            //            }
+            //        }
+            //    }
+            //}
         }
     }
 

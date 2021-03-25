@@ -22,8 +22,11 @@ public class FPPCamController : MonoBehaviour
     private float originFov;
     private float destFov;
     private float fovStopTime;
+    private float realOriginFov;
 
     public float GetOriginFov() { return originFov; }
+    public float GetRealOriginFov() { return realOriginFov; }
+    public void SetOriginFov(float value) { originFov = value; } 
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +39,7 @@ public class FPPCamController : MonoBehaviour
 
         mainCamera = Camera.main;
         originFov = Camera.main.fieldOfView;
+        realOriginFov = originFov;
     }
 
     private void Update()
@@ -106,7 +110,6 @@ public class FPPCamController : MonoBehaviour
         this.timeToDest = timeToDest;
         this.timeToOrigin = timeToOrigin;
         fovStopTime = stopTime;
-
         fovTimer = 0;
     }
 

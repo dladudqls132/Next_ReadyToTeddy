@@ -33,10 +33,11 @@ public class Gun : MonoBehaviour
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
     public bool GetIsRecoil() { return isRecoil; }
+    public void SetIsRecoil(bool value) { isRecoil = value; }
     public void SetOwner(GameObject who) { owner = who; }
 
     public void SetIsReload(bool value) { isReload = value; }
 
-    virtual public void Fire() { }
+    virtual public bool Fire() { return false; }
     public bool CanReload() { if (currentAmmo < maxAmmo) return true; return false; }
 }

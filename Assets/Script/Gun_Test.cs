@@ -24,12 +24,12 @@ public class Gun_Test : Gun
             if(currentShotDelay <= 0)
             {
                 isShot = false;
-                //Debug.Log("asd");
                 isRecoil = false;
+                //Debug.Log("asd");
                 currentShotDelay = shotDelay;
             }
 
-            if(currentShotDelay <= shotDelay / 3)
+            if(currentShotDelay <= shotDelay / 1.6f)
             {
                 isRecoil = true;
             }
@@ -55,7 +55,7 @@ public class Gun_Test : Gun
             currentReloadTime = reloadTime;
         }
 
-        if(currentAmmo <= 0 && !isShot && !isRecoil)
+        if(currentAmmo <= 0 && !isShot)
         {
             isReload = true;
         }
@@ -66,11 +66,12 @@ public class Gun_Test : Gun
             canShot = false;
     }
 
-    override public void Fire()
+    override public bool Fire()
     {
         if (canShot)
         {
             isReload = false;
+            isRecoil = false;
 
             for (int i = 0; i < fireNum; i++)
             {
@@ -116,6 +117,10 @@ public class Gun_Test : Gun
             }
 
             currentAmmo--;
+
+            return true;
         }
+
+        return false;
     }
 }
