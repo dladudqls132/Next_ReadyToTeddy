@@ -418,7 +418,7 @@ public class PlayerController : MonoBehaviour
             if (isGrounded)
                 dashDirection = result;
             else
-                dashDirection = moveDirection;
+                dashDirection = moveDirection.normalized;
 
             // rigid.AddForce(moveDirection * dashPower, ForceMode.VelocityChange);
         }
@@ -447,6 +447,10 @@ public class PlayerController : MonoBehaviour
                 isDash = false;
                 currentDashPower = dashPower;
             }
+        }
+        else
+        {
+            currentDashPower = dashPower;
         }
 
         if (Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
