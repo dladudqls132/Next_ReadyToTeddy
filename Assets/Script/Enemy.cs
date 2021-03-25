@@ -28,14 +28,9 @@ public class Enemy : MonoBehaviour
         if(currentHp <= 0)
         {
             isDead = true;
-            GameObject temp = Instantiate(spreadBlood, this.transform.position, Quaternion.identity);
+            GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.identity);
             temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
             temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseHp) });
-
-            if(whoAttackThis.CompareTag("Player"))
-            {
-                whoAttackThis.GetComponent<PlayerController>().IncreaseHp(increaseHp);
-            }
 
             this.gameObject.SetActive(false);
         }

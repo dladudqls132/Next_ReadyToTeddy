@@ -702,26 +702,29 @@ public class PlayerController : MonoBehaviour
             if (isCombat || isAiming)
             {
                 if (isAiming)
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
-                else
-                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-            }
-            else
-            {
-                if (weapon.GetIsShot())
                 {
-                    if (!isGrounded)
-                    {
-                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-                    }
-                    else
-                    {
-                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-                    }
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
                 }
                 else
                 {
-                    if (isRun)
+                    if (!weapon.GetIsRecoil())
+                    {
+                        if (weapon.GetIsShot())
+                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
+                    }
+                    else
+                        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
+                }
+            }
+            else
+            {
+                if (weapon.GetIsShot() && !weapon.GetIsRecoil())
+                {
+                    hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
+                }
+                else
+                {
+                    if (isRun && !weapon.GetIsRecoil() && !weapon.GetIsShot())
                     {
                         hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(15.479f, -62.062f, 0), Time.deltaTime * 14);
                     }

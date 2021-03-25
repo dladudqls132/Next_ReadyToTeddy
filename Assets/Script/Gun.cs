@@ -8,6 +8,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Transform shotPos;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
+    [SerializeField] protected bool isRecoil;
     [SerializeField] protected float shotDelay;
     [SerializeField] protected float currentShotDelay;
     [SerializeField] protected bool isReload;
@@ -31,6 +32,7 @@ public class Gun : MonoBehaviour
     public int GetAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
+    public bool GetIsRecoil() { return isRecoil; }
     public void SetOwner(GameObject who) { owner = who; }
 
     public void SetIsReload(bool value) { isReload = value; }

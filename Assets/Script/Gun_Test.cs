@@ -24,7 +24,14 @@ public class Gun_Test : Gun
             if(currentShotDelay <= 0)
             {
                 isShot = false;
+                //Debug.Log("asd");
+                isRecoil = false;
                 currentShotDelay = shotDelay;
+            }
+
+            if(currentShotDelay <= shotDelay / 3)
+            {
+                isRecoil = true;
             }
         }
 
@@ -48,7 +55,7 @@ public class Gun_Test : Gun
             currentReloadTime = reloadTime;
         }
 
-        if(currentAmmo <= 0)
+        if(currentAmmo <= 0 && !isShot && !isRecoil)
         {
             isReload = true;
         }
