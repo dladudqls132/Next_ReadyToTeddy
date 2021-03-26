@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
     public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos)
     {
         currentHp -= value;
-        //Instantiate(damagedEffect, damagedPos, Quaternion.identity);
+
         GameObject effect = pool_damagedEffect.GetDamagedEffect(Pool_DamagedEffect.Material.Iron);
 
         effect.transform.SetParent(null);

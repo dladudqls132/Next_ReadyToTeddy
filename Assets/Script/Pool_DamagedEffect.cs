@@ -18,19 +18,15 @@ public class Pool_DamagedEffect : MonoBehaviour
 
         public EffectInfo(EffectInfo info)
         {
-            this = info;
-        }
-
-        public EffectInfo(GameObject prefab, Material material)
-        {
-            this.prefab = prefab;
-            this.material = material;
+            this.prefab = Instantiate(info.prefab);
+            this.prefab.SetActive(false);
+            this.material = info.material;
         }
     }
 
-    [SerializeField] private EffectInfo[] damagedEffectsInfo;
-    [SerializeField] private List<EffectInfo> damagedEffects = new List<EffectInfo>();
     [SerializeField] private int effectNum;
+    [SerializeField] private EffectInfo[] damagedEffectsInfo;
+    private List<EffectInfo> damagedEffects = new List<EffectInfo>();
 
     // Start is called before the first frame update
     void Start()
@@ -39,9 +35,8 @@ public class Pool_DamagedEffect : MonoBehaviour
         {
             for (int j = 0; j < effectNum; j++)
             {
-                GameObject temp = Instantiate(damagedEffectsInfo[i].prefab, this.transform);
-                damagedEffects.Add(damagedEffectsInfo[i]);
-                temp.SetActive(false);
+                EffectInfo temp = new EffectInfo(damagedEffectsInfo[i]);
+                damagedEffects.Add(temp);
             }
         }
     }
