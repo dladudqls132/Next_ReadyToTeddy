@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private Transform mainCam;
+    [SerializeField] private FPPCamController mainCam;
     [SerializeField] private Transform camPos;
     [SerializeField] private CapsuleCollider groundCollider;
     [SerializeField] private Transform hand;
@@ -14,6 +14,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float maxHP;
     [SerializeField] private float currentHP;
+    [SerializeField] private int maxCombo;
+    [SerializeField] private int currentCombo;
+    [SerializeField] private float resetComboTime;
+    [SerializeField] private float currentResetComboTime;
+
     [SerializeField] private float decreaseHpValuePerSecond;
     [SerializeField] private bool isDead;
     [SerializeField] private float walkSpeed;
@@ -33,7 +38,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isJumpByObject;
     [SerializeField] private bool isGrounded;
     [SerializeField] private float jumpPower;
-    [SerializeField] private float currentJumpPower;
+    private float currentJumpPower;
     [SerializeField] private bool isClimbing;
     [SerializeField] private float climbPower;
     private float currentClimbPower;
@@ -48,7 +53,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isDash;
     [SerializeField] private float dashPower;
     [SerializeField] private float dashTime;
-    [SerializeField] private float currentDashPower;
+    private float currentDashPower;
     [SerializeField] private bool useGravity;
 
     private Vector3 climbUpPos;
@@ -72,6 +77,10 @@ public class PlayerController : MonoBehaviour
     public void SetIsJumpByObject(bool value, float power) { isJumpByObject = value; currentJumpPower = power; }
     public float GetMaxHp() { return maxHP; }
     public float GetCurrentHp() { return currentHP; }
+    public float GetMaxCombo() { return maxCombo; }
+    public float GetCurrentCombo() { return currentCombo; }
+    public float GetResetComboTime() { return resetComboTime; }
+    public float GetCurrentResetComboTime() { return currentResetComboTime; }
 
     // Start is called before the first frame update
     public void Init()
@@ -80,9 +89,9 @@ public class PlayerController : MonoBehaviour
         currentSlidingCoolTime = 0;
         headBobValue = 0;
         headOriginY = camPos.localPosition.y;
-        mainCam = Camera.main.transform;
-        hand = mainCam.Find("HandPos").Find("WeaponPos");
-        hand_Origin = mainCam.Find("HandPos");
+        mainCam = Camera.main.transform.GetComponent<FPPCamController>();
+        hand = mainCam.transform.Find("HandPos").Find("WeaponPos");
+        hand_Origin = mainCam.transform.Find("HandPos");
         currentHP = maxHP;
         handOriginPos = hand.parent.localPosition;
         handOriginRot = hand.parent.localRotation;
@@ -100,12 +109,12 @@ public class PlayerController : MonoBehaviour
             currentSlidingCoolTime = 0;
             headBobValue = 0;
             headOriginY = camPos.localPosition.y;
-            mainCam = Camera.main.transform;
-            hand = mainCam.Find("HandPos").Find("WeaponPos");
-            hand_Origin = mainCam.Find("HandPos");
+            mainCam = Camera.main.transform.GetComponent<FPPCamController>();
+            hand = mainCam.transform.Find("HandPos").Find("WeaponPos");
+            hand_Origin = mainCam.transform.Find("HandPos");
             currentHP = maxHP;
-            handOriginPos = hand.localPosition;
-            handOriginRot = hand.localRotation;
+            handOriginPos = hand.parent.localPosition;
+            handOriginRot = hand.parent.localRotation;
             currentCombatTime = combatTime;
             currentWPressTime = WPressTime;
             currentDashPower = dashPower;
@@ -125,8 +134,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        Vector3 forward = mainCam.forward;
-        Vector3 right = mainCam.right;
+        Vector3 forward = mainCam.transform.forward;
+        Vector3 right = mainCam.transform.right;
 
         forward.y = 0; right.y = 0;
 
@@ -165,8 +174,8 @@ public class PlayerController : MonoBehaviour
                     {
                         if (!isAiming)
                         {
-                            mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10, 0.1f, 1000);
-                            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 10);
+                            mainCam.FovMove(mainCam.GetOriginFov() + 10, 0.1f, 1000);
+                            mainCam.SetOriginFov(mainCam.GetOriginFov() + 10);
                         }
 
                         if (!isCrouch)
@@ -240,8 +249,8 @@ public class PlayerController : MonoBehaviour
                     if (Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), slidingDirection) < 0 || Vector3.Dot(new Vector3(rigid.velocity.normalized.x, moveDirection.y, rigid.velocity.normalized.z), moveDirection) < -0.75f)
                     {
                         isSlide = false;
-                        mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-                        mainCam.GetComponent<FPPCamController>().FovReset();
+                        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                        mainCam.FovReset();
                     }
                     else
                     {
@@ -342,9 +351,10 @@ public class PlayerController : MonoBehaviour
                             isClimbing = true;
                             isSlide = false;
                             isDash = false;
+                            canJump = false;
                             rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
-                            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-                            mainCam.GetComponent<FPPCamController>().FovReset();
+                            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                            mainCam.FovReset();
                         }
                     }
                 }
@@ -411,9 +421,9 @@ public class PlayerController : MonoBehaviour
         {
             isDash = true;
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
-                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 2.0f, 0.1f, 0.1f);
+                mainCam.FovMove(mainCam.GetOriginFov() - 2.0f, 0.1f, 0.1f);
             if (Vector3.Dot(forward, moveDirection) < 0)
-                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 2.0f, 0.1f, 0.1f);
+                mainCam.FovMove(mainCam.GetOriginFov() + 2.0f, 0.1f, 0.1f);
 
             if (isJump)
             {
@@ -426,8 +436,6 @@ public class PlayerController : MonoBehaviour
                 dashDirection = result;
             else
                 dashDirection = moveDirection.normalized;
-
-            // rigid.AddForce(moveDirection * dashPower, ForceMode.VelocityChange);
         }
 
         if (useGravity)
@@ -446,9 +454,6 @@ public class PlayerController : MonoBehaviour
             useGravity = false;
             currentDashPower -= (Time.deltaTime * dashPower) / dashTime;
 
-            //if (currentDashPower <= walkSpeed + 1.5f)
-            //    mainCam.GetComponent<FPPCamController>().FovReset();
-
             if (currentDashPower <= walkSpeed)
             {
                 isDash = false;
@@ -466,7 +471,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!isDash)
                 {
-                    mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() + 1.8f, 0.005f, 0.01f);
+                    mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
                 }
             }
 
@@ -492,13 +497,13 @@ public class PlayerController : MonoBehaviour
             if (isAiming)
             {
                 weapon.SetIsReload(false);
-                mainCam.GetComponent<FPPCamController>().FovMove(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10, 0.1f, 1000);
-                mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetOriginFov() - 10);
+                mainCam.FovMove(mainCam.GetOriginFov() - 10, 0.1f, 1000);
+                mainCam.SetOriginFov(mainCam.GetOriginFov() - 10);
             }
             else
             {
-                mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-                mainCam.GetComponent<FPPCamController>().FovReset();
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
             }
         }
 
@@ -511,14 +516,14 @@ public class PlayerController : MonoBehaviour
         {
             isSlide = false;
             isCrouch = false;
-            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-            mainCam.GetComponent<FPPCamController>().FovReset();
+            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+            mainCam.FovReset();
         }
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
         {
             isSlide = false;
-            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-            mainCam.GetComponent<FPPCamController>().FovReset();
+            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+            mainCam.FovReset();
             isJump = true;
             canJump = false;
 
@@ -564,8 +569,8 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             isJumpByObject = false;
             isDash = false;
-            mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-            mainCam.GetComponent<FPPCamController>().FovReset();
+            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+            mainCam.FovReset();
 
             if (climbUpPower <= 2)
             {
@@ -608,7 +613,7 @@ public class PlayerController : MonoBehaviour
 
         if (isJump || isJumpByObject)
         {
-            if (Physics.Raycast(mainCam.position, Vector3.up, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+            if (Physics.Raycast(mainCam.transform.position, Vector3.up, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
             {
                 isJump = false;
                 isJumpByObject = false;
@@ -631,8 +636,8 @@ public class PlayerController : MonoBehaviour
                 if (rigid.velocity.magnitude <= walkSpeed)
                 {
                     isSlide = false;
-                    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-                    mainCam.GetComponent<FPPCamController>().FovReset();
+                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                    mainCam.FovReset();
                 }
             }
             else
@@ -640,8 +645,8 @@ public class PlayerController : MonoBehaviour
                 if (rigid.velocity.magnitude <= 0.5f)
                 {
                     isSlide = false;
-                    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-                    mainCam.GetComponent<FPPCamController>().FovReset();
+                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                    mainCam.FovReset();
                 }
             }
         }
@@ -652,19 +657,14 @@ public class PlayerController : MonoBehaviour
                 currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            //if (!isAiming && !isDash &&!weapon.GetIsShot())
-            //{
-            //    mainCam.GetComponent<FPPCamController>().SetOriginFov(mainCam.GetComponent<FPPCamController>().GetRealOriginFov());
-            //    mainCam.GetComponent<FPPCamController>().FovReset();
-            //}
-
             HeadBob();
 
             isSlope = false;
         }
 
         HandAnimation();
-        DecreaseHpPerSecond();
+        //DecreaseHpPerSecond();
+        UpdateComboDamage();
 
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
@@ -774,7 +774,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if (isSlide)
                         {
-                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(0, 0, 56.788f), Time.deltaTime * 14);
+                            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(8, 0, 56.788f), Time.deltaTime * 14);
                         }
                         else
                         {
@@ -790,56 +790,6 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-            //if (isCombat || isAiming)
-            //{
-            //    if (isAiming)
-            //    {
-            //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.05f), Time.deltaTime * 30);
-            //    }
-            //    else
-            //    {
-            //        if (!weapon.GetIsRecoil())
-            //        {
-            //            if (weapon.GetIsShot())
-            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
-            //        }
-            //        else
-            //            hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-            //    }
-            //}
-            //else
-            //{
-            
-            //    if (weapon.GetIsShot() && !weapon.GetIsRecoil())
-            //    {
-            //        hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
-            //    }
-            //    else
-            //    {
-            //        if (weapon.GetIsRecoil())
-            //        {
-            //            if (isRun)
-            //            {
-            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 14);
-            //            }
-            //            else
-            //            {
-            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 5);
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (isRun)
-            //            {
-            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(12.507f, 0, 0), Time.deltaTime * 14);
-            //            }
-            //            else
-            //            {
-            //                hand_Origin.localRotation = Quaternion.Lerp(hand_Origin.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -moveInput.x * 1.7f), Time.deltaTime * 12);
-            //            }
-            //        }
-            //    }
-            //}
         }
     }
 
@@ -876,5 +826,50 @@ public class PlayerController : MonoBehaviour
         currentHP += value;
 
         CheckingHp();
+    }
+
+    void CheckingCombo()
+    {
+        if (currentCombo < 0)
+        {
+            currentCombo = 0;
+        }
+        else if (currentCombo > maxCombo)
+            currentCombo = maxCombo;
+    }
+
+    public void IncreaseCombo(int value)
+    {
+        //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
+        if(currentResetComboTime > resetComboTime - 3 || currentCombo == 0)
+            currentCombo += value;
+        currentResetComboTime = resetComboTime;
+
+        CheckingCombo();
+    }
+
+    public void DecreaseCombo(int value)
+    {
+        currentCombo -= value;
+
+        CheckingCombo();
+    }
+
+    public void UpdateComboDamage()
+    {
+        if (currentCombo > 0)
+        {
+            currentResetComboTime -= Time.deltaTime;
+            if (currentResetComboTime <= 0)
+            {
+                DecreaseCombo(1);
+                //currentResetComboTime = resetComboTime / 2;
+                if(currentCombo > 0)
+                    currentResetComboTime = 2;
+                else
+                    currentResetComboTime = 0;
+            }
+        }
+        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo / 10);
     }
 }

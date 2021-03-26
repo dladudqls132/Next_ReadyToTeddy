@@ -17,6 +17,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
+    protected float damagePerBullet_origin;
     [SerializeField] protected float speed;
     [SerializeField] protected ParticleSystem muzzleFlash;
 
@@ -27,6 +28,7 @@ public class Gun : MonoBehaviour
         currentAmmo = maxAmmo;
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
+        damagePerBullet_origin = damagePerBullet;
     }
 
     public int GetAmmoCount() { return currentAmmo; }
@@ -36,6 +38,9 @@ public class Gun : MonoBehaviour
     public void SetIsRecoil(bool value) { isRecoil = value; }
     public void SetOwner(GameObject who) { owner = who; }
 
+    public float GetDamagePerBullet_Origin() { return damagePerBullet_origin; }
+    public float GetDamagePerBullet() { return damagePerBullet; }
+    public void SetDamagePerBullet(float value) { damagePerBullet = value; }
     public void SetIsReload(bool value) { isReload = value; }
 
     virtual public bool Fire() { return false; }

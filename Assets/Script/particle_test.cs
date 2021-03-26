@@ -8,25 +8,29 @@ public class particle_test : MonoBehaviour
     [SerializeField] private bool isEatted;
     [SerializeField] private float eattedTime;
     [SerializeField] private Vector3[] particlePosition;
+
+    private ParticleSystem particleSystem;
     private float eattedSpeed;
 
     public void SetTarget(Transform target) { this.target = target; }
 
     private void Start()
     {
+        particleSystem = this.GetComponent<ParticleSystem>();
         particlePosition = new Vector3[this.GetComponent<ParticleSystem>().emission.GetBurst(0).maxCount];
     }
 
     // Update is called once per frame
     void Update()
     {
-        ParticleSystem.Particle[] p = new ParticleSystem.Particle[this.GetComponent<ParticleSystem>().particleCount + 1];
-        int l = this.GetComponent<ParticleSystem>().GetParticles(p);
+        ParticleSystem.Particle[] p = new ParticleSystem.Particle[particleSystem.particleCount + 1];
+        int l = particleSystem.GetParticles(p);
 
         if (isEatted)
         {
+                bool destroy= true;
             eattedSpeed += Time.deltaTime / eattedTime;
-            for (int i = 0; i < this.GetComponent<ParticleSystem>().particleCount; i++)
+            for (int i = 0; i < particleSystem.particleCount; i++)
             {
                 p[i].position = Vector3.Lerp(p[i].position, target.position, Time.deltaTime * eattedSpeed);
                 p[i].velocity = Vector3.zero;
@@ -36,24 +40,32 @@ public class particle_test : MonoBehaviour
                 {
                     if (target.CompareTag("Player"))
                     {
-                        target.GetComponent<PlayerController>().IncreaseHp(1);
+                        target.GetComponent<PlayerController>().IncreaseCombo(1);
 
                     }
                     p[i].remainingLifetime = 0;
                 }
 
-                this.GetComponent<ParticleSystem>().SetParticles(p, l);
+                if (p[i].remainingLifetime != 0)
+                    destroy = false;
+
+                
+
+                particleSystem.SetParticles(p, l);
             }
+
+            if (destroy)
+                Destroy(this.gameObject);
         }
         else
         {
-            for (int i = 0; i < this.GetComponent<ParticleSystem>().particleCount; i++)
+            for (int i = 0; i < particleSystem.particleCount; i++)
             {
                 p[i].velocity = Vector3.Lerp(p[i].velocity, Vector3.zero, Time.deltaTime * 5);
 
                 if (p[0].velocity.magnitude <= 0.3f)
                     isEatted = true;
-                this.GetComponent<ParticleSystem>().SetParticles(p, l);
+                particleSystem.SetParticles(p, l);
             }
         }
     }

@@ -4,17 +4,45 @@ using UnityEngine;
 
 public class Pool_DamagedEffect : MonoBehaviour
 {
-    [SerializeField] private GameObject damagedEffectPrefab;
-    [SerializeField] private List<GameObject> damagedEffects = new List<GameObject>();
+    public enum Material
+    {
+        None,
+        Iron
+    }
+
+    [System.Serializable]
+    struct EffectInfo
+    {
+        public GameObject prefab;
+        public Material material;
+
+        public EffectInfo(EffectInfo info)
+        {
+            this = info;
+        }
+
+        public EffectInfo(GameObject prefab, Material material)
+        {
+            this.prefab = prefab;
+            this.material = material;
+        }
+    }
+
+    [SerializeField] private EffectInfo[] damagedEffectsInfo;
+    [SerializeField] private List<EffectInfo> damagedEffects = new List<EffectInfo>();
     [SerializeField] private int effectNum;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < effectNum; i++)
+        for (int i = 0; i < damagedEffectsInfo.Length; i++)
         {
-            damagedEffects.Add(Instantiate(damagedEffectPrefab, this.transform));
-            damagedEffects[i].SetActive(false);
+            for (int j = 0; j < effectNum; j++)
+            {
+                GameObject temp = Instantiate(damagedEffectsInfo[i].prefab, this.transform);
+                damagedEffects.Add(damagedEffectsInfo[i]);
+                temp.SetActive(false);
+            }
         }
     }
 
@@ -22,17 +50,20 @@ public class Pool_DamagedEffect : MonoBehaviour
     {
         for (int i = 0; i < damagedEffects.Count; i++)
         {
-            if (!damagedEffects[i].activeSelf && damagedEffects[i].transform.parent == null)
-                damagedEffects[i].transform.SetParent(this.transform);
+            if (!damagedEffects[i].prefab.activeSelf && damagedEffects[i].prefab.transform.parent == null)
+                damagedEffects[i].prefab.transform.SetParent(this.transform);
         }
     }
 
-    public GameObject GetDamagedEffect()
+    public GameObject GetDamagedEffect(Material material)
     {
         for(int i = 0; i < damagedEffects.Count; i++)
         {
-            if (!damagedEffects[i].activeSelf)
-                return damagedEffects[i];
+            if (damagedEffects[i].material == material)
+            {
+                if (!damagedEffects[i].prefab.activeSelf)
+                    return damagedEffects[i].prefab;
+            }
         }
 
         return null;
