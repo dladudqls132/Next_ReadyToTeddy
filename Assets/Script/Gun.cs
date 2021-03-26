@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform shotPos;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
+    [SerializeField] protected bool isRecoil;
     [SerializeField] protected float shotDelay;
     [SerializeField] protected float currentShotDelay;
     [SerializeField] protected bool isReload;
@@ -15,7 +17,10 @@ public class Gun : MonoBehaviour
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
+    protected float damagePerBullet_origin;
     [SerializeField] protected float speed;
+    [SerializeField] protected ParticleSystem muzzleFlash;
+
     protected Vector3 direction;
 
     protected virtual void Start()
@@ -23,14 +28,21 @@ public class Gun : MonoBehaviour
         currentAmmo = maxAmmo;
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
+        damagePerBullet_origin = damagePerBullet;
     }
 
     public int GetAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
+    public bool GetIsRecoil() { return isRecoil; }
+    public void SetIsRecoil(bool value) { isRecoil = value; }
+    public void SetOwner(GameObject who) { owner = who; }
 
+    public float GetDamagePerBullet_Origin() { return damagePerBullet_origin; }
+    public float GetDamagePerBullet() { return damagePerBullet; }
+    public void SetDamagePerBullet(float value) { damagePerBullet = value; }
     public void SetIsReload(bool value) { isReload = value; }
 
-    virtual public void Fire() { }
+    virtual public bool Fire() { return false; }
     public bool CanReload() { if (currentAmmo < maxAmmo) return true; return false; }
 }

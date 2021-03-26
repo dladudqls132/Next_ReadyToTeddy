@@ -22,8 +22,11 @@ public class FPPCamController : MonoBehaviour
     private float originFov;
     private float destFov;
     private float fovStopTime;
+    private float realOriginFov;
 
     public float GetOriginFov() { return originFov; }
+    public float GetRealOriginFov() { return realOriginFov; }
+    public void SetOriginFov(float value) { originFov = value; } 
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +39,7 @@ public class FPPCamController : MonoBehaviour
 
         mainCamera = Camera.main;
         originFov = Camera.main.fieldOfView;
+        realOriginFov = originFov;
     }
 
     private void Update()
@@ -63,7 +67,7 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 10);
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 13);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
             {
@@ -106,7 +110,6 @@ public class FPPCamController : MonoBehaviour
         this.timeToDest = timeToDest;
         this.timeToOrigin = timeToOrigin;
         fovStopTime = stopTime;
-
         fovTimer = 0;
     }
 

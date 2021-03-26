@@ -13,6 +13,6 @@ public class Enemy_Target : Enemy
     // Update is called once per frame
     void Update()
     {
-        CheckingHp();
+        //CheckingHp();
     }
 }
