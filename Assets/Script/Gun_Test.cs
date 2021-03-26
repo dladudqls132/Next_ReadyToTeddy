@@ -24,7 +24,14 @@ public class Gun_Test : Gun
             if(currentShotDelay <= 0)
             {
                 isShot = false;
+                isRecoil = false;
+                //Debug.Log("asd");
                 currentShotDelay = shotDelay;
+            }
+
+            if(currentShotDelay <= shotDelay / 1.6f)
+            {
+                isRecoil = true;
             }
         }
 
@@ -48,7 +55,7 @@ public class Gun_Test : Gun
             currentReloadTime = reloadTime;
         }
 
-        if(currentAmmo <= 0)
+        if(currentAmmo <= 0 && !isShot)
         {
             isReload = true;
         }
@@ -59,11 +66,12 @@ public class Gun_Test : Gun
             canShot = false;
     }
 
-    override public void Fire()
+    override public bool Fire()
     {
         if (canShot)
         {
             isReload = false;
+            isRecoil = false;
 
             for (int i = 0; i < fireNum; i++)
             {
@@ -84,7 +92,7 @@ public class Gun_Test : Gun
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
                 //Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)).normalized * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up).normalized * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
-                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
+                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
 
                 RaycastHit hit2;
                 if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
@@ -92,7 +100,8 @@ public class Gun_Test : Gun
                     if (hit2.transform.CompareTag("Enemy"))
                     {
                         Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                        enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                        //enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point);
                     }
                     else
                     {
@@ -102,10 +111,16 @@ public class Gun_Test : Gun
                     }
                 }
 
+      
+                muzzleFlash.Play();
                 isShot = true;
             }
 
             currentAmmo--;
+
+            return true;
         }
+
+        return false;
     }
 }
