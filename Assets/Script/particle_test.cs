@@ -32,11 +32,11 @@ public class particle_test : MonoBehaviour
             eattedSpeed += Time.deltaTime / eattedTime;
             for (int i = 0; i < particleSystem.particleCount; i++)
             {
-                p[i].position = Vector3.Lerp(p[i].position, target.position, Time.deltaTime * eattedSpeed);
+                p[i].position = Vector3.Lerp(p[i].position, target.GetComponent<Collider>().bounds.center, Time.deltaTime * eattedSpeed);
                 p[i].velocity = Vector3.zero;
                 particlePosition[i] = p[i].position;
 
-                if (target.GetComponent<Collider>().bounds.Contains(p[i].position))
+                if (Vector3.Distance(p[i].position, target.GetComponent<Collider>().bounds.center) < 0.5f)
                 {
                     if (target.CompareTag("Player"))
                     {
