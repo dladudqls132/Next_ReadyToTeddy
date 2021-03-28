@@ -870,6 +870,6 @@ public class PlayerController : MonoBehaviour
                     currentResetComboTime = 0;
             }
         }
-        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo / 10);
+        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 }

@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float currentHp;
     [SerializeField] protected float increaseHp;
     [SerializeField] protected float increaseCombo;
-    [SerializeField] protected Pool_DamagedEffect pool_damagedEffect;
+    protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected GameObject spreadBlood;
     private GameObject whoAttackThis;
 
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
             GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.identity);
             temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
             //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-            temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, 1) });
+            temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
 
             this.gameObject.SetActive(false);
         }

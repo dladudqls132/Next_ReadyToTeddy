@@ -130,6 +130,10 @@ MonoBehaviour:
   weapon: {fileID: 0}
   maxHP: 100
   currentHP: 0
+  maxCombo: 30
+  currentCombo: 0
+  resetComboTime: 5
+  currentResetComboTime: 0
   decreaseHpValuePerSecond: 1
   isDead: 0
   walkSpeed: 7
@@ -145,15 +149,13 @@ MonoBehaviour:
   isJumpByObject: 0
   isGrounded: 1
   jumpPower: 6.5
-  currentJumpPower: 0
   isClimbing: 0
   climbPower: 5.35
   isClimbUp: 0
   isCombat: 0
   isAiming: 0
-  combatTime: 0.8
+  combatTime: 0
   isDash: 0
   dashPower: 30
   dashTime: 0.3
-  currentDashPower: 0
   useGravity: 0
