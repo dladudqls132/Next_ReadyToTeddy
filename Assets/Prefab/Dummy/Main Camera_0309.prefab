@@ -117,9 +117,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78927b682e01c224796e7c394fc9278b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  owner: {fileID: 0}
   shotPos: {fileID: 7640704203253700905}
   isShot: 0
   canShot: 0
+  isRecoil: 0
   shotDelay: 0.75
   currentShotDelay: 0
   isReload: 0
@@ -127,11 +129,11 @@ MonoBehaviour:
   currentReloadTime: 0
   maxAmmo: 6
   currentAmmo: 0
-  damagePerBullet: 1
+  damagePerBullet: 5
   speed: 500
   muzzleFlash: {fileID: 1846890387899228356}
   ammoHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef, type: 3}
-  spreadAngle: 7.44
+  spreadAngle: 10
   fireNum: 10
 --- !u!1 &7640704203253700908
 GameObject:

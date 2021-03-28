@@ -423,7 +423,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2541457280464432744, guid: a49d3fd7ff38d5a4e945f881893d0136, type: 3}
+  - {fileID: 2100000, guid: c1f4e21302e87eb4cb876b195796ae98, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -863,7 +863,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2477152504647978758, guid: a49d3fd7ff38d5a4e945f881893d0136, type: 3}
+  - {fileID: 2100000, guid: 51d1bb4e3f820a747a0fa7fd281cf59f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2294,7 +2294,7 @@ GameObject:
   - component: {fileID: 8380056890694969919}
   - component: {fileID: 8380056890694969918}
   m_Layer: 12
-  m_Name: Enemy
+  m_Name: Enemy_250
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2344,10 +2344,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDead: 0
-  maxHp: 10
+  maxHp: 250
   currentHp: 0
   increaseHp: 0
-  increaseCombo: 15
+  increaseCombo: 1
   pool_damagedEffect: {fileID: 0}
   spreadBlood: {fileID: 5509323513824876469, guid: 9f2a57df863802045a4990bedec7d9bc,
     type: 3}
