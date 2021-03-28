@@ -472,6 +472,7 @@ public class PlayerController : MonoBehaviour
                 if (!isDash)
                 {
                     mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
+                    mainCam.Shake(0.05f, 0.06f);
                 }
             }
 
@@ -522,8 +523,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
         {
             isSlide = false;
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            if (!isAiming)
+            {
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
+            }
             isJump = true;
             canJump = false;
 
