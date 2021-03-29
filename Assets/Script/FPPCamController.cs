@@ -79,6 +79,15 @@ public class FPPCamController : MonoBehaviour
                 mainCamera.fieldOfView = originFov;
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.PageUp))
+        {
+            cameraMoveSpeed += 5;
+        }
+        else if(Input.GetKeyDown(KeyCode.PageDown))
+        {
+            cameraMoveSpeed -= 5;
+        }
     }
 
     // Update is called once per frame
