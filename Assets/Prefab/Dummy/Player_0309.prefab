@@ -76,7 +76,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.5
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
@@ -128,25 +128,34 @@ MonoBehaviour:
   hand_Origin: {fileID: 0}
   weapon_gameObject: {fileID: 0}
   weapon: {fileID: 0}
+  maxHP: 100
+  currentHP: 0
+  maxCombo: 30
+  currentCombo: 0
+  resetComboTime: 5
+  currentResetComboTime: 0
+  decreaseHpValuePerSecond: 1
+  isDead: 0
   walkSpeed: 7
   runSpeed: 11
   slidingCoolTime: 1.5
-  currentSlidingCoolTime: 0
   isSlide: 0
   isSlope: 0
   isRun: 0
+  WPressTime: 0.2
   isCrouch: 0
+  canJump: 0
   isJump: 0
+  isJumpByObject: 0
   isGrounded: 1
   jumpPower: 6.5
   isClimbing: 0
   climbPower: 5.35
-  canClimb: 0
   isClimbUp: 0
   isCombat: 0
-  combatTime: 0.8
-  currentCombatTime: 0
   isAiming: 0
-  walk_defaultPm: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
-  sliding_groundPm: {fileID: 13400000, guid: 6c0865cd32034ba45b7bc880840ab76e, type: 2}
-  sliding_slopePm: {fileID: 13400000, guid: c1b17bda80ff76549831a93abff4f3be, type: 2}
+  combatTime: 0
+  isDash: 0
+  dashPower: 30
+  dashTime: 0.3
+  useGravity: 0

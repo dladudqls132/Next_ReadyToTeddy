@@ -15,15 +15,22 @@ public class FPPCamController : MonoBehaviour
     private float rotY = 0.0f;
     private float rotX = 0.0f;
 
-    private bool isFovMove;
+    [SerializeField] private bool isFovMove;
     private float timeToDest;
     private float timeToOrigin;
     private float fovTimer;
     private float originFov;
     private float destFov;
     private float fovStopTime;
+    private float realOriginFov;
+    [SerializeField] private bool isShake;
+    [SerializeField] private float shakeTime;
+    private float currentShakeTime;
+    [SerializeField] private float shakeAmount;
 
     public float GetOriginFov() { return originFov; }
+    public float GetRealOriginFov() { return realOriginFov; }
+    public void SetOriginFov(float value) { originFov = value; } 
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +43,7 @@ public class FPPCamController : MonoBehaviour
 
         mainCamera = Camera.main;
         originFov = Camera.main.fieldOfView;
+        realOriginFov = originFov;
     }
 
     private void Update()
@@ -63,7 +71,7 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 10);
+            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 13);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
             {
@@ -86,7 +94,30 @@ public class FPPCamController : MonoBehaviour
         Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
         transform.rotation = localRotation;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
-        this.transform.position = cameraFollow.position;
+
+        if (isShake)
+
+        {
+
+            transform.position = Random.insideUnitSphere * shakeAmount + cameraFollow.position;
+
+            currentShakeTime -= Time.deltaTime;
+
+            if(currentShakeTime <= 0)
+            {
+                isShake = false;
+            }
+
+        }
+
+        else
+
+        {
+            this.transform.position = cameraFollow.position;
+
+            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
+
+        }
     }
 
     public void FovMove(float destination, float timeToDest, float stopTime)
@@ -106,7 +137,6 @@ public class FPPCamController : MonoBehaviour
         this.timeToDest = timeToDest;
         this.timeToOrigin = timeToOrigin;
         fovStopTime = stopTime;
-
         fovTimer = 0;
     }
 
@@ -119,5 +149,14 @@ public class FPPCamController : MonoBehaviour
         this.timeToOrigin = 0;
         fovStopTime = 0;
         fovTimer = 0;
+    }
+
+    public void Shake(float shakeTime, float shakeAmount)
+    {
+        this.isShake = true;
+        this.shakeTime = shakeTime;
+        this.shakeAmount = shakeAmount;
+
+        currentShakeTime = shakeTime;
     }
 }
