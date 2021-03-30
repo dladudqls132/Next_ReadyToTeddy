@@ -11,12 +11,12 @@ public class UI_PlayerBarController : MonoBehaviour
         ComboBar
     }
 
-    [SerializeField] private BarType barType;
-    private PlayerController player;
-    private Image image;
-    private Image image_comboResetTime;
-    private Text text;
-    private RectTransform rectTransform;
+    [SerializeField] private BarType barType = 0;
+    private PlayerController player = null;
+    private Image image = null;
+    private Image image_comboResetTime = null;
+    private Text text = null;
+    private RectTransform rectTransform = null;
 
     private void Start()
     {

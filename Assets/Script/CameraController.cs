@@ -5,11 +5,10 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private float CameraMoveSpeed = 120.0f;
-    [SerializeField] Transform CameraFollow;
-    Camera mainCamera;
+    [SerializeField] Transform CameraFollow = null;
+    Camera mainCamera = null;
 
     private float clampAngle = 70.0f;
-    private float inputSensitivity = 150.0f;
     private float mouseX;
     private float mouseY;
     private float rotY = 0.0f;

@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class UI_Ammo : MonoBehaviour
 {
-    [SerializeField] private Gun gun;
-    [SerializeField] private Text text_ammoCount;
-    [SerializeField] private Image image_lowAmmoCount;
-    [SerializeField] private Image image_reload;
+    [SerializeField] private Gun gun = null;
+    [SerializeField] private Text text_ammoCount = null;
+    [SerializeField] private Image image_lowAmmoCount = null;
+    [SerializeField] private Image image_reload = null;
 
     // Update is called once per frame
     void Update()
