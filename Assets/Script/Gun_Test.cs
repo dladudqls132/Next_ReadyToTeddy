@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun_Test : Gun
 {
-    [SerializeField] private GameObject ammoHit = null;
+    [SerializeField] private GameObject bulletHit = null;
     [SerializeField] private float spreadAngle = 0;
     [SerializeField] private float fireNum = 0;
 
@@ -105,7 +105,7 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-                        GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
+                        GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                         tempObect.transform.SetParent(hit2.transform, true);
                     }
