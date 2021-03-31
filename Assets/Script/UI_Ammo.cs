@@ -23,7 +23,7 @@ public class UI_Ammo : MonoBehaviour
 
         if (gun != null)
         {
-            text_ammoCount.text = gun.GetCurrentAmmoCount().ToString();
+            text_ammoCount.text = gun.GetCurrentAmmoCount().ToString() + " / " + gun.GetMaxAmmoCount().ToString();
 
             if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmoCount() / 3)
             {
