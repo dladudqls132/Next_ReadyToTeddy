@@ -22,10 +22,10 @@ public class UI_PlayerBarController : MonoBehaviour
     {
         rectTransform = this.GetComponent<RectTransform>();
 
-        if (this.transform.Find("Image") != null)
-            image = this.transform.Find("Image").GetComponent<Image>();
-        if (this.transform.Find("Image_comboResetTime") != null)
-            image_comboResetTime = this.transform.Find("Image_comboResetTime").GetComponent<Image>();
+        if (this.transform.Find("Image_Hp") != null)
+            image = this.transform.Find("Image_Hp").GetComponent<Image>();
+        if (this.transform.Find("Image_ComboResetTime") != null)
+            image_comboResetTime = this.transform.Find("Image_ComboResetTime").GetComponent<Image>();
         if (this.transform.Find("Text") != null)
             text = this.transform.Find("Text").GetComponent<Text>();
     }
@@ -43,8 +43,8 @@ public class UI_PlayerBarController : MonoBehaviour
 
         if (barType == BarType.HpBar)
         {
-            text.text = player.GetCurrentHp().ToString();
-            //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
+            text.text = player.GetCurrentHp().ToString() + "/ " + player.GetMaxHp().ToString();
+            image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
         }
         else if (barType == BarType.ComboBar)
         {

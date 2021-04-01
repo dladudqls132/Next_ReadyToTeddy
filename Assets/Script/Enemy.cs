@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
-    [SerializeField] protected float increaseHp;
+    protected float increaseHp;
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected GameObject spreadBlood;
