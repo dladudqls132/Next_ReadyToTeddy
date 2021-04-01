@@ -107,7 +107,9 @@ public class Gun_Test : Gun
                     {
                         GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                        tempObect.transform.SetParent(hit2.transform, true);
+                        //tempObect.transform.SetParent(hit2.transform, true);
+                        //tempObect.transform.localScale = new Vector3(1 / hit2.transform.localScale.x * bulletHit.transform.localScale.x, 1 / hit2.transform.localScale.y * bulletHit.transform.localScale.y, 1 / hit2.transform.localScale.z * bulletHit.transform.localScale.z);
+                        tempObect.transform.SetParent(hit2.transform);
                     }
                 }
 
