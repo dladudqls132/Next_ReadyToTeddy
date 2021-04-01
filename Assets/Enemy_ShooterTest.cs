@@ -8,6 +8,7 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private bool isAiming;
     [SerializeField] private Rig aimRig;
     [SerializeField] private Transform target;
+    private Quaternion tempRot;
 
     // Start is called before the first frame update
     override protected void Start()
@@ -51,9 +52,13 @@ public class Enemy_ShooterTest : Enemy
         //    anim.SetBool("isAiming", false);
         //}
 
-        Quaternion temp = Quaternion.LookRotation(target.transform.position - this.transform.position);
-        temp = Quaternion.Euler(0, temp.eulerAngles.y, 0);
-        this.transform.rotation = temp;
+        if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) <= 0.5f)
+        {
+            tempRot = Quaternion.LookRotation(target.transform.position - this.transform.position);
+            tempRot = Quaternion.Euler(0, tempRot.eulerAngles.y, 0);
+        }
+
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, tempRot, Time.deltaTime * 12);
 
         anim.SetBool("isAiming", isAiming);
     }
