@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected GameObject spreadBlood;
     private GameObject whoAttackThis;
+    protected Animator anim;
 
     public float GetCurrentHP() { return currentHp; }
     public void SetCurrentHP(float value) { currentHp = value; }
