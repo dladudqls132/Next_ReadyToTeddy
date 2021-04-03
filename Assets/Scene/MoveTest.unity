@@ -1211,7 +1211,7 @@ PrefabInstance:
     - target: {fileID: 2273862262067903311, guid: bcd39a1ea530b2844b480749d7dc33b6,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcd39a1ea530b2844b480749d7dc33b6, type: 3}
@@ -5303,6 +5303,27 @@ PrefabInstance:
       propertyPath: pathFindingDelay
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 2273862262067903310, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: spreadBlood
+      value: 
+      objectReference: {fileID: 5509323513824876469, guid: 9f2a57df863802045a4990bedec7d9bc,
+        type: 3}
+    - target: {fileID: 2273862262067903310, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: currentHp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273862262067903310, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: increaseCombo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273862262067903310, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: maxHp
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 2273862262067903311, guid: bcd39a1ea530b2844b480749d7dc33b6,
         type: 3}
       propertyPath: m_Name
@@ -5312,6 +5333,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273862262067903311, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273862262067903311, guid: bcd39a1ea530b2844b480749d7dc33b6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcd39a1ea530b2844b480749d7dc33b6, type: 3}

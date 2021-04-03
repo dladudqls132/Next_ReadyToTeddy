@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_AirTest : MonoBehaviour
+public class Enemy_AirTest : Enemy
 {
     [SerializeField] private NodeManager nodeManager;
     [SerializeField] private Transform target;
-    [SerializeField] private List<Node> path = new List<Node>();
-    [SerializeField] private GameObject pathObject;
+    private List<Node> path = new List<Node>();
     [SerializeField] private float pathFindingDelay;
 
     private Vector3 destPos;
     private Node[][][] node;
 
     // Start is called before the first frame update
-    void Start()
+    override protected void Start()
     {
+        base.Start();
+
         node = nodeManager.node;
 
         StartCoroutine(PathFinding());
@@ -35,7 +36,6 @@ public class Enemy_AirTest : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(pathFindingDelay);
-            int t = 0;
 
             Vector3 temp = this.transform.position - nodeManager.transform.position;
             Node startNode = node[Mathf.RoundToInt(Mathf.Abs(temp.x))][Mathf.RoundToInt(Mathf.Abs(temp.y))][Mathf.RoundToInt(Mathf.Abs(temp.z))];
@@ -51,7 +51,6 @@ public class Enemy_AirTest : MonoBehaviour
 
             while (openList.Count > 0)
             {
-                t++;
                 Node currentNode = openList[0];
 
                 for (int i = 1; i < openList.Count; i++)
@@ -94,7 +93,6 @@ public class Enemy_AirTest : MonoBehaviour
                     }
                 }
             }
-            Debug.Log(t);
         }
     }
 
