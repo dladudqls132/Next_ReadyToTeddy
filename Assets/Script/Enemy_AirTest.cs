@@ -96,13 +96,13 @@ public class Enemy_AirTest : Enemy
         }
     }
 
-    Node GetNode(Vector3 pos)
+    Node GetNode(Vector3 pos)   //position에 맞는 node 반환
     {
         Vector3 temp = pos - nodeManager.transform.position;
         return node[Mathf.RoundToInt(Mathf.Abs(temp.x))][Mathf.RoundToInt(Mathf.Abs(temp.y))][Mathf.RoundToInt(Mathf.Abs(temp.z))];
     }
 
-    List<Node> GetNeighborNode(Node node)
+    List<Node> GetNeighborNode(Node node)   //근처 노드 반환
     {
         List<Node> neighborNode = new List<Node>();
 
@@ -132,7 +132,7 @@ public class Enemy_AirTest : Enemy
         return result;
     }
 
-    void GetFinalPath(Node startNode, Node targetNode)
+    void GetFinalPath(Node startNode, Node targetNode)  //최종 경로 입력
     {
         Node currentNode = targetNode;
 

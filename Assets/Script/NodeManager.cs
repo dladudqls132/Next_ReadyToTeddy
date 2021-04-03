@@ -11,8 +11,8 @@ public class NodeManager : MonoBehaviour
 
     private bool isStart;
 
-
     public Node[][][] node;
+
     // Start is called before the first frame update
     void Awake()
     {
