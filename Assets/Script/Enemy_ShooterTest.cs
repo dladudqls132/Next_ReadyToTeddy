@@ -129,7 +129,7 @@ public class Enemy_ShooterTest : Enemy
         }
         else
         {
-            agent.speed = 3;
+            agent.speed = Mathf.Lerp(agent.speed, 3, Time.deltaTime * 10);
             jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 3)) * Time.deltaTime;
 
             agent.baseOffset = Mathf.Sin(jumpAngle) * 2;
