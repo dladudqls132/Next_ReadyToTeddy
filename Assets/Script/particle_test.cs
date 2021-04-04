@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class particle_test : MonoBehaviour
 {
-    [SerializeField] private Transform target;
-    [SerializeField] private bool isEatted;
-    [SerializeField] private float eattedTime;
+    [SerializeField] private Transform target = null;
+    [SerializeField] private bool isEatted = false;
+    [SerializeField] private float eattedTime = 0;
     [SerializeField] private Vector3[] particlePosition;
 
-    private ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem = null;
     private float eattedSpeed;
 
     public void SetTarget(Transform target) { this.target = target; }
@@ -28,7 +28,7 @@ public class particle_test : MonoBehaviour
 
         if (isEatted)
         {
-                bool destroy= true;
+            bool destroy = true;
             eattedSpeed += Time.deltaTime / eattedTime;
             for (int i = 0; i < particleSystem.particleCount; i++)
             {

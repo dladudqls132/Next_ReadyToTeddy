@@ -24,7 +24,7 @@ public class Pool_DamagedEffect : MonoBehaviour
         }
     }
 
-    [SerializeField] private int effectNum;
+    [SerializeField] private int effectNum = 0;
     [SerializeField] private EffectInfo[] damagedEffectsInfo;
     private List<EffectInfo> damagedEffects = new List<EffectInfo>();
 

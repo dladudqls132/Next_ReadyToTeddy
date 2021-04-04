@@ -128,6 +128,7 @@ MonoBehaviour:
   hand_Origin: {fileID: 0}
   weapon_gameObject: {fileID: 0}
   weapon: {fileID: 0}
+  isDead: 0
   maxHP: 100
   currentHP: 0
   maxCombo: 30
@@ -135,8 +136,7 @@ MonoBehaviour:
   resetComboTime: 5
   currentResetComboTime: 0
   decreaseHpValuePerSecond: 1
-  isDead: 0
-  walkSpeed: 7
+  walkSpeed: 8
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlide: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   isClimbing: 0
   climbPower: 5.35
   isClimbUp: 0
+  climbUpTime: 0.5
+  climbUpPower: 10
   isCombat: 0
   isAiming: 0
   combatTime: 0
@@ -159,3 +161,5 @@ MonoBehaviour:
   dashPower: 30
   dashTime: 0.3
   useGravity: 0
+  isLanding: 0
+  landingReboundSpeed: 40

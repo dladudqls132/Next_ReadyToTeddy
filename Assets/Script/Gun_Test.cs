@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Gun_Test : Gun
 {
-    [SerializeField] private GameObject ammoHit;
-    [SerializeField] private float spreadAngle;
-    [SerializeField] private float fireNum;
+    [SerializeField] private GameObject bulletHit = null;
+    [SerializeField] private float spreadAngle = 0;
+    [SerializeField] private float fireNum = 0;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -105,9 +105,11 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-                        GameObject tempObect = Instantiate(ammoHit, hit2.point, Quaternion.identity);
+                        GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                        tempObect.transform.SetParent(hit2.transform, true);
+                        //tempObect.transform.SetParent(hit2.transform, true);
+                        //tempObect.transform.localScale = new Vector3(1 / hit2.transform.localScale.x * bulletHit.transform.localScale.x, 1 / hit2.transform.localScale.y * bulletHit.transform.localScale.y, 1 / hit2.transform.localScale.z * bulletHit.transform.localScale.z);
+                        tempObect.transform.SetParent(hit2.transform);
                     }
                 }
 

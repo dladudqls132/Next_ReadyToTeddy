@@ -31,7 +31,8 @@ public class Gun : MonoBehaviour
         damagePerBullet_origin = damagePerBullet;
     }
 
-    public int GetAmmoCount() { return currentAmmo; }
+    public int GetMaxAmmoCount() { return maxAmmo; }
+    public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
     public bool GetIsRecoil() { return isRecoil; }
