@@ -2,16 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Enemy_State
+{
+    None,
+    Patrol,
+    Search,
+    Targeting
+}
+
+public enum Enemy_Behavior
+{
+    Idle,
+    Walk,
+    Run,
+    Jump,
+    Attack
+}
+
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private CharacterMaterial material;
+    [SerializeField] protected Enemy_State state;
+    [SerializeField] protected Enemy_Behavior behavior;
+    [SerializeField] protected CharacterMaterial material;
+    [SerializeField] protected Transform eye;
+    [SerializeField] protected Transform target;
+    [SerializeField] protected GameObject spreadBlood;
+    [SerializeField] protected bool canSee;
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
     protected float increaseHp;
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
-    [SerializeField] protected GameObject spreadBlood;
+    [SerializeField] protected float combatTime;
+    protected float currentCombatTime;
     private GameObject whoAttackThis;
     protected Animator anim;
 
@@ -24,6 +48,9 @@ public class Enemy : MonoBehaviour
 
         if (GameObject.Find("Pool").transform.Find("Pool_Effect") != null)
             pool_damagedEffect = GameObject.Find("Pool").transform.Find("Pool_Effect").GetComponent<Pool_DamagedEffect>();
+
+        state = Enemy_State.None;
+        behavior = Enemy_Behavior.Idle;
     }
 
     protected void CheckingHp()

@@ -5,7 +5,6 @@ using UnityEngine;
 public class Enemy_AirTest : Enemy
 {
     [SerializeField] private NodeManager nodeManager;
-    [SerializeField] private Transform target;
     private List<Node> path = new List<Node>();
     [SerializeField] private float pathFindingDelay;
 
