@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CharacterMaterial
+{
+    None,
+    Iron
+}
+
 public class Pool_DamagedEffect : MonoBehaviour
 {
-    public enum Material
-    {
-        None,
-        Iron
-    }
-
     [System.Serializable]
     struct EffectInfo
     {
         public GameObject prefab;
-        public Material material;
+        public CharacterMaterial material;
 
         public EffectInfo(EffectInfo info)
         {
@@ -50,7 +50,7 @@ public class Pool_DamagedEffect : MonoBehaviour
         }
     }
 
-    public GameObject GetDamagedEffect(Material material)
+    public GameObject GetDamagedEffect(CharacterMaterial material)
     {
         for(int i = 0; i < damagedEffects.Count; i++)
         {

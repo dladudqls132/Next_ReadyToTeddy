@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private CharacterMaterial material;
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
@@ -52,7 +53,7 @@ public class Enemy : MonoBehaviour
     {
         currentHp -= value;
 
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(Pool_DamagedEffect.Material.Iron);
+        GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
 
         effect.transform.SetParent(null);
         effect.transform.position = damagedPos;
