@@ -129,7 +129,7 @@ public class Enemy_ShooterTest : Enemy
 
         if (!agent.isOnOffMeshLink)
         {
-            if(behavior != Enemy_Behavior.Jump)
+            if(behavior != Enemy_Behavior.Attack)
                 behavior = Enemy_Behavior.Idle;
 
             agent.speed = 2;
