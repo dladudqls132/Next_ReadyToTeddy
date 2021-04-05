@@ -182,14 +182,14 @@ public class PlayerController : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        if (!isAiming)
-                        {
-                            mainCam.FovMove(mainCam.GetOriginFov() + 10, 0.1f, 1000);
-                            mainCam.SetOriginFov(mainCam.GetOriginFov() + 10);
-                        }
 
                         if (!isCrouch)
                         {
+                            if (!isAiming)
+                            {
+                                mainCam.FovMove(mainCam.GetRealOriginFov() + 10, 0.1f, 1000);
+                                mainCam.SetOriginFov(mainCam.GetRealOriginFov() + 10);
+                            }
                             isSlide = true;
 
                             if (currentSlidingCoolTime <= 0)
