@@ -129,6 +129,7 @@ public class Enemy_ShooterTest : Enemy
 
         if (!agent.isOnOffMeshLink)
         {
+            behavior = Enemy_Behavior.Idle;
             agent.speed = 2;
             handRig.weight = Mathf.Lerp(handRig.weight, 1, Time.deltaTime * 15);
             if (isAiming)
@@ -169,6 +170,7 @@ public class Enemy_ShooterTest : Enemy
         }
         else
         {
+            currentShotDelay = shotDelay;
             agent.speed = Mathf.Lerp(agent.speed, 3, Time.deltaTime * 10);
             jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 3)) * Time.deltaTime;
 
@@ -190,7 +192,7 @@ public class Enemy_ShooterTest : Enemy
 
         if(state == Enemy_State.Targeting)
         {
-            if(behavior != Enemy_Behavior.Attack)
+            if(behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.Jump)
                 behavior = Enemy_Behavior.Aiming;
         }
         else if(state == Enemy_State.Search || state == Enemy_State.Patrol)
