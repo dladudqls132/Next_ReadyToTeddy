@@ -18,8 +18,8 @@ public class Enemy_ShooterTest : Enemy
     }
 
     [SerializeField] private Enemy_Behavior behavior;
-    [SerializeField] private bool isAiming;
-    [SerializeField] private bool isAttack;
+    //[SerializeField] private bool isAiming;
+    //[SerializeField] private bool isAttack;
     [SerializeField] private Rig aimRig;
     [SerializeField] private Rig bodyRig;
     [SerializeField] private Rig handRig;
@@ -27,7 +27,7 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private Transform firePos;
     [SerializeField] private Transform aimPos;
     [SerializeField] private float shotDelay;
-    private float currentShotDelay;
+    [SerializeField] private float currentShotDelay;
 
     private Quaternion tempRot;
     private NavMeshAgent agent;
@@ -47,6 +47,7 @@ public class Enemy_ShooterTest : Enemy
         currentShotDelay = shotDelay;
 
         aimPos = GameObject.Find("Player_targetPos").transform;
+        tempRot = this.transform.rotation;
 
         foreach (MultiAimConstraint component in bodyRig.GetComponentsInChildren<MultiAimConstraint>())
         {
@@ -70,13 +71,13 @@ public class Enemy_ShooterTest : Enemy
     void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, 10))
+        if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, detectRange * 3))
         {
             if (hit.transform.CompareTag("Player"))
             {
                 canSee = true;
 
-                if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) > 0.5f || Vector3.Distance(this.transform.position, target.position) <= detectRange)
+                if (Vector3.Dot(this.transform.forward, target.GetComponent<Collider>().bounds.center - this.transform.position) > 0.5f || Vector3.Distance(this.transform.position, target.GetComponent<Collider>().bounds.center) <= detectRange)
                 {
                     state = Enemy_State.Targeting;
                 }
@@ -93,14 +94,18 @@ public class Enemy_ShooterTest : Enemy
             {
                 currentCombatTime = combatTime;
 
-                isAiming = true;
+                //isAiming = true;
             }
             else
             {
                 currentCombatTime -= Time.deltaTime;
 
-                isAiming = false;
                 state = Enemy_State.Search;
+
+                if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.Aiming)
+                {
+                    //isAiming = false;
+                }
             }
 
             if(currentCombatTime <= 0)
@@ -110,9 +115,9 @@ public class Enemy_ShooterTest : Enemy
             }
             else
             {
-                if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) <= 0.5f)
+                if (Vector3.Dot(this.transform.forward, target.GetComponent<Collider>().bounds.center - this.transform.position) <= 0.5f)
                 {
-                    tempRot = Quaternion.LookRotation(target.transform.position - this.transform.position);
+                    tempRot = Quaternion.LookRotation(target.GetComponent<Collider>().bounds.center - this.transform.position);
                     tempRot = Quaternion.Euler(0, tempRot.eulerAngles.y, 0);
                 }
                 if(state == Enemy_State.Search && !canSee)
@@ -124,17 +129,19 @@ public class Enemy_ShooterTest : Enemy
         }
         else
         {
-            isAiming = false;
+            //isAiming = false;
         }
 
         if (!agent.isOnOffMeshLink)
         {
-            if(behavior != Enemy_Behavior.Attack)
+            if (behavior == Enemy_Behavior.Jump)
+            {
                 behavior = Enemy_Behavior.Idle;
+            }
 
             agent.speed = 2;
             handRig.weight = Mathf.Lerp(handRig.weight, 1, Time.deltaTime * 15);
-            if (isAiming)
+            if (behavior == Enemy_Behavior.Aiming || behavior == Enemy_Behavior.Attack)
             {
                 bodyRig.weight = Mathf.Lerp(bodyRig.weight, 1, Time.deltaTime * 15);
                 aimRig.weight = Mathf.Lerp(aimRig.weight, 1, Time.deltaTime * 15);
@@ -180,7 +187,7 @@ public class Enemy_ShooterTest : Enemy
             agent.baseOffset = Mathf.Clamp(agent.baseOffset, 0, agent.baseOffset);
 
             behavior = Enemy_Behavior.Jump;
-            isAiming = false;
+            //isAiming = false;
             agent.isStopped = false;
 
             bodyRig.weight = Mathf.Lerp(bodyRig.weight, 0, Time.deltaTime * 15);
@@ -199,7 +206,10 @@ public class Enemy_ShooterTest : Enemy
         }
         else if(state == Enemy_State.Search || state == Enemy_State.Patrol)
         {
-            behavior = Enemy_Behavior.Walk;
+            if (behavior != Enemy_Behavior.Aiming)
+            {
+                behavior = Enemy_Behavior.Walk;
+            }
         }
         else
         {
@@ -242,7 +252,11 @@ public class Enemy_ShooterTest : Enemy
             }
 
             laser.startWidth = 0;
-            behavior = Enemy_Behavior.Aiming;
+
+            if (state == Enemy_State.Targeting)
+                behavior = Enemy_Behavior.Aiming;
+            else
+                behavior = Enemy_Behavior.Idle;
         }
         else
         {
