@@ -129,7 +129,8 @@ public class Enemy_ShooterTest : Enemy
 
         if (!agent.isOnOffMeshLink)
         {
-            behavior = Enemy_Behavior.Idle;
+            if(behavior == Enemy_Behavior.Jump)
+                behavior = Enemy_Behavior.Idle;
             agent.speed = 2;
             handRig.weight = Mathf.Lerp(handRig.weight, 1, Time.deltaTime * 15);
             if (isAiming)
@@ -220,7 +221,6 @@ public class Enemy_ShooterTest : Enemy
             if (currentShotDelay <= 0)
             {
                 currentShotDelay = shotDelay;
-
                 behavior = Enemy_Behavior.Attack;
             }
         }
