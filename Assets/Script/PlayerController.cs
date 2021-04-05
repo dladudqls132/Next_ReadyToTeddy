@@ -4,71 +4,76 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private FPPCamController mainCam;
-    [SerializeField] private Transform camPos;
-    [SerializeField] private CapsuleCollider groundCollider;
-    [SerializeField] private Transform hand;
-    [SerializeField] private Transform hand_Origin;
-    [SerializeField] private GameObject weapon_gameObject;
-    [SerializeField] private Gun weapon;
+    [SerializeField] private FPPCamController mainCam = null;
+    [SerializeField] private Transform camPos = null;
+    [SerializeField] private CapsuleCollider groundCollider = null;
+    [SerializeField] private Transform hand = null;
+    [SerializeField] private Transform hand_Origin = null;
+    [SerializeField] private GameObject weapon_gameObject = null;
+    [SerializeField] private Gun weapon = null;
 
-    [SerializeField] private float maxHP;
-    [SerializeField] private float currentHP;
-    [SerializeField] private int maxCombo;
-    [SerializeField] private int currentCombo;
-    [SerializeField] private float resetComboTime;
-    [SerializeField] private float currentResetComboTime;
+    [SerializeField] private bool isDead = false;
+    [SerializeField] private float maxHP = 0;
+    [SerializeField] private float currentHP = 0;
+    [SerializeField] private int maxCombo = 0;
+    [SerializeField] private int currentCombo = 0;
+    [SerializeField] private float resetComboTime = 0;
+    [SerializeField] private float currentResetComboTime = 0;
 
-    [SerializeField] private float decreaseHpValuePerSecond;
-    [SerializeField] private bool isDead;
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float slidingCoolTime;
-    private float currentSlidingCoolTime;
-    [SerializeField] private bool isSlide;
-    private float slideSpeed;
-    [SerializeField] private bool isSlope;
-    [SerializeField] private bool isRun;
-    [SerializeField] private float WPressTime;
-    private float currentWPressTime;
-    private bool isPressW;
-    [SerializeField] private bool isCrouch;
-    [SerializeField] private bool canJump;
-    [SerializeField] private bool isJump;
-    [SerializeField] private bool isJumpByObject;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private float jumpPower;
-    private float currentJumpPower;
-    [SerializeField] private bool isClimbing;
-    [SerializeField] private float climbPower;
-    private float currentClimbPower;
-    private bool canClimb;
-    private float climbUpPower;
+    [SerializeField] private float decreaseHpValuePerSecond = 0;
+    [SerializeField] private float walkSpeed = 0;
+    [SerializeField] private float runSpeed = 0;
+    [SerializeField] private float slidingCoolTime = 0;
+    private float currentSlidingCoolTime = 0;
+    [SerializeField] private bool isSlide = false;
+    private float slideSpeed = 0;
+    [SerializeField] private bool isSlope = false;
+    [SerializeField] private bool isRun = false;
+    [SerializeField] private float WPressTime = 0;
+    private float currentWPressTime = 0;
+    private bool isPressW = false;
+    [SerializeField] private bool isCrouch = false;
+    [SerializeField] private bool canJump = false;
+    [SerializeField] private bool isJump = false;
+    [SerializeField] private bool isJumpByObject = false;
+    [SerializeField] private bool isGrounded = false;
+    [SerializeField] private float jumpPower = 0;
+    private float currentJumpPower = 0;
+    [SerializeField] private bool isClimbing = false;
+    [SerializeField] private float climbPower = 0;
+    private float currentClimbPower = 0;
+    private bool canClimb = false;
 
-    [SerializeField] private bool isClimbUp;
-    [SerializeField] private bool isCombat;
-    [SerializeField] private bool isAiming;
-    [SerializeField] private float combatTime;
-    private float currentCombatTime;
+    [SerializeField] private bool isClimbUp = false;
+    [SerializeField] private float climbUpTime = 0;
+    [SerializeField] private float climbUpPower = 0;
+    private float currentClimbuUpPower = 0;
+    private float currentClimbUpTime = 0;
+    [SerializeField] private bool isCombat = false;
+    [SerializeField] private bool isAiming = false;
+    [SerializeField] private float combatTime = 0;
+    private float currentCombatTime = 0;
     [SerializeField] private bool isDash;
-    [SerializeField] private float dashPower;
-    [SerializeField] private float dashTime;
-    private float currentDashPower;
-    [SerializeField] private bool useGravity;
+    [SerializeField] private float dashPower = 0;
+    [SerializeField] private float dashTime = 0;
+    private float currentDashPower = 0;
+    [SerializeField] private bool useGravity = false;
+    [SerializeField] private bool isLanding = false;
+    [SerializeField] private float landingReboundSpeed = 0;
 
-    private Vector3 climbUpPos;
-    private Vector2 moveInput;
-    private Rigidbody rigid;
-    private Vector3 moveDirection;
-    private Vector3 slidingDirection;
-    private Vector3 dashDirection;
-    private float headBobValue;
-    private float headOriginY;
-    private Vector3 handOriginPos;
-    private Quaternion handOriginRot;
-    Vector3 result;
+    private Vector3 climbUpPos = Vector3.zero;
+    private Vector2 moveInput = Vector2.zero;
+    private Rigidbody rigid = null;
+    private Vector3 moveDirection = Vector3.zero;
+    private Vector3 slidingDirection = Vector3.zero;
+    private Vector3 dashDirection = Vector3.zero;
+    private float headBobValue = 0;
+    private float headOriginY = 0;
+    private Vector3 handOriginPos = Vector3.zero;
+    private Quaternion handOriginRot = Quaternion.identity;
+    private Vector3 result = Vector3.zero;
 
-    private bool isInit;
+    private bool isInit = false;
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
@@ -98,6 +103,8 @@ public class PlayerController : MonoBehaviour
         currentCombatTime = combatTime;
         currentWPressTime = WPressTime;
         currentDashPower = dashPower;
+        currentClimbUpTime = climbUpTime;
+        currentClimbuUpPower = climbUpPower;
         isInit = true;
     }
 
@@ -118,6 +125,8 @@ public class PlayerController : MonoBehaviour
             currentCombatTime = combatTime;
             currentWPressTime = WPressTime;
             currentDashPower = dashPower;
+            currentClimbUpTime = climbUpTime;
+            currentClimbuUpPower = climbUpPower;
         }
     }
 
@@ -152,17 +161,18 @@ public class PlayerController : MonoBehaviour
         //Debug.DrawLine(this.transform.position + moveDirection * 0.2f, this.transform.position + moveDirection * 0.2f + Vector3.down * 0.5f);
         if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
-            groundCollider.enabled = true;
             if (currentJumpPower <= 0)
             {
                 isJump = false;
                 isJumpByObject = false;
             }
+
+            groundCollider.enabled = true;
             canJump = true;
-            isGrounded = true;
             isClimbing = false;
             canClimb = true;
             useGravity = false;
+
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
             result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
 
@@ -197,6 +207,14 @@ public class PlayerController : MonoBehaviour
                     isCrouch = true;
 
             }
+
+            if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
+            {
+                isLanding = true;
+                headBobValue = Mathf.PI;
+            }
+
+            isGrounded = true;
 
             if (Input.GetKeyDown(KeyCode.W))
             {
@@ -313,6 +331,7 @@ public class PlayerController : MonoBehaviour
             }
 
             isGrounded = false;
+            isLanding = false;
 
             if (!isClimbUp)
             {
@@ -337,62 +356,101 @@ public class PlayerController : MonoBehaviour
             }
 
             RaycastHit wallHit;
-            for (int i = 0; i < 12; i++)
+            if (!isClimbUp)
             {
-                //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
-                if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                for (int i = 0; i < 12; i++)
                 {
-                    if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
+                    //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
+                    if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
-                        if (Input.GetKey(KeyCode.Space))
+                        if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
                         {
-                            isJump = false;
-                            isJumpByObject = false;
-                            isClimbing = true;
-                            isSlide = false;
-                            isDash = false;
-                            canJump = false;
-                            rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
-                            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                            mainCam.FovReset();
+                            if (Input.GetKey(KeyCode.Space))
+                            {
+                                isJump = false;
+                                isJumpByObject = false;
+                                isClimbing = true;
+                                isSlide = false;
+                                isDash = false;
+                                canJump = false;
+                                rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
+                                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                                mainCam.FovReset();
+                            }
                         }
                     }
-                }
-                else if (moveDirection != Vector3.zero)
-                {
-                    bool isCheckObject = false;
-                    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                    else if (moveDirection != Vector3.zero)
                     {
-                        isCheckObject = true;
-                    }
-
-                    if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
-                    {
-                        isCheckObject = true;
-                    }
-
-                    for (int j = 0; j < 20; j++)
-                    {
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + (Vector3.up * 0.1f * j), forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
-                            isCheckObject = true;
+                            break;
                         }
-                    }
 
-                    if (!isCheckObject)
-                    {
+                        //if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i + 1)) + Vector3.up * 0.35f + forward * 0.38f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, this.transform.rotation, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        //{
+                        //    isClimbUp = true;
+                        //    rigid.velocity = Vector3.zero;
+                        //    climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
+                        //    climbUpPower = Vector3.Distance(this.transform.position, climbUpPos) * 9;
+                        //    Debug.Log(i);
+                        //    Debug.Log(climbUpPos);
+                        //    break;
+                        //}
+
+                        if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        {
+                            break;
+                        }
+
+                        if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        {
+                            break;
+                        }
+
                         isClimbUp = true;
                         rigid.velocity = Vector3.zero;
                         climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
-                        climbUpPower = Vector3.Distance(this.transform.position, climbUpPos) * 9;
-                    }
 
-                    if (isClimbing)
-                    {
-                        canClimb = false;
-                    }
+                        //for (int j = 0; j < 20; j++)
+                        //{
+                        //    if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + (Vector3.up * 0.1f * j), forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        //    {
+                        //        isCheckObject = true;
+                        //    }
+                        //}
 
-                    isClimbing = false;
+                        //if (!isCheckObject)
+                        //{
+                        //    //RaycastHit tempHit;
+                        //    //if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, out tempHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        //    //{
+                        //    //    if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, -tempHit.normal, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        //    //    {
+                        //    //        isClimbUp = true;
+                        //    //        rigid.velocity = Vector3.zero;
+                        //    //        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + -tempHit.normal * 0.38f;
+                        //    //        climbUpPower = Vector3.Distance(this.transform.position, climbUpPos) * 9;
+                        //    //        Debug.Log(climbUpPos);
+                        //    //    }
+                        //    //}
+
+                        //    if (!Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, this.transform.rotation, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        //    {
+                        //        isClimbUp = true;
+                        //        rigid.velocity = Vector3.zero;
+                        //        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
+                        //        climbUpPower = Vector3.Distance(this.transform.position, climbUpPos) * 9;
+                        //        Debug.Log(climbUpPos);
+                        //    }
+                        //}
+
+                        if (isClimbing)
+                        {
+                            canClimb = false;
+                        }
+
+                        isClimbing = false;
+                    }
                 }
             }
 
@@ -472,6 +530,7 @@ public class PlayerController : MonoBehaviour
                 if (!isDash)
                 {
                     mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
+                    mainCam.Shake(0.05f, 0.06f);
                 }
             }
 
@@ -497,8 +556,8 @@ public class PlayerController : MonoBehaviour
             if (isAiming)
             {
                 weapon.SetIsReload(false);
-                mainCam.FovMove(mainCam.GetOriginFov() - 10, 0.1f, 1000);
-                mainCam.SetOriginFov(mainCam.GetOriginFov() - 10);
+                mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
+                mainCam.SetOriginFov(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f);
             }
             else
             {
@@ -522,8 +581,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
         {
             isSlide = false;
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            if (!isAiming)
+            {
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
+            }
             isJump = true;
             canJump = false;
 
@@ -571,23 +633,28 @@ public class PlayerController : MonoBehaviour
             isDash = false;
             mainCam.SetOriginFov(mainCam.GetRealOriginFov());
             mainCam.FovReset();
+            currentClimbUpTime -= Time.deltaTime;
 
-            if (climbUpPower <= 2)
+
+            if (currentClimbuUpPower <= 2)
             {
-                climbUpPower = 2;
+                currentClimbuUpPower = 2;
             }
             else
             {
-                climbUpPower -= Time.deltaTime * 15;
+                currentClimbuUpPower -= Time.deltaTime * 20;
             }
 
-            rigid.velocity = (climbUpPos - this.transform.position).normalized * Mathf.Clamp(Vector3.Distance(this.transform.position, climbUpPos) * 9, 2, 100);
+            rigid.velocity = (climbUpPos - this.transform.position).normalized * currentClimbuUpPower;
 
-            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.1f)
+            if (Vector3.Distance(this.transform.position, climbUpPos) <= 0.13f || currentClimbUpTime <= 0)
             {
+                currentClimbuUpPower = climbUpPower;
+                currentClimbUpTime = climbUpTime;
                 isClimbUp = false;
                 rigid.velocity = Vector3.zero;
             }
+
         }
 
         if (isClimbing)
@@ -628,9 +695,6 @@ public class PlayerController : MonoBehaviour
             //isRun = false;
             currentSlidingCoolTime = slidingCoolTime;
 
-            headBobValue = 0;
-            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
-
             if (moveDirection != Vector3.zero)
             {
                 if (rigid.velocity.magnitude <= walkSpeed)
@@ -657,11 +721,10 @@ public class PlayerController : MonoBehaviour
                 currentSlidingCoolTime -= Time.deltaTime;
             }
 
-            HeadBob();
-
             isSlope = false;
         }
 
+        HeadBob();
         HandAnimation();
         //DecreaseHpPerSecond();
         UpdateComboDamage();
@@ -673,46 +736,67 @@ public class PlayerController : MonoBehaviour
 
     private void HeadBob()
     {
-        if (isGrounded)
+        if (!isSlide)
         {
-            if (moveDirection == Vector3.zero)
+            if (isLanding)
             {
-                headBobValue += Time.deltaTime * 1.0f;
+                headBobValue += Time.deltaTime * landingReboundSpeed;
 
-                if (isCrouch)
-                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, camPos.localPosition.z), Time.deltaTime * 8);
-                else
-                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, camPos.localPosition.z), Time.deltaTime * 8);
+                camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(camPos.localPosition.x, headOriginY + Mathf.Sin(headBobValue) / 3.0f, camPos.localPosition.z), Time.deltaTime * 22);
+
+                if (headBobValue >= 2 * Mathf.PI)
+                    isLanding = false;
             }
-            else if (!isDash)
+            else
             {
-                if (isRun)
+                if (isGrounded)
                 {
-                    headBobValue += Time.deltaTime * runSpeed * 0.8f;
-                }
-                else
-                {
-                    headBobValue += Time.deltaTime * walkSpeed * 1.0f;
-                }
+                    if (moveDirection == Vector3.zero)
+                    {
+                        headBobValue += Time.deltaTime * 1.0f;
 
-                if (isCrouch)
-                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                        if (isCrouch)
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
+                        else
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 30, 0), Time.deltaTime * 8);
+                    }
+                    else if (!isDash)
+                    {
+                        if (isRun)
+                        {
+                            headBobValue += Time.deltaTime * runSpeed * 0.8f;
+                        }
+                        else
+                        {
+                            headBobValue += Time.deltaTime * walkSpeed * 1.0f;
+                        }
+
+                        if (isCrouch)
+                            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                        else
+                        {
+                            if (isRun)
+                                camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, 0), Time.deltaTime * 10);
+                            else
+                                camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
+                        }
+                    }
+                }
                 else
                 {
-                    if (isRun)
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 30, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 3.5f, camPos.localPosition.z), Time.deltaTime * 10);
-                    else
-                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(Mathf.Sin(headBobValue) / 50, headOriginY + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, camPos.localPosition.z), Time.deltaTime * 8);
+                    if (!isCrouch && !isSlide)
+                    {
+                        camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, camPos.localPosition.z), Time.deltaTime * 8);
+                        headBobValue = 0;
+                    }
                 }
             }
         }
         else
         {
-            if (!isCrouch && !isSlide)
-            {
-                camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, camPos.localPosition.z), Time.deltaTime * 8);
-                headBobValue = 0;
-            }
+            isLanding = false;
+            headBobValue = 0;
+            camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
         }
     }
 
@@ -841,7 +925,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseCombo(int value)
     {
         //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
-        if(currentResetComboTime > resetComboTime - 3 || currentCombo == 0)
+        if (currentResetComboTime > resetComboTime - 3 || currentCombo == 0)
             currentCombo += value;
         currentResetComboTime = resetComboTime;
 
@@ -864,12 +948,12 @@ public class PlayerController : MonoBehaviour
             {
                 DecreaseCombo(1);
                 //currentResetComboTime = resetComboTime / 2;
-                if(currentCombo > 0)
+                if (currentCombo > 0)
                     currentResetComboTime = 2;
                 else
                     currentResetComboTime = 0;
             }
         }
-        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo / 10);
+        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 }
