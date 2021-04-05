@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InverseKinematicTest : MonoBehaviour
 {
-    [SerializeField] private Transform target;
-    [SerializeField] private float speed;
+    [SerializeField] private Transform target = null;
+    [SerializeField] private float speed = 0;
 
     // Update is called once per frame
     void Update()

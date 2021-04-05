@@ -40,8 +40,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8404995892916541648}
   - component: {fileID: 8404995892916541649}
-  - component: {fileID: 8404995892916541650}
   - component: {fileID: 8404995892916541651}
+  - component: {fileID: 8404995892916541650}
   - component: {fileID: 8404995892916541652}
   m_Layer: 11
   m_Name: Player_0309
@@ -59,7 +59,7 @@ Transform:
   m_GameObject: {fileID: 8404995892916541653}
   m_LocalRotation: {x: 0, y: -0.0076531637, z: 0, w: 0.99997073}
   m_LocalPosition: {x: -2.6551437, y: 0.66737926, z: 3.5550826}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.99999994, y: 1, z: 0.99999994}
   m_Children:
   - {fileID: 8404995892510735342}
   m_Father: {fileID: 0}
@@ -81,20 +81,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!136 &8404995892916541650
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8404995892916541653}
-  m_Material: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.25
-  m_Height: 0.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.15, z: 0}
 --- !u!136 &8404995892916541651
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -109,6 +95,20 @@ CapsuleCollider:
   m_Height: 1.5314683
   m_Direction: 1
   m_Center: {x: 0, y: 0.6728787, z: 0}
+--- !u!136 &8404995892916541650
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8404995892916541653}
+  m_Material: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 0.5
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.15, z: 0}
 --- !u!114 &8404995892916541652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +128,7 @@ MonoBehaviour:
   hand_Origin: {fileID: 0}
   weapon_gameObject: {fileID: 0}
   weapon: {fileID: 0}
+  isDead: 0
   maxHP: 100
   currentHP: 0
   maxCombo: 30
@@ -135,8 +136,7 @@ MonoBehaviour:
   resetComboTime: 5
   currentResetComboTime: 0
   decreaseHpValuePerSecond: 1
-  isDead: 0
-  walkSpeed: 7
+  walkSpeed: 8
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlide: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   isClimbing: 0
   climbPower: 5.35
   isClimbUp: 0
+  climbUpTime: 0.5
+  climbUpPower: 10
   isCombat: 0
   isAiming: 0
   combatTime: 0
@@ -159,3 +161,5 @@ MonoBehaviour:
   dashPower: 30
   dashTime: 0.3
   useGravity: 0
+  isLanding: 0
+  landingReboundSpeed: 40
