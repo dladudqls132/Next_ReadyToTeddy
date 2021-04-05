@@ -8,6 +8,10 @@ public class Enemy_AirTest : Enemy
     private List<Node> path = new List<Node>();
     [SerializeField] private float pathFindingDelay;
 
+
+    HashSet<Node> closeList = new HashSet<Node>();
+    List<Node> openList = new List<Node>();
+
     private Vector3 destPos;
     private Node[][][] node;
 
@@ -43,8 +47,8 @@ public class Enemy_AirTest : Enemy
             if (targetNode.nodeType == NodeType.Wall)
                 continue;
 
-            HashSet<Node> closeList = new HashSet<Node>();
-            List<Node> openList = new List<Node>();
+            closeList.Clear();
+            openList.Clear();
 
             openList.Add(startNode);
 
@@ -101,9 +105,11 @@ public class Enemy_AirTest : Enemy
         return node[Mathf.RoundToInt(Mathf.Abs(temp.x))][Mathf.RoundToInt(Mathf.Abs(temp.y))][Mathf.RoundToInt(Mathf.Abs(temp.z))];
     }
 
+    List<Node> neighborNode = new List<Node>();
+
     List<Node> GetNeighborNode(Node node)   //근처 노드 반환
     {
-        List<Node> neighborNode = new List<Node>();
+        neighborNode.Clear();
 
         if (node.nodePosX > 0)
             neighborNode.Add(this.node[node.nodePosX - 1][node.nodePosY][node.nodePosZ]);
@@ -135,7 +141,7 @@ public class Enemy_AirTest : Enemy
     {
         Node currentNode = targetNode;
 
-        while (currentNode.parent != startNode)
+        while (currentNode.parent != startNode && currentNode.parent != null)
         {
             path.Add(currentNode.parent);
             currentNode = currentNode.parent;

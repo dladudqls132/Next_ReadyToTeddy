@@ -4,17 +4,34 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using UnityEngine.AI;
 
+
 public class Enemy_ShooterTest : Enemy
 {
+    enum Enemy_Behavior
+    {
+        Idle,
+        Walk,
+        Run,
+        Jump,
+        Aiming,
+        Attack
+    }
+
+    [SerializeField] private Enemy_Behavior behavior;
     [SerializeField] private bool isAiming;
+    [SerializeField] private bool isAttack;
     [SerializeField] private Rig aimRig;
     [SerializeField] private Rig bodyRig;
     [SerializeField] private Rig handRig;
+    [SerializeField] private LineRenderer laser;
+    [SerializeField] private Transform firePos;
+    [SerializeField] private Transform aimPos;
+    [SerializeField] private float shotDelay;
+    private float currentShotDelay;
 
     private Quaternion tempRot;
     private NavMeshAgent agent;
     [SerializeField] private float jumpAngle;
-    private Vector3 jumpStartPos;
 
     // Start is called before the first frame update
     override protected void Start()
@@ -23,6 +40,30 @@ public class Enemy_ShooterTest : Enemy
 
         anim = this.GetComponent<Animator>();
         agent = this.GetComponent<NavMeshAgent>();
+        laser = this.GetComponent<LineRenderer>();
+
+        target = GameManager.Instance.GetPlayer().transform;
+
+        currentShotDelay = shotDelay;
+
+        aimPos = GameObject.Find("Player_targetPos").transform;
+
+        foreach (MultiAimConstraint component in bodyRig.GetComponentsInChildren<MultiAimConstraint>())
+        {
+            var data = component.data.sourceObjects;
+            data.SetTransform(0, GameManager.Instance.GetPlayer().transform.Find("CamPos"));
+            component.data.sourceObjects = data;
+        }
+
+        foreach (MultiAimConstraint component in aimRig.GetComponentsInChildren<MultiAimConstraint>())
+        {
+            var data = component.data.sourceObjects;
+            data.SetTransform(0, aimPos);
+            component.data.sourceObjects = data;
+        }
+
+        RigBuilder rigs = GetComponent<RigBuilder>();
+        rigs.Build();
     }
 
     // Update is called once per frame
@@ -35,7 +76,7 @@ public class Enemy_ShooterTest : Enemy
             {
                 canSee = true;
 
-                if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) > 0.5f)
+                if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) > 0.5f || Vector3.Distance(this.transform.position, target.position) <= detectRange)
                 {
                     state = Enemy_State.Targeting;
                 }
@@ -78,7 +119,7 @@ public class Enemy_ShooterTest : Enemy
                     tempRot = this.transform.rotation;
 
                 if (canSee)
-                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, tempRot, Time.deltaTime * 12);
+                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, tempRot, Time.deltaTime * 12.0f);
             }
         }
         else
@@ -116,7 +157,6 @@ public class Enemy_ShooterTest : Enemy
                 }
             }
 
-            jumpStartPos = this.transform.position;
             jumpAngle = 0;
             if (agent.baseOffset > 0)
                 agent.baseOffset = Mathf.Lerp(agent.baseOffset, 0, Time.deltaTime * 6);
@@ -124,7 +164,7 @@ public class Enemy_ShooterTest : Enemy
                 agent.baseOffset = 0;
 
             anim.SetBool("isJumping", false);
-            anim.SetBool("isAiming", isAiming);
+            //anim.SetBool("isAiming", isAiming);
             anim.SetBool("isWalking", !agent.isStopped);
         }
         else
@@ -135,6 +175,7 @@ public class Enemy_ShooterTest : Enemy
             agent.baseOffset = Mathf.Sin(jumpAngle) * 2;
             agent.baseOffset = Mathf.Clamp(agent.baseOffset, 0, agent.baseOffset);
 
+            behavior = Enemy_Behavior.Jump;
             isAiming = false;
             agent.isStopped = false;
 
@@ -143,19 +184,65 @@ public class Enemy_ShooterTest : Enemy
             handRig.weight = Mathf.Lerp(handRig.weight, 0, Time.deltaTime * 15);
 
             anim.SetBool("isJumping", true);
-            anim.SetBool("isAiming", false);
+            //anim.SetBool("isAiming", false);
             anim.SetBool("isWalking", false);
         }
-    }
 
-    float CalculateVelocityY(Vector3 target, Vector3 origin, float time)
-    {
-        Vector3 distance = target - origin;
+        if(state == Enemy_State.Targeting)
+        {
+            if(behavior != Enemy_Behavior.Attack)
+                behavior = Enemy_Behavior.Aiming;
+        }
+        else if(state == Enemy_State.Search || state == Enemy_State.Patrol)
+        {
+            behavior = Enemy_Behavior.Walk;
+        }
+        else
+        {
+            behavior = Enemy_Behavior.Idle;
+        }
 
-        float Sy = distance.y;
+        if(behavior == Enemy_Behavior.Aiming)
+        {
+            currentShotDelay -= Time.deltaTime;
 
-        float Vy = Sy / time + 0.5f * Mathf.Abs(Physics.gravity.y) * time;
+            if (currentShotDelay <= shotDelay / 2)
+            {
+                float rayScale = 0.05f * (currentShotDelay / shotDelay);
 
-        return Vy;
+                laser.startWidth = rayScale;
+            }
+            laser.SetPosition(0, firePos.position);
+            laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30);
+            
+            if (currentShotDelay <= 0)
+            {
+                currentShotDelay = shotDelay;
+
+                behavior = Enemy_Behavior.Attack;
+            }
+        }
+        else if(behavior == Enemy_Behavior.Attack)
+        {
+            RaycastHit fireHit;
+            if (Physics.Raycast(firePos.position, firePos.forward, out fireHit, Mathf.Infinity))
+            {
+                if(fireHit.transform.CompareTag("Player"))
+                {
+                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(1);
+                }
+                else if(fireHit.transform.CompareTag("Enemy"))
+                {
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1);
+                }
+            }
+
+            laser.startWidth = 0;
+            behavior = Enemy_Behavior.Aiming;
+        }
+        else
+        {
+            laser.startWidth = 0;
+        }
     }
 }
