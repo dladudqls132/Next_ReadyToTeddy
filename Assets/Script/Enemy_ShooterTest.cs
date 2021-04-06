@@ -23,11 +23,11 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private Rig aimRig;
     [SerializeField] private Rig bodyRig;
     [SerializeField] private Rig handRig;
-    [SerializeField] private LineRenderer laser;
+    private LineRenderer laser;
     [SerializeField] private Transform firePos;
     [SerializeField] private Transform aimPos;
     [SerializeField] private float shotDelay;
-    [SerializeField] private float currentShotDelay;
+    private float currentShotDelay;
 
     private Quaternion tempRot;
     private NavMeshAgent agent;
@@ -112,10 +112,10 @@ public class Enemy_ShooterTest : Enemy
             }
         }
 
+        currentShotDelay -= Time.deltaTime;
+
         if (behavior == Enemy_Behavior.Aiming)
         {
-            currentShotDelay -= Time.deltaTime;
-
             if (currentShotDelay <= 0)
             {
                 behavior = Enemy_Behavior.Attack;

@@ -4,33 +4,190 @@ using UnityEngine;
 
 public class Enemy_AirTest : Enemy
 {
+    enum Enemy_Behavior
+    {
+        Idle,
+        Move,
+        Aiming,
+        Attack
+    }
+
     [SerializeField] private NodeManager nodeManager;
     private List<Node> path = new List<Node>();
     [SerializeField] private float pathFindingDelay;
-
+    [SerializeField] private float shotDelay;
+    [SerializeField] private float currentShotDelay;
 
     HashSet<Node> closeList = new HashSet<Node>();
     List<Node> openList = new List<Node>();
 
+    [SerializeField] private Enemy_Behavior behavior;
     private Vector3 destPos;
     private Node[][][] node;
+    private LineRenderer laser;
+    [SerializeField] private Transform firePos;
+    [SerializeField] private float speed;
+    float currentSpeed;
+    bool canSee;
+    Vector3 move;
 
     // Start is called before the first frame update
     override protected void Start()
     {
         base.Start();
 
+        nodeManager = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<NodeManager>();
         node = nodeManager.node;
+
+        currentShotDelay = shotDelay;
+        laser = this.GetComponent<LineRenderer>();
+        target = GameManager.Instance.GetPlayer().transform.Find("TargetPos");
 
         StartCoroutine(PathFinding());
     }
 
     private void Update()
     {
-        if(path.Count > 0)
+        if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
+            return;
+
+        
+            RaycastHit hit;
+            if (Physics.Raycast(firePos.position, (target.position - firePos.position).normalized, out hit, Mathf.Infinity))
+            {
+            if (hit.transform.CompareTag("Player"))
+            {
+                canSee = true;
+                state = Enemy_State.Targeting;
+            }
+            else
+            {
+                canSee = false;
+                state = Enemy_State.Search;
+            }
+            }
+            else
+            {
+            canSee = false;
+                state = Enemy_State.Search;
+            }
+        
+
+        if (state == Enemy_State.Targeting)
         {
-            this.transform.position = Vector3.MoveTowards(this.transform.position, path[path.Count - 1].position, Time.deltaTime * 3);
+            if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                behavior = Enemy_Behavior.Aiming;
+            else
+            {
+                if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+                {
+                    behavior = Enemy_Behavior.Move;
+                }
+                    }
         }
+        else if (state == Enemy_State.Search)
+        {
+            if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+            {
+                behavior = Enemy_Behavior.Move;
+            }
+        }
+
+        currentShotDelay -= Time.deltaTime;
+
+        if (behavior == Enemy_Behavior.Aiming)
+        {
+            if (currentShotDelay <= 0)
+            {
+                behavior = Enemy_Behavior.Attack;
+                currentShotDelay = shotDelay;
+                laser.startWidth = 0;
+            }
+            else
+            {
+                if (currentShotDelay <= shotDelay / 2)
+                {
+                    float rayScale = 0.1f * (currentShotDelay / shotDelay);
+
+                    laser.startWidth = rayScale;
+                }
+
+                laser.SetPosition(0, firePos.position);
+                laser.SetPosition(1, firePos.position + (target.position - firePos.position).normalized * 30);
+            }
+        }
+        else
+        {
+            laser.startWidth = 0;
+        }
+
+        if (behavior == Enemy_Behavior.Attack)
+        {
+            RaycastHit fireHit;
+
+            if (Physics.Raycast(firePos.position, firePos.forward, out fireHit, Mathf.Infinity))
+            {
+                if (fireHit.transform.CompareTag("Player"))
+                {
+                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(1);
+                }
+                else if (fireHit.transform.CompareTag("Enemy"))
+                {
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1);
+                }
+            }
+            if (state == Enemy_State.Targeting)
+                behavior = Enemy_Behavior.Aiming;
+            else
+                behavior = Enemy_Behavior.Idle;
+        }
+
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target.position - this.transform.position), Time.deltaTime * 12.0f);
+
+        if (behavior == Enemy_Behavior.Move)
+        {
+            if (path.Count > 0)
+            {
+                if (canSee)
+                {
+                    Vector3 dir = this.transform.forward;
+
+                    move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
+
+                    this.transform.position = this.transform.position + move * Time.deltaTime * speed;
+                }
+                else
+                {
+                    Vector3 dir = (path[path.Count - 1].position - this.transform.position).normalized;
+
+                    move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
+
+                    this.transform.position = this.transform.position + move * Time.deltaTime * speed;
+                }
+            }
+        }
+        else
+        {
+            move = Vector3.Lerp(move, Vector3.zero, Time.deltaTime * 10);
+
+            this.transform.position = this.transform.position + move * Time.deltaTime * speed;
+        }
+
+        //if (behavior == Enemy_Behavior.Move)
+        //{
+        //    if (path.Count > 1)
+        //    {
+        //        Vector3 dir = (path[path.Count - 1].position - this.transform.position).normalized;
+        //        move = Vector3.Lerp(move, dir, Time.deltaTime);
+        //        this.transform.position = this.transform.position + move * Time.deltaTime * speed;
+        //    }
+        //}
+        //else
+        //{
+        //    Vector3 dir = Vector3.zero;
+        //    move = Vector3.Lerp(move, dir, Time.deltaTime);
+        //    this.transform.position = this.transform.position + move * Time.deltaTime * speed;
+        //}
     }
 
     // Update is called once per frame
@@ -39,6 +196,9 @@ public class Enemy_AirTest : Enemy
         while (true)
         {
             yield return new WaitForSeconds(pathFindingDelay);
+
+            if (behavior != Enemy_Behavior.Move)
+                continue;
 
             Vector3 temp = this.transform.position - nodeManager.transform.position;
             Node startNode = node[Mathf.RoundToInt(Mathf.Abs(temp.x))][Mathf.RoundToInt(Mathf.Abs(temp.y))][Mathf.RoundToInt(Mathf.Abs(temp.z))];
@@ -123,6 +283,23 @@ public class Enemy_AirTest : Enemy
             neighborNode.Add(this.node[node.nodePosX][node.nodePosY][node.nodePosZ - 1]);
         if (node.nodePosZ < nodeManager.gridSizeZ - 1)
             neighborNode.Add(this.node[node.nodePosX][node.nodePosY][node.nodePosZ + 1]);
+
+        for(int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    if (node.nodePosX > 0 && node.nodePosX < nodeManager.gridSizeX - 1 && 
+                        node.nodePosY > 0 && node.nodePosY < nodeManager.gridSizeY - 1 && 
+                        node.nodePosZ > 0 && node.nodePosZ < nodeManager.gridSizeZ - 1)
+
+                    {
+                        neighborNode.Add(this.node[node.nodePosX - i][node.nodePosY - j][node.nodePosZ - k]);
+                    }
+                }
+            }
+        }
 
         return neighborNode;
     }
