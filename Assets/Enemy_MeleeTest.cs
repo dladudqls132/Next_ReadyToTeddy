@@ -10,13 +10,17 @@ public class Enemy_MeleeTest : Enemy
         Idle,
         Run,
         Jump,
-        Attack
+        Attack,
+        RunningAttack
     }
 
     [SerializeField] private Enemy_Behavior behavior;
     private NavMeshAgent agent;
     [SerializeField] private float attackDelay;
     private float currentAttackDelay;
+    private bool canAttackTurn;
+    private float jumpAngle;
+    private bool canAttack;
 
     override protected void Start()
     {
@@ -33,43 +37,120 @@ public class Enemy_MeleeTest : Enemy
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
-        if(agent.enabled)
-        agent.SetDestination(target.position);
+        if (!agent.isStopped)
+            agent.SetDestination(target.position);
+
 
         RaycastHit hit;
         if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, Mathf.Infinity))
         {
-            state = Enemy_State.Targeting;
+            if (hit.transform.CompareTag("Player"))
+                state = Enemy_State.Targeting;
+            else
+                state = Enemy_State.Search;
         }
         else
         {
             state = Enemy_State.Search;
         }
 
-        if(behavior != Enemy_Behavior.Attack)
+        if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.RunningAttack)
+        {
             currentAttackDelay -= Time.deltaTime;
 
-        if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-        {
-            if(currentAttackDelay <= 0)
+            if (currentAttackDelay <= 0)
             {
-                agent.enabled = false;
-                currentAttackDelay = attackDelay;
-                behavior = Enemy_Behavior.Attack;
+                if (behavior != Enemy_Behavior.Jump)
+                {
+                    if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                    {
+                        currentAttackDelay = attackDelay;
+                        agent.isStopped = true;
+                        canAttackTurn = true;
+
+                        behavior = Enemy_Behavior.Attack;
+                    }
+                    else if (Vector3.Distance(this.transform.position, target.position) <= attackRange + 2)
+                    {
+                        currentAttackDelay = attackDelay;
+                        agent.isStopped = true;
+                        canAttackTurn = true;
+
+                        behavior = Enemy_Behavior.RunningAttack;
+                    }
+                    else
+                    {
+                        agent.isStopped = false;
+                        canAttackTurn = false;
+
+                        behavior = Enemy_Behavior.Run;
+                    }
+                }
+            }
+            else
+            {
+                if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+                {
+                    agent.isStopped = false;
+                    canAttackTurn = false;
+
+                    behavior = Enemy_Behavior.Run;
+                }
+                else
+                {
+                    agent.isStopped = true;
+
+                    behavior = Enemy_Behavior.Idle;
+
+                    Vector3 dir = (target.position - this.transform.position).normalized;
+                    dir.y = 0;
+                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
+                }
             }
         }
         else
         {
-            if(behavior != Enemy_Behavior.Attack)
+            if (canAttackTurn)
             {
-                agent.enabled = true;
-                behavior = Enemy_Behavior.Run;
+                Vector3 dir = (target.position - this.transform.position).normalized;
+                dir.y = 0;
+                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
             }
         }
 
-        if(behavior == Enemy_Behavior.Attack)
+        if ((behavior == Enemy_Behavior.Attack || behavior == Enemy_Behavior.RunningAttack))
         {
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, 0, target.position.z) - new Vector3(this.transform.position.x, 0, this.transform.position.z).normalized), Time.deltaTime * 12);
+            agent.isStopped = true;
+
+            if (canAttackTurn)
+            {
+                Vector3 dir = (target.position - this.transform.position).normalized;
+                dir.y = 0;
+                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
+            }
+        }
+
+        //Jump
+        if (agent.isOnOffMeshLink)
+        {
+            //currentShotDelay = shotDelay;
+            agent.isStopped = false;
+            behavior = Enemy_Behavior.Jump;
+
+            agent.speed = 3;
+            jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 3)) * Time.deltaTime;
+
+            agent.baseOffset = Mathf.Sin(jumpAngle) * 2;
+            agent.baseOffset = Mathf.Clamp(agent.baseOffset, 1, agent.baseOffset);
+        }
+        else
+        {
+            if (behavior == Enemy_Behavior.Jump)
+                behavior = Enemy_Behavior.Idle;
+
+            agent.speed = 8;
+            jumpAngle = 0;
+            agent.baseOffset = 0;
         }
 
         //Animation Controll
@@ -89,6 +170,9 @@ public class Enemy_MeleeTest : Enemy
                 anim.SetBool("isRunning", true);
                 break;
             case Enemy_Behavior.Attack:
+                anim.SetBool("isAttack", true);
+                break;
+            case Enemy_Behavior.RunningAttack:
                 anim.SetBool("isRunningAttack", true);
                 break;
             case Enemy_Behavior.Jump:
@@ -97,8 +181,29 @@ public class Enemy_MeleeTest : Enemy
         }
     }
 
+    void Attack()
+    {
+        if (Physics.CheckBox(this.GetComponent<Collider>().bounds.center + this.transform.forward * (attackRange / 2), new Vector3(1, 1, attackRange), this.transform.rotation, 1 << LayerMask.NameToLayer("Player")))
+        {
+            target.GetComponent<PlayerController>().DecreaseHp(10);
+        }
+    }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawWireCube(this.GetComponent<Collider>().bounds.center + this.transform.forward * (attackRange / 2), new Vector3(1, 1, attackRange));
+    //}
+
+    void CanAttackTurnFalse()
+    {
+        canAttackTurn = false;
+    }
+
     void AttackFalse()
     {
+        anim.SetBool("isAttack", false);
+        anim.SetBool("isRunningAttack", false);
+
         if (Vector3.Distance(this.transform.position, target.position) > attackRange)
         {
             behavior = Enemy_Behavior.Run;

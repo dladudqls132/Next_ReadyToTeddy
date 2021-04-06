@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     protected float currentCombatTime;
     private GameObject whoAttackThis;
     protected Animator anim;
+    protected float originAttackRange;
 
     ParticleSystem.Burst[] bursts;
 
@@ -46,6 +47,7 @@ public class Enemy : MonoBehaviour
         state = Enemy_State.None;
 
         bursts = new[] { new ParticleSystem.Burst(0.0f, increaseCombo) };
+        originAttackRange = attackRange;
     }
 
     protected void CheckingHp()

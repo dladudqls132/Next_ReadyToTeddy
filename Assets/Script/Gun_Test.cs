@@ -94,8 +94,10 @@ public class Gun_Test : Gun
                 //Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)).normalized * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up).normalized * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
 
+                Debug.DrawRay(shotPos.position, shotDir * 1000);
+
                 RaycastHit hit2;
-                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player"))))
+                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Collide))
                 {
                     if (hit2.transform.CompareTag("Enemy"))
                     {
