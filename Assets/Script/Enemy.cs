@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
+    [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
     protected float currentCombatTime;
     private GameObject whoAttackThis;
