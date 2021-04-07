@@ -21,6 +21,7 @@ public class Enemy_MeleeTest : Enemy
     private bool canAttackTurn;
     private float jumpAngle;
     private bool canAttack;
+    [SerializeField] private bool temp;
 
     override protected void Start()
     {
@@ -30,6 +31,7 @@ public class Enemy_MeleeTest : Enemy
 
         anim = this.GetComponent<Animator>();
         agent = this.GetComponent<NavMeshAgent>();
+
     }
 
     private void Update()
@@ -38,8 +40,9 @@ public class Enemy_MeleeTest : Enemy
             return;
 
         if (!agent.isStopped)
-            agent.SetDestination(target.position);
-
+        {
+            agent.SetDestination(target.GetComponent<Collider>().bounds.center);
+        }
 
         RaycastHit hit;
         if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, Mathf.Infinity))

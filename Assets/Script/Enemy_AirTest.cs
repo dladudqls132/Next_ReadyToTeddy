@@ -28,7 +28,7 @@ public class Enemy_AirTest : Enemy
     [SerializeField] private Transform firePos;
     [SerializeField] private float speed;
     float currentSpeed;
-    bool canSee;
+
     Vector3 move;
 
     // Start is called before the first frame update
