@@ -21,7 +21,6 @@ public class Enemy_MeleeTest : Enemy
     private bool canAttackTurn;
     private float jumpAngle;
     private bool canAttack;
-    [SerializeField] private bool temp;
 
     override protected void Start()
     {

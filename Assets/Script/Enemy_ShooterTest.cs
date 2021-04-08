@@ -152,7 +152,7 @@ public class Enemy_ShooterTest : Enemy
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1, true);
                 }
             }
             if (state == Enemy_State.Targeting)

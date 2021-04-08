@@ -103,7 +103,7 @@ public class Gun_Test : Gun
                     {
                         Enemy enemy = hit2.transform.GetComponent<Enemy>();
                         //enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point);
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, true);
                     }
                     else
                     {

@@ -51,10 +51,10 @@ public class Enemy_AirTest : Enemy
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
-        
-            RaycastHit hit;
-            if (Physics.Raycast(firePos.position, (target.position - firePos.position).normalized, out hit, Mathf.Infinity))
-            {
+
+        RaycastHit hit;
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, attackRange))
+        {
             if (hit.transform.CompareTag("Player"))
             {
                 canSee = true;
@@ -65,13 +65,12 @@ public class Enemy_AirTest : Enemy
                 canSee = false;
                 state = Enemy_State.Search;
             }
-            }
-            else
-            {
-            canSee = false;
-                state = Enemy_State.Search;
-            }
-        
+        }
+        else
+        {
+            state = Enemy_State.Search;
+        }
+
 
         if (state == Enemy_State.Targeting)
         {
@@ -83,7 +82,7 @@ public class Enemy_AirTest : Enemy
                 {
                     behavior = Enemy_Behavior.Move;
                 }
-                    }
+            }
         }
         else if (state == Enemy_State.Search)
         {
@@ -133,7 +132,7 @@ public class Enemy_AirTest : Enemy
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1, true);
                 }
             }
             if (state == Enemy_State.Targeting)
@@ -205,7 +204,24 @@ public class Enemy_AirTest : Enemy
             Node targetNode = GetNode(target.position);
 
             if (targetNode.nodeType == NodeType.Wall)
-                continue;
+            {
+                bool changed = false;
+                foreach (Node neighborNode in GetNeighborNode(targetNode))
+                {
+                    if (neighborNode.nodeType == NodeType.Wall)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        changed = true;
+                        targetNode = neighborNode;
+                    }
+                }
+
+                if (!changed)
+                    continue;
+            }
 
             closeList.Clear();
             openList.Clear();
@@ -248,10 +264,10 @@ public class Enemy_AirTest : Enemy
                     }
                     else
                     {
-                        if (currentNode.g + 10 < neighborNode.g)
+                        if (currentNode.g + GetManhattenDistance(currentNode, neighborNode) < neighborNode.g)
                         {
                             neighborNode.parent = currentNode;
-                            neighborNode.g = currentNode.g + 10;
+                            neighborNode.g = currentNode.g + GetManhattenDistance(currentNode, neighborNode);
                         }
                     }
                 }
@@ -271,31 +287,17 @@ public class Enemy_AirTest : Enemy
     {
         neighborNode.Clear();
 
-        if (node.nodePosX > 0)
-            neighborNode.Add(this.node[node.nodePosX - 1][node.nodePosY][node.nodePosZ]);
-        if (node.nodePosX < nodeManager.gridSizeX - 1)
-            neighborNode.Add(this.node[node.nodePosX + 1][node.nodePosY][node.nodePosZ]);
-        if (node.nodePosY > 0)
-            neighborNode.Add(this.node[node.nodePosX][node.nodePosY - 1][node.nodePosZ]);
-        if (node.nodePosY < nodeManager.gridSizeY - 1)
-            neighborNode.Add(this.node[node.nodePosX][node.nodePosY + 1][node.nodePosZ]);
-        if (node.nodePosZ > 0)
-            neighborNode.Add(this.node[node.nodePosX][node.nodePosY][node.nodePosZ - 1]);
-        if (node.nodePosZ < nodeManager.gridSizeZ - 1)
-            neighborNode.Add(this.node[node.nodePosX][node.nodePosY][node.nodePosZ + 1]);
-
-        for(int i = 0; i < 3; i++)
+        for (int i = -1; i < 2; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (int j = -1; j < 2; j++)
             {
-                for (int k = 0; k < 3; k++)
+                for (int k = -1; k < 2; k++)
                 {
-                    if (node.nodePosX > 0 && node.nodePosX < nodeManager.gridSizeX - 1 && 
-                        node.nodePosY > 0 && node.nodePosY < nodeManager.gridSizeY - 1 && 
+                    if (node.nodePosX > 0 && node.nodePosX < nodeManager.gridSizeX - 1 &&
+                        node.nodePosY > 0 && node.nodePosY < nodeManager.gridSizeY - 1 &&
                         node.nodePosZ > 0 && node.nodePosZ < nodeManager.gridSizeZ - 1)
-
                     {
-                        neighborNode.Add(this.node[node.nodePosX - i][node.nodePosY - j][node.nodePosZ - k]);
+                        neighborNode.Add(this.node[node.nodePosX + i][node.nodePosY + j][node.nodePosZ + k]);
                     }
                 }
             }

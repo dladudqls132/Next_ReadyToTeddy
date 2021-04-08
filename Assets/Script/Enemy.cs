@@ -50,30 +50,34 @@ public class Enemy : MonoBehaviour
         originAttackRange = attackRange;
     }
 
-    protected void CheckingHp()
+    protected void CheckingHp(bool isUpCombo)
     {
         if(currentHp <= 0)
         {
             isDead = true;
-            GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
-            temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
-            //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-            temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+
+            if (isUpCombo)
+            {
+                GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
+                temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
+                //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
+                temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+            }
 
             this.gameObject.SetActive(false);
         }
     }
 
-    public void DecreaseHp(float value)
+    public void DecreaseHp(float value, bool isUpCombo)
     {
         currentHp -= value;
 
         whoAttackThis = null;
 
-        CheckingHp();
+        CheckingHp(isUpCombo);
     }
 
-    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos)
+    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos, bool isUpCombo)
     {
         currentHp -= value;
 
@@ -86,6 +90,6 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = attackObj;
 
-        CheckingHp();
+        CheckingHp(isUpCombo);
     }
 }

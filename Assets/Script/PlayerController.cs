@@ -25,41 +25,42 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float runSpeed = 0;
     [SerializeField] private float slidingCoolTime = 0;
     private float currentSlidingCoolTime = 0;
-    [SerializeField] private bool isSlide = false;
+    private bool isSlide = false;
     private float slideSpeed = 0;
     [SerializeField] private bool isSlope = false;
-    [SerializeField] private bool isRun = false;
+    private bool isRun = false;
     [SerializeField] private float WPressTime = 0;
     private float currentWPressTime = 0;
     private bool isPressW = false;
-    [SerializeField] private bool isCrouch = false;
-    [SerializeField] private bool canJump = false;
-    [SerializeField] private bool isJump = false;
-    [SerializeField] private bool isJumpByObject = false;
+    private bool isCrouch = false;
+    private bool canJump = false;
+    private bool isJump = false;
+    private bool isJumpByObject = false;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private float jumpPower = 0;
     private float currentJumpPower = 0;
-    [SerializeField] private bool isClimbing = false;
+    private bool isClimbing = false;
     [SerializeField] private float climbPower = 0;
     private float currentClimbPower = 0;
     private bool canClimb = false;
 
-    [SerializeField] private bool isClimbUp = false;
+    private bool isClimbUp = false;
     [SerializeField] private float climbUpTime = 0;
     [SerializeField] private float climbUpPower = 0;
     private float currentClimbuUpPower = 0;
     private float currentClimbUpTime = 0;
-    [SerializeField] private bool isCombat = false;
-    [SerializeField] private bool isAiming = false;
+    private bool isCombat = false;
+    private bool isAiming = false;
     [SerializeField] private float combatTime = 0;
     private float currentCombatTime = 0;
-    [SerializeField] private bool isDash;
+    private bool isDash;
     [SerializeField] private float dashPower = 0;
     [SerializeField] private float dashTime = 0;
     private float currentDashPower = 0;
     [SerializeField] private bool useGravity = false;
-    [SerializeField] private bool isLanding = false;
+    private bool isLanding = false;
     [SerializeField] private float landingReboundSpeed = 0;
+    [SerializeField] private float skill1_range;
 
     private Vector3 climbUpPos = Vector3.zero;
     private Vector2 moveInput = Vector2.zero;
@@ -613,6 +614,24 @@ public class PlayerController : MonoBehaviour
             isClimbing = false;
         }
 
+        //스킬
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if (currentCombo == maxCombo)
+            {
+                currentCombo = 0;
+                currentResetComboTime = 0;
+
+                Collider[] target = Physics.OverlapSphere(this.transform.position, skill1_range, 1 << LayerMask.NameToLayer("Enemy"));
+
+                for (int i = 0; i < target.Length; i++)
+                {
+                    if(Physics.Raycast(camPos.position, (target[i].transform.position - camPos.position).normalized, skill1_range, 1 << LayerMask.NameToLayer("Enemy")))
+                        target[i].GetComponent<Enemy>().DecreaseHp(60, false);
+                }
+            }
+        }
+
         if (isCombat)
         {
             currentCombatTime -= Time.deltaTime;
@@ -925,7 +944,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseCombo(int value)
     {
         //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
-        if (currentResetComboTime > resetComboTime - 3 || currentCombo == 0)
+        if (currentResetComboTime > resetComboTime / 3 || currentCombo == 0)
             currentCombo += value;
         currentResetComboTime = resetComboTime;
 
@@ -949,11 +968,13 @@ public class PlayerController : MonoBehaviour
                 DecreaseCombo(1);
                 //currentResetComboTime = resetComboTime / 2;
                 if (currentCombo > 0)
-                    currentResetComboTime = 2;
+                    currentResetComboTime = resetComboTime / 3;
                 else
                     currentResetComboTime = 0;
             }
         }
-        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
+
+        //콤보가 오르면 데미지 증가
+        //weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 }
