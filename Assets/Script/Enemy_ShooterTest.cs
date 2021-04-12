@@ -32,6 +32,9 @@ public class Enemy_ShooterTest : Enemy
     private Quaternion tempRot;
     private NavMeshAgent agent;
     [SerializeField] private float jumpAngle;
+    //[SerializeField] private Transform head;
+    //[SerializeField] private Transform spine1;
+    //[SerializeField] private Transform spine2;
 
     // Start is called before the first frame update
     override protected void Start()
@@ -232,4 +235,24 @@ public class Enemy_ShooterTest : Enemy
         }
 
     }
+
+    //private void LateUpdate()
+    //{
+
+    //    if (behavior == Enemy_Behavior.Aiming)
+    //    {
+    //        Quaternion oringinRot_Spine1 = spine1.rotation;
+    //        Quaternion oringinRot_Spine2 = spine2.rotation;
+
+    //        Vector3 dir = (target.position - spine1.position).normalized;
+    //        spine1.rotation = Quaternion.LookRotation(dir);
+    //        spine1.rotation *= Quaternion.Inverse(this.transform.rotation);
+    //        spine1.rotation *= oringinRot_Spine1;
+            
+    //        dir = (target.position - spine2.position).normalized;
+    //        spine2.rotation = Quaternion.LookRotation(dir);
+    //        spine2.rotation *= Quaternion.Inverse(this.transform.rotation);
+    //        spine2.rotation *= oringinRot_Spine2;
+    //    }
+    //}
 }
