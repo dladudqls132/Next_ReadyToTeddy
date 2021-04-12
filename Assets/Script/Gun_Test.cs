@@ -78,17 +78,20 @@ public class Gun_Test : Gun
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
                 {
-                    if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-                    {
-                        direction = (hit.point - shotPos.position).normalized;
-                    }
-                    else
-                    {
-                        direction = Camera.main.transform.forward;
-                    }
+                    //if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                    //{
+                    //    direction = (hit.point - shotPos.position).normalized;
+                    //}
+                    //else
+                    //{
+                    //    direction = Camera.main.transform.forward;
+                    //}
+                    direction = (hit.point - shotPos.position).normalized;
                 }
+                else
+                    direction = Camera.main.transform.forward;
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
                 //Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)).normalized * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up).normalized * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);

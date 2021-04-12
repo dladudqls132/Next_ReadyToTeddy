@@ -26,6 +26,8 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private float shakeTime;
     private float currentShakeTime;
     [SerializeField] private float shakeAmount;
+    [SerializeField] private Transform enemyHp;
+    [SerializeField] private Vector3 enemyHp_pos;
 
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
@@ -86,6 +88,20 @@ public class FPPCamController : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.PageDown))
         {
             cameraMoveSpeed -= 5;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enemy"))))
+        {
+            enemyHp.gameObject.SetActive(true);
+            enemyHp.position = hit.transform.position + Vector3.up * 3;
+            enemyHp.rotation = this.transform.rotation;
+        }
+        else
+        {
+            enemyHp.gameObject.SetActive(false);
         }
     }
 
