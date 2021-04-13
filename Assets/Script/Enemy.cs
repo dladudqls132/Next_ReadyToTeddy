@@ -7,7 +7,8 @@ public enum Enemy_State
     None,
     Patrol,
     Search,
-    Targeting
+    Targeting,
+    Chase
 }
 
 public class Enemy : MonoBehaviour
@@ -27,7 +28,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
-    protected float currentCombatTime;
+    [SerializeField] protected float currentCombatTime;
     private GameObject whoAttackThis;
     protected Animator anim;
     protected float originAttackRange;

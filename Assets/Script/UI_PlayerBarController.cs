@@ -58,7 +58,9 @@ public class UI_PlayerBarController : MonoBehaviour
             else
                 text.text = player.GetCurrentCombo().ToString();
             //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentCombo() / player.GetMaxCombo()), image.rectTransform.rect.height), Time.deltaTime * 15);
-            if (player.GetCurrentResetComboTime() <= player.GetResetComboTime() / 3)
+            if (player.GetCurrentResetComboTime() <= player.GetKeepComboTime() && player.GetCurrentResetComboTime() > player.GetDownComboTime())
+                image.color = new Color(255.0f, 127.0f, 0.0f);
+            else if (player.GetCurrentResetComboTime() <= player.GetDownComboTime())
                 image.color = Color.red;
             else
                 image.color = Color.white;

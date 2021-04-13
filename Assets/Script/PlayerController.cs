@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool isDead = false;
     [SerializeField] private float maxHP = 0;
-    [SerializeField] private float currentHP = 0;
+    private float currentHP = 0;
     [SerializeField] private int maxCombo = 0;
     [SerializeField] private int currentCombo = 0;
     [SerializeField] private float resetComboTime = 0;
-    [SerializeField] private float currentResetComboTime = 0;
+    [SerializeField] private float keepComboTime = 0;
+    [SerializeField] private float downComboTime = 0;
+    private float currentResetComboTime = 0;
 
     [SerializeField] private float decreaseHpValuePerSecond = 0;
     [SerializeField] private float walkSpeed = 0;
@@ -86,6 +88,8 @@ public class PlayerController : MonoBehaviour
     public float GetMaxCombo() { return maxCombo; }
     public float GetCurrentCombo() { return currentCombo; }
     public float GetResetComboTime() { return resetComboTime; }
+    public float GetKeepComboTime() { return keepComboTime; }
+    public float GetDownComboTime() { return downComboTime; }
     public float GetCurrentResetComboTime() { return currentResetComboTime; }
 
     // Start is called before the first frame update
@@ -944,7 +948,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseCombo(int value)
     {
         //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
-        if (currentResetComboTime > resetComboTime / 3 || currentCombo == 0)
+        if (currentResetComboTime > keepComboTime || currentCombo == 0)
             currentCombo += value;
         currentResetComboTime = resetComboTime;
 
@@ -968,7 +972,7 @@ public class PlayerController : MonoBehaviour
                 DecreaseCombo(1);
                 //currentResetComboTime = resetComboTime / 2;
                 if (currentCombo > 0)
-                    currentResetComboTime = resetComboTime / 3;
+                    currentResetComboTime = downComboTime;
                 else
                     currentResetComboTime = 0;
             }

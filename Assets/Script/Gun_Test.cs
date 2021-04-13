@@ -42,7 +42,7 @@ public class Gun_Test : Gun
             if (currentReloadTime <= 0)
             {                
                 currentReloadTime = reloadTime;
-                currentAmmo++;
+                currentAmmo = maxAmmo;
 
                 if(currentAmmo >= maxAmmo)
                 {
