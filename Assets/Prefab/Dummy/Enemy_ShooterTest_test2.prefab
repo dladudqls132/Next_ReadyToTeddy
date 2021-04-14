@@ -3418,7 +3418,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7705451154521109007}
-  m_LocalRotation: {x: -0, y: 0.9904401, z: -0, w: -0.1379441}
+  m_LocalRotation: {x: 0, y: 0.99043983, z: -0, w: -0.1379456}
   m_LocalPosition: {x: 275.72, y: 0.00000047683716, z: 229.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3490,8 +3490,16 @@ MonoBehaviour:
   increaseCombo: 1
   detectRange: 20
   attackRange: 13
-  combatTime: 3
+  combatTime: 5
   currentCombatTime: 0
+  returnToPatorlTime: 3
+  currentReturnToPatrolTime: 0
+  patrolNode:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentDestPatrolNode: {fileID: 0}
+  isRunAway: 0
   behavior: 0
   aimRig: {fileID: 1325705881866562176}
   bodyRig: {fileID: 1325705882231406188}

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.AI;
-
 
 public class Enemy_ShooterTest : Enemy
 {
@@ -30,7 +28,6 @@ public class Enemy_ShooterTest : Enemy
     private float currentShotDelay;
 
     private Quaternion tempRot;
-    private NavMeshAgent agent;
     [SerializeField] private float jumpAngle;
     //[SerializeField] private Transform head;
     //[SerializeField] private Transform spine1;
@@ -42,15 +39,16 @@ public class Enemy_ShooterTest : Enemy
         base.Start();
 
         anim = this.GetComponent<Animator>();
-        agent = this.GetComponent<NavMeshAgent>();
         laser = this.GetComponent<LineRenderer>();
 
-        target = GameManager.Instance.GetPlayer().transform;
+        //target = GameManager.Instance.GetPlayer().transform;
 
         currentShotDelay = shotDelay;
 
         aimPos = GameObject.Find("Player_targetPos").transform;
         tempRot = this.transform.rotation;
+
+        state = Enemy_State.None;
 
         foreach (MultiAimConstraint component in bodyRig.GetComponentsInChildren<MultiAimConstraint>())
         {
@@ -85,7 +83,7 @@ public class Enemy_ShooterTest : Enemy
         else
         {
             RaycastHit hit;
-            if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, Mathf.Infinity))
+            if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity))
             {
                 if (hit.transform.CompareTag("Player"))
                     state = Enemy_State.Targeting;
@@ -189,9 +187,9 @@ public class Enemy_ShooterTest : Enemy
         //IK, Rotation Controll
         if (behavior == Enemy_Behavior.Aiming || behavior == Enemy_Behavior.Attack)
         {
-            if (Vector3.Dot(this.transform.forward, target.GetComponent<Collider>().bounds.center - this.transform.position) <= 0.5f)
+            if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) <= 0.5f)
             {
-                tempRot = Quaternion.LookRotation(target.GetComponent<Collider>().bounds.center - this.transform.position);
+                tempRot = Quaternion.LookRotation(target.position - this.transform.position);
                 tempRot = Quaternion.Euler(0, tempRot.eulerAngles.y, 0);
             }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum Enemy_State
 {
@@ -8,7 +9,8 @@ public enum Enemy_State
     Patrol,
     Search,
     Targeting,
-    Chase
+    Chase,
+    RunAway
 }
 
 public class Enemy : MonoBehaviour
@@ -29,9 +31,17 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
     [SerializeField] protected float currentCombatTime;
+    [SerializeField] protected float returnToPatorlTime;
+    [SerializeField] protected float currentReturnToPatrolTime;
+    [SerializeField] protected Transform[] patrolNode;
+    [SerializeField] protected Transform currentDestPatrolNode;
+    protected int currentDestPatrolNodeIndex;
+    [SerializeField] protected bool isRunAway;
+
     private GameObject whoAttackThis;
     protected Animator anim;
     protected float originAttackRange;
+    protected NavMeshAgent agent;
 
     ParticleSystem.Burst[] bursts;
 
@@ -45,10 +55,56 @@ public class Enemy : MonoBehaviour
         if (GameObject.Find("Pool").transform.Find("Pool_Effect") != null)
             pool_damagedEffect = GameObject.Find("Pool").transform.Find("Pool_Effect").GetComponent<Pool_DamagedEffect>();
 
-        state = Enemy_State.None;
-
         bursts = new[] { new ParticleSystem.Burst(0.0f, increaseCombo) };
         originAttackRange = attackRange;
+
+        currentCombatTime = combatTime;
+        currentReturnToPatrolTime = returnToPatorlTime;
+
+        target = GameManager.Instance.GetPlayer().GetCamPos();
+
+        if (this.GetComponent<NavMeshAgent>() != null)
+            agent = this.GetComponent<NavMeshAgent>();
+
+        if (patrolNode.Length != 0)
+        {
+            currentDestPatrolNode = patrolNode[0];
+            currentDestPatrolNodeIndex = 0;
+        }
+    }
+
+    protected void GoToPatrolNode()
+    {
+        if (patrolNode.Length != 0)
+        {
+            if (state == Enemy_State.Search)
+            {
+                currentDestPatrolNode = patrolNode[0];
+                currentDestPatrolNodeIndex = 0;
+
+                for (int i = 0; i < patrolNode.Length; i++)
+                {
+                    if (Vector3.Distance(this.transform.position, patrolNode[i].position) < Vector3.Distance(this.transform.position, currentDestPatrolNode.position))
+                    {
+                        currentDestPatrolNode = patrolNode[i];
+                        currentDestPatrolNodeIndex = i;
+                    }
+                }
+            }
+
+            if (state == Enemy_State.Patrol)
+            {
+                if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
+                {
+                    currentDestPatrolNodeIndex++;
+                    currentDestPatrolNodeIndex = currentDestPatrolNodeIndex % patrolNode.Length;
+
+                    currentDestPatrolNode = patrolNode[currentDestPatrolNodeIndex];
+                }
+
+                agent.SetDestination(currentDestPatrolNode.position);
+            }
+        }
     }
 
     protected void CheckingHp(bool isUpCombo)

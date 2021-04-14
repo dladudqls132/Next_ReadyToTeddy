@@ -1999,7 +1999,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6991400970523937373}
-  m_LocalRotation: {x: -0, y: 0.21758287, z: -0, w: -0.9760419}
+  m_LocalRotation: {x: 0, y: 0.21758124, z: -0, w: -0.9760422}
   m_LocalPosition: {x: 282.34308, y: 0, z: 227.63094}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2089,8 +2089,16 @@ MonoBehaviour:
   increaseCombo: 1
   detectRange: 20
   attackRange: 2
-  combatTime: 3
+  combatTime: 5
   currentCombatTime: 0
+  returnToPatorlTime: 3
+  currentReturnToPatrolTime: 0
+  patrolNode:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentDestPatrolNode: {fileID: 0}
+  isRunAway: 0
   behavior: 0
   attackDelay: 1
 --- !u!1 &7116280500561864966

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.AI;
 
 
 public class Enemy_test2 : Enemy
@@ -30,7 +29,7 @@ public class Enemy_test2 : Enemy
     [SerializeField] private float currentShotDelay;
 
     private Quaternion tempRot;
-    private NavMeshAgent agent;
+    //private NavMeshAgent agent;
     [SerializeField] private float jumpAngle;
     Vector3 originPos;
     //[SerializeField] private Transform head;
@@ -43,15 +42,17 @@ public class Enemy_test2 : Enemy
         base.Start();
 
         anim = this.GetComponent<Animator>();
-        agent = this.GetComponent<NavMeshAgent>();
+        //agent = this.GetComponent<NavMeshAgent>();
         laser = this.GetComponent<LineRenderer>();
 
-        target = GameManager.Instance.GetPlayer().transform;
+        target = GameManager.Instance.GetPlayer().GetCamPos();
 
         currentShotDelay = shotDelay;
 
         aimPos = GameObject.Find("Player_targetPos").transform;
         tempRot = this.transform.rotation;
+
+        //state = Enemy_State.Patrol;
 
         foreach (MultiAimConstraint component in bodyRig.GetComponentsInChildren<MultiAimConstraint>())
         {
@@ -76,69 +77,88 @@ public class Enemy_test2 : Enemy
     // Update is called once per frame
     void Update()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, detectRange, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
+        if (state != Enemy_State.RunAway)
         {
-
-            if (hit.transform.CompareTag("Player"))
+            RaycastHit hit;
+            if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, detectRange, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
             {
-                if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) >= 0.5f)
+                if (hit.transform.CompareTag("Player"))
                 {
-                    state = Enemy_State.Chase;
-                    currentCombatTime = combatTime;
-                }
-                else
-                {
-                    if (target.GetComponent<Rigidbody>().velocity.magnitude > 7.0f)
+                    canSee = true;
+
+                    if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) >= 0.5f)
                     {
                         state = Enemy_State.Chase;
                         currentCombatTime = combatTime;
+                        currentReturnToPatrolTime = returnToPatorlTime;
+                    }
+                    else
+                    {
+                        if (target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f)
+                        {
+                            state = Enemy_State.Chase;
+                            currentCombatTime = combatTime;
+                            currentReturnToPatrolTime = returnToPatorlTime;
+                        }
+                    }
+                }
+                else
+                {
+                    canSee = false;
+                    if (target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
+                    {
+                        if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.Aiming)
+                        {
+                            agent.SetDestination(target.position);
+                            currentReturnToPatrolTime = returnToPatorlTime;
+                            if (state != Enemy_State.Chase)
+                                state = Enemy_State.Search;
+
+                            behavior = Enemy_Behavior.Walk;
+                        }
                     }
                 }
             }
             else
-            {
-                if (target.GetComponent<Rigidbody>().velocity.magnitude > 7.0f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
-                {
-                    agent.SetDestination(target.position);
-                    state = Enemy_State.Search;
-                    behavior = Enemy_Behavior.Run;
-                }
-            }
-        }
-        else
-        {
-            if (state == Enemy_State.Chase)
-                state = Enemy_State.Search;
-
-            if (state == Enemy_State.Search)
-            {
-                currentCombatTime -= Time.deltaTime;
-
-                if (currentCombatTime <= 0)
-                {
-                    currentCombatTime = combatTime;
-                    state = Enemy_State.Patrol;
-                    agent.SetDestination(originPos);
-                }
-            }
+                canSee = false;
         }
 
         if (state == Enemy_State.Chase)
         {
+            agent.SetDestination(target.position);
+
             if (behavior != Enemy_Behavior.Jump)
             {
-                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                if (canSee)
                 {
-                    agent.isStopped = true;
-                    behavior = Enemy_Behavior.Aiming;
+                    if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                    {
+                        agent.isStopped = true;
+                        behavior = Enemy_Behavior.Aiming;
+                    }
+                    else if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+                    {
+                        agent.isStopped = false;
+                        agent.SetDestination(target.position);
+                        behavior = Enemy_Behavior.Walk;
+                    }
                 }
-                else if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+                else
                 {
-                    agent.isStopped = false;
-                    agent.SetDestination(target.position);
-                    behavior = Enemy_Behavior.Walk;
+                    if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+                    {
+                        agent.isStopped = false;
+                        behavior = Enemy_Behavior.Walk;
+                    }
                 }
+            }
+
+            currentCombatTime -= Time.deltaTime;
+
+            if (currentCombatTime <= 0)
+            {
+                currentCombatTime = combatTime;
+                state = Enemy_State.Search;
             }
         }
         else if (state == Enemy_State.Search)
@@ -148,6 +168,21 @@ public class Enemy_test2 : Enemy
                 agent.isStopped = false;
                 behavior = Enemy_Behavior.Walk;
             }
+            currentReturnToPatrolTime -= Time.deltaTime;
+
+            if(currentReturnToPatrolTime <= 0)
+            {
+                currentReturnToPatrolTime = returnToPatorlTime;
+                state = Enemy_State.Patrol;
+            }
+        }
+        else if (state == Enemy_State.Patrol)
+        {
+            behavior = Enemy_Behavior.Walk;
+        }
+        else if(state == Enemy_State.RunAway)
+        {
+            behavior = Enemy_Behavior.Run;
         }
 
 
@@ -172,7 +207,16 @@ public class Enemy_test2 : Enemy
                 }
 
                 laser.SetPosition(0, firePos.position);
-                laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30);
+
+                RaycastHit laserHit;
+                if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out laserHit, 30.0f, ~(1 << LayerMask.NameToLayer("Enemy"))))
+                {
+                    laser.SetPosition(1, laserHit.point + (aimPos.position - firePos.position).normalized * 0.2f + Vector3.down * 0.01f);
+                }
+                else
+                {
+                    laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30 + Vector3.down * 0.01f);
+                }
             }
         }
         else
@@ -198,7 +242,7 @@ public class Enemy_test2 : Enemy
             }
             if (state == Enemy_State.Chase)
             {
-                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                if (canSee)
                     behavior = Enemy_Behavior.Aiming;
                 else
                     behavior = Enemy_Behavior.Walk;
@@ -227,14 +271,50 @@ public class Enemy_test2 : Enemy
             agent.speed = 2;
             jumpAngle = 0;
             agent.baseOffset = 0;
+
+            //GoToPatrolNode();
+
+            if (currentHp < maxHp / 2 && !isRunAway)
+            {
+                if (state != Enemy_State.RunAway)
+                {
+                    currentDestPatrolNode = patrolNode[0];
+                    currentDestPatrolNodeIndex = 0;
+
+                    for (int i = 0; i < patrolNode.Length; i++)
+                    {
+                        if (Vector3.Distance(target.position, patrolNode[i].position) > Vector3.Distance(target.position, currentDestPatrolNode.position))
+                        {
+                            currentDestPatrolNode = patrolNode[i];
+                            currentDestPatrolNodeIndex = i;
+                        }
+                    }
+
+                    state = Enemy_State.RunAway;
+                    behavior = Enemy_Behavior.Run;
+                    isRunAway = true;
+
+                    agent.isStopped = false;
+                    agent.SetDestination(currentDestPatrolNode.position);
+                }
+            }
+        }
+
+        if(state == Enemy_State.RunAway)
+        {
+            if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
+            {
+                state = Enemy_State.None;
+                behavior = Enemy_Behavior.Idle;
+            }
         }
 
         //IK, Rotation Controll
         if (behavior == Enemy_Behavior.Aiming || behavior == Enemy_Behavior.Attack)
         {
-            if (Vector3.Dot(this.transform.forward, target.GetComponent<Collider>().bounds.center - this.transform.position) <= 0.5f)
+            if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) <= 0.5f)
             {
-                tempRot = Quaternion.LookRotation(target.GetComponent<Collider>().bounds.center - this.transform.position);
+                tempRot = Quaternion.LookRotation(target.position - this.transform.position);
                 tempRot = Quaternion.Euler(0, tempRot.eulerAngles.y, 0);
             }
 
@@ -250,6 +330,7 @@ public class Enemy_test2 : Enemy
             bodyRig.weight = Mathf.Lerp(bodyRig.weight, 0, Time.deltaTime * 15);
             aimRig.weight = Mathf.Lerp(aimRig.weight, 0, Time.deltaTime * 15);
         }
+       
 
         //Animation Controll
         for (int i = 0; i < anim.parameterCount; i++)
@@ -266,6 +347,9 @@ public class Enemy_test2 : Enemy
                 break;
             case Enemy_Behavior.Walk:
                 anim.SetBool("isWalking", true);
+                break;
+            case Enemy_Behavior.Run:
+                anim.SetBool("isRunning", true);
                 break;
             case Enemy_Behavior.Aiming:
                 anim.SetBool("isAiming", true);

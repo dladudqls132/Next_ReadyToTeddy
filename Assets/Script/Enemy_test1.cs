@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Enemy_test1 : Enemy
 {
     enum Enemy_Behavior
     {
         Idle,
+        Walk,
         Run,
         Jump,
         Attack,
@@ -15,7 +15,7 @@ public class Enemy_test1 : Enemy
     }
 
     [SerializeField] private Enemy_Behavior behavior;
-    private NavMeshAgent agent;
+    //private NavMeshAgent agent;
     [SerializeField] private float attackDelay;
     private float currentAttackDelay;
     private bool canAttackTurn;
@@ -27,17 +27,18 @@ public class Enemy_test1 : Enemy
     {
         base.Start();
 
-        target = GameManager.Instance.GetPlayer().transform;
+        //target = GameManager.Instance.GetPlayer().transform;
 
         anim = this.GetComponent<Animator>();
-        agent = this.GetComponent<NavMeshAgent>();
+        state = Enemy_State.Patrol;
+        //agent = this.GetComponent<NavMeshAgent>();
         originPos = this.transform.position;
     }
 
     private void Update()
     {
         RaycastHit hit;
-        if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, detectRange, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")) ))
+        if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, detectRange, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")) ))
         {
    
             if(hit.transform.CompareTag("Player"))
@@ -46,46 +47,35 @@ public class Enemy_test1 : Enemy
                 {
                     state = Enemy_State.Chase;
                     currentCombatTime = combatTime;
+                    currentReturnToPatrolTime = returnToPatorlTime;
                 }
                 else
                 {
-                    if (target.GetComponent<Rigidbody>().velocity.magnitude > 7.0f)
+                    if (target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f)
                     {
                         state = Enemy_State.Chase;
                         currentCombatTime = combatTime;
+                        currentReturnToPatrolTime = returnToPatorlTime;
                     }
                 }
             }
             else
             {
-                if(target.GetComponent<Rigidbody>().velocity.magnitude > 7.0f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
+                if(target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
                 {
                     if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.RunningAttack)
                     {
                         agent.SetDestination(target.position);
-                        state = Enemy_State.Search;
+                        currentReturnToPatrolTime = returnToPatorlTime;
+                        if (state != Enemy_State.Chase)
+                            state = Enemy_State.Search;
+
                         behavior = Enemy_Behavior.Run;
                     }
                 }
             }
         }
-        else
-        {
-            if(state == Enemy_State.Chase)
-                state = Enemy_State.Search;
 
-            if(state == Enemy_State.Search)
-            {
-                currentCombatTime -= Time.deltaTime;
-
-                if(currentCombatTime <= 0)
-                {
-                    currentCombatTime = combatTime;
-                    state = Enemy_State.Patrol;
-                    agent.SetDestination(originPos);
-                }
-            }
-        }
 
         if (state == Enemy_State.Chase)
         {
@@ -147,11 +137,33 @@ public class Enemy_test1 : Enemy
                 }
             }
 
+            currentCombatTime -= Time.deltaTime;
+
+            if (currentCombatTime <= 0)
+            {
+                currentCombatTime = combatTime;
+                state = Enemy_State.Search;
+            }
         }
         else if(state == Enemy_State.Search)
         {
-            //agent.speed = 2.0f;
-            //agent.SetDestination(target.position);
+            if (behavior != Enemy_Behavior.RunningAttack && behavior != Enemy_Behavior.Attack)
+            {
+                agent.isStopped = false;
+                behavior = Enemy_Behavior.Walk;
+            }
+
+            currentReturnToPatrolTime -= Time.deltaTime;
+
+            if(currentReturnToPatrolTime <= 0)
+            {
+                currentReturnToPatrolTime = returnToPatorlTime;
+                state = Enemy_State.Patrol;
+            }
+        }
+        else if (state == Enemy_State.Patrol)
+        {
+            behavior = Enemy_Behavior.Walk;
         }
 
         if ((behavior == Enemy_Behavior.Attack || behavior == Enemy_Behavior.RunningAttack))
@@ -186,10 +198,12 @@ public class Enemy_test1 : Enemy
 
             if (state == Enemy_State.Chase)
                 agent.speed = 8;
-            else if (state == Enemy_State.Search)
+            else if (state == Enemy_State.Search || state == Enemy_State.Patrol)
                 agent.speed = 3;
             jumpAngle = 0;
             agent.baseOffset = 0;
+
+            GoToPatrolNode();
         }
 
         //Animation Controll
@@ -204,6 +218,9 @@ public class Enemy_test1 : Enemy
         switch (behavior)
         {
             case Enemy_Behavior.Idle:
+                break;
+            case Enemy_Behavior.Walk:
+                anim.SetBool("isWalking", true);
                 break;
             case Enemy_Behavior.Run:
                 anim.SetBool("isRunning", true);
@@ -224,7 +241,7 @@ public class Enemy_test1 : Enemy
     {
         if (Physics.CheckBox(this.GetComponent<Collider>().bounds.center + this.transform.forward * (attackRange / 2), new Vector3(1, 1, attackRange), this.transform.rotation, 1 << LayerMask.NameToLayer("Player")))
         {
-            target.GetComponent<PlayerController>().DecreaseHp(10);
+            target.parent.GetComponent<PlayerController>().DecreaseHp(10);
         }
     }
 

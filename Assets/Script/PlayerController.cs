@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private FPPCamController mainCam = null;
     [SerializeField] private Transform camPos = null;
+    [SerializeField] private CapsuleCollider bodyCollider = null;
     [SerializeField] private CapsuleCollider groundCollider = null;
     [SerializeField] private Transform hand = null;
     [SerializeField] private Transform hand_Origin = null;
@@ -75,6 +76,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 handOriginPos = Vector3.zero;
     private Quaternion handOriginRot = Quaternion.identity;
     private Vector3 result = Vector3.zero;
+    private Vector3 originBodyColliderCenter;
+    private float originBodyColliderHeight;
 
     private bool isInit = false;
 
@@ -91,6 +94,8 @@ public class PlayerController : MonoBehaviour
     public float GetKeepComboTime() { return keepComboTime; }
     public float GetDownComboTime() { return downComboTime; }
     public float GetCurrentResetComboTime() { return currentResetComboTime; }
+    public Transform GetCamPos() { return camPos; }
+    public bool GetIsCrouch() { return isCrouch; }
 
     // Start is called before the first frame update
     public void Init()
@@ -110,6 +115,8 @@ public class PlayerController : MonoBehaviour
         currentDashPower = dashPower;
         currentClimbUpTime = climbUpTime;
         currentClimbuUpPower = climbUpPower;
+        originBodyColliderCenter = bodyCollider.center;
+        originBodyColliderHeight = bodyCollider.height;
         isInit = true;
     }
 
@@ -132,6 +139,8 @@ public class PlayerController : MonoBehaviour
             currentDashPower = dashPower;
             currentClimbUpTime = climbUpTime;
             currentClimbuUpPower = climbUpPower;
+            originBodyColliderCenter = bodyCollider.center;
+            originBodyColliderHeight = bodyCollider.height;
         }
     }
 
@@ -209,7 +218,12 @@ public class PlayerController : MonoBehaviour
                 }
 
                 if (!isClimbing && !isClimbUp && !isSlide && !isJump && !isJumpByObject)
+                {
                     isCrouch = true;
+
+                    bodyCollider.center = new Vector3(0, 0.3922825f, 0);
+                    bodyCollider.height = 0.9702759f;
+                }
 
             }
 
@@ -580,6 +594,8 @@ public class PlayerController : MonoBehaviour
         {
             isSlide = false;
             isCrouch = false;
+            bodyCollider.center = originBodyColliderCenter;
+            bodyCollider.height = originBodyColliderHeight;
             mainCam.SetOriginFov(mainCam.GetRealOriginFov());
             mainCam.FovReset();
         }

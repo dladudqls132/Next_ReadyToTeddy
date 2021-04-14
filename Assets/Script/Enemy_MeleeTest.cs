@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class Enemy_MeleeTest : Enemy
 {
@@ -15,7 +14,6 @@ public class Enemy_MeleeTest : Enemy
     }
 
     [SerializeField] private Enemy_Behavior behavior;
-    private NavMeshAgent agent;
     [SerializeField] private float attackDelay;
     private float currentAttackDelay;
     private bool canAttackTurn;
@@ -26,11 +24,10 @@ public class Enemy_MeleeTest : Enemy
     {
         base.Start();
 
-        target = GameManager.Instance.GetPlayer().transform;
+        //target = GameManager.Instance.GetPlayer().transform;
+        state = Enemy_State.None;
 
         anim = this.GetComponent<Animator>();
-        agent = this.GetComponent<NavMeshAgent>();
-
     }
 
     private void Update()
@@ -40,11 +37,11 @@ public class Enemy_MeleeTest : Enemy
 
         if (!agent.isStopped)
         {
-            agent.SetDestination(target.GetComponent<Collider>().bounds.center);
+            agent.SetDestination(target.position);
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(eye.position, (target.GetComponent<Collider>().bounds.center - eye.position).normalized, out hit, Mathf.Infinity))
+        if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity))
         {
             if (hit.transform.CompareTag("Player"))
                 state = Enemy_State.Targeting;
@@ -187,7 +184,7 @@ public class Enemy_MeleeTest : Enemy
     {
         if (Physics.CheckBox(this.GetComponent<Collider>().bounds.center + this.transform.forward * (attackRange / 2), new Vector3(1, 1, attackRange), this.transform.rotation, 1 << LayerMask.NameToLayer("Player")))
         {
-            target.GetComponent<PlayerController>().DecreaseHp(10);
+            target.parent.GetComponent<PlayerController>().DecreaseHp(10);
         }
     }
 
