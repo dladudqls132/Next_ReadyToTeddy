@@ -268,7 +268,11 @@ public class Enemy_test2 : Enemy
             if (behavior == Enemy_Behavior.Jump)
                 behavior = Enemy_Behavior.Idle;
 
-            agent.speed = 2;
+            if(state == Enemy_State.RunAway)
+                agent.speed = 6.0f;
+            else
+                agent.speed = 2;
+
             jumpAngle = 0;
             agent.baseOffset = 0;
 

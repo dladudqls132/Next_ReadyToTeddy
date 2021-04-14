@@ -41,7 +41,7 @@ public class Enemy_AirTest : Enemy
 
         currentShotDelay = shotDelay;
         laser = this.GetComponent<LineRenderer>();
-        target = GameManager.Instance.GetPlayer().transform.Find("TargetPos");
+        target = GameManager.Instance.GetPlayer().GetCamPos();
 
         StartCoroutine(PathFinding());
     }

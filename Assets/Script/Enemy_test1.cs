@@ -40,7 +40,6 @@ public class Enemy_test1 : Enemy
         RaycastHit hit;
         if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, detectRange, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")) ))
         {
-   
             if(hit.transform.CompareTag("Player"))
             {
                 if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) >= 0.5f)

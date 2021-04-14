@@ -42,7 +42,7 @@ public class Enemy_ShooterTest : Enemy
         laser = this.GetComponent<LineRenderer>();
 
         //target = GameManager.Instance.GetPlayer().transform;
-
+        target = GameManager.Instance.GetPlayer().GetCamPos();
         currentShotDelay = shotDelay;
 
         aimPos = GameObject.Find("Player_targetPos").transform;
@@ -133,7 +133,16 @@ public class Enemy_ShooterTest : Enemy
                 }
 
                 laser.SetPosition(0, firePos.position);
-                laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30);
+
+                RaycastHit laserHit;
+                if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out laserHit, 30.0f, ~(1 << LayerMask.NameToLayer("Enemy"))))
+                {
+                    laser.SetPosition(1, laserHit.point + (aimPos.position - firePos.position).normalized * 0.2f + Vector3.down * 0.01f);
+                }
+                else
+                {
+                    laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30 + Vector3.down * 0.01f);
+                }
             }
         }
         else
