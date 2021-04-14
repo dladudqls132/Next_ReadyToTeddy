@@ -26,6 +26,7 @@ public class Enemy_AirTest : Enemy
     private Node[][][] node;
     private LineRenderer laser;
     [SerializeField] private Transform firePos;
+    [SerializeField] private Transform aimPos;
     [SerializeField] private float speed;
     float currentSpeed;
 
@@ -42,6 +43,7 @@ public class Enemy_AirTest : Enemy
         currentShotDelay = shotDelay;
         laser = this.GetComponent<LineRenderer>();
         target = GameManager.Instance.GetPlayer().GetCamPos();
+        aimPos = GameObject.Find("Player_targetPos").transform;
 
         StartCoroutine(PathFinding());
     }
@@ -112,7 +114,15 @@ public class Enemy_AirTest : Enemy
                 }
 
                 laser.SetPosition(0, firePos.position);
-                laser.SetPosition(1, firePos.position + (target.position - firePos.position).normalized * 30);
+                RaycastHit laserHit;
+                if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out laserHit, 30.0f, ~(1 << LayerMask.NameToLayer("Enemy"))))
+                {
+                    laser.SetPosition(1, laserHit.point + (aimPos.position - firePos.position).normalized * 0.2f + Vector3.down * 0.01f);
+                }
+                else
+                {
+                    laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30 + Vector3.down * 0.01f);
+                }
             }
         }
         else
