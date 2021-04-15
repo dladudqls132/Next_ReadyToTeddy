@@ -42,12 +42,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private float jumpPower = 0;
     private float currentJumpPower = 0;
-    private bool isClimbing = false;
+    [SerializeField] private bool isClimbing = false;
     [SerializeField] private float climbPower = 0;
     private float currentClimbPower = 0;
     private bool canClimb = false;
 
-    private bool isClimbUp = false;
+    [SerializeField] private bool isClimbUp = false;
     [SerializeField] private float climbUpTime = 0;
     [SerializeField] private float climbUpPower = 0;
     private float currentClimbuUpPower = 0;
