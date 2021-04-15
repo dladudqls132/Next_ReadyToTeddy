@@ -4,6 +4,7 @@ Shader "FX/Smoke"
 {
 	Properties
 	{
+		_Ins("Ins", Range( -1 , 0)) = -0.1755842
 		_SmokeTexture("Smoke Texture", 2D) = "white" {}
 		_Dissolve("Dissolve", Range( -1 , 0)) = -0.1755842
 		[Toggle(_USEPARTICLE_ON)] _UseParticle("Use Particle", Float) = 0
@@ -17,7 +18,6 @@ Shader "FX/Smoke"
 		Tags{ "RenderType" = "Custom"  "Queue" = "Transparent+0" "IsEmissive" = "true"  }
 		Cull Off
 		ZWrite Off
-		ZTest Always
 		Blend SrcAlpha One
 		CGPROGRAM
 		#pragma target 2.0
@@ -35,6 +35,7 @@ Shader "FX/Smoke"
 		uniform sampler2D _SmokeTexture;
 		uniform float4 _SmokeTexture_ST;
 		uniform half _Dissolve;
+		uniform half _Ins;
 
 		inline fixed4 LightingUnlit( SurfaceOutput s, half3 lightDir, half atten )
 		{
@@ -49,7 +50,12 @@ Shader "FX/Smoke"
 			#else
 				float staticSwitch16 = _Dissolve;
 			#endif
-			o.Emission = ( i.vertexColor * saturate( ( tex2D( _SmokeTexture, uv_SmokeTexture ).r + staticSwitch16 ) ) ).rgb;
+			#ifdef _USEPARTICLE_ON
+				float staticSwitch17 = i.uv_tex4coord.w;
+			#else
+				float staticSwitch17 = _Ins;
+			#endif
+			o.Emission = ( ( i.vertexColor * saturate( ( tex2D( _SmokeTexture, uv_SmokeTexture ).r + staticSwitch16 ) ) ) * staticSwitch17 ).rgb;
 			o.Alpha = i.vertexColor.a;
 		}
 
@@ -59,17 +65,20 @@ Shader "FX/Smoke"
 }
 /*ASEBEGIN
 Version=15301
-0;-5;1920;1019;771.2529;757.7549;1;True;True
-Node;AmplifyShaderEditor.TextureCoordinatesNode;11;-442.7016,-372.6967;Float;False;0;1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.RangedFloatNode;9;-427.0307,-102.164;Float;False;Property;_Dissolve;Dissolve;2;0;Create;True;0;0;False;0;-0.1755842;-0.248;-1;0;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexCoordVertexDataNode;15;-386.3069,-15.94072;Float;False;0;4;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SamplerNode;1;-210.3162,-362.8524;Float;True;Property;_SmokeTexture;Smoke Texture;1;0;Create;True;0;0;False;0;aadc8ef477fda3942a1b19a41bf725d0;63949db0ec1f8754a8247326d901bfa0;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.StaticSwitch;16;-158.3069,-66.94072;Float;False;Property;_UseParticle;Use Particle;3;0;Create;True;0;0;False;0;0;0;0;True;;Toggle;2;Key0;Key1;9;1;FLOAT;0;False;0;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;4;109.7177,-334.1941;Float;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.VertexColorNode;12;281.2426,-514.597;Float;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.SaturateNode;10;327.0672,-329.4232;Float;True;1;0;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;13;485.4984,-451.8526;Float;False;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
-Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;657.443,-417.2;Half;False;True;0;Half;ASEMaterialInspector;0;0;Unlit;Practice/Ice smoke;False;False;False;False;True;True;True;True;True;True;True;True;False;False;False;False;False;False;False;False;Off;2;False;-1;7;False;-1;False;0;0;False;0;Custom;0.5;True;False;0;True;Custom;;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;False;8;5;False;-1;1;False;-1;0;0;False;-1;0;False;-1;-1;False;-1;-1;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;0;-1;-1;-1;0;0;0;False;0;0;0;False;-1;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
+1920;0;1920;1019;1209.033;923.1661;1.3;True;True
+Node;AmplifyShaderEditor.TextureCoordinatesNode;11;-831.6016,-612.7966;Float;False;0;1;2;3;2;SAMPLER2D;;False;0;FLOAT2;1,1;False;1;FLOAT2;0,0;False;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.TexCoordVertexDataNode;15;-775.2068,-256.0407;Float;False;0;4;0;5;FLOAT4;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;9;-815.9306,-343.264;Float;False;Property;_Dissolve;Dissolve;3;0;Create;True;0;0;False;0;-0.1755842;0;-1;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SamplerNode;1;-599.2161,-602.9524;Float;True;Property;_SmokeTexture;Smoke Texture;2;0;Create;True;0;0;False;0;aadc8ef477fda3942a1b19a41bf725d0;63949db0ec1f8754a8247326d901bfa0;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;6;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.StaticSwitch;16;-547.2068,-307.0407;Float;False;Property;_UseParticle;Use Particle;4;0;Create;True;0;0;False;0;0;0;1;True;;Toggle;2;Key0;Key1;9;1;FLOAT;0;False;0;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;4;-279.1823,-574.2941;Float;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.VertexColorNode;12;-34.65737,-588.697;Float;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SaturateNode;10;11.16722,-403.5232;Float;True;1;0;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;18;-263.153,-187.4549;Float;False;Property;_Ins;Ins;1;0;Create;True;0;0;False;0;-0.1755842;0;-1;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;13;231.5984,-532.9526;Float;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.StaticSwitch;17;84.1471,-164.1549;Float;False;Property;_UseParticle;Use Particle;3;0;Create;True;0;0;False;0;0;0;1;True;;Toggle;2;Key0;Key1;9;1;FLOAT;0;False;0;FLOAT;0;False;2;FLOAT;0;False;3;FLOAT;0;False;4;FLOAT;0;False;5;FLOAT;0;False;6;FLOAT;0;False;7;FLOAT;0;False;8;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;19;518.6666,-323.866;Float;True;2;2;0;COLOR;0,0,0,0;False;1;FLOAT;0;False;1;COLOR;0
+Node;AmplifyShaderEditor.StandardSurfaceOutputNode;0;824.443,-418.2;Half;False;True;0;Half;ASEMaterialInspector;0;0;Unlit;FX/Smoke;False;False;False;False;True;True;True;True;True;True;True;True;False;False;False;False;False;False;False;False;Off;2;False;-1;0;False;-1;False;0;0;False;0;Custom;0.5;True;False;0;True;Custom;;Transparent;All;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;True;0;False;-1;False;0;False;-1;255;False;-1;255;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;0;False;-1;False;2;15;10;25;False;0.5;False;8;5;False;-1;1;False;-1;0;0;False;-1;0;False;-1;-1;False;-1;-1;False;-1;0;False;0;0,0,0,0;VertexOffset;True;False;Cylindrical;False;Relative;0;;0;-1;-1;-1;0;0;0;False;0;0;0;False;-1;-1;0;False;-1;15;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;2;FLOAT3;0,0,0;False;3;FLOAT;0;False;4;FLOAT;0;False;6;FLOAT3;0,0,0;False;7;FLOAT3;0,0,0;False;8;FLOAT;0;False;9;FLOAT;0;False;10;FLOAT;0;False;13;FLOAT3;0,0,0;False;11;FLOAT3;0,0,0;False;12;FLOAT3;0,0,0;False;14;FLOAT4;0,0,0,0;False;15;FLOAT3;0,0,0;False;0
 WireConnection;1;1;11;0
 WireConnection;16;1;9;0
 WireConnection;16;0;15;3
@@ -78,7 +87,11 @@ WireConnection;4;1;16;0
 WireConnection;10;0;4;0
 WireConnection;13;0;12;0
 WireConnection;13;1;10;0
-WireConnection;0;2;13;0
+WireConnection;17;1;18;0
+WireConnection;17;0;15;4
+WireConnection;19;0;13;0
+WireConnection;19;1;17;0
+WireConnection;0;2;19;0
 WireConnection;0;9;12;4
 ASEEND*/
-//CHKSM=795C5F6ED6D6C9D4BC197342E9D65DC90FF0ED6B
+//CHKSM=6EA6C82A9934D34AC5CA685285CC697F00525F70
