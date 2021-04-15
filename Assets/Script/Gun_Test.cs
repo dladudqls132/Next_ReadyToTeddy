@@ -100,7 +100,7 @@ public class Gun_Test : Gun
                 Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
                 {
                     if (hit2.transform.CompareTag("Enemy"))
                     {

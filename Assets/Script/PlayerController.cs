@@ -36,9 +36,9 @@ public class PlayerController : MonoBehaviour
     private float currentWPressTime = 0;
     private bool isPressW = false;
     private bool isCrouch = false;
-    private bool canJump = false;
+    [SerializeField] private bool canJump = false;
     private bool isJump = false;
-    private bool isJumpByObject = false;
+    [SerializeField] private bool isJumpByObject = false;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private float jumpPower = 0;
     private float currentJumpPower = 0;
@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
     public float GetCurrentResetComboTime() { return currentResetComboTime; }
     public Transform GetCamPos() { return camPos; }
     public bool GetIsCrouch() { return isCrouch; }
+    public void SetCanJump(bool value) { canJump = value; }
 
     // Start is called before the first frame update
     public void Init()
@@ -391,7 +392,8 @@ public class PlayerController : MonoBehaviour
                                 isClimbing = true;
                                 isSlide = false;
                                 isDash = false;
-                                canJump = false;
+                                //canJump = false;
+                                
                                 rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
                                 mainCam.SetOriginFov(mainCam.GetRealOriginFov());
                                 mainCam.FovReset();
@@ -504,7 +506,7 @@ public class PlayerController : MonoBehaviour
 
             if (isJump)
             {
-                canJump = false;
+                //canJump = false;
             }
             isJump = false;
             isJumpByObject = false;
@@ -599,7 +601,7 @@ public class PlayerController : MonoBehaviour
             mainCam.SetOriginFov(mainCam.GetRealOriginFov());
             mainCam.FovReset();
         }
-        if (Input.GetKeyDown(KeyCode.Space) && !isDash && !isJump && canJump)
+        if (Input.GetKeyDown(KeyCode.Space) && !isDash && canJump)
         {
             isSlide = false;
             if (!isAiming)
@@ -608,10 +610,13 @@ public class PlayerController : MonoBehaviour
                 mainCam.FovReset();
             }
             isJump = true;
+
+            if(!isGrounded)
             canJump = false;
 
             if (isJumpByObject)
             {
+                isJumpByObject = false;
                 rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
                 currentJumpPower = jumpPower;
             }

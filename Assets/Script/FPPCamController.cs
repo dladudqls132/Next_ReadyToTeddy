@@ -45,6 +45,7 @@ public class FPPCamController : MonoBehaviour
         mainCamera = Camera.main;
         originFov = Camera.main.fieldOfView;
         realOriginFov = originFov;
+        cameraFollow = GameManager.Instance.GetPlayer().GetCamPos();
     }
 
     private void Update()
