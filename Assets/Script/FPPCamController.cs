@@ -5,11 +5,10 @@ using UnityEngine;
 public class FPPCamController : MonoBehaviour
 {
     [SerializeField] private float cameraMoveSpeed = 120.0f;
-    [SerializeField] Transform cameraFollow;
+    [SerializeField] Transform cameraFollow = null;
     private Camera mainCamera;
     
     private float clampAngle = 72.0f;
-    private float inputSensitivity = 150.0f;
     private float mouseX;
     private float mouseY;
     private float rotY = 0.0f;
@@ -78,6 +77,15 @@ public class FPPCamController : MonoBehaviour
                 fovTimer = 0;
                 mainCamera.fieldOfView = originFov;
             }
+        }
+
+        if(Input.GetKeyDown(KeyCode.PageUp))
+        {
+            cameraMoveSpeed += 5;
+        }
+        else if(Input.GetKeyDown(KeyCode.PageDown))
+        {
+            cameraMoveSpeed -= 5;
         }
     }
 

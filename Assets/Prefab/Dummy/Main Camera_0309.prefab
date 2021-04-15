@@ -132,7 +132,8 @@ MonoBehaviour:
   damagePerBullet: 5
   speed: 500
   muzzleFlash: {fileID: 1846890387899228356}
-  ammoHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef, type: 3}
+  bulletHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef,
+    type: 3}
   spreadAngle: 10
   fireNum: 10
 --- !u!1 &7640704203253700908
@@ -236,6 +237,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraMoveSpeed: 600
   cameraFollow: {fileID: 0}
+  isFovMove: 0
+  isShake: 0
+  shakeTime: 0
+  shakeAmount: 0
 --- !u!114 &7640704203253700907
 MonoBehaviour:
   m_ObjectHideFlags: 0

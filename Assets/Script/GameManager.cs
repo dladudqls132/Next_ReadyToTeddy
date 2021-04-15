@@ -20,4 +20,9 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         player.Init();
     }
+
+    private void OnDestroy()
+    {
+        Instance = null;
+    }
 }
