@@ -3446,10 +3446,19 @@ MonoBehaviour:
   isDead: 0
   maxHp: 30
   currentHp: 0
+  damage: 3
   increaseCombo: 1
-  detectRange: 20
+  detectRange: 100
   attackRange: 11
   combatTime: 4
+  currentCombatTime: 0
+  returnToPatorlTime: 0
+  currentReturnToPatrolTime: 0
+  patrolNode: []
+  currentDestPatrolNode: {fileID: 0}
+  isRunAway: 0
+  increaseSuccessRate: 0.3
+  currentStage: {fileID: 0}
   behavior: 0
   aimRig: {fileID: 1494957038025643593}
   bodyRig: {fileID: 1494957038390477477}

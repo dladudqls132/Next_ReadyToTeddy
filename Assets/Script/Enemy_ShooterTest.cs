@@ -71,6 +71,16 @@ public class Enemy_ShooterTest : Enemy
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            behavior = Enemy_Behavior.Idle;
+            state = Enemy_State.None;
+            agent.isStopped = true;
+            this.gameObject.SetActive(false);
+
+            return;
+        }
+
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
@@ -83,7 +93,7 @@ public class Enemy_ShooterTest : Enemy
         else
         {
             RaycastHit hit;
-            if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity))
+            if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enviroment"))))
             {
                 if (hit.transform.CompareTag("Player"))
                     state = Enemy_State.Targeting;
@@ -113,10 +123,12 @@ public class Enemy_ShooterTest : Enemy
             }
         }
 
-        currentShotDelay -= Time.deltaTime;
 
         if (behavior == Enemy_Behavior.Aiming)
         {
+            currentShotDelay -= Time.deltaTime;
+            currentShotDelay = Mathf.Clamp(currentShotDelay, 0, currentShotDelay);
+
             if (currentShotDelay <= 0)
             {
                 behavior = Enemy_Behavior.Attack;
@@ -147,6 +159,7 @@ public class Enemy_ShooterTest : Enemy
         }
         else
         {
+            currentShotDelay = shotDelay;
             laser.startWidth = 0;
         }
 
@@ -162,7 +175,7 @@ public class Enemy_ShooterTest : Enemy
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(damage, true);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(this.gameObject, damage, fireHit.point, false);
                 }
             }
             if (state == Enemy_State.Targeting)

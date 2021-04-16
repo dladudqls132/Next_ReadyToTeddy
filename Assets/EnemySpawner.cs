@@ -26,30 +26,17 @@ public class EnemySpawner : MonoBehaviour
 
             if (currentSpawnTime <= 0)
             {
-                float r = Random.Range(0.0f, 100.0f);
-                float temp = 0;
-
                 for (int i = 0; i < currentStage.GetEnemySpawnInfo().Count; i++)
                 {
-                    if (r <= temp + currentStage.GetEnemySpawnInfo()[i].spawnRate)
+                    float r = Random.Range(0.0f, 100.0f);
+
+                    if(r <= currentStage.GetEnemySpawnInfo()[i].spawnRate)
                     {
-                        if (temp != 0)
-                        {
-                            if (r >= currentStage.GetEnemySpawnInfo()[i - 1].spawnRate)
-                            {
-                                currentStage.SpawnEnemy(currentStage.GetEnemySpawnInfo()[i].enemyType, this.transform.position);
-                            }
-                        }
-                        else
-                        {
-                            currentStage.SpawnEnemy(currentStage.GetEnemySpawnInfo()[i].enemyType, this.transform.position);
-                        }
+                        currentStage.SpawnEnemy(currentStage.GetEnemySpawnInfo()[i].enemyType, this.transform.position);
+                        currentSpawnTime = spawnTime;
+                        break;
                     }
-
-                    temp += currentStage.GetEnemySpawnInfo()[i].spawnRate;
                 }
-
-                currentSpawnTime = spawnTime;
             }
         }
     }

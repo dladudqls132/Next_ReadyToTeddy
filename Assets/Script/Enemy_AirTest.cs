@@ -55,7 +55,7 @@ public class Enemy_AirTest : Enemy
 
 
         RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, attackRange))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, attackRange, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enviroment"))))
         {
             if (hit.transform.CompareTag("Player"))
             {
@@ -138,11 +138,11 @@ public class Enemy_AirTest : Enemy
             {
                 if (fireHit.transform.CompareTag("Player"))
                 {
-                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(1);
+                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(damage);
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1, true);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(this.gameObject, damage, fireHit.point, false);
                 }
             }
             if (state == Enemy_State.Targeting)
@@ -213,6 +213,7 @@ public class Enemy_AirTest : Enemy
             Node startNode = node[Mathf.RoundToInt(Mathf.Abs(temp.x))][Mathf.RoundToInt(Mathf.Abs(temp.y))][Mathf.RoundToInt(Mathf.Abs(temp.z))];
             Node targetNode = GetNode(target.position);
 
+            int temp2 = 0;
             if (targetNode.nodeType == NodeType.Wall)
             {
                 bool changed = false;
@@ -240,6 +241,7 @@ public class Enemy_AirTest : Enemy
 
             while (openList.Count > 0)
             {
+                temp2++;
                 Node currentNode = openList[0];
 
                 for (int i = 1; i < openList.Count; i++)
@@ -282,6 +284,8 @@ public class Enemy_AirTest : Enemy
                     }
                 }
             }
+
+            Debug.Log(temp2);
         }
     }
 

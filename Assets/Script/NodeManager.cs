@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEditor;
 
 public class NodeManager : MonoBehaviour
 {
@@ -46,7 +46,7 @@ public class NodeManager : MonoBehaviour
 
     //private void OnDrawGizmos()
     //{
-  
+
     //    for (int i = 0; i < gridSizeX; i++)
     //    {
     //        for (int j = 0; j < gridSizeY; j++)
@@ -55,12 +55,16 @@ public class NodeManager : MonoBehaviour
     //            {
     //                if (isStart)
     //                {
-    //                    if (node[i][j][k].nodeType == NodeType.None)
-    //                        Gizmos.color = Color.green;
-    //                    else
-    //                        Gizmos.color = Color.red;
+    //                    //if (node[i][j][k].nodeType == NodeType.None)
+    //                    //    Gizmos.color = Color.green;
+    //                    //else
+    //                    //    Gizmos.color = Color.red;
 
-    //                    Gizmos.DrawWireCube(node[i][j][k].position, Vector3.one);
+    //                    //Gizmos.DrawWireCube(node[i][j][k].position, Vector3.one);
+    //                    if (node[i][j][k].g != 0)
+    //                    {
+    //                        Handles.Label(node[i][j][k].position, node[i][j][k].g.ToString());
+    //                    }
     //                }
     //            }
     //        }

@@ -118,9 +118,9 @@ MonoBehaviour:
   isDead: 0
   maxHp: 30
   currentHp: 0
-  damage: 0
+  damage: 3
   increaseCombo: 1
-  detectRange: 15
+  detectRange: 100
   attackRange: 8
   combatTime: 0
   currentCombatTime: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
   patrolNode: []
   currentDestPatrolNode: {fileID: 0}
   isRunAway: 0
-  increaseSuccessRate: 0
+  increaseSuccessRate: 0.3
   currentStage: {fileID: 0}
   nodeManager: {fileID: 0}
   pathFindingDelay: 0.1
