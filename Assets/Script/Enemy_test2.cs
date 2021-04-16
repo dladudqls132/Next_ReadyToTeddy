@@ -53,6 +53,10 @@ public class Enemy_test2 : Enemy
         tempRot = this.transform.rotation;
 
         //state = Enemy_State.Patrol;
+        if (patrolNode.Length != 0)
+            state = Enemy_State.Patrol;
+        else
+            state = Enemy_State.None;
 
         foreach (MultiAimConstraint component in bodyRig.GetComponentsInChildren<MultiAimConstraint>())
         {
