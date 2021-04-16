@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum Enemy_State
 {
     None,
     Patrol,
     Search,
-    Targeting
+    Targeting,
+    Chase,
+    RunAway
 }
 
 public class Enemy : MonoBehaviour
@@ -25,10 +28,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
+    [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
-    protected float currentCombatTime;
+    [SerializeField] protected float currentCombatTime;
+    [SerializeField] protected float returnToPatorlTime;
+    [SerializeField] protected float currentReturnToPatrolTime;
+    [SerializeField] protected Transform[] patrolNode;
+    [SerializeField] protected Transform currentDestPatrolNode;
+    protected int currentDestPatrolNodeIndex;
+    [SerializeField] protected bool isRunAway;
+
     private GameObject whoAttackThis;
     protected Animator anim;
+    protected float originAttackRange;
+    protected NavMeshAgent agent;
 
     ParticleSystem.Burst[] bursts;
 
@@ -42,35 +55,86 @@ public class Enemy : MonoBehaviour
         if (GameObject.Find("Pool").transform.Find("Pool_Effect") != null)
             pool_damagedEffect = GameObject.Find("Pool").transform.Find("Pool_Effect").GetComponent<Pool_DamagedEffect>();
 
-        state = Enemy_State.None;
-
         bursts = new[] { new ParticleSystem.Burst(0.0f, increaseCombo) };
+        originAttackRange = attackRange;
+
+        currentCombatTime = combatTime;
+        currentReturnToPatrolTime = returnToPatorlTime;
+
+        target = GameManager.Instance.GetPlayer().GetCamPos();
+
+        if (this.GetComponent<NavMeshAgent>() != null)
+            agent = this.GetComponent<NavMeshAgent>();
+
+        if (patrolNode.Length != 0)
+        {
+            currentDestPatrolNode = patrolNode[0];
+            currentDestPatrolNodeIndex = 0;
+        }
     }
 
-    protected void CheckingHp()
+    protected void GoToPatrolNode()
+    {
+        if (patrolNode.Length != 0)
+        {
+            if (state == Enemy_State.Search)
+            {
+                currentDestPatrolNode = patrolNode[0];
+                currentDestPatrolNodeIndex = 0;
+
+                for (int i = 0; i < patrolNode.Length; i++)
+                {
+                    if (Vector3.Distance(this.transform.position, patrolNode[i].position) < Vector3.Distance(this.transform.position, currentDestPatrolNode.position))
+                    {
+                        currentDestPatrolNode = patrolNode[i];
+                        currentDestPatrolNodeIndex = i;
+                    }
+                }
+            }
+
+            if (state == Enemy_State.Patrol)
+            {
+                if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
+                {
+                    currentDestPatrolNodeIndex++;
+                    currentDestPatrolNodeIndex = currentDestPatrolNodeIndex % patrolNode.Length;
+
+                    currentDestPatrolNode = patrolNode[currentDestPatrolNodeIndex];
+                }
+
+                agent.SetDestination(currentDestPatrolNode.position);
+            }
+        }
+    }
+
+    protected void CheckingHp(bool isUpCombo)
     {
         if(currentHp <= 0)
         {
             isDead = true;
-            GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
-            temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
-            //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-            temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+
+            if (isUpCombo)
+            {
+                GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
+                temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
+                //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
+                temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+            }
 
             this.gameObject.SetActive(false);
         }
     }
 
-    public void DecreaseHp(float value)
+    public void DecreaseHp(float value, bool isUpCombo)
     {
         currentHp -= value;
 
         whoAttackThis = null;
 
-        CheckingHp();
+        CheckingHp(isUpCombo);
     }
 
-    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos)
+    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos, bool isUpCombo)
     {
         currentHp -= value;
 
@@ -83,6 +147,6 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = attackObj;
 
-        CheckingHp();
+        CheckingHp(isUpCombo);
     }
 }

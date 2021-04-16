@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class NodeManager : MonoBehaviour
 {
     public int gridSizeX;
@@ -29,7 +30,7 @@ public class NodeManager : MonoBehaviour
                     node[i][j][k] = new Node(this.transform.position + new Vector3(i, j, k));
                     node[i][j][k].SetNodePos(i, j, k);
 
-                    if (Physics.CheckSphere(node[i][j][k].position, nodeRadius, 1 << LayerMask.NameToLayer("Enviroment")))
+                    if (Physics.CheckBox(node[i][j][k].position, Vector3.one * nodeRadius, Quaternion.identity, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
                         node[i][j][k].nodeType = NodeType.Wall;
                     }

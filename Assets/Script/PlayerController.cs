@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private FPPCamController mainCam = null;
     [SerializeField] private Transform camPos = null;
+    [SerializeField] private CapsuleCollider bodyCollider = null;
     [SerializeField] private CapsuleCollider groundCollider = null;
     [SerializeField] private Transform hand = null;
     [SerializeField] private Transform hand_Origin = null;
@@ -14,52 +15,55 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool isDead = false;
     [SerializeField] private float maxHP = 0;
-    [SerializeField] private float currentHP = 0;
+    private float currentHP = 0;
     [SerializeField] private int maxCombo = 0;
     [SerializeField] private int currentCombo = 0;
     [SerializeField] private float resetComboTime = 0;
-    [SerializeField] private float currentResetComboTime = 0;
+    [SerializeField] private float keepComboTime = 0;
+    [SerializeField] private float downComboTime = 0;
+    private float currentResetComboTime = 0;
 
     [SerializeField] private float decreaseHpValuePerSecond = 0;
     [SerializeField] private float walkSpeed = 0;
     [SerializeField] private float runSpeed = 0;
     [SerializeField] private float slidingCoolTime = 0;
     private float currentSlidingCoolTime = 0;
-    [SerializeField] private bool isSlide = false;
+    private bool isSlide = false;
     private float slideSpeed = 0;
     [SerializeField] private bool isSlope = false;
-    [SerializeField] private bool isRun = false;
+    private bool isRun = false;
     [SerializeField] private float WPressTime = 0;
     private float currentWPressTime = 0;
     private bool isPressW = false;
-    [SerializeField] private bool isCrouch = false;
-    [SerializeField] private bool canJump = false;
-    [SerializeField] private bool isJump = false;
-    [SerializeField] private bool isJumpByObject = false;
+    private bool isCrouch = false;
+    private bool canJump = false;
+    private bool isJump = false;
+    private bool isJumpByObject = false;
     [SerializeField] private bool isGrounded = false;
     [SerializeField] private float jumpPower = 0;
     private float currentJumpPower = 0;
-    [SerializeField] private bool isClimbing = false;
+    private bool isClimbing = false;
     [SerializeField] private float climbPower = 0;
     private float currentClimbPower = 0;
     private bool canClimb = false;
 
-    [SerializeField] private bool isClimbUp = false;
+    private bool isClimbUp = false;
     [SerializeField] private float climbUpTime = 0;
     [SerializeField] private float climbUpPower = 0;
     private float currentClimbuUpPower = 0;
     private float currentClimbUpTime = 0;
-    [SerializeField] private bool isCombat = false;
-    [SerializeField] private bool isAiming = false;
+    private bool isCombat = false;
+    private bool isAiming = false;
     [SerializeField] private float combatTime = 0;
     private float currentCombatTime = 0;
-    [SerializeField] private bool isDash;
+    private bool isDash;
     [SerializeField] private float dashPower = 0;
     [SerializeField] private float dashTime = 0;
     private float currentDashPower = 0;
     [SerializeField] private bool useGravity = false;
-    [SerializeField] private bool isLanding = false;
+    private bool isLanding = false;
     [SerializeField] private float landingReboundSpeed = 0;
+    [SerializeField] private float skill1_range;
 
     private Vector3 climbUpPos = Vector3.zero;
     private Vector2 moveInput = Vector2.zero;
@@ -72,6 +76,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 handOriginPos = Vector3.zero;
     private Quaternion handOriginRot = Quaternion.identity;
     private Vector3 result = Vector3.zero;
+    private Vector3 originBodyColliderCenter;
+    private float originBodyColliderHeight;
 
     private bool isInit = false;
 
@@ -85,7 +91,11 @@ public class PlayerController : MonoBehaviour
     public float GetMaxCombo() { return maxCombo; }
     public float GetCurrentCombo() { return currentCombo; }
     public float GetResetComboTime() { return resetComboTime; }
+    public float GetKeepComboTime() { return keepComboTime; }
+    public float GetDownComboTime() { return downComboTime; }
     public float GetCurrentResetComboTime() { return currentResetComboTime; }
+    public Transform GetCamPos() { return camPos; }
+    public bool GetIsCrouch() { return isCrouch; }
 
     // Start is called before the first frame update
     public void Init()
@@ -105,6 +115,8 @@ public class PlayerController : MonoBehaviour
         currentDashPower = dashPower;
         currentClimbUpTime = climbUpTime;
         currentClimbuUpPower = climbUpPower;
+        originBodyColliderCenter = bodyCollider.center;
+        originBodyColliderHeight = bodyCollider.height;
         isInit = true;
     }
 
@@ -127,6 +139,8 @@ public class PlayerController : MonoBehaviour
             currentDashPower = dashPower;
             currentClimbUpTime = climbUpTime;
             currentClimbuUpPower = climbUpPower;
+            originBodyColliderCenter = bodyCollider.center;
+            originBodyColliderHeight = bodyCollider.height;
         }
     }
 
@@ -182,14 +196,14 @@ public class PlayerController : MonoBehaviour
                 {
                     if (Vector3.Dot(moveDirection, forward) > 0)
                     {
-                        if (!isAiming)
-                        {
-                            mainCam.FovMove(mainCam.GetOriginFov() + 10, 0.1f, 1000);
-                            mainCam.SetOriginFov(mainCam.GetOriginFov() + 10);
-                        }
 
                         if (!isCrouch)
                         {
+                            if (!isAiming)
+                            {
+                                mainCam.FovMove(mainCam.GetRealOriginFov() + 10, 0.1f, 1000);
+                                mainCam.SetOriginFov(mainCam.GetRealOriginFov() + 10);
+                            }
                             isSlide = true;
 
                             if (currentSlidingCoolTime <= 0)
@@ -204,7 +218,12 @@ public class PlayerController : MonoBehaviour
                 }
 
                 if (!isClimbing && !isClimbUp && !isSlide && !isJump && !isJumpByObject)
+                {
                     isCrouch = true;
+
+                    bodyCollider.center = new Vector3(0, 0.3922825f, 0);
+                    bodyCollider.height = 0.9702759f;
+                }
 
             }
 
@@ -575,6 +594,8 @@ public class PlayerController : MonoBehaviour
         {
             isSlide = false;
             isCrouch = false;
+            bodyCollider.center = originBodyColliderCenter;
+            bodyCollider.height = originBodyColliderHeight;
             mainCam.SetOriginFov(mainCam.GetRealOriginFov());
             mainCam.FovReset();
         }
@@ -611,6 +632,24 @@ public class PlayerController : MonoBehaviour
             }
 
             isClimbing = false;
+        }
+
+        //스킬
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            if (currentCombo == maxCombo)
+            {
+                currentCombo = 0;
+                currentResetComboTime = 0;
+
+                Collider[] target = Physics.OverlapSphere(this.transform.position, skill1_range, 1 << LayerMask.NameToLayer("Enemy"));
+
+                for (int i = 0; i < target.Length; i++)
+                {
+                    if(Physics.Raycast(camPos.position, (target[i].transform.position - camPos.position).normalized, skill1_range, 1 << LayerMask.NameToLayer("Enemy")))
+                        target[i].GetComponent<Enemy>().DecreaseHp(60, false);
+                }
+            }
         }
 
         if (isCombat)
@@ -925,7 +964,7 @@ public class PlayerController : MonoBehaviour
     public void IncreaseCombo(int value)
     {
         //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
-        if (currentResetComboTime > resetComboTime - 3 || currentCombo == 0)
+        if (currentResetComboTime > keepComboTime || currentCombo == 0)
             currentCombo += value;
         currentResetComboTime = resetComboTime;
 
@@ -949,11 +988,13 @@ public class PlayerController : MonoBehaviour
                 DecreaseCombo(1);
                 //currentResetComboTime = resetComboTime / 2;
                 if (currentCombo > 0)
-                    currentResetComboTime = 2;
+                    currentResetComboTime = downComboTime;
                 else
                     currentResetComboTime = 0;
             }
         }
-        weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
+
+        //콤보가 오르면 데미지 증가
+        //weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 }

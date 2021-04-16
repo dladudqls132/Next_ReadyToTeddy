@@ -14,20 +14,24 @@ public class UI_PlayerBarController : MonoBehaviour
     [SerializeField] private BarType barType = 0;
     private PlayerController player = null;
     private Image image = null;
-    private Image image_comboResetTime = null;
+    //private Image image_comboResetTime = null;
     private Text text = null;
     private RectTransform rectTransform = null;
+    private float maxWidth;
 
     private void Start()
     {
         rectTransform = this.GetComponent<RectTransform>();
 
+
         if (this.transform.Find("Image_Hp") != null)
             image = this.transform.Find("Image_Hp").GetComponent<Image>();
         if (this.transform.Find("Image_ComboResetTime") != null)
-            image_comboResetTime = this.transform.Find("Image_ComboResetTime").GetComponent<Image>();
+            image = this.transform.Find("Image_ComboResetTime").GetComponent<Image>();
         if (this.transform.Find("Text") != null)
             text = this.transform.Find("Text").GetComponent<Text>();
+
+        maxWidth = image.rectTransform.rect.width;
     }
 
     // Update is called once per frame
@@ -44,7 +48,8 @@ public class UI_PlayerBarController : MonoBehaviour
         if (barType == BarType.HpBar)
         {
             text.text = player.GetCurrentHp().ToString() + "/ " + player.GetMaxHp().ToString();
-            image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
+            //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(maxWidth * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
+            image.fillAmount = Mathf.Lerp(image.fillAmount, player.GetCurrentHp() / player.GetMaxHp(), Time.deltaTime * 15);
         }
         else if (barType == BarType.ComboBar)
         {
@@ -53,7 +58,14 @@ public class UI_PlayerBarController : MonoBehaviour
             else
                 text.text = player.GetCurrentCombo().ToString();
             //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentCombo() / player.GetMaxCombo()), image.rectTransform.rect.height), Time.deltaTime * 15);
-            image_comboResetTime.rectTransform.sizeDelta = Vector2.Lerp(image_comboResetTime.rectTransform.sizeDelta, new Vector2(rectTransform.rect.width * (player.GetCurrentResetComboTime() / player.GetResetComboTime()), image_comboResetTime.rectTransform.rect.height), Time.deltaTime * 15);
+            if (player.GetCurrentResetComboTime() <= player.GetKeepComboTime() && player.GetCurrentResetComboTime() > player.GetDownComboTime())
+                image.color = new Color(255.0f, 127.0f, 0.0f);
+            else if (player.GetCurrentResetComboTime() <= player.GetDownComboTime())
+                image.color = Color.red;
+            else
+                image.color = Color.white;
+            //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(maxWidth * (player.GetCurrentResetComboTime() / player.GetResetComboTime()), image.rectTransform.rect.height), Time.deltaTime * 15);
+            image.fillAmount = Mathf.Lerp(image.fillAmount, player.GetCurrentResetComboTime() / player.GetResetComboTime(), Time.deltaTime * 15);
         }
     }
 }
