@@ -17,6 +17,7 @@ public class SpawnButton : MonoBehaviour
                 if(Input.GetKeyDown(KeyCode.F))
                 {
                     isPressed = true;
+                    this.transform.root.GetComponent<Stage>().SetIsStart(true);
                 }
             }
         }

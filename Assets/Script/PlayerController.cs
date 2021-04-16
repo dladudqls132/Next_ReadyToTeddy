@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour
         //Debug.DrawLine(this.transform.position + moveDirection * 0.2f, this.transform.position + moveDirection * 0.2f + Vector3.down * 0.5f);
         if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
-            if (currentJumpPower <= 0)
+            if (currentJumpPower <= jumpPower / 2)
             {
                 isJump = false;
                 isJumpByObject = false;

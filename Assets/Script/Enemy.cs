@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
     protected float increaseHp;
+    [SerializeField] protected float damage;
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
@@ -37,6 +38,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;
     [SerializeField] protected bool isRunAway;
+    [SerializeField] protected float increaseSuccessRate;
+    [SerializeField] protected Stage currentStage;
 
     private GameObject whoAttackThis;
     protected Animator anim;
@@ -47,6 +50,8 @@ public class Enemy : MonoBehaviour
 
     public float GetCurrentHP() { return currentHp; }
     public void SetCurrentHP(float value) { currentHp = value; }
+    public void SetIsDead(bool value) { isDead = value; }
+    public void SetCurrentStage(Stage stage) { currentStage = stage; }
 
     virtual protected void Start()
     {
@@ -109,19 +114,24 @@ public class Enemy : MonoBehaviour
 
     protected void CheckingHp(bool isUpCombo)
     {
-        if(currentHp <= 0)
+        if (!isDead)
         {
-            isDead = true;
-
-            if (isUpCombo)
+            if (currentHp <= 0)
             {
-                GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
-                temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
-                //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-                temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
-            }
+                if (isUpCombo)
+                {
+                    GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
+                    temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
+                    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
+                    temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+                }
 
-            this.gameObject.SetActive(false);
+                currentStage.DecreaseEnemyNum();
+                currentStage.SetSuccessRate(currentStage.GetSuccessRate() + increaseSuccessRate);
+                isDead = true;
+                //agent.isStopped = true;
+                //this.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -139,6 +149,9 @@ public class Enemy : MonoBehaviour
         currentHp -= value;
 
         GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
+
+        if (effect == null)
+            return;
 
         effect.transform.SetParent(null);
         effect.transform.position = damagedPos;

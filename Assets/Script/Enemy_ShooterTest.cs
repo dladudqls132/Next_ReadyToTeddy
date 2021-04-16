@@ -158,11 +158,11 @@ public class Enemy_ShooterTest : Enemy
             {
                 if (fireHit.transform.CompareTag("Player"))
                 {
-                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(1);
+                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(damage);
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1, true);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(damage, true);
                 }
             }
             if (state == Enemy_State.Targeting)

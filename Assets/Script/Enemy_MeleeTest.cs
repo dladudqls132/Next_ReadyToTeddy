@@ -32,6 +32,16 @@ public class Enemy_MeleeTest : Enemy
 
     private void Update()
     {
+        if(isDead)
+        {
+            behavior = Enemy_Behavior.Idle;
+            state = Enemy_State.None;
+            agent.isStopped = true;
+            this.gameObject.SetActive(false);
+
+            return;
+        }
+
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
@@ -153,28 +163,40 @@ public class Enemy_MeleeTest : Enemy
         }
 
         //Animation Controll
-        for (int i = 0; i < anim.parameterCount; i++)
-        {
-            if (anim.parameters[i].type == AnimatorControllerParameterType.Bool)
-            {
-                anim.SetBool(anim.parameters[i].nameHash, false);
-            }
-        }
+        //for (int i = 0; i < anim.parameterCount; i++)
+        //{
+        //    if (anim.parameters[i].type == AnimatorControllerParameterType.Bool)
+        //    {
+        //        anim.SetBool(anim.parameters[i].nameHash, false);
+        //    }
+        //}
 
         switch (behavior)
         {
             case Enemy_Behavior.Idle:
                 break;
             case Enemy_Behavior.Run:
+                anim.SetBool("isAttack", false);
+                anim.SetBool("isRunningAttack", false);
+                anim.SetBool("isJumping", false);
                 anim.SetBool("isRunning", true);
                 break;
             case Enemy_Behavior.Attack:
+                anim.SetBool("isRunningAttack", false);
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isRunning", false);
                 anim.SetBool("isAttack", true);
                 break;
             case Enemy_Behavior.RunningAttack:
+                anim.SetBool("isAttack", false);
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isRunning", false);
                 anim.SetBool("isRunningAttack", true);
                 break;
             case Enemy_Behavior.Jump:
+                anim.SetBool("isAttack", false);
+                anim.SetBool("isRunningAttack", false);
+                anim.SetBool("isRunning", false);
                 anim.SetBool("isJumping", true);
                 break;
         }
@@ -184,7 +206,7 @@ public class Enemy_MeleeTest : Enemy
     {
         if (Physics.CheckBox(this.GetComponent<Collider>().bounds.center + this.transform.forward * (attackRange / 2), new Vector3(1, 1, attackRange), this.transform.rotation, 1 << LayerMask.NameToLayer("Player")))
         {
-            target.parent.GetComponent<PlayerController>().DecreaseHp(10);
+            target.parent.GetComponent<PlayerController>().DecreaseHp(damage);
         }
     }
 

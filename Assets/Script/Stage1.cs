@@ -9,10 +9,4 @@ public class Stage1 : Stage
     {
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
