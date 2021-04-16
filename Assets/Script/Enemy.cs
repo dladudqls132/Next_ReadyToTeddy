@@ -26,14 +26,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float currentHp;
     protected float increaseHp;
     [SerializeField] protected float damage;
+    [SerializeField] protected float speed;
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
-    [SerializeField] protected float currentCombatTime;
+    protected float currentCombatTime;
     [SerializeField] protected float returnToPatorlTime;
-    [SerializeField] protected float currentReturnToPatrolTime;
+    protected float currentReturnToPatrolTime;
     [SerializeField] protected Transform[] patrolNode;
     [SerializeField] protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;

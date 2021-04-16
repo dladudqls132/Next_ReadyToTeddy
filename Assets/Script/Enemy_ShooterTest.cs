@@ -190,7 +190,7 @@ public class Enemy_ShooterTest : Enemy
             agent.isStopped = false;
             behavior = Enemy_Behavior.Jump;
 
-            agent.speed = 3;
+            agent.speed = 5.5f;
             jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 3)) * Time.deltaTime;
 
             agent.baseOffset = Mathf.Sin(jumpAngle) * 2;
@@ -201,7 +201,7 @@ public class Enemy_ShooterTest : Enemy
             if (behavior == Enemy_Behavior.Jump)
                 behavior = Enemy_Behavior.Idle;
 
-            agent.speed = 2;
+            agent.speed = speed;
             jumpAngle = 0;
             agent.baseOffset = 0;
         }

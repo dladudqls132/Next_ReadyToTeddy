@@ -146,8 +146,8 @@ public class Enemy_MeleeTest : Enemy
             agent.isStopped = false;
             behavior = Enemy_Behavior.Jump;
 
-            agent.speed = 3;
-            jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 3)) * Time.deltaTime;
+            agent.speed = 5.5f;
+            jumpAngle += (2 * Mathf.PI / ((agent.currentOffMeshLinkData.endPos - agent.currentOffMeshLinkData.startPos).magnitude / 5.5f)) * Time.deltaTime;
 
             agent.baseOffset = Mathf.Sin(jumpAngle) * 2;
             agent.baseOffset = Mathf.Clamp(agent.baseOffset, 1, agent.baseOffset);
@@ -157,7 +157,7 @@ public class Enemy_MeleeTest : Enemy
             if (behavior == Enemy_Behavior.Jump)
                 behavior = Enemy_Behavior.Idle;
 
-            agent.speed = 8;
+            agent.speed = speed;
             jumpAngle = 0;
             agent.baseOffset = 0;
         }

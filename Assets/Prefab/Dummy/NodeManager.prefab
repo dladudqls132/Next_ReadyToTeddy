@@ -9,13 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7247950875722171044}
-  - component: {fileID: 7247950875722171045}
-  m_Layer: 0
+  - component: {fileID: 425217982}
+  - component: {fileID: 425217983}
+  m_Layer: 2
   m_Name: NodeManager
   m_TagString: NodeManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &7247950875722171044
 Transform:
@@ -31,7 +32,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7247950875722171045
+--- !u!65 &425217982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247950875722171046}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 102.98425, y: 47.02804, z: 97.79793}
+  m_Center: {x: 50.992126, y: 23.01402, z: 48.398964}
+--- !u!114 &425217983
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,10 +54,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7247950875722171046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c27daa99e183164aa4d01eb72049bb5, type: 3}
+  m_Script: {fileID: 11500000, guid: b2450172697b3c94f954dd63e09ad1c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSizeX: 100
-  gridSizeY: 100
-  gridSizeZ: 100
-  nodeRadius: 0.5
+  minCellSize: 2
+  mask:
+    serializedVersion: 2
+    m_Bits: 256
+  maxMilisecondsPerFrame: 10
+  cellCount: 0
+  algorithm: 0
+  maxActivePathfinds: 6

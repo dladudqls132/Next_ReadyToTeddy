@@ -45,7 +45,7 @@ public class Enemy_AirTest : Enemy
         target = GameManager.Instance.GetPlayer().GetCamPos();
         aimPos = GameObject.Find("Player_targetPos").transform;
 
-        StartCoroutine(PathFinding());
+        //StartCoroutine(PathFinding());
     }
 
     private void Update()
