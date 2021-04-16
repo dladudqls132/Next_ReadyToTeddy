@@ -182,6 +182,9 @@ public class PlayerController : MonoBehaviour
                 isJumpByObject = false;
             }
 
+            if(!isJump)
+                this.transform.position = hit.point + Vector3.up * 0.15f;
+
             groundCollider.enabled = true;
             canJump = true;
             isClimbing = false;

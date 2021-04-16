@@ -7084,17 +7084,17 @@ PrefabInstance:
     - target: {fileID: 8404995892916541648, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.91
+      value: -38.09
       objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541648, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.31
       objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541648, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -59.12
+      value: -27.98
       objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541648, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
@@ -7136,15 +7136,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8404995892916541649, guid: b09db55921717a04d8c9dbb800bf0ebc,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541650, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
       propertyPath: m_Center.y
       value: 0.24
       objectReference: {fileID: 0}
+    - target: {fileID: 8404995892916541650, guid: b09db55921717a04d8c9dbb800bf0ebc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541651, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
       propertyPath: m_Center.y
       value: 0.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 8404995892916541651, guid: b09db55921717a04d8c9dbb800bf0ebc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541652, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
@@ -7155,6 +7170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: climbPower
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8404995892916541652, guid: b09db55921717a04d8c9dbb800bf0ebc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8404995892916541653, guid: b09db55921717a04d8c9dbb800bf0ebc,
         type: 3}
@@ -22870,6 +22890,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1692645763}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1694442000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8404995892916541653, guid: b09db55921717a04d8c9dbb800bf0ebc,
+    type: 3}
+  m_PrefabInstance: {fileID: 556107526}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1694442006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694442000}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 910c2bebddda24948b583ef2df8a74a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGrounded: 0
 --- !u!1001 &1696878042
 PrefabInstance:
   m_ObjectHideFlags: 0
