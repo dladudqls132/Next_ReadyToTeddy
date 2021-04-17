@@ -50,7 +50,7 @@ public class Enemy_test1 : Enemy
                 }
                 else
                 {
-                    if (target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f)
+                    if (target.parent.GetComponent<Rigidbody>().velocity.magnitude > target.parent.GetComponent<PlayerController>().GetWalkSpeed() / 2)
                     {
                         state = Enemy_State.Chase;
                         currentCombatTime = combatTime;
@@ -60,7 +60,7 @@ public class Enemy_test1 : Enemy
             }
             else
             {
-                if(target.parent.GetComponent<Rigidbody>().velocity.magnitude > 7.0f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
+                if(target.parent.GetComponent<Rigidbody>().velocity.magnitude > target.parent.GetComponent<PlayerController>().GetWalkSpeed() / 1.5f && Vector3.Distance(this.transform.position, target.position) <= detectRange)
                 {
                     if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.RunningAttack)
                     {

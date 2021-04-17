@@ -101,6 +101,7 @@ public class PlayerController : MonoBehaviour
     public Transform GetCamPos() { return camPos; }
     public bool GetIsCrouch() { return isCrouch; }
     public void SetCanJump(bool value) { canJump = value; }
+    public float GetWalkSpeed() { return walkSpeed; }
 
     // Start is called before the first frame update
     public void Init()
