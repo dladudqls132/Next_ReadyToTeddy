@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform hand_Origin = null;
     [SerializeField] private GameObject weapon_gameObject = null;
     [SerializeField] private Gun weapon = null;
+    [SerializeField] private Transform checkingGroundRayPos;
 
     [SerializeField] private bool isDead = false;
     [SerializeField] private float maxHP = 0;
@@ -174,7 +175,7 @@ public class PlayerController : MonoBehaviour
 
         //Debug.DrawLine(this.transform.position, this.transform.position + Vector3.down * 0.2f);
         //Debug.DrawLine(this.transform.position + moveDirection * 0.2f, this.transform.position + moveDirection * 0.2f + Vector3.down * 0.5f);
-        if (Physics.Raycast(this.transform.position, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
+        if (Physics.SphereCast(checkingGroundRayPos.position, 0.25f, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
             if (currentJumpPower <= jumpPower / 2)
             {
@@ -182,8 +183,8 @@ public class PlayerController : MonoBehaviour
                 isJumpByObject = false;
             }
 
-            if(!isJump)
-                this.transform.position = hit.point + Vector3.up * 0.15f;
+            if(!isJump && isClimbing && !isClimbUp)
+                this.transform.position = new Vector3(this.transform.position.x, hit.point.y + 0.05f, this.transform.position.z);
 
             groundCollider.enabled = true;
             canJump = true;
@@ -770,6 +771,8 @@ public class PlayerController : MonoBehaviour
 
             isSlope = false;
         }
+
+ 
 
         HeadBob();
         HandAnimation();
