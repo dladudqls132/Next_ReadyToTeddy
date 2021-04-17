@@ -200,7 +200,7 @@ MonoBehaviour:
   keepComboTime: 10
   downComboTime: 2
   decreaseHpValuePerSecond: 1
-  walkSpeed: 8
+  walkSpeed: 7
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
@@ -209,6 +209,7 @@ MonoBehaviour:
   isJumpByObject: 0
   isGrounded: 1
   jumpPower: 6.5
+  currentJumpPower: 0
   isClimbing: 0
   climbPower: 4
   isClimbUp: 0
@@ -220,3 +221,5 @@ MonoBehaviour:
   useGravity: 0
   landingReboundSpeed: 40
   skill1_range: 10
+  kickWallTime: 0.3
+  currentKickWallTime: 0
