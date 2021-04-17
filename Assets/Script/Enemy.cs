@@ -94,15 +94,22 @@ public class Enemy : MonoBehaviour
 
             if (state == Enemy_State.Patrol)
             {
-                if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
+                if (patrolNode.Length == 0)
                 {
-                    currentDestPatrolNodeIndex++;
-                    currentDestPatrolNodeIndex = currentDestPatrolNodeIndex % patrolNode.Length;
-
-                    currentDestPatrolNode = patrolNode[currentDestPatrolNodeIndex];
+                    state = Enemy_State.None;
                 }
+                else
+                {
+                    if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
+                    {
+                        currentDestPatrolNodeIndex++;
+                        currentDestPatrolNodeIndex = currentDestPatrolNodeIndex % patrolNode.Length;
 
-                agent.SetDestination(currentDestPatrolNode.position);
+                        currentDestPatrolNode = patrolNode[currentDestPatrolNodeIndex];
+                    }
+
+                    agent.SetDestination(currentDestPatrolNode.position);
+                }
             }
         }
     }
