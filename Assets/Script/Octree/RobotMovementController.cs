@@ -31,6 +31,7 @@ public class RobotMovementController : Enemy
 	private Vector3 lastDestination;
 	private SphereCollider sphereCollider;
     Vector3 move;
+    LineRenderer line;
     // Use this for initialization
     override protected void Start ()
 	{
@@ -41,6 +42,7 @@ public class RobotMovementController : Enemy
 		rigidbody = GetComponent<Rigidbody>();
 		playerObject = GameManager.Instance.GetPlayer().gameObject;
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
+        line = this.GetComponent<LineRenderer>();
 	}
 	
 	// Update is called once per frame
@@ -77,10 +79,13 @@ public class RobotMovementController : Enemy
 
             rigidbody.velocity = move * acceleration * 1.5f;
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(rigidbody.velocity), Time.deltaTime * 12);
+            line.enabled = true;
+            line.SetPosition(0, this.transform.position);
+            line.SetPosition(1, target.position + Vector3.down * 0.1f);
         }
         else
         {
-
+            line.enabled = false;
             if ((newPath == null || !newPath.isCalculating) && Vector3.SqrMagnitude(target.transform.position - lastDestination) > maxDistanceRebuildPath && !octree.IsBuilding)
             {
                 lastDestination = target.transform.position;

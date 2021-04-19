@@ -70,6 +70,7 @@ public class Gun_Test : Gun
     {
         if (canShot)
         {
+            GameManager.Instance.GetCrosshair().ResetAttack();
             isReload = false;
             isRecoil = false;
 
@@ -80,24 +81,16 @@ public class Gun_Test : Gun
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
                 {
-                    //if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-                    //{
-                    //    direction = (hit.point - shotPos.position).normalized;
-                    //}
-                    //else
-                    //{
-                    //    direction = Camera.main.transform.forward;
-                    //}
                     direction = (hit.point - shotPos.position).normalized;
                 }
                 else
                     direction = Camera.main.transform.forward;
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
-                //Vector3 shotDir = direction + (Vector3.Cross(direction, Vector3.Cross(direction, Vector3.up)).normalized * Mathf.Sin(temp) + Vector3.Cross(direction, Vector3.up).normalized * Mathf.Cos(temp)) * Random.Range(0.0f, spreadAngle / 90);
+              
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
 
-                Debug.DrawRay(shotPos.position, shotDir * 1000);
+                //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
                 if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
@@ -105,20 +98,20 @@ public class Gun_Test : Gun
                     if (hit2.transform.CompareTag("Enemy"))
                     {
                         Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                        //enemy.SetCurrentHP(enemy.GetCurrentHP() - damagePerBullet);
                         enemy.DecreaseHp(owner, damagePerBullet, hit2.point, true);
+                        if (enemy.GetIsDead())
+                            GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                        else if(!GameManager.Instance.GetCrosshair().GetIsKill())
+                            GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                     }
                     else
                     {
                         GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                        //tempObect.transform.SetParent(hit2.transform, true);
-                        //tempObect.transform.localScale = new Vector3(1 / hit2.transform.localScale.x * bulletHit.transform.localScale.x, 1 / hit2.transform.localScale.y * bulletHit.transform.localScale.y, 1 / hit2.transform.localScale.z * bulletHit.transform.localScale.z);
                         tempObect.transform.SetParent(hit2.transform);
                     }
                 }
 
-      
                 muzzleFlash.Play();
                 isShot = true;
             }

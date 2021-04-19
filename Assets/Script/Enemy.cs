@@ -53,6 +53,7 @@ public class Enemy : MonoBehaviour
     public void SetCurrentHP(float value) { currentHp = value; }
     public void SetIsDead(bool value) { isDead = value; }
     public void SetCurrentStage(Stage stage) { currentStage = stage; }
+    public bool GetIsDead() { return isDead; }
 
     virtual protected void Start()
     {

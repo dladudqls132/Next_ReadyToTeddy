@@ -15,6 +15,7 @@ public class Enemy_MeleeTest : Enemy
 
     [SerializeField] private Enemy_Behavior behavior;
     [SerializeField] private float attackDelay;
+    [SerializeField] private CapsuleCollider coll;
     private float currentAttackDelay;
     private bool canAttackTurn;
     private float jumpAngle;
@@ -28,6 +29,7 @@ public class Enemy_MeleeTest : Enemy
         state = Enemy_State.None;
 
         anim = this.GetComponent<Animator>();
+        coll = this.GetComponent<CapsuleCollider>();
     }
 
     private void Update()
@@ -45,9 +47,12 @@ public class Enemy_MeleeTest : Enemy
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
-        if (!agent.isStopped)
+        if (agent.enabled)
         {
-            agent.SetDestination(target.position);
+            if (!agent.isStopped)
+            {
+                agent.SetDestination(target.position);
+            }
         }
 
         RaycastHit hit;
@@ -66,6 +71,7 @@ public class Enemy_MeleeTest : Enemy
         if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.RunningAttack)
         {
             currentAttackDelay -= Time.deltaTime;
+            coll.center = new Vector3(0, 0.8804636f, 0);
 
             if (currentAttackDelay <= 0)
             {
@@ -82,7 +88,7 @@ public class Enemy_MeleeTest : Enemy
                     else if (Vector3.Distance(this.transform.position, target.position) <= attackRange + 2)
                     {
                         currentAttackDelay = attackDelay;
-                        agent.isStopped = true;
+                        //agent.isStopped = true;
                         canAttackTurn = true;
 
                         behavior = Enemy_Behavior.RunningAttack;
@@ -125,18 +131,8 @@ public class Enemy_MeleeTest : Enemy
                 dir.y = 0;
                 this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
             }
-        }
-
-        if ((behavior == Enemy_Behavior.Attack || behavior == Enemy_Behavior.RunningAttack))
-        {
-            agent.isStopped = true;
-
-            if (canAttackTurn)
-            {
-                Vector3 dir = (target.position - this.transform.position).normalized;
-                dir.y = 0;
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
-            }
+            else
+                agent.isStopped = true;
         }
 
         //Jump

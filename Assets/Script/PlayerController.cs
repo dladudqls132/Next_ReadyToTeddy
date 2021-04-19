@@ -102,6 +102,13 @@ public class PlayerController : MonoBehaviour
     public bool GetIsCrouch() { return isCrouch; }
     public void SetCanJump(bool value) { canJump = value; }
     public float GetWalkSpeed() { return walkSpeed; }
+    public bool GetIsDead() { return isDead; }
+    public bool GetIsRun() { return isRun; }
+    public bool GetIsGrounded() { return isGrounded; }
+    public bool GetIsSlide() { return isSlide; }
+    public bool GetIsDash() { return isDash; }
+    public bool GetIsClimbing() { return isClimbing; }
+    public bool GetIsClimbUp() { return isClimbUp; }
 
     // Start is called before the first frame update
     public void Init()
@@ -155,6 +162,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(isDead || GameManager.Instance.GetIsPause())
+        {
+            if(isDead)
+                rigid.velocity = Vector3.zero;
+
+            return;
+        }
+
         if (hand.GetChild(0) != null)
         {
             if (hand.GetChild(0) != weapon)
@@ -219,7 +234,7 @@ public class PlayerController : MonoBehaviour
 
                             if (currentSlidingCoolTime <= 0)
                             {
-                                rigid.AddForce(slopeResult.normalized * new Vector3(rigid.velocity.x, rigid.velocity.y / 2, rigid.velocity.z).magnitude * 0.9f, ForceMode.VelocityChange);
+                                rigid.AddForce(slopeResult.normalized * new Vector3(rigid.velocity.x, rigid.velocity.y / 2, rigid.velocity.z).magnitude * 0.75f, ForceMode.VelocityChange);
                                 slideSpeed = rigid.velocity.magnitude * 1.5f;
                             }
                         }
@@ -610,7 +625,10 @@ public class PlayerController : MonoBehaviour
                 {
                     if (currentKickWallTime < kickWallTime)
                     {
-                        rigid.AddForce((wallHit.normal + Vector3.up * 0.3f).normalized * 10, ForceMode.Impulse);
+                        if(rigid.velocity.magnitude >= walkSpeed)
+                            rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * rigid.velocity.magnitude, ForceMode.Impulse);
+                        else
+                            rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * 8, ForceMode.Impulse);
                     }
                 }
                 canClimb = false;
@@ -771,12 +789,19 @@ public class PlayerController : MonoBehaviour
         {
             if (isLanding)
             {
-                headBobValue += Time.deltaTime * landingReboundSpeed;
+                if (!isCrouch)
+                {
+                    headBobValue += Time.deltaTime * landingReboundSpeed;
 
-                camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(camPos.localPosition.x, headOriginY + Mathf.Sin(headBobValue) / 3.0f, camPos.localPosition.z), Time.deltaTime * 22);
+                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(camPos.localPosition.x, headOriginY + Mathf.Sin(headBobValue) / 3.0f, camPos.localPosition.z), Time.deltaTime * 22);
 
-                if (headBobValue >= 2 * Mathf.PI)
+                    if (headBobValue >= 2 * Mathf.PI)
+                        isLanding = false;
+                }
+                else
+                {
                     isLanding = false;
+                }
             }
             else
             {
