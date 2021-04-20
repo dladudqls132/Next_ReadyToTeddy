@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 61347208586587642}
   - component: {fileID: 8399780248914119419}
   - component: {fileID: 8399780248914119418}
-  - component: {fileID: -5678645342555126029}
+  - component: {fileID: 4462208978626163799}
   m_Layer: 12
   m_Name: Enemy_Melee_Easy
   m_TagString: Enemy
@@ -141,7 +141,7 @@ Animator:
   m_GameObject: {fileID: 871617123658420397}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d36c454d9c0e90d439fed000b78c1fa1, type: 3}
-  m_Controller: {fileID: 9100000, guid: a14118c0affefea4c9b1370c44606a3a, type: 2}
+  m_Controller: {fileID: 9100000, guid: df6491ce226ac1b4db9b9f19ec5e61a0, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 748655ff585c94945b3fe361f66d2451, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   state: 0
   material: 1
   eye: {fileID: 5854637168856373396}
@@ -184,13 +185,15 @@ MonoBehaviour:
     type: 3}
   canSee: 0
   isDead: 0
-  maxHp: 40
+  maxHp: 20
   currentHp: 0
   damage: 5
-  speed: 7
+  speed_min: 7
+  speed_max: 9
+  speed: 4
   increaseCombo: 1
   detectRange: 100
-  attackRange: 2
+  attackRange: 3
   combatTime: 0
   returnToPatorlTime: 0
   patrolNode: []
@@ -199,8 +202,10 @@ MonoBehaviour:
   increaseSuccessRate: 0.5
   currentStage: {fileID: 0}
   behavior: 0
-  attackDelay: 2
-  coll: {fileID: 0}
+  attackDelay: 4
+  ragdoll: {fileID: 0}
+  attackAfterTime: 1.5
+  currentAttackAfterTime: 0
 --- !u!195 &8399780248914119418
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -223,7 +228,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &-5678645342555126029
+--- !u!54 &4462208978626163799
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

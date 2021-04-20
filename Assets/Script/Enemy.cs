@@ -15,6 +15,7 @@ public enum Enemy_State
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] protected EnemyType enemyType;
     [SerializeField] protected Enemy_State state;
     [SerializeField] protected CharacterMaterial material;
     [SerializeField] protected Transform eye;
@@ -26,6 +27,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float currentHp;
     protected float increaseHp;
     [SerializeField] protected float damage;
+    [SerializeField] protected float speed_min;
+    [SerializeField] protected float speed_max;
     [SerializeField] protected float speed;
     [SerializeField] protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
@@ -51,6 +54,7 @@ public class Enemy : MonoBehaviour
 
     public float GetCurrentHP() { return currentHp; }
     public void SetCurrentHP(float value) { currentHp = value; }
+    public float GetMaxHp() { return maxHp; }
     public void SetIsDead(bool value) { isDead = value; }
     public void SetCurrentStage(Stage stage) { currentStage = stage; }
     public bool GetIsDead() { return isDead; }
@@ -69,6 +73,8 @@ public class Enemy : MonoBehaviour
         currentReturnToPatrolTime = returnToPatorlTime;
 
         target = GameManager.Instance.GetPlayer().GetCamPos();
+
+        speed = Random.Range(speed_min, speed_max);
 
         if (this.GetComponent<NavMeshAgent>() != null)
             agent = this.GetComponent<NavMeshAgent>();
@@ -126,10 +132,15 @@ public class Enemy : MonoBehaviour
                     temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
                     //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
                     temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+                    GameManager.Instance.GetPlayer().IncreaseHp(2);
                 }
 
-                currentStage.DecreaseEnemyNum();
-                currentStage.SetSuccessRate(currentStage.GetSuccessRate() + increaseSuccessRate);
+                if (currentStage != null)
+                {
+                    if (enemyType != EnemyType.Gunner_Easy)
+                        currentStage.DecreaseEnemyNum();
+                    currentStage.SetSuccessRate(currentStage.GetSuccessRate() + increaseSuccessRate);
+                }
                 isDead = true;
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);

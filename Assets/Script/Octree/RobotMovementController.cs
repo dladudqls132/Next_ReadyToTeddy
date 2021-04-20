@@ -52,6 +52,7 @@ public class RobotMovementController : Enemy
         {
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
+            currentHp = maxHp;
             this.gameObject.SetActive(false);
 
             return;

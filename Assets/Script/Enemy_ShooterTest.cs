@@ -79,6 +79,7 @@ public class Enemy_ShooterTest : Enemy
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
             agent.isStopped = true;
+            currentHp = maxHp;
             this.gameObject.SetActive(false);
 
             return;
@@ -260,29 +261,35 @@ public class Enemy_ShooterTest : Enemy
             aimRig.weight = Mathf.Lerp(aimRig.weight, 0, Time.deltaTime * 15);
         }
 
-        //Animation Controll
-        for (int i = 0; i < anim.parameterCount; i++)
-        {
-            if (anim.parameters[i].type == AnimatorControllerParameterType.Bool)
-            {
-                anim.SetBool(anim.parameters[i].nameHash, false);
-            }
-        }
+        ////Animation Controll
+        //for (int i = 0; i < anim.parameterCount; i++)
+        //{
+        //    if (anim.parameters[i].type == AnimatorControllerParameterType.Bool)
+        //    {
+        //        anim.SetBool(anim.parameters[i].nameHash, false);
+        //    }
+        //}
 
         switch (behavior)
         {
             case Enemy_Behavior.Idle:
                 break;
             case Enemy_Behavior.Walk:
+                anim.SetBool("isAiming", false);
+                anim.SetBool("isJumping", false);
                 anim.SetBool("isWalking", true);
                 break;
             case Enemy_Behavior.Aiming:
                 anim.SetBool("isAiming", true);
+                anim.SetBool("isJumping", false);
+                anim.SetBool("isWalking", false);
                 break;
             case Enemy_Behavior.Attack:
                 break;
             case Enemy_Behavior.Jump:
+                anim.SetBool("isAiming", false);
                 anim.SetBool("isJumping", true);
+                anim.SetBool("isWalking", false);
                 break;
         }
 

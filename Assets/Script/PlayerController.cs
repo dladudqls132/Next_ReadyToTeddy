@@ -665,7 +665,7 @@ public class PlayerController : MonoBehaviour
                 for (int i = 0; i < target.Length; i++)
                 {
                     if(Physics.Raycast(camPos.position, (target[i].transform.position - camPos.position).normalized, skill1_range, 1 << LayerMask.NameToLayer("Enemy")))
-                        target[i].GetComponent<Enemy>().DecreaseHp(60, false);
+                        target[i].GetComponent<Enemy>().DecreaseHp(200, false);
                 }
             }
         }

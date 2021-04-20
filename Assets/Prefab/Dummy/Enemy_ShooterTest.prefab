@@ -3437,6 +3437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6907a17ca7017b84c8d89c1601da446f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 3
   state: 0
   material: 1
   eye: {fileID: 3536167232681772799}
@@ -3448,10 +3449,12 @@ MonoBehaviour:
   maxHp: 30
   currentHp: 0
   damage: 5
+  speed_min: 6
+  speed_max: 6
   speed: 8
   increaseCombo: 1
   detectRange: 100
-  attackRange: 50
+  attackRange: 30
   combatTime: 4
   returnToPatorlTime: 0
   patrolNode: []
@@ -3465,7 +3468,7 @@ MonoBehaviour:
   handRig: {fileID: 1494957037503679297}
   firePos: {fileID: 103456479}
   aimPos: {fileID: 0}
-  shotDelay: 2
+  shotDelay: 5
   destPos: {x: 0, y: 0, z: 0}
   jumpAngle: 0
 --- !u!195 &300592397

@@ -45,10 +45,24 @@ public class EnemySpawner : MonoBehaviour
                 //    }
                 //}
 
-                enemy = currentStage.SpawnEnemy(enemyType, this.transform.position);
 
-                if (enemyType == EnemyType.Gunner_Easy)
+                if(enemyType == EnemyType.Gunner_Easy)
+                {
+                    enemy = currentStage.SpawnEnemy(enemyType, this.transform.position, false);
                     enemy.GetComponent<Enemy_ShooterTest>().SetDestPos(destPos.position);
+                }
+                else
+                {
+                    if(currentStage.GetBoss())
+                        enemy = currentStage.SpawnEnemy(enemyType, this.transform.position, true);
+                }
+
+                if(enemyType == EnemyType.Boss)
+                {
+                    enemy = currentStage.SpawnEnemy(enemyType, this.transform.position, true);
+                    currentStage.SetBoss(enemy);
+                }
+
                 currentSpawnTime = spawnTime;
 
             }

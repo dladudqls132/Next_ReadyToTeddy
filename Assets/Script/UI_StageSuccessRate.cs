@@ -23,16 +23,22 @@ public class UI_StageSuccessRate : MonoBehaviour
         {
             if(currentStage.GetIsStart())
             {
-                image_gauge.enabled = true;
-                image_backGround.enabled = true;
+                if (!currentStage.GetIsClear())
+                {
+                    image_gauge.enabled = true;
+                    image_backGround.enabled = true;
+
+                    if(currentStage.GetBoss() != null)
+                        image_gauge.rectTransform.sizeDelta = Vector2.Lerp(image_gauge.rectTransform.sizeDelta, new Vector2(maxGaugeWidth * (currentStage.GetBoss().GetCurrentHP() / currentStage.GetBoss().GetMaxHp()), image_gauge.rectTransform.sizeDelta.y), Time.deltaTime * 20);
+                }
             }
             else
             {
                 image_gauge.enabled = false;
                 image_backGround.enabled = false;
-            }
 
-            image_gauge.rectTransform.sizeDelta = Vector2.Lerp(image_gauge.rectTransform.sizeDelta, new Vector2(maxGaugeWidth * (currentStage.GetSuccessRate() / 100), image_gauge.rectTransform.sizeDelta.y), Time.deltaTime * 20);
+                image_gauge.rectTransform.sizeDelta = new Vector2(0, image_gauge.rectTransform.sizeDelta.y);
+            }
         }
     }
 }

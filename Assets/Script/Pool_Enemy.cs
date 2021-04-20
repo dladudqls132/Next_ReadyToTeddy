@@ -12,7 +12,8 @@ public enum EnemyType
     Gunner_Hard,
     Air_Easy,
     Air_Normal,
-    Air_Hard
+    Air_Hard,
+    Boss
 }
 
 public class Pool_Enemy : MonoBehaviour

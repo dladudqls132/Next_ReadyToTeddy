@@ -11,7 +11,9 @@ public struct EnemySpawnInfo
 
 public class Stage : MonoBehaviour
 {
+    [SerializeField] private bool isClear;
     [SerializeField] private bool isStart;
+    [SerializeField] private Enemy boss;
     [SerializeField] private Pool_Enemy pool_Enemy;
     [SerializeField] private float successRate;
     [SerializeField] private float clearTime;
@@ -39,8 +41,17 @@ public class Stage : MonoBehaviour
         else
             return false;
     }
+
+    public void SetBoss(Enemy enemy) { boss = enemy; }
+    public Enemy GetBoss() { return boss; }
+
+    public void SetIsClear(bool value) { isClear = value; }
+    public bool GetIsClear() { return isClear; }
+
+    public float GetCurrentClearTime() { return currentClearTime; }
+
     public List<EnemySpawnInfo> GetEnemySpawnInfo() { return enemySpawnInfo; }
-    public Enemy SpawnEnemy(EnemyType enemyType, Vector3 position)
+    public Enemy SpawnEnemy(EnemyType enemyType, Vector3 position, bool addNum)
     {
         GameObject tempEnemy = pool_Enemy.GetEnemy(enemyType);
         if (tempEnemy == null)
@@ -50,7 +61,8 @@ public class Stage : MonoBehaviour
         tempEnemy.GetComponent<Enemy>().SetIsDead(false);
         tempEnemy.GetComponent<Enemy>().SetCurrentStage(this);
 
-        currentEnemyNum++;
+        if(addNum)
+            currentEnemyNum++;
 
         return tempEnemy.GetComponent<Enemy>();
     }
@@ -58,20 +70,28 @@ public class Stage : MonoBehaviour
     private void Start()
     {
         pool_Enemy = GameManager.Instance.GetPoolEnemy();
+        currentClearTime = clearTime;
     }
 
     protected void Update()
     {
-        currentClearTime += Time.deltaTime;
+        if(isStart)
+            currentClearTime -= Time.deltaTime;
 
-        if(currentClearTime >= clearTime)
+        if(currentClearTime <= 0)
         {
             GameManager.Instance.SetIsGameOver(true);
         }
 
         if(successRate >= 100.0f)
         {
-            isStart = false;
+            if (boss != null)
+            {
+                if (boss.GetIsDead())
+                    isStart = false;
+            }
+            else
+                isStart = false;
         }
     }
 }

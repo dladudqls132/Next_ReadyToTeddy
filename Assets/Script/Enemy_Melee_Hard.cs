@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_MeleeTest : Enemy
+public class Enemy_Melee_Hard : Enemy
 {
     enum Enemy_Behavior
     {
@@ -32,12 +32,12 @@ public class Enemy_MeleeTest : Enemy
 
         anim = this.GetComponent<Animator>();
 
-        
+
     }
 
     private void Update()
     {
-        if(isDead)
+        if (isDead)
         {
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
@@ -89,14 +89,14 @@ public class Enemy_MeleeTest : Enemy
 
                         behavior = Enemy_Behavior.Attack;
                     }
-                    //else if (Vector3.Distance(this.transform.position, target.position) <= attackRange + 2)
-                    //{
-                    //    currentAttackDelay = attackDelay;
-                    //    //agent.isStopped = true;
-                    //    canAttackTurn = true;
+                    else if (Vector3.Distance(this.transform.position, target.position) <= attackRange + 2)
+                    {
+                        currentAttackDelay = attackDelay;
+                        //agent.isStopped = true;
+                        canAttackTurn = true;
 
-                    //    behavior = Enemy_Behavior.RunningAttack;
-                    //}
+                        behavior = Enemy_Behavior.RunningAttack;
+                    }
                     else
                     {
                         canAttackTurn = false;
@@ -238,11 +238,11 @@ public class Enemy_MeleeTest : Enemy
         anim.SetBool("isAttack", false);
         anim.SetBool("isRunningAttack", false);
 
-        //if (Vector3.Distance(this.transform.position, target.position) > attackRange)
-        //{
-        //    behavior = Enemy_Behavior.Run;
-        //}
-        //else
+        if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+        {
+            behavior = Enemy_Behavior.Run;
+        }
+        else
             behavior = Enemy_Behavior.Idle;
     }
 }

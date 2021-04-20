@@ -104,8 +104,8 @@ GameObject:
   - component: {fileID: 527848643609135639}
   - component: {fileID: 6459524202302159780}
   - component: {fileID: 61347208586587642}
-  - component: {fileID: 8399780248914119419}
   - component: {fileID: 8399780248914119418}
+  - component: {fileID: -1968176397044079381}
   - component: {fileID: -2939124411865212993}
   m_Layer: 12
   m_Name: Enemy_Melee_Hard
@@ -164,43 +164,6 @@ CapsuleCollider:
   m_Height: 1.9277706
   m_Direction: 1
   m_Center: {x: 0, y: 0.8804636, z: 0}
---- !u!114 &8399780248914119419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 871617123658420397}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 748655ff585c94945b3fe361f66d2451, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
-  material: 1
-  eye: {fileID: 5854637168856373396}
-  target: {fileID: 0}
-  spreadBlood: {fileID: 5509323513824876469, guid: 9f2a57df863802045a4990bedec7d9bc,
-    type: 3}
-  canSee: 0
-  isDead: 0
-  maxHp: 1000
-  currentHp: 0
-  damage: 15
-  speed: 13
-  increaseCombo: 3
-  detectRange: 100
-  attackRange: 2
-  combatTime: 0
-  returnToPatorlTime: 0
-  patrolNode: []
-  currentDestPatrolNode: {fileID: 0}
-  isRunAway: 0
-  increaseSuccessRate: 5
-  currentStage: {fileID: 0}
-  behavior: 0
-  attackDelay: 1.5
-  coll: {fileID: 0}
 --- !u!195 &8399780248914119418
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -223,6 +186,48 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &-1968176397044079381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 871617123658420397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d3140301fddf554d9f8109333530a85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 9
+  state: 0
+  material: 1
+  eye: {fileID: 5854637168856373396}
+  target: {fileID: 0}
+  spreadBlood: {fileID: 5509323513824876469, guid: 9f2a57df863802045a4990bedec7d9bc,
+    type: 3}
+  canSee: 0
+  isDead: 0
+  maxHp: 1000
+  currentHp: 0
+  damage: 15
+  speed_min: 10
+  speed_max: 12
+  speed: 11
+  increaseCombo: 1
+  detectRange: 100
+  attackRange: 2
+  combatTime: 0
+  returnToPatorlTime: 0
+  patrolNode: []
+  currentDestPatrolNode: {fileID: 0}
+  isRunAway: 0
+  increaseSuccessRate: 5
+  currentStage: {fileID: 0}
+  behavior: 0
+  attackDelay: 1.5
+  ragdoll: {fileID: 0}
+  attackAfterTime: 0
+  currentAttackAfterTime: 0
 --- !u!54 &-2939124411865212993
 Rigidbody:
   m_ObjectHideFlags: 0

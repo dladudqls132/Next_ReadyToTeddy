@@ -22,6 +22,7 @@ public class UI_GameOver : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                Time.timeScale = 1;
                 GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
             }
         }
