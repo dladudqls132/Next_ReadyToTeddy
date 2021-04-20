@@ -16,7 +16,7 @@ public class UI_GameOver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.GetPlayer().GetIsDead())
+        if (GameManager.Instance.GetIsGameOver())
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a + Time.deltaTime);
 

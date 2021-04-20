@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject weapon_gameObject = null;
     [SerializeField] private Gun weapon = null;
     [SerializeField] private Transform checkingGroundRayPos;
+    [SerializeField] private Stage currentStage;
 
     [SerializeField] private bool isDead = false;
     [SerializeField] private float maxHP = 0;
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 originBodyColliderCenter;
     private float originBodyColliderHeight;
     private RaycastHit wallHit;
+    private bool isPushed;
 
     private bool isInit = false;
 
@@ -109,6 +111,9 @@ public class PlayerController : MonoBehaviour
     public bool GetIsDash() { return isDash; }
     public bool GetIsClimbing() { return isClimbing; }
     public bool GetIsClimbUp() { return isClimbUp; }
+    public Stage GetCurrentStage() { return currentStage; }
+    public void SetIsPushed(bool value) { isPushed = value; }
+    public bool GetIsPushed() { return isPushed; }
 
     // Start is called before the first frame update
     public void Init()
@@ -162,10 +167,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isDead || GameManager.Instance.GetIsPause())
+        if(isDead || GameManager.Instance.GetIsPause() || isPushed)
         {
             if(isDead)
                 rigid.velocity = Vector3.zero;
+
+            if(isPushed)
+            {
+                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 6);
+
+                if(rigid.velocity.magnitude <= 6.0f)
+                {
+                    isPushed = false;
+                }
+            }
 
             return;
         }
@@ -940,6 +955,8 @@ public class PlayerController : MonoBehaviour
             currentHP = 0;
 
             isDead = true;
+
+            GameManager.Instance.SetIsGameOver(true);
         }
         else if (currentHP > maxHP)
         {
@@ -1013,5 +1030,13 @@ public class PlayerController : MonoBehaviour
 
         //콤보가 오르면 데미지 증가
         //weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("StageEnter"))
+        {
+            currentStage = other.transform.root.GetComponent<Stage>();
+        }
     }
 }

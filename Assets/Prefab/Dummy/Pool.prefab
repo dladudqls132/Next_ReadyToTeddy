@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 899366413}
   - component: {fileID: 899366414}
+  - component: {fileID: 164505544}
   m_Layer: 0
   m_Name: Pool_Enemy
   m_TagString: Untagged
@@ -57,6 +58,32 @@ MonoBehaviour:
   - prefab: {fileID: 2273862262067903311, guid: bcd39a1ea530b2844b480749d7dc33b6,
       type: 3}
     enemyType: 6
+--- !u!114 &164505544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899366412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 410d7c7b61a0adb4ea5c4f202357cdeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyNum: 30
+  enemyInfos:
+  - prefab: {fileID: 8750402339389165590, guid: 5ff5b1192a1e33b488af0c5fead98ddd,
+      type: 3}
+    enemyType: 0
+  - prefab: {fileID: 2853134887023759384, guid: 258a689662092484e84a7b7eac91e51f,
+      type: 3}
+    enemyType: 1
+  - prefab: {fileID: 7901647248647607428, guid: c18350300a129cc42af7de31e29cdd7c,
+      type: 3}
+    enemyType: 2
+  - prefab: {fileID: 7100201072090824284, guid: eb561515c775abf4a8ff0f2d1d1ad3f3,
+      type: 3}
+    enemyType: 3
 --- !u!1 &3366010378903187983
 GameObject:
   m_ObjectHideFlags: 0

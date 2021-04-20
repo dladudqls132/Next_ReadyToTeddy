@@ -104,6 +104,10 @@ public class Gun_Test : Gun
                         else if(!GameManager.Instance.GetCrosshair().GetIsKill())
                             GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                     }
+                    else if(hit.transform.CompareTag("InteractiveObject"))
+                    {
+                        hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+                    }
                     else
                     {
                         GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);

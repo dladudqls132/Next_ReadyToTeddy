@@ -22,12 +22,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerController player;
     [SerializeField] private UI_Pause UI_pause;
     [SerializeField] private UI_Crosshair UI_crosshair;
+    [SerializeField] private Pool_Enemy pool_enemy;
     [SerializeField] private bool isPause;
+    [SerializeField] private bool isGameOver;
 
     private static GameManager instance;
 
     public PlayerController GetPlayer() { return player; }
     public UI_Crosshair GetCrosshair() { return UI_crosshair; }
+    public Pool_Enemy GetPoolEnemy() { return pool_enemy; }
 
     // Start is called before the first frame update
     void Awake()
@@ -40,6 +43,9 @@ public class GameManager : MonoBehaviour
 
         UI_crosshair = FindObjectOfType<UI_Crosshair>();
         UI_crosshair.Init();
+
+        pool_enemy = FindObjectOfType<Pool_Enemy>();
+        pool_enemy.Init();
     }
 
     private void Update()
@@ -54,6 +60,9 @@ public class GameManager : MonoBehaviour
     {
         instance = null;
     }
+
+    public void SetIsGameOver(bool value) { isGameOver = value; }
+    public bool GetIsGameOver() { return isGameOver; }
 
     public void SetIsPause(bool value)
     {

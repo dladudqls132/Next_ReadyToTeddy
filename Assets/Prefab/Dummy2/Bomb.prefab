@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 6973934643178605869}
   - component: {fileID: 5093919352276287108}
   - component: {fileID: 2424413237079885058}
+  - component: {fileID: 6084216709494058199}
   m_Layer: 0
   m_Name: Bomb
-  m_TagString: Untagged
+  m_TagString: InteractiveObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94,3 +95,21 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &6084216709494058199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623570240846973892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a46c2640aa4d4d84ea9429e997ddcfb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canDestroyed: 1
+  isDestroyed: 0
+  maxHp: 30
+  currentHp: 0
+  explosionRadius: 7
+  explosionPower: 40

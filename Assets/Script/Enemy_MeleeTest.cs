@@ -16,6 +16,7 @@ public class Enemy_MeleeTest : Enemy
     [SerializeField] private Enemy_Behavior behavior;
     [SerializeField] private float attackDelay;
     [SerializeField] private CapsuleCollider coll;
+    [SerializeField] private GameObject ragdoll;
     private float currentAttackDelay;
     private bool canAttackTurn;
     private float jumpAngle;
@@ -30,6 +31,7 @@ public class Enemy_MeleeTest : Enemy
 
         anim = this.GetComponent<Animator>();
         coll = this.GetComponent<CapsuleCollider>();
+        
     }
 
     private void Update()

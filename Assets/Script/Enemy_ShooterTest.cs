@@ -26,12 +26,15 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private Transform aimPos;
     [SerializeField] private float shotDelay;
     private float currentShotDelay;
+    [SerializeField] private Vector3 destPos;
 
     private Quaternion tempRot;
     [SerializeField] private float jumpAngle;
     //[SerializeField] private Transform head;
     //[SerializeField] private Transform spine1;
     //[SerializeField] private Transform spine2;
+
+    public void SetDestPos(Vector3 pos) { destPos = pos; }
 
     // Start is called before the first frame update
     override protected void Start()
@@ -84,19 +87,20 @@ public class Enemy_ShooterTest : Enemy
         if (Vector3.Distance(this.transform.position, target.position) > detectRange && state == Enemy_State.None)
             return;
 
-        agent.SetDestination(target.position);
+        agent.SetDestination(destPos);
 
-        if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+        if(Vector3.Distance(this.transform.position, destPos) <= 1.0f)
         {
-            state = Enemy_State.Search;
-        }
-        else
-        {
+            agent.isStopped = true;
+
             RaycastHit hit;
             if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enviroment"))))
             {
                 if (hit.transform.CompareTag("Player"))
+                {
                     state = Enemy_State.Targeting;
+                    behavior = Enemy_Behavior.Aiming;
+                }
                 else
                     state = Enemy_State.Search;
             }
@@ -104,24 +108,52 @@ public class Enemy_ShooterTest : Enemy
             {
                 state = Enemy_State.Search;
             }
+
+            if (state == Enemy_State.Search)
+                behavior = Enemy_Behavior.Idle;
+        }
+        else
+        {
+            behavior = Enemy_Behavior.Walk;
         }
 
-        if (state == Enemy_State.Targeting)
-        {
-            if (behavior != Enemy_Behavior.Jump)
-            {
-                agent.isStopped = true;
-                behavior = Enemy_Behavior.Aiming;
-            }
-        }
-        else if (state == Enemy_State.Search)
-        {
-            if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
-            {
-                agent.isStopped = false;
-                behavior = Enemy_Behavior.Walk;
-            }
-        }
+      
+        //if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+        //{
+        //    state = Enemy_State.Search;
+        //}
+        //else
+        //{
+        //    RaycastHit hit;
+        //    if (Physics.Raycast(eye.position, (target.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enviroment"))))
+        //    {
+        //        if (hit.transform.CompareTag("Player"))
+        //            state = Enemy_State.Targeting;
+        //        else
+        //            state = Enemy_State.Search;
+        //    }
+        //    else
+        //    {
+        //        state = Enemy_State.Search;
+        //    }
+        //}
+
+        //if (state == Enemy_State.Targeting)
+        //{
+        //    if (behavior != Enemy_Behavior.Jump)
+        //    {
+        //        agent.isStopped = true;
+        //        behavior = Enemy_Behavior.Aiming;
+        //    }
+        //}
+        //else if (state == Enemy_State.Search)
+        //{
+        //    if (behavior != Enemy_Behavior.Aiming && behavior != Enemy_Behavior.Attack)
+        //    {
+        //        agent.isStopped = false;
+        //        behavior = Enemy_Behavior.Walk;
+        //    }
+        //}
 
 
         if (behavior == Enemy_Behavior.Aiming)
@@ -147,13 +179,13 @@ public class Enemy_ShooterTest : Enemy
                 laser.SetPosition(0, firePos.position);
 
                 RaycastHit laserHit;
-                if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out laserHit, 30.0f, ~(1 << LayerMask.NameToLayer("Enemy"))))
+                if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out laserHit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Ignore Raycast"))))
                 {
-                    laser.SetPosition(1, laserHit.point + (aimPos.position - firePos.position).normalized * 0.2f + Vector3.down * 0.01f);
+                    laser.SetPosition(1, laserHit.point + (aimPos.position - firePos.position).normalized * 0.2f);
                 }
                 else
                 {
-                    laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 30 + Vector3.down * 0.01f);
+                    laser.SetPosition(1, firePos.position + (aimPos.position - firePos.position).normalized * 100);
                 }
             }
         }

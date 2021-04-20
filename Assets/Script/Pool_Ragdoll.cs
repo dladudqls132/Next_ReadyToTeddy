@@ -2,20 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType
-{
-    Warrior_Easy,
-    Warrior_Normal,
-    Warrior_Hard,
-    Gunner_Easy,
-    Gunner_Normal,
-    Gunner_Hard,
-    Air_Easy,
-    Air_Normal,
-    Air_Hard
-}
-
-public class Pool_Enemy : MonoBehaviour
+public class Pool_Ragdoll : MonoBehaviour
 {
     [System.Serializable]
     struct EnemyInfo
@@ -35,19 +22,6 @@ public class Pool_Enemy : MonoBehaviour
     [SerializeField] private EnemyInfo[] enemyInfos;
     private List<EnemyInfo> enemys = new List<EnemyInfo>();
 
-    //// Start is called before the first frame update
-    //void Start()
-    //{
-    //    for (int i = 0; i < enemyInfos.Length; i++)
-    //    {
-    //        for (int j = 0; j < enemyNum; j++)
-    //        {
-    //            EnemyInfo temp = new EnemyInfo(enemyInfos[i], this.transform);
-    //            enemys.Add(temp);
-    //        }
-    //    }
-    //}
-
     public void Init()
     {
         for (int i = 0; i < enemyInfos.Length; i++)
@@ -60,7 +34,7 @@ public class Pool_Enemy : MonoBehaviour
         }
     }
 
-    public GameObject GetEnemy(EnemyType enemyType)
+    public GameObject GetEnemyRagdoll(EnemyType enemyType)
     {
         for (int i = 0; i < enemys.Count; i++)
         {
@@ -73,5 +47,4 @@ public class Pool_Enemy : MonoBehaviour
 
         return null;
     }
-
 }

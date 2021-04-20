@@ -14,6 +14,8 @@ public class Stage : MonoBehaviour
     [SerializeField] private bool isStart;
     [SerializeField] private Pool_Enemy pool_Enemy;
     [SerializeField] private float successRate;
+    [SerializeField] private float clearTime;
+    private float currentClearTime;
     //[SerializeField] private Transform enemySpawnPoint;
     [SerializeField] private List<EnemySpawnInfo> enemySpawnInfo = new List<EnemySpawnInfo>();
     [SerializeField] private int maxEnemyNum;
@@ -38,21 +40,35 @@ public class Stage : MonoBehaviour
             return false;
     }
     public List<EnemySpawnInfo> GetEnemySpawnInfo() { return enemySpawnInfo; }
-    public void SpawnEnemy(EnemyType enemyType, Vector3 position)
+    public Enemy SpawnEnemy(EnemyType enemyType, Vector3 position)
     {
         GameObject tempEnemy = pool_Enemy.GetEnemy(enemyType);
         if (tempEnemy == null)
-            return;
+            return null;
         tempEnemy.transform.position = position;
         tempEnemy.SetActive(true);
         tempEnemy.GetComponent<Enemy>().SetIsDead(false);
         tempEnemy.GetComponent<Enemy>().SetCurrentStage(this);
 
         currentEnemyNum++;
+
+        return tempEnemy.GetComponent<Enemy>();
+    }
+
+    private void Start()
+    {
+        pool_Enemy = GameManager.Instance.GetPoolEnemy();
     }
 
     protected void Update()
     {
+        currentClearTime += Time.deltaTime;
+
+        if(currentClearTime >= clearTime)
+        {
+            GameManager.Instance.SetIsGameOver(true);
+        }
+
         if(successRate >= 100.0f)
         {
             isStart = false;

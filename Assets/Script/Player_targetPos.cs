@@ -26,7 +26,7 @@ public class Player_targetPos : MonoBehaviour
         if(player.GetComponent<PlayerController>().GetIsCrouch())
             this.transform.position = Vector3.MoveTowards(this.transform.position, playerColl.bounds.center + Vector3.up * 0.15f, Time.deltaTime * lerpSpeed);
         else
-            this.transform.position = Vector3.MoveTowards(this.transform.position, playerColl.bounds.center + Vector3.up * 0.55f, Time.deltaTime * lerpSpeed);
+            this.transform.position = Vector3.MoveTowards(this.transform.position, playerColl.bounds.center + Vector3.up * 0.45f, Time.deltaTime * lerpSpeed);
         //this.transform.position = playerColl.bounds.center + Vector3.up * 0.5f;
     }
 }
