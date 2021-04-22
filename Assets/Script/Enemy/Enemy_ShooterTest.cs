@@ -140,7 +140,7 @@ public class Enemy_ShooterTest : Enemy
             else
             {
                 behavior = Enemy_Behavior.Aiming;
-                shotDir = ((aimPos.position + Random.insideUnitSphere * 0.1f + target.GetComponent<Rigidbody>().velocity * Vector3.Distance(aimPos.position, firePos.position) / 20) - firePos.position).normalized;
+                shotDir = ((aimPos.position + Random.insideUnitSphere * 0.1f + target.GetComponent<Rigidbody>().velocity * 0.25f) - firePos.position).normalized;
             }
 
             if(!isDodge)
