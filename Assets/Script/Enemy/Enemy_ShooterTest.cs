@@ -32,8 +32,12 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private float jumpAngle;
     private Vector3 shotDir;
     [SerializeField] private float rndAimingWalkTime;
-    [SerializeField] private float currentRndAimingWalkTime;
-    [SerializeField] private Vector2 aimingWalkDir;
+    private float currentRndAimingWalkTime;
+    private Vector2 aimingWalkDir;
+
+    [SerializeField] private float dodgeCoolTime;
+    private float currentDodgeCoolTime;
+    private bool isDodge;
 
     // Start is called before the first frame update
     override protected void Start()
@@ -116,6 +120,11 @@ public class Enemy_ShooterTest : Enemy
                 currentRndAimingWalkTime = rndAimingWalkTime;
                 int dir = Random.Range(-1, 2);
                 aimingWalkDir = new Vector2(dir, 0);
+
+                if(Physics.Raycast(eye.position, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
+                {
+                    aimingWalkDir = new Vector2(-aimingWalkDir.x, aimingWalkDir.y);
+                }
             }
 
             if (currentShotDelay <= 0)
@@ -131,7 +140,20 @@ public class Enemy_ShooterTest : Enemy
             else
             {
                 behavior = Enemy_Behavior.Aiming;
-                shotDir = ((aimPos.position + Random.insideUnitSphere * 0.1f + target.GetComponent<Rigidbody>().velocity * 0.25f) - firePos.position).normalized;
+                shotDir = ((aimPos.position + Random.insideUnitSphere * 0.1f + target.GetComponent<Rigidbody>().velocity * Vector3.Distance(aimPos.position, firePos.position) / 20) - firePos.position).normalized;
+            }
+
+            if(!isDodge)
+                currentDodgeCoolTime -= Time.deltaTime;
+
+            if(currentDodgeCoolTime <= 0)
+            {
+                if (Vector3.Distance(this.transform.position, target.position) < 3.0f)
+                {
+                    anim.SetBool("isDodge_backward", true);
+                    isDodge = true;
+                    currentDodgeCoolTime = dodgeCoolTime;
+                }
             }
         }
         else
@@ -240,8 +262,15 @@ public class Enemy_ShooterTest : Enemy
 
         if(canSee)
         {
+            
             anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), aimingWalkDir.x, Time.deltaTime * 12));
         }
+    }
+
+    void DodgeFalse()
+    {
+        isDodge = false;
+        anim.SetBool("isDodge_backward", false);
     }
 
     //private void LateUpdate()
