@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GunType
+{
+    Auto,
+    SemiAuto
+}
+
 public class Gun : MonoBehaviour
 {
     [SerializeField] protected GameObject owner;
+    [SerializeField] protected GunType gunType;
     [SerializeField] protected Transform shotPos;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
@@ -31,6 +38,7 @@ public class Gun : MonoBehaviour
         damagePerBullet_origin = damagePerBullet;
     }
 
+    public GunType GetGunType() { return gunType; }
     public int GetMaxAmmoCount() { return maxAmmo; }
     public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }

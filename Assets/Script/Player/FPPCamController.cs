@@ -11,8 +11,10 @@ public class FPPCamController : MonoBehaviour
     private float clampAngle = 72.0f;
     private float mouseX;
     private float mouseY;
-    private float rotY = 0.0f;
-    private float rotX = 0.0f;
+    [SerializeField] private float rotY = 0.0f;
+    [SerializeField] private float rotX = 0.0f;
+    private float tempRotX;
+    private float tempRotY;
 
     [SerializeField] private bool isFovMove;
     private float timeToDest;
@@ -28,6 +30,23 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private float shakeAmount;
     //[SerializeField] private Transform enemyHp;
     //[SerializeField] private Vector3 enemyHp_pos;
+    [SerializeField] private bool isRecoil;
+    [SerializeField] private bool isFire;
+    [SerializeField] private float rotationSpeed;
+    [SerializeField] private float returnSpeed;
+    private float currentReturnSpeed;
+    private Vector3 tempDir;
+
+    [Header("Hipfire: ")]
+    [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
+
+    [Header("Aiming: ")]
+    [SerializeField] private Vector3 recoilRotationAiming = new Vector3(0.5f, 0.5f, 1.0f);
+
+    public bool isAiming;
+
+    [SerializeField] private Vector3 currentRotation;
+    [SerializeField] private Vector3 rot;
 
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
@@ -46,6 +65,7 @@ public class FPPCamController : MonoBehaviour
         originFov = Camera.main.fieldOfView;
         realOriginFov = originFov;
         cameraFollow = GameManager.Instance.GetPlayer().GetCamPos();
+
     }
 
     private void Update()
@@ -105,7 +125,13 @@ public class FPPCamController : MonoBehaviour
         //    enemyHp.gameObject.SetActive(false);
         //}
     }
+    // return : -180 ~ 180 degree (for unity)
+    public static float GetAngle(Vector3 vStart, Vector3 vEnd)
+    {
+        Vector3 v = vEnd - vStart;
 
+        return Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -116,9 +142,18 @@ public class FPPCamController : MonoBehaviour
         rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
-        Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0.0f);
-        transform.rotation = localRotation;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+
+
+
+            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+            rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
+
+
+
+       currentReturnSpeed += Time.deltaTime;
+            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+
+        
 
         if (isShake)
 
@@ -143,6 +178,18 @@ public class FPPCamController : MonoBehaviour
             //canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
         }
+
+       
+    }
+
+    public void FireRotate(Vector3 axis, float value)
+    {
+        isFire = true;
+        currentReturnSpeed = 0;
+
+        Vector3 rnd = new Vector3(-recoilRotation.x, Random.Range(-recoilRotation.y, recoilRotation.y), Random.Range(-recoilRotation.z, recoilRotation.z));
+
+        currentRotation += rnd;
     }
 
     public void FovMove(float destination, float timeToDest, float stopTime)
