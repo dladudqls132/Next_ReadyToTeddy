@@ -182,14 +182,14 @@ public class FPPCamController : MonoBehaviour
        
     }
 
-    public void FireRotate(Vector3 axis, float value)
+    public Vector3 FireRotate()
     {
-        isFire = true;
         currentReturnSpeed = 0;
 
         Vector3 rnd = new Vector3(-recoilRotation.x, Random.Range(-recoilRotation.y, recoilRotation.y), Random.Range(-recoilRotation.z, recoilRotation.z));
 
         currentRotation += rnd;
+        return rnd;
     }
 
     public void FovMove(float destination, float timeToDest, float stopTime)
