@@ -121,7 +121,7 @@ public class Enemy_ShooterTest : Enemy
                 int dir = Random.Range(-1, 2);
                 aimingWalkDir = new Vector2(dir, 0);
 
-                if(Physics.Raycast(eye.position, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
+                if(Physics.Raycast(this.transform.position + this.transform.up * 0.3f, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     aimingWalkDir = new Vector2(-aimingWalkDir.x, aimingWalkDir.y);
                 }
@@ -148,7 +148,7 @@ public class Enemy_ShooterTest : Enemy
 
             if(currentDodgeCoolTime <= 0)
             {
-                if (Vector3.Distance(this.transform.position, target.position) < 3.0f)
+                if (Vector3.Distance(this.transform.position, target.position) <= 3.5f)
                 {
                     anim.SetBool("isDodge_backward", true);
                     isDodge = true;
