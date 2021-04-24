@@ -15,6 +15,8 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private float rotX = 0.0f;
     private float tempRotX;
     private float tempRotY;
+    private float resetRotX;
+    private float resetRotY;
 
     [SerializeField] private bool isFovMove;
     private float timeToDest;
@@ -47,6 +49,7 @@ public class FPPCamController : MonoBehaviour
 
     [SerializeField] private Vector3 currentRotation;
     [SerializeField] private Vector3 rot;
+    [SerializeField] private Vector3 resetDir;
 
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
@@ -132,6 +135,16 @@ public class FPPCamController : MonoBehaviour
 
         return Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
     }
+
+    public float ClampAngle(float value)
+    {
+        if (value > 90)
+        {
+            value -= 360;
+        }
+
+        return value;
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -143,17 +156,27 @@ public class FPPCamController : MonoBehaviour
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
+        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
 
+        currentReturnSpeed += Time.deltaTime;
 
-            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
-            rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
+        transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
 
+        if (isFire)
+        {
+            if (Vector3.Cross(this.transform.forward, resetDir).normalized.x < 0)
+            {
+                isFire = false;
 
+                rotX -= currentRotation.x;
+                rotY += currentRotation.y;
+            }
+        }
 
-       currentReturnSpeed += Time.deltaTime;
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+        //Debug.Log(resetRotY);
 
-        
+        //Debug.Log(UnityEditor.TransformUtils.GetInspectorRotation(gameObject.transform).x);
 
         if (isShake)
 
@@ -182,13 +205,22 @@ public class FPPCamController : MonoBehaviour
        
     }
 
-    public Vector3 FireRotate()
+    public Vector3 SetFireRecoilRot(Vector3 rot)
     {
         currentReturnSpeed = 0;
 
-        Vector3 rnd = new Vector3(-recoilRotation.x, Random.Range(-recoilRotation.y, recoilRotation.y), Random.Range(-recoilRotation.z, recoilRotation.z));
+        Vector3 rnd = new Vector3(-rot.x, Random.Range(-rot.y, rot.y), Random.Range(-rot.z, rot.z));
 
         currentRotation += rnd;
+        //tempRotX = ClampAngle(this.transform.localEulerAngles.x);
+        //Debug.Log(tempRotX);
+       
+        if (!isFire)
+        {
+            resetDir = this.transform.forward;
+        }
+
+        isFire = true;
         return rnd;
     }
 

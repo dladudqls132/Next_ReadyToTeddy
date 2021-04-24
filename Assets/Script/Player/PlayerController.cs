@@ -235,7 +235,10 @@ public class PlayerController : MonoBehaviour
             useGravity = false;
 
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
-            result = Vector3.Cross(hit.normal, Vector3.Cross(moveDirection.normalized, hit.normal));
+            //result = Vector3.Cross(Vector3.Cross(hit.normal, moveDirection), hit.normal);
+            result = Vector3.ProjectOnPlane(moveDirection, hit.normal).normalized;
+
+            //Debug.DrawRay(this.transform.position, result * 10);
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -593,7 +596,7 @@ public class PlayerController : MonoBehaviour
                         {
                             //mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
                             mainCam.Shake(0.02f, 0.015f);
-                            handFireRot = Quaternion.Euler(mainCam.FireRotate() / 1.5f);
+                            handFireRot = Quaternion.Euler(mainCam.SetFireRecoilRot(new Vector3(1.5f, 1.5f, 0)) / 1.5f);
                             hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
                         }
                     }
