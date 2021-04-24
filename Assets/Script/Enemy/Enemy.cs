@@ -125,13 +125,13 @@ public class Enemy : MonoBehaviour
         {
             if (currentHp <= 0)
             {
-                if (isUpCombo)
-                {
-                    GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
-                    temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
-                    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-                    temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
-                }
+                //if (isUpCombo)
+                //{
+                //    //GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
+                //    //temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
+                //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
+                //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
+                //}
 
                 isDead = true;
                 //agent.isStopped = true;

@@ -215,8 +215,7 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit hit;
 
-        //Debug.DrawLine(this.transform.position, this.transform.position + Vector3.down * 0.2f);
-        //Debug.DrawLine(this.transform.position + moveDirection * 0.2f, this.transform.position + moveDirection * 0.2f + Vector3.down * 0.5f);
+
         if (Physics.SphereCast(checkingGroundRayPos.position, 0.25f, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
             if (currentJumpPower <= jumpPower / 2)
@@ -235,9 +234,21 @@ public class PlayerController : MonoBehaviour
             useGravity = false;
 
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
-            //result = Vector3.Cross(Vector3.Cross(hit.normal, moveDirection), hit.normal);
-            result = Vector3.ProjectOnPlane(moveDirection, hit.normal).normalized;
+            Vector3 temp = Vector3.Cross(Vector3.Cross(hit.normal, moveDirection), hit.normal);
+            result = temp;
+            Debug.DrawRay(hit.point, temp * 10, Color.red);
+            //Vector3 temp = Vector3.Cross(hit.normal, moveDirection);
+            //result = Vector3.ProjectOnPlane(moveDirection, hit.normal).normalized;
+            //result = temp;
+            //Debug.DrawRay(hit.point, right * 10);
+            //temp = Vector3.Cross(right, hit.normal);
+            //Debug.DrawRay(hit.point, temp * 10, Color.red);
+            //Debug.DrawRay(hit.point, hit.normal * 10);
+            //Debug.DrawRay(Vector3.Dot() hit.point, temp * 10, Color.yellow);
 
+
+            //Vector3 temp2 = Vector3.Cross(hit.normal, Vector3.Cross(temp, hit.normal));
+            //Debug.DrawRay(hit.point, temp2 * 10, Color.blue);
             //Debug.DrawRay(this.transform.position, result * 10);
 
             if (Input.GetKey(KeyCode.LeftControl))
@@ -596,7 +607,7 @@ public class PlayerController : MonoBehaviour
                         {
                             //mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
                             mainCam.Shake(0.02f, 0.015f);
-                            handFireRot = Quaternion.Euler(mainCam.SetFireRecoilRot(new Vector3(1.5f, 1.5f, 0)) / 1.5f);
+                            handFireRot = Quaternion.Euler(mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0)));
                             hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
                         }
                     }
