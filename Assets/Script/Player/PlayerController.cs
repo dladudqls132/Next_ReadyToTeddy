@@ -227,7 +227,7 @@ public class PlayerController : MonoBehaviour
             }
 
             if(!isJump && isClimbing && !isClimbUp)
-                this.transform.position = new Vector3(this.transform.position.x, hit.point.y + 0.05f, this.transform.position.z);
+                this.transform.position = new Vector3(this.transform.position.x, hit.point.y + 0.04f, this.transform.position.z);
 
             groundCollider.enabled = true;
             isClimbing = false;
