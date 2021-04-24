@@ -163,16 +163,16 @@ public class FPPCamController : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
 
-        if (isFire)
-        {
-            if (Vector3.Cross(this.transform.forward, resetDir).normalized.x < 0)
-            {
-                isFire = false;
+        //if (isFire)
+        //{
+        //    if (Vector3.Cross(this.transform.forward, resetDir).normalized.x < 0)
+        //    {
+        //        isFire = false;
 
-                rotX -= currentRotation.x;
-                rotY += currentRotation.y;
-            }
-        }
+        //        rotX -= currentRotation.x;
+        //        rotY += currentRotation.y;
+        //    }
+        //}
 
         //Debug.Log(resetRotY);
 
