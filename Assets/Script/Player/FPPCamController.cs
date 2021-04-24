@@ -181,9 +181,11 @@ public class FPPCamController : MonoBehaviour
        
     }
 
-    public Vector3 SetFireRecoilRot(Vector3 rot)
+    public Vector3 SetFireRecoilRot(Vector3 rot, float rotSpeed, float returnSpeed)
     {
         currentReturnSpeed = 0;
+        this.returnSpeed = returnSpeed;
+        this.rotationSpeed = rotSpeed;
 
         Vector3 rnd = new Vector3(-rot.x, Random.Range(-rot.y, rot.y), Random.Range(-rot.z, rot.z));
 

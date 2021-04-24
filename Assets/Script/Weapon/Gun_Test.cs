@@ -79,11 +79,14 @@ public class Gun_Test : Gun
 
     override public bool Fire()
     {
+        if (isReload)
+            return false;
+
         if (canShot)
         {
-            mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
             mainCam.Shake(0.05f, 0.06f);
-            //hand.GetComponent<Animator>().SetTrigger("isFire_SemiAuto");
+            handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+            hand.GetComponent<Animator>().SetTrigger("isFire_SemiAuto");
 
             isReload = false;
             isRecoil = false;
@@ -107,7 +110,7 @@ public class Gun_Test : Gun
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(shotPos.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
                 {
                     if (hit2.transform.CompareTag("Enemy"))
                     {

@@ -561,7 +561,7 @@ public class PlayerController : MonoBehaviour
 
         if (weapon != null)
         {
-            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) && !isClimbUp && !isClimbing)
+            if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing)
             {
                 weapon.Fire();
                 handFireRot = weapon.GetHandFireRot();
@@ -919,12 +919,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (weapon.GetIsShot() && !weapon.GetIsRecoil())
                 {
-                    if (weapon.GetGunType() == GunType.SemiAuto)
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(-0.5f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
-                    else
-                    {
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, handFireRot, Time.deltaTime * 20);
-                    }
+                    hand.localRotation = Quaternion.Lerp(hand.localRotation, handFireRot, Time.deltaTime * 20);
                 }
                 else
                 {
@@ -935,12 +930,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (weapon.GetIsShot() && !weapon.GetIsRecoil())
                 {
-                    if (weapon.GetGunType() == GunType.SemiAuto)
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(-40.451f, handOriginRot.eulerAngles.y, handOriginRot.eulerAngles.z), Time.deltaTime * 25);
-                    else
-                    {
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, handFireRot, Time.deltaTime * 20);
-                    }
+                    hand.localRotation = Quaternion.Lerp(hand.localRotation, handFireRot, Time.deltaTime * 20);
                 }
                 else
                 {
