@@ -189,17 +189,20 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if(hand.childCount > 0)
-            if (hand.GetChild(0) != null)
+        if (hand.childCount > 0)
+        {
+            for(int i = 0; i < hand.childCount; i++)
             {
-                if (hand.GetChild(0) != weapon)
+                if(hand.GetChild(i).gameObject.activeSelf)
                 {
-                    weapon_gameObject = hand.GetChild(0).GetChild(0).gameObject;
+                    weapon_gameObject = hand.GetChild(i).GetChild(0).gameObject;
                     weapon = weapon_gameObject.GetComponent<Gun>();
-                    weapon.SetOwner(this.gameObject);
+
+                    if(weapon.GetOwner() == null)
+                        weapon.SetOwner(this.gameObject, hand);
                 }
             }
-        
+        }
 
         Vector3 forward = mainCam.transform.forward;
         Vector3 right = mainCam.transform.right;
@@ -236,20 +239,6 @@ public class PlayerController : MonoBehaviour
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
             Vector3 temp = Vector3.Cross(Vector3.Cross(hit.normal, moveDirection), hit.normal);
             result = temp;
-            Debug.DrawRay(hit.point, temp * 10, Color.red);
-            //Vector3 temp = Vector3.Cross(hit.normal, moveDirection);
-            //result = Vector3.ProjectOnPlane(moveDirection, hit.normal).normalized;
-            //result = temp;
-            //Debug.DrawRay(hit.point, right * 10);
-            //temp = Vector3.Cross(right, hit.normal);
-            //Debug.DrawRay(hit.point, temp * 10, Color.red);
-            //Debug.DrawRay(hit.point, hit.normal * 10);
-            //Debug.DrawRay(Vector3.Dot() hit.point, temp * 10, Color.yellow);
-
-
-            //Vector3 temp2 = Vector3.Cross(hit.normal, Vector3.Cross(temp, hit.normal));
-            //Debug.DrawRay(hit.point, temp2 * 10, Color.blue);
-            //Debug.DrawRay(this.transform.position, result * 10);
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -572,63 +561,25 @@ public class PlayerController : MonoBehaviour
 
         if (weapon != null)
         {
-            if (weapon.GetGunType() == GunType.SemiAuto)
+            if ((Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) && !isClimbUp && !isClimbing)
             {
-                if (Input.GetMouseButtonDown(0) && !isClimbUp && !isClimbing)
+                weapon.Fire();
+                handFireRot = weapon.GetHandFireRot();
+
+                if (isGrounded && !isSlide)
                 {
-
-
-                    if (weapon.Fire())
-                    {
-                        if (!isDash)
-                        {
-                            mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
-                            mainCam.Shake(0.05f, 0.06f);
-                        }
-                    }
-
-                    if (isGrounded && !isSlide)
-                    {
-                        isCombat = true;
-                        isRun = false;
-                    }
-
-                    currentCombatTime = combatTime;
+                    isCombat = true;
+                    isRun = false;
                 }
 
+                currentCombatTime = combatTime;
             }
-            else if (weapon.GetGunType() == GunType.Auto)
-            {
-                if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing)
-                {
-                    if (weapon.Fire())
-                    {
-                        if (!isDash)
-                        {
-                            //mainCam.FovMove(mainCam.GetOriginFov() + 1.8f, 0.005f, 0.01f);
-                            mainCam.Shake(0.02f, 0.015f);
-                            handFireRot = Quaternion.Euler(mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0)));
-                            hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
-                        }
-                    }
 
-                    if (isGrounded && !isSlide)
-                    {
-                        isCombat = true;
-                        isRun = false;
-                    }
-
-                    currentCombatTime = combatTime;
-                }
-            }
-        }
-        else
-        {
-            if (weapon.GetIsShot())
+            if (!weapon.GetIsShot())
             {
                 handFireRot = handOriginRot;
             }
-        }
+        }        
 
         if (Input.GetKeyDown(KeyCode.R))
         {

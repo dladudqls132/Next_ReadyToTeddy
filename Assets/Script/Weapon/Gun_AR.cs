@@ -17,59 +17,77 @@ public class Gun_AR : Gun
     // Update is called once per frame
     void Update()
     {
-        if (isShot)
+        if (owner != null)
         {
-            currentShotDelay -= Time.deltaTime;
-
-            if (currentShotDelay <= 0)
+            if (isShot)
             {
-                isShot = false;
-                isRecoil = false;
-                //Debug.Log("asd");
-                currentShotDelay = shotDelay;
-            }
+                currentShotDelay -= Time.deltaTime;
 
-            if (currentShotDelay <= shotDelay / 1.6f)
-            {
-                isRecoil = true;
-            }
-        }
-
-        if (isReload)
-        {
-            currentReloadTime -= Time.deltaTime;
-
-            if (currentReloadTime <= 0)
-            {
-                currentReloadTime = reloadTime;
-                currentAmmo = maxAmmo;
-
-                if (currentAmmo >= maxAmmo)
+                if (currentShotDelay <= 0)
                 {
-                    isReload = false;
+                    isShot = false;
+                    isRecoil = false;
+                    //Debug.Log("asd");
+                    currentShotDelay = shotDelay;
+                }
+
+                if (currentShotDelay <= shotDelay / 1.6f)
+                {
+                    isRecoil = true;
                 }
             }
+
+            if (isReload)
+            {
+                currentReloadTime -= Time.deltaTime;
+
+                if (currentReloadTime <= 0)
+                {
+                    currentReloadTime = reloadTime;
+                    currentAmmo = maxAmmo;
+
+                    if (currentAmmo >= maxAmmo)
+                    {
+                        isReload = false;
+                    }
+                }
+            }
+            else
+            {
+                currentReloadTime = reloadTime;
+            }
+
+            if (currentAmmo <= 0 && !isShot)
+            {
+                isReload = true;
+            }
+
+            if (currentAmmo > 0 && !isShot)
+                canShot = true;
+            else
+                canShot = false;
         }
         else
         {
-            currentReloadTime = reloadTime;
-        }
-
-        if (currentAmmo <= 0 && !isShot)
-        {
-            isReload = true;
-        }
-
-        if (currentAmmo > 0 && !isShot)
-            canShot = true;
-        else
             canShot = false;
+            isReload = false;
+            currentReloadTime = reloadTime;
+            currentShotDelay = shotDelay;
+            isShot = false;
+        }
     }
 
     override public bool Fire()
     {
+        if (isReload)
+            return false;
+
         if (canShot)
         {
+            mainCam.Shake(0.02f, 0.015f);
+            handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0));
+            hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
+
             isReload = false;
             isRecoil = false;
 
@@ -123,5 +141,10 @@ public class Gun_AR : Gun
         }
 
         return false;
+    }
+
+    protected override void ResetInfo()
+    {
+        base.ResetInfo();
     }
 }
