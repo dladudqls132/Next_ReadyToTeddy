@@ -906,6 +906,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            if(!weapon.GetIsShot())
             hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 16);
         }
 

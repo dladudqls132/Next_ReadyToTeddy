@@ -96,7 +96,7 @@ public class Gun_AR : Gun
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
             {
-                direction = (hit.point - shotPos.position).normalized;
+                direction = (hit.point - Camera.main.transform.position).normalized;
             }
             else
                 direction = Camera.main.transform.forward;
