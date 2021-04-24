@@ -10,10 +10,12 @@ public enum GunType
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] protected GunType gunType;
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
-    [SerializeField] protected GunType gunType;
     [SerializeField] protected Transform shotPos;
+    [SerializeField] protected GameObject bulletHit = null;
+    [SerializeField] protected float fireNum = 0;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
     [SerializeField] protected bool isRecoil;
@@ -30,6 +32,9 @@ public class Gun : MonoBehaviour
     [SerializeField] protected ParticleSystem muzzleFlash;
     protected FPPCamController mainCam;
     protected Vector3 handFireRot;
+    [SerializeField] protected float originSpreadAngle = 3;
+    [SerializeField] protected float aimingSpreadAngle = 0.5f;
+    [SerializeField] protected float currentSpreadAngle;
 
     protected Vector3 direction;
 

@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Gun_Test : Gun
 {
-    [SerializeField] private GameObject bulletHit = null;
-    [SerializeField] private float spreadAngle = 0;
-    [SerializeField] private float fireNum = 0;
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -84,8 +80,20 @@ public class Gun_Test : Gun
 
         if (canShot)
         {
-            mainCam.Shake(0.05f, 0.06f);
-            handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+            if (!owner.GetComponent<PlayerController>().GetIsAiming())
+            {
+                currentSpreadAngle = originSpreadAngle;
+                mainCam.Shake(0.05f, 0.06f);
+                handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+            }
+            else
+            {
+                currentSpreadAngle = aimingSpreadAngle;
+                mainCam.Shake(0.05f, 0.06f);
+                handFireRot = mainCam.SetFireRecoilRot(new Vector3(4.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+            }
+
+
             hand.GetComponent<Animator>().SetTrigger("isFire_SemiAuto");
 
             isReload = false;
@@ -105,7 +113,7 @@ public class Gun_Test : Gun
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
               
-                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
+                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
