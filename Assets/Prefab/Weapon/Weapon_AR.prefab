@@ -14378,26 +14378,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5435f44ff9180c94bb7eef8a0ccfcf5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
   gunType: 0
+  owner: {fileID: 0}
+  hand: {fileID: 0}
   shotPos: {fileID: 4650317208651906138}
+  bulletHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef,
+    type: 3}
+  fireNum: 1
   isShot: 0
   canShot: 0
   isRecoil: 0
   shotDelay: 0.1
   currentShotDelay: 0
   isReload: 0
-  reloadTime: 2
-  currentReloadTime: 0
+  reloadTime: 1
   maxAmmo: 30
   currentAmmo: 0
   damagePerBullet: 20
   speed: 0
   muzzleFlash: {fileID: 487056229}
-  bulletHit: {fileID: 5224865294680170146, guid: b72485b109b50bb439657d11d61756ef,
-    type: 3}
-  spreadAngle: 0.5
-  fireNum: 1
+  originSpreadAngle: 3
+  aimingSpreadAngle: 0.5
+  currentSpreadAngle: 0
 --- !u!1 &3562839830111801885
 GameObject:
   m_ObjectHideFlags: 0

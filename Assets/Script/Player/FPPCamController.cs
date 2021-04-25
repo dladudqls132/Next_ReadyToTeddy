@@ -7,7 +7,7 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private float cameraMoveSpeed = 120.0f;
     [SerializeField] Transform cameraFollow = null;
     private Camera mainCamera;
-    
+
     private float clampAngle = 72.0f;
     private float mouseX;
     private float mouseY;
@@ -50,7 +50,7 @@ public class FPPCamController : MonoBehaviour
 
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
-    public void SetOriginFov(float value) { originFov = value; } 
+    public void SetOriginFov(float value) { originFov = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -102,11 +102,11 @@ public class FPPCamController : MonoBehaviour
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.PageUp))
+        if (Input.GetKeyDown(KeyCode.PageUp))
         {
             cameraMoveSpeed += 5;
         }
-        else if(Input.GetKeyDown(KeyCode.PageDown))
+        else if (Input.GetKeyDown(KeyCode.PageDown))
         {
             cameraMoveSpeed -= 5;
         }
@@ -132,6 +132,14 @@ public class FPPCamController : MonoBehaviour
 
         return Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
     }
+    private void LateUpdate()
+    {
+        if (GameManager.Instance.GetPlayer().GetWeapon().GetIsReload())
+            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + this.GetComponent<Animator>().rootRotation.eulerAngles);
+        else
+            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -144,15 +152,21 @@ public class FPPCamController : MonoBehaviour
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
 
-
-            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
-            rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
-
+        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
 
 
-       currentReturnSpeed += Time.deltaTime;
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
 
+        currentReturnSpeed += Time.deltaTime;
+
+
+        //else
+        //    transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+
+        if (GameManager.Instance.GetPlayer().GetWeapon().GetIsReload())
+            this.GetComponent<Animator>().SetBool("isReload", true);
+        else
+            this.GetComponent<Animator>().SetBool("isReload", false);
 
         if (isShake)
 
@@ -162,7 +176,7 @@ public class FPPCamController : MonoBehaviour
 
             currentShakeTime -= Time.deltaTime;
 
-            if(currentShakeTime <= 0)
+            if (currentShakeTime <= 0)
             {
                 isShake = false;
             }
@@ -178,7 +192,7 @@ public class FPPCamController : MonoBehaviour
 
         }
 
-       
+
     }
 
     public Vector3 SetFireRecoilRot(Vector3 rot, float rotSpeed, float returnSpeed)

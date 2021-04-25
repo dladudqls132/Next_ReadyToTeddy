@@ -22,7 +22,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float shotDelay;
     [SerializeField] protected float currentShotDelay;
     [SerializeField] protected bool isReload;
-    protected float reloadTime = 1;
+    [SerializeField] protected float reloadTime = 1;
     protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int currentAmmo;
@@ -73,7 +73,7 @@ public class Gun : MonoBehaviour
     public Quaternion GetHandFireRot() { return Quaternion.Euler(handFireRot); }
 
     virtual public bool Fire() { return false; }
-    public bool CanReload() { if (currentAmmo < maxAmmo) return true; return false; }
+    public bool CanReload() { if (currentAmmo < maxAmmo && !isReload) return true; return false; }
 
     protected virtual void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
 

@@ -210,13 +210,16 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (!weapon.GetIsReload())
         {
-            ChangeGun(1);
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ChangeGun(2);
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                ChangeGun(1);
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                ChangeGun(2);
+            }
         }
 
         
@@ -615,8 +618,12 @@ public class PlayerController : MonoBehaviour
         {
             if (weapon.CanReload())
             {
+                isAiming = false;
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
                 weapon.SetIsReload(true);
                 hand.localRotation = handOriginRot;
+                //hand.localPosition = handOriginPos;
                 handFireRot = Quaternion.Euler(Vector3.zero);
             }
         }
@@ -1000,10 +1007,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        if(weapon.GetIsReload())
+        {
+            hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
+
+        }
+    }
+
     private void ChangeGun(int num)
     {
         if (currentWeaponNum == num)
             return;
+
+        isAiming = false;
+        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        mainCam.FovReset();
 
         currentWeaponNum = num;
 

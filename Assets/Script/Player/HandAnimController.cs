@@ -6,6 +6,9 @@ public class HandAnimController : MonoBehaviour
 {
     [SerializeField] private Gun currentWeapon;
 
+
+    
+
     private void Update()
     {
         currentWeapon = GameManager.Instance.GetPlayer().GetWeapon();
