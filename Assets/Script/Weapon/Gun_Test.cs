@@ -33,29 +33,29 @@ public class Gun_Test : Gun
                 }
             }
 
-            if (isReload)
-            {
-                currentReloadTime -= Time.deltaTime;
+            //if (isReload)
+            //{
+            //    currentReloadTime -= Time.deltaTime;
 
-                if (currentReloadTime <= 0)
-                {
-                    currentReloadTime = reloadTime;
-                    currentAmmo = maxAmmo;
+            //    if (currentReloadTime <= 0)
+            //    {
+            //        currentReloadTime = reloadTime;
+            //        currentAmmo = maxAmmo;
 
-                    if (currentAmmo >= maxAmmo)
-                    {
-                        isReload = false;
-                    }
-                }
-            }
-            else
-            {
-                currentReloadTime = reloadTime;
-            }
+            //        if (currentAmmo >= maxAmmo)
+            //        {
+            //            isReload = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    currentReloadTime = reloadTime;
+            //}
 
             if (currentAmmo <= 0 && !isShot)
             {
-                isReload = true;
+                SetIsReload(true);
             }
 
             if (currentAmmo > 0 && !isShot)
@@ -71,6 +71,27 @@ public class Gun_Test : Gun
             currentShotDelay = shotDelay;
             isShot = false;
         }
+    }
+
+    public override void SetIsReload(bool value)
+    {
+        base.SetIsReload(value);
+
+        if (value)
+        {
+
+            hand.GetComponent<Animator>().SetBool("isReload_Shotgun", true);
+
+        }
+    }
+
+    public override void SetIsReloadFinish()
+    {
+        isReload = false;
+
+        currentAmmo = maxAmmo;
+
+        hand.GetComponent<Animator>().SetBool("isReload_Shotgun", false);
     }
 
     override public bool Fire()
@@ -94,7 +115,7 @@ public class Gun_Test : Gun
             }
 
 
-            hand.GetComponent<Animator>().SetTrigger("isFire_SemiAuto");
+            hand.GetComponent<Animator>().SetTrigger("Fire_SemiAuto");
 
             isReload = false;
             isRecoil = false;

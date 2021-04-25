@@ -34,29 +34,29 @@ public class Gun_AR : Gun
                 }
             }
 
-            if (isReload)
-            {
-                currentReloadTime -= Time.deltaTime;
+            //if (isReload)
+            //{
+            //    currentReloadTime -= Time.deltaTime;
 
-                if (currentReloadTime <= 0)
-                {
-                    currentReloadTime = reloadTime;
-                    currentAmmo = maxAmmo;
+            //    if (currentReloadTime <= 0)
+            //    {
+            //        currentReloadTime = reloadTime;
+            //        currentAmmo = maxAmmo;
 
-                    if (currentAmmo >= maxAmmo)
-                    {
-                        isReload = false;
-                    }
-                }
-            }
-            else
-            {
-                currentReloadTime = reloadTime;
-            }
+            //        if (currentAmmo >= maxAmmo)
+            //        {
+            //            isReload = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    currentReloadTime = reloadTime;
+            //}
 
             if (currentAmmo <= 0 && !isShot)
             {
-                isReload = true;
+                SetIsReload(true);
             }
 
             if (currentAmmo > 0 && !isShot)
@@ -72,6 +72,25 @@ public class Gun_AR : Gun
             currentShotDelay = shotDelay;
             isShot = false;
         }
+    }
+
+    public override void SetIsReload(bool value)
+    {
+        base.SetIsReload(value);
+
+        if (value)
+        {
+            hand.GetComponent<Animator>().SetBool("isReload_AR", true);
+        }
+    }
+
+    public override void SetIsReloadFinish()
+    {
+        isReload = false;
+
+        currentAmmo = maxAmmo;
+
+        hand.GetComponent<Animator>().SetBool("isReload_AR", false);
     }
 
     override public bool Fire()
@@ -94,7 +113,7 @@ public class Gun_AR : Gun
                 handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
             }
 
-            hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
+            hand.GetComponent<Animator>().SetTrigger("Fire_Auto");
 
             isReload = false;
             isRecoil = false;

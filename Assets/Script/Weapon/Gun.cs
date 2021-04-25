@@ -4,8 +4,8 @@ using UnityEngine;
 
 public enum GunType
 {
-    Auto,
-    SemiAuto
+    AR,
+    ShotGun
 }
 
 public class Gun : MonoBehaviour
@@ -22,8 +22,8 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float shotDelay;
     [SerializeField] protected float currentShotDelay;
     [SerializeField] protected bool isReload;
-    [SerializeField] protected float reloadTime;
-    [SerializeField] protected float currentReloadTime;
+    protected float reloadTime = 1;
+    protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
@@ -60,7 +60,15 @@ public class Gun : MonoBehaviour
     public float GetDamagePerBullet_Origin() { return damagePerBullet_origin; }
     public float GetDamagePerBullet() { return damagePerBullet; }
     public void SetDamagePerBullet(float value) { damagePerBullet = value; }
-    public void SetIsReload(bool value) { isReload = value; }
+
+    public virtual void SetIsReload(bool value)
+    {
+        isReload = value;
+        hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
+        hand.GetComponent<Animator>().ResetTrigger("Fire_Auto");
+    }
+
+    virtual public void SetIsReloadFinish() { }
 
     public Quaternion GetHandFireRot() { return Quaternion.Euler(handFireRot); }
 
