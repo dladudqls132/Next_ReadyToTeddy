@@ -52,6 +52,7 @@ public class Gun : MonoBehaviour
     public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
+    public void SetIsShot(bool value) { isShot = value; } 
     public bool GetIsRecoil() { return isRecoil; }
     public void SetIsRecoil(bool value) { isRecoil = value; }
     public void SetOwner(GameObject who, Transform hand) { owner = who; this.hand = hand; }

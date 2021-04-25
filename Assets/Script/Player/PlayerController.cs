@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float currentKickWallTime;
    
     [SerializeField] private int currentWeaponNum;
+    private bool isSwap;
 
     private bool isMoveAim;
     private Vector3 climbUpPos = Vector3.zero;
@@ -120,6 +121,8 @@ public class PlayerController : MonoBehaviour
     public void SetIsPushed(bool value) { isPushed = value; }
     public bool GetIsPushed() { return isPushed; }
     public Transform GetAimPos() { return aimPos; }
+    public int GetCurrentWeaponNum() { return currentWeaponNum; }
+    public void SetIsSwap(bool value) { isSwap = value; } 
 
     // Start is called before the first frame update
     public void Init()
@@ -210,15 +213,15 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (!weapon.GetIsReload())
+        if (!weapon.GetIsReload() && !isSwap)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                ChangeGun(1);
+                SwapWeapon(1);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                ChangeGun(2);
+                SwapWeapon(2);
             }
         }
 
@@ -596,7 +599,7 @@ public class PlayerController : MonoBehaviour
 
         if (weapon != null)
         {
-            if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing)
+            if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap)
             {
                 if (weapon.Fire())
                 {
@@ -616,7 +619,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (weapon.CanReload())
+            if (weapon.CanReload() && !isSwap)
             {
                 isAiming = false;
                 mainCam.SetOriginFov(mainCam.GetRealOriginFov());
@@ -940,42 +943,45 @@ public class PlayerController : MonoBehaviour
     {
 
 
-        if (isAiming)
+        if (!isSwap)
         {
-            if (isGrounded)
-                isRun = false;
-
-            if (isMoveAim)
+            if (isAiming)
             {
+                if (isGrounded)
+                    isRun = false;
 
-                hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 35);
-
-
-                if (Vector3.Distance(hand.localPosition, new Vector3(0, -0.08f, 0.087f)) < 0.001f)
+                if (isMoveAim)
                 {
-                    hand.localPosition = new Vector3(0, -0.08f, 0.087f);
-                    hand.localRotation = Quaternion.Euler(0, 0, 0);
-                    isMoveAim = false;
+
+                    hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
+                    hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 35);
+
+
+                    if (Vector3.Distance(hand.localPosition, new Vector3(0, -0.08f, 0.087f)) < 0.001f)
+                    {
+                        hand.localPosition = new Vector3(0, -0.08f, 0.087f);
+                        hand.localRotation = Quaternion.Euler(0, 0, 0);
+                        isMoveAim = false;
+                    }
+
+
                 }
-
-
             }
-        }
-        else
-        {
-            if (isMoveAim)
+            else
             {
-                hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
-                hand.localRotation = Quaternion.Lerp(hand.localRotation, handOriginRot, Time.deltaTime * 35);
-
-                if (Vector3.Distance(hand.localPosition, handOriginPos) < 0.001f)
+                if (isMoveAim)
                 {
-                    hand.localPosition = handOriginPos;
-                    hand.localRotation = handOriginRot;
-                    isMoveAim = false;
-                }
+                    hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
+                    hand.localRotation = Quaternion.Lerp(hand.localRotation, handOriginRot, Time.deltaTime * 35);
 
+                    if (Vector3.Distance(hand.localPosition, handOriginPos) < 0.001f)
+                    {
+                        hand.localPosition = handOriginPos;
+                        hand.localRotation = handOriginRot;
+                        isMoveAim = false;
+                    }
+
+                }
             }
         }
 
@@ -983,23 +989,26 @@ public class PlayerController : MonoBehaviour
         {
             //hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -30), Time.deltaTime * 12);
             
+            
         }
         else
         {
                     handFireRot = Quaternion.Lerp(handFireRot, Quaternion.Euler(0, 0, 0), Time.deltaTime * 15);
             if (!isMoveAim)
             {
-
-                if(isAiming)
+                if (!isSwap)
                 {
-                    hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 10);
-                    hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
-                }
-                else
-                {
-                    hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 10);
-                    hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
+                    if (isAiming)
+                    {
+                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 10);
+                        hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
+                    }
+                    else
+                    {
+                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 10);
+                        hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
 
+                    }
                 }
                 
 
@@ -1012,33 +1021,48 @@ public class PlayerController : MonoBehaviour
         if(weapon.GetIsReload())
         {
             hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
-
         }
     }
 
-    private void ChangeGun(int num)
+    private void SwapWeapon(int num)
     {
         if (currentWeaponNum == num)
             return;
+
+        currentWeaponNum = num;
+
+        isSwap = true;
+
+        hand.GetComponent<Animator>().applyRootMotion = false;
+
+        hand.localPosition = handOriginPos;
+        hand.localRotation = handOriginRot;
+        handFireRot = Quaternion.Euler(0, 0, 0);
 
         isAiming = false;
         mainCam.SetOriginFov(mainCam.GetRealOriginFov());
         mainCam.FovReset();
 
-        currentWeaponNum = num;
-
-        for(int i = 0; i < hand.childCount; i++)
-        {
-            hand.GetChild(i).gameObject.SetActive(false);
-        }
-
-        hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
+        hand.GetComponent<Animator>().SetBool("isSwap", true);
 
         weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).GetChild(0).gameObject;
         weapon = weapon_gameObject.GetComponent<Gun>();
 
         if (weapon.GetOwner() == null)
             weapon.SetOwner(this.gameObject, hand);
+    }
+
+    public void SwapWeapon()
+    {
+        hand.GetComponent<Animator>().applyRootMotion = true;
+        for (int i = 0; i < hand.childCount; i++)
+        {
+            hand.GetChild(i).gameObject.SetActive(false);
+        }
+
+        hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
+
+    
     }
 
     private void CheckingHp()
