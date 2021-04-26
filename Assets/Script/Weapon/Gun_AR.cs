@@ -140,7 +140,7 @@ public class Gun_AR : Gun
                 if (hit2.transform.CompareTag("Enemy"))
                 {
                     Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                    enemy.DecreaseHp(owner, damagePerBullet, hit2.point, true);
+                    enemy.DecreaseHp(owner, damagePerBullet, hit2.point, shotDir * 200);
                     GameManager.Instance.GetCrosshair().ResetAttack();
                     if (enemy.GetIsDead())
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);

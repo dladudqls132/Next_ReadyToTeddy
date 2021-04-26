@@ -73,17 +73,21 @@ public class Enemy_ShooterTest : Enemy
         rigs.Build();
     }
 
+    protected override void SetDead(bool value)
+    {
+        isDead = value;
+        behavior = Enemy_Behavior.Idle;
+        state = Enemy_State.None;
+        agent.isStopped = true;
+        currentHp = maxHp;
+        this.gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (isDead)
         {
-            behavior = Enemy_Behavior.Idle;
-            state = Enemy_State.None;
-            agent.isStopped = true;
-            currentHp = maxHp;
-            this.gameObject.SetActive(false);
-
             return;
         }
 

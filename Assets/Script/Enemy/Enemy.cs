@@ -85,6 +85,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void SetDead(bool value) {}
+
+    public void SetRagdoll(Vector3 damagedVelocity)
+    {
+        GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
+        
+        temp.SetActive(true);
+        temp.transform.position = this.transform.position;
+        temp.transform.rotation = this.transform.rotation;
+        temp.GetComponent<Enemy_RagdollController>().AddForce(damagedVelocity);
+    }
+
     protected void GoToPatrolNode()
     {
         if (patrolNode.Length != 0)
@@ -119,10 +131,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void CheckingHp(bool isUpCombo)
+    protected void CheckingHp(Vector3 damagedVelocity)
     {
         if (!isDead)
         {
+
             if (currentHp <= 0)
             {
                 //if (isUpCombo)
@@ -132,15 +145,26 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
-
-                isDead = true;
+                SetRagdoll(damagedVelocity);
+                SetDead(true);
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
             }
         }
     }
 
-    public void DecreaseHp(float value, bool isUpCombo)
+    protected void CheckingHp()
+    {
+        if (!isDead)
+        {
+            if (currentHp <= 0)
+            {
+                isDead = true;
+            }
+        }
+    }
+
+    public void DecreaseHp(float value)
     {
         if (!GameManager.Instance.GetIsCombat())
             return;
@@ -149,15 +173,15 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = null;
 
-        CheckingHp(isUpCombo);
+        CheckingHp();
     }
 
-    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos, bool isUpCombo)
+    public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
     {
         if (!GameManager.Instance.GetIsCombat())
             return;
 
-        currentHp -= value;
+        currentHp -= damage;
 
         GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
 
@@ -171,6 +195,6 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = attackObj;
 
-        CheckingHp(isUpCombo);
+        CheckingHp(damagedVelocity);
     }
 }

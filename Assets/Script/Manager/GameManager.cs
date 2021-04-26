@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UI_Crosshair UI_crosshair;
     [SerializeField] private Pool_Enemy pool_enemy;
     [SerializeField] private Pool_Bullet pool_bullet;
+    [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     public UI_Crosshair GetCrosshair() { return UI_crosshair; }
     public Pool_Enemy GetPoolEnemy() { return pool_enemy; }
     public Pool_Bullet GetPoolBullet() { return pool_bullet; }
+    public Pool_Ragdoll GetPoolRagdoll() { return pool_ragdoll; }
 
     // Start is called before the first frame update
     void Awake()
@@ -62,6 +64,11 @@ public class GameManager : MonoBehaviour
 
         if (pool_bullet != null)
             pool_bullet.Init();
+
+        pool_ragdoll = FindObjectOfType<Pool_Ragdoll>();
+
+        if (pool_ragdoll != null)
+            pool_ragdoll.Init();
     }
 
     private void Update()

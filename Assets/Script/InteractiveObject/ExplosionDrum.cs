@@ -31,7 +31,7 @@ public class ExplosionDrum : InteractiveObject
                     else if(rb.CompareTag("Enemy"))
                     {
                         Enemy temp = rb.GetComponent<Enemy>();
-                        temp.DecreaseHp(50, false);
+                        temp.DecreaseHp(this.gameObject, 50, hit.ClosestPoint(explosionPos), (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
                     }
                 }
             }

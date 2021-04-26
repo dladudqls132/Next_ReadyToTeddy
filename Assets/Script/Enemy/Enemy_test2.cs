@@ -237,7 +237,7 @@ public class Enemy_test2 : Enemy
                 }
                 else if (fireHit.transform.CompareTag("Enemy"))
                 {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1, true);
+                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(1);
                 }
             }
             if (state == Enemy_State.Chase)
