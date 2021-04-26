@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private GameObject weapon_gameObject = null;
     [SerializeField] private Gun weapon = null;
+    [SerializeField] private Projectile projectile = null;
+    private ThrowProjectile projectileController;
     [SerializeField] private Transform checkingGroundRayPos;
 
     [SerializeField] private bool isDead = false;
@@ -71,9 +73,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float skill1_range;
     [SerializeField] private float kickWallTime;
     [SerializeField] private float currentKickWallTime;
+    private bool isSwap;
+    private bool isAimingProjectile;
    
     [SerializeField] private int currentWeaponNum;
-    private bool isSwap;
+    int tempWeaponNum;
+
 
     private bool isMoveAim;
     private Vector3 climbUpPos = Vector3.zero;
@@ -149,6 +154,7 @@ public class PlayerController : MonoBehaviour
         originBodyColliderHeight = bodyCollider.height;
         currentKickWallTime = 0;
         originAimPos = aimPos.localPosition;
+        projectileController = this.GetComponent<ThrowProjectile>();
         currentWeaponNum = 1;
 
         hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
@@ -185,6 +191,7 @@ public class PlayerController : MonoBehaviour
             originBodyColliderHeight = bodyCollider.height;
             currentKickWallTime = 0;
             originAimPos = aimPos.position;
+            projectileController = this.GetComponent<ThrowProjectile>();
             currentWeaponNum = 1;
 
             hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
@@ -218,7 +225,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (!weapon.GetIsReload() && !isSwap)
+        if (!isSwap)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
@@ -228,9 +235,26 @@ public class PlayerController : MonoBehaviour
             {
                 SwapWeapon(2);
             }
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+
+                    SwapWeapon(4);
+
+
+            }
         }
 
-        
+        if(projectile != null)
+        {
+
+            if (projectile.GetHaveNum() == 0)
+            {
+                SwapWeapon(1);
+            }
+
+        }
+
+
 
         //if (hand.childCount > 0)
         //{
@@ -602,9 +626,10 @@ public class PlayerController : MonoBehaviour
             currentDashPower = dashPower;
         }
 
-        if (weapon != null)
+
+        if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap)
         {
-            if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap)
+            if (currentWeaponNum != 4)
             {
                 if (weapon.Fire())
                 {
@@ -618,41 +643,60 @@ public class PlayerController : MonoBehaviour
 
                     currentCombatTime = combatTime;
                 }
-            }
 
-        }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (weapon.CanReload() && !isSwap)
-            {
-                isAiming = false;
-                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                mainCam.FovReset();
-                weapon.SetIsReload(true);
-                //hand.localRotation = handOriginRot;
-                //hand.localPosition = handOriginPos;
-                //lastAngle_hand = handOriginRot;
-                //lastPos_hand = handOriginPos;
-                handFireRot = Quaternion.Euler(Vector3.zero);
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1) && !weapon.GetIsReload())
-        {
-            isAiming = !isAiming;
-            isMoveAim = true;
-
-            if (isAiming)
-            {
-                weapon.SetIsReload(false);
-                mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
-                mainCam.SetOriginFov(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f);
             }
             else
             {
-                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                mainCam.FovReset();
+                projectileController.AimingProjectile();
+                isAimingProjectile = true;
+            }
+        }
+        else if(Input.GetMouseButtonUp(0) && isAimingProjectile)
+        {
+            projectileController.LaunchProjectile();
+            projectile.DecreaseHaveNum();
+            isAimingProjectile = false;
+        }
+
+
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (currentWeaponNum != 4)
+            {
+                if (weapon.CanReload() && !isSwap)
+                {
+                    isAiming = false;
+                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                    mainCam.FovReset();
+                    weapon.SetIsReload(true);
+                    //hand.localRotation = handOriginRot;
+                    //hand.localPosition = handOriginPos;
+                    //lastAngle_hand = handOriginRot;
+                    //lastPos_hand = handOriginPos;
+                    handFireRot = Quaternion.Euler(Vector3.zero);
+                }
+            }
+        }
+
+        if (currentWeaponNum != 4)
+        {
+            if (Input.GetMouseButtonDown(1) && !weapon.GetIsReload())
+            {
+                isAiming = !isAiming;
+                isMoveAim = true;
+
+                if (isAiming)
+                {
+                    weapon.SetIsReload(false);
+                    mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
+                    mainCam.SetOriginFov(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f);
+                }
+                else
+                {
+                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                    mainCam.FovReset();
+                }
             }
         }
 
@@ -948,43 +992,46 @@ public class PlayerController : MonoBehaviour
 
     private void HandAnimation()
     {
-        if (weapon.GetIsReload())
+        if (currentWeaponNum != 4)
         {
-            lastAngle_hand = hand.localRotation;
-            lastPos_hand = Vector3.Lerp(lastPos_hand, handOriginPos, Time.deltaTime * 15);
-
-            hand.localPosition = lastPos_hand;
-            hand.localRotation = lastAngle_hand;
-        }
-        else
-        {
-            handFireRot = Quaternion.Lerp(handFireRot, Quaternion.Euler(0, 0, 0), Time.deltaTime * 15);
-
-            if (!isSwap)
-            {
-                if (isAiming)
-                {
-
-                    lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(Quaternion.Euler(0, 0, 0).eulerAngles + handFireRot.eulerAngles * 2), Time.deltaTime * 10);
-                    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
-                    hand.localRotation = lastAngle_hand;
-                    hand.localPosition = lastPos_hand;
-                }
-                else
-                {
-                    lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 40);
-                    lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 40);
-                    hand.localRotation = lastAngle_hand;
-                    hand.localPosition = lastPos_hand;
-                }
-            }
-            else
+            if (weapon.GetIsReload())
             {
                 lastAngle_hand = hand.localRotation;
-                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
+                lastPos_hand = Vector3.Lerp(lastPos_hand, handOriginPos, Time.deltaTime * 15);
 
                 hand.localPosition = lastPos_hand;
                 hand.localRotation = lastAngle_hand;
+            }
+            else
+            {
+                handFireRot = Quaternion.Lerp(handFireRot, Quaternion.Euler(0, 0, 0), Time.deltaTime * 15);
+
+                if (!isSwap)
+                {
+                    if (isAiming)
+                    {
+
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(Quaternion.Euler(0, 0, 0).eulerAngles + handFireRot.eulerAngles * 2), Time.deltaTime * 10);
+                        lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
+                        hand.localRotation = lastAngle_hand;
+                        hand.localPosition = lastPos_hand;
+                    }
+                    else
+                    {
+                        lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 40);
+                        lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 40);
+                        hand.localRotation = lastAngle_hand;
+                        hand.localPosition = lastPos_hand;
+                    }
+                }
+                else
+                {
+                    lastAngle_hand = hand.localRotation;
+                    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
+
+                    hand.localPosition = lastPos_hand;
+                    hand.localRotation = lastAngle_hand;
+                }
             }
         }
     }
@@ -996,10 +1043,23 @@ public class PlayerController : MonoBehaviour
 
     private void SwapWeapon(int num)
     {
-        if (currentWeaponNum == num)
+        if (currentWeaponNum == num || hand.childCount < num || hand.GetChild(num - 1).childCount == 0)
             return;
 
-        currentWeaponNum = num;
+        if(currentWeaponNum != 4)
+        {
+            if (weapon.GetIsReload())
+                return;
+        }
+
+        if(num == 4)
+        {
+            GameObject temp = hand.GetChild(num - 1).GetChild(0).gameObject;
+            if (temp.GetComponent<Projectile>().GetHaveNum() == 0)
+                return;
+        }
+
+        tempWeaponNum = num;
 
         isSwap = true;
 
@@ -1011,16 +1071,17 @@ public class PlayerController : MonoBehaviour
 
         hand.GetComponent<Animator>().SetBool("isSwap", true);
 
-        weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).GetChild(0).gameObject;
-        weapon = weapon_gameObject.GetComponent<Gun>();
+        //weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).GetChild(0).gameObject;
+        //weapon = weapon_gameObject.GetComponent<Gun>();
 
-        if (weapon.GetOwner() == null)
-            weapon.SetOwner(this.gameObject, hand);
+        //if (weapon.GetOwner() == null)
+        //    weapon.SetOwner(this.gameObject, hand);
     }
 
     public void SwapWeapon()
     {
- 
+        currentWeaponNum = tempWeaponNum;
+
         for (int i = 0; i < hand.childCount; i++)
         {
             hand.GetChild(i).gameObject.SetActive(false);
@@ -1028,7 +1089,26 @@ public class PlayerController : MonoBehaviour
 
         hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
 
-    
+        
+
+        if (currentWeaponNum != 4)
+        {
+            weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).GetChild(0).gameObject;
+            weapon = weapon_gameObject.GetComponent<Gun>();
+            projectile = null;
+
+            if (weapon.GetOwner() == null)
+                weapon.SetOwner(this.gameObject, hand);
+        }
+        else
+        {
+            weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).gameObject;
+            projectile = weapon_gameObject.GetComponent<Projectile>();
+            weapon = null;
+            
+        }
+
+
     }
 
     private void CheckingHp()

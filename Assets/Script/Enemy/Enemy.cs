@@ -179,7 +179,9 @@ public class Enemy : MonoBehaviour
     public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
     {
         if (!GameManager.Instance.GetIsCombat())
+        {
             return;
+        }
 
         currentHp -= damage;
 

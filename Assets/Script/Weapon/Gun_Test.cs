@@ -61,7 +61,9 @@ public class Gun_Test : Gun
             if (currentAmmo > 0 && !isShot)
                 canShot = true;
             else
+            {
                 canShot = false;
+            }
         }
         else
         {

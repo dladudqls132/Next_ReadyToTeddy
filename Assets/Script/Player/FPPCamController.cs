@@ -134,15 +134,22 @@ public class FPPCamController : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (GameManager.Instance.GetPlayer().GetWeapon().GetIsReload())
+        if (GameManager.Instance.GetPlayer().GetCurrentWeaponNum() != 4)
         {
-            //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
-            this.GetComponent<Animator>().SetBool("isReload", true);
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + this.GetComponent<Animator>().rootRotation.eulerAngles);
+            if (GameManager.Instance.GetPlayer().GetWeapon().GetIsReload())
+            {
+                //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
+                this.GetComponent<Animator>().SetBool("isReload", true);
+                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + this.GetComponent<Animator>().rootRotation.eulerAngles);
+            }
+            else
+            {
+                this.GetComponent<Animator>().SetBool("isReload", false);
+                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+            }
         }
         else
         {
-            this.GetComponent<Animator>().SetBool("isReload", false);
             transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
         }
     }
