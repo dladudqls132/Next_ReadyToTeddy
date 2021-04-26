@@ -31,7 +31,6 @@ public class UI_Ammo : MonoBehaviour
 
                 if (!gun.GetIsReload() && gun.GetCurrentAmmoCount() <= 1)
                 {
-                    Debug.Log(gun.gameObject);
                     image_reload.enabled = true;
                 }
                 else

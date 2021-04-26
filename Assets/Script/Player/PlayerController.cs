@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CapsuleCollider groundCollider = null;
     [SerializeField] private Transform hand = null;
 
+    private Quaternion lastAngle_hand;
+    [SerializeField] private Vector3 lastPos_hand;
+
     [SerializeField] private GameObject weapon_gameObject = null;
     [SerializeField] private Gun weapon = null;
     [SerializeField] private Transform checkingGroundRayPos;
@@ -132,6 +135,7 @@ public class PlayerController : MonoBehaviour
         headBobValue = 0;
         headOriginY = camPos.localPosition.y;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
+        if(hand == null)
         hand = mainCam.transform.Find("HandPos");
         currentHP = maxHP;
         handOriginPos = hand.localPosition;
@@ -167,7 +171,8 @@ public class PlayerController : MonoBehaviour
             headBobValue = 0;
             headOriginY = camPos.localPosition.y;
             mainCam = Camera.main.transform.GetComponent<FPPCamController>();
-            hand = mainCam.transform.Find("HandPos");
+            if (hand == null)
+                hand = mainCam.transform.Find("HandPos");
             currentHP = maxHP;
             handOriginPos = hand.parent.localPosition;
             handOriginRot = hand.parent.localRotation;
@@ -625,8 +630,10 @@ public class PlayerController : MonoBehaviour
                 mainCam.SetOriginFov(mainCam.GetRealOriginFov());
                 mainCam.FovReset();
                 weapon.SetIsReload(true);
-                hand.localRotation = handOriginRot;
+                //hand.localRotation = handOriginRot;
                 //hand.localPosition = handOriginPos;
+                //lastAngle_hand = handOriginRot;
+                //lastPos_hand = handOriginPos;
                 handFireRot = Quaternion.Euler(Vector3.zero);
             }
         }
@@ -941,87 +948,50 @@ public class PlayerController : MonoBehaviour
 
     private void HandAnimation()
     {
-
-
-        if (!isSwap)
+        if (weapon.GetIsReload())
         {
-            if (isAiming)
-            {
-                if (isGrounded)
-                    isRun = false;
+            lastAngle_hand = hand.localRotation;
+            lastPos_hand = Vector3.Lerp(lastPos_hand, handOriginPos, Time.deltaTime * 15);
 
-                if (isMoveAim)
+            hand.localPosition = lastPos_hand;
+            hand.localRotation = lastAngle_hand;
+        }
+        else
+        {
+            handFireRot = Quaternion.Lerp(handFireRot, Quaternion.Euler(0, 0, 0), Time.deltaTime * 15);
+
+            if (!isSwap)
+            {
+                if (isAiming)
                 {
 
-                    hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
-                    hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 35);
-
-
-                    if (Vector3.Distance(hand.localPosition, new Vector3(0, -0.08f, 0.087f)) < 0.001f)
-                    {
-                        hand.localPosition = new Vector3(0, -0.08f, 0.087f);
-                        hand.localRotation = Quaternion.Euler(0, 0, 0);
-                        isMoveAim = false;
-                    }
-
-
+                    lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(Quaternion.Euler(0, 0, 0).eulerAngles + handFireRot.eulerAngles * 2), Time.deltaTime * 10);
+                    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
+                    hand.localRotation = lastAngle_hand;
+                    hand.localPosition = lastPos_hand;
+                }
+                else
+                {
+                    lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 40);
+                    lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 40);
+                    hand.localRotation = lastAngle_hand;
+                    hand.localPosition = lastPos_hand;
                 }
             }
             else
             {
-                if (isMoveAim)
-                {
-                    hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
-                    hand.localRotation = Quaternion.Lerp(hand.localRotation, handOriginRot, Time.deltaTime * 35);
+                lastAngle_hand = hand.localRotation;
+                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
 
-                    if (Vector3.Distance(hand.localPosition, handOriginPos) < 0.001f)
-                    {
-                        hand.localPosition = handOriginPos;
-                        hand.localRotation = handOriginRot;
-                        isMoveAim = false;
-                    }
-
-                }
-            }
-        }
-
-        if (weapon.GetIsReload())
-        {
-            //hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles.x, handOriginRot.eulerAngles.y, -30), Time.deltaTime * 12);
-            
-            
-        }
-        else
-        {
-                    handFireRot = Quaternion.Lerp(handFireRot, Quaternion.Euler(0, 0, 0), Time.deltaTime * 15);
-            if (!isMoveAim)
-            {
-                if (!isSwap)
-                {
-                    if (isAiming)
-                    {
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 10);
-                        hand.localPosition = Vector3.Lerp(hand.localPosition, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 35);
-                    }
-                    else
-                    {
-                        hand.localRotation = Quaternion.Lerp(hand.localRotation, Quaternion.Euler(handOriginRot.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 10);
-                        hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
-
-                    }
-                }
-                
-
+                hand.localPosition = lastPos_hand;
+                hand.localRotation = lastAngle_hand;
             }
         }
     }
 
     private void LateUpdate()
     {
-        if(weapon.GetIsReload())
-        {
-            hand.localPosition = Vector3.Lerp(hand.localPosition, handOriginPos, Time.deltaTime * 25);
-        }
+        HandAnimation();
     }
 
     private void SwapWeapon(int num)
@@ -1033,10 +1003,6 @@ public class PlayerController : MonoBehaviour
 
         isSwap = true;
 
-        hand.GetComponent<Animator>().applyRootMotion = false;
-
-        hand.localPosition = handOriginPos;
-        hand.localRotation = handOriginRot;
         handFireRot = Quaternion.Euler(0, 0, 0);
 
         isAiming = false;
@@ -1054,7 +1020,7 @@ public class PlayerController : MonoBehaviour
 
     public void SwapWeapon()
     {
-        hand.GetComponent<Animator>().applyRootMotion = true;
+ 
         for (int i = 0; i < hand.childCount; i++)
         {
             hand.GetChild(i).gameObject.SetActive(false);
