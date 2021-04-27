@@ -13,6 +13,8 @@ public class Gun_Test : Gun
     // Update is called once per frame
     void Update()
     {
+        //CheckingParent();
+
         if (owner != null)
         {
             if (isShot)
@@ -105,13 +107,13 @@ public class Gun_Test : Gun
         {
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
-                currentSpreadAngle = originSpreadAngle;
+                currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.05f, 0.06f);
                 handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
             }
             else
             {
-                currentSpreadAngle = aimingSpreadAngle;
+                currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.05f, 0.06f);
                 handFireRot = mainCam.SetFireRecoilRot(new Vector3(4.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
             }
@@ -159,9 +161,12 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-                        GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
+       
+                        GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                        tempObect.transform.position = hit2.point;
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                        tempObect.transform.SetParent(hit2.transform);
+                        tempObect.transform.SetParent(hit2.transform, true);
+                        tempObect.SetActive(true);
                     }
                 }
 

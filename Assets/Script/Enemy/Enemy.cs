@@ -58,6 +58,17 @@ public class Enemy : MonoBehaviour
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
 
+    public void SetInfo(EnemyType enemyType, CharacterMaterial material, float hp, float speed_min, float speed_max, float detectRange, float attackRange)
+    {
+        this.enemyType = enemyType;
+        this.material = material;
+        this.maxHp = hp;
+        this.speed_min = speed_min;
+        this.speed_max = speed_max;
+        this.detectRange = detectRange;
+        this.attackRange = attackRange;
+    }
+
     virtual protected void Start()
     {
         currentHp = maxHp;

@@ -14,6 +14,8 @@ public class Gun_AR : Gun
     // Update is called once per frame
     void Update()
     {
+        //CheckingParent();
+
         if (owner != null)
         {
             if (isShot)
@@ -68,11 +70,7 @@ public class Gun_AR : Gun
         }
         else
         {
-            canShot = false;
-            isReload = false;
-            currentReloadTime = reloadTime;
-            currentShotDelay = shotDelay;
-            isShot = false;
+            ResetInfo();
         }
     }
 
@@ -104,13 +102,13 @@ public class Gun_AR : Gun
         {
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
-                currentSpreadAngle = originSpreadAngle;
+                currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.02f, 0.015f);
                 handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
             }
             else
             {
-                currentSpreadAngle = aimingSpreadAngle;
+                currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.02f, 0.015f);
                 handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
             }
@@ -155,9 +153,11 @@ public class Gun_AR : Gun
                 }
                 else
                 {
-                    GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
+                    GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                    tempObect.transform.position = hit.point;
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                    tempObect.transform.SetParent(hit2.transform);
+                    tempObect.transform.SetParent(hit2.transform, true);
+                    tempObect.SetActive(true);
                 }
             }
 
