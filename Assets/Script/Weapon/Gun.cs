@@ -13,7 +13,10 @@ public class Gun : MonoBehaviour
     [SerializeField] protected GunType gunType;
     [SerializeField] protected Vector3 originPos;
     [SerializeField] protected Vector3 originRot;
+    [SerializeField] protected Vector3 aimingPos;
+    [SerializeField] protected Vector3 aimingRot;
 
+    [SerializeField] protected GameObject item;
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
     [SerializeField] protected Transform shotPos;
@@ -41,6 +44,12 @@ public class Gun : MonoBehaviour
     [SerializeField] protected bool isDroped;
     [SerializeField] protected bool isPlayerEnter;
 
+    //[SerializeField] private Transform meshRoot;
+    [SerializeField] MeshRenderer[] mesh;
+
+    public Vector3 GetOriginPos() { return originPos; }
+    public Vector3 GetOriginRot() { return originRot; }
+
     protected Vector3 direction;
 
     public void SetInfo(GunType gunType, float damagePerBullet, int maxAmmo, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
@@ -61,6 +70,33 @@ public class Gun : MonoBehaviour
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
+
+        //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
+
+        //foreach(MeshRenderer m in tempMesh)
+        //{
+        //    m.enabled = false;
+        //}
+
+
+        for (int i = 0; i < mesh.Length; i++)
+        {
+            mesh[i].enabled = false;
+        }
+    }
+
+    public void SetIsAiming(bool value)
+    {
+        if (value)
+        {
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(aimingRot), Time.deltaTime * 25);
+            this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, aimingPos, Time.deltaTime * 25);
+        }
+        else
+        {
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(originRot), Time.deltaTime * 25);
+            this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, originPos, Time.deltaTime * 25);
+        }
     }
 
     public GunType GetGunType() { return gunType; }
@@ -75,14 +111,28 @@ public class Gun : MonoBehaviour
     { 
         owner = who; 
         this.hand = hand;
- 
-        //for (int i = 0; i < hand.childCount; i++)
-        //{
-        //    if (!hand.GetChild(i).gameObject.activeSelf)
-        //    {
-        //        this.transform.SetParent(hand);
-        //    }
-        //}
+
+        if (owner != null)
+        {
+            this.transform.localPosition = originPos;
+            this.transform.localRotation = Quaternion.Euler(originRot);
+
+            for(int i = 0; i < mesh.Length; i++)
+            {
+                mesh[i].enabled = true;
+            }
+
+            item.SetActive(false);
+        }
+        else
+        {
+            for (int i = 0; i < mesh.Length; i++)
+            {
+                mesh[i].enabled = false;
+            }
+
+            item.SetActive(true);
+        }
     }
     public GameObject GetOwner() { return owner; }
 
@@ -103,7 +153,7 @@ public class Gun : MonoBehaviour
     virtual public bool Fire() { return false; }
     public bool CanReload() { if (currentAmmo < maxAmmo && !isReload) return true; return false; }
 
-    protected virtual void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
+    virtual public void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
 
     //protected void CheckingParent()
     //{

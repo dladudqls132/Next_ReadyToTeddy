@@ -9,7 +9,7 @@ public class HandAnimController : MonoBehaviour
 
     private void Update()
     {
-        currentWeapon = GameManager.Instance.GetPlayer().GetWeapon();
+        currentWeapon = GameManager.Instance.GetPlayer().GetGun();
         player = GameManager.Instance.GetPlayer();
     }
 
