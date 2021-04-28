@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum SlotType
 {
+    Hand,
     Gun,
     Projectile
 }
@@ -95,7 +96,9 @@ public class Inventory : MonoBehaviour
                     {
                         slots[i].weapon = weapon;
                         slots[i].isEmpty = false;
+                        weapon.gameObject.SetActive(false);
                         weapon.transform.SetParent(slots[i].transform);
+                        weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand());
 
                         return;
                     }
@@ -104,19 +107,60 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void SwapWeapon(int slotNum)
+    public void SetAnyWeapon()
     {
-        if(slots[slotNum].weapon != null)
+        for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[slotNum].weapon == player.GetWeaponGameObject())
-                return;
-
-            if(player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
+            if (!slots[i].isEmpty)
             {
-                slots[slotNum].isEmpty = false;
+                if (player.SetWeapon(slots[i].slotType, slots[i].weapon))
+                {
+                    currentSlotNum = i;
+                    return;
+                }
+            }
+        }
+    }
+
+        public void SwapWeapon(int slotNum)
+    {
+        if (slots[slotNum].slotType == SlotType.Gun)
+        {
+            if (slots[slotNum].weapon != null)
+            {
+                if (slots[slotNum].weapon == player.GetWeaponGameObject())
+                    return;
+
+                if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
+                {
+                    currentSlotNum = slotNum;
+                }
+            }
+        }
+        else if(slots[slotNum].slotType == SlotType.Projectile)
+        {
+            if (slots[slotNum].weapon != null)
+            {
+                if (slots[slotNum].weapon == player.GetWeaponGameObject())
+                {
+                    slots[slotNum].weapon.GetComponent<Projectile>().IncreaseHaveNum();
+                    return;
+                }
+                else
+                {
+                    if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
+                    {
+                        currentSlotNum = slotNum;
+                    }
+                }
+            }
+        }
+        else if(slots[slotNum].slotType == SlotType.Hand)
+        {
+            if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
+            {
                 currentSlotNum = slotNum;
             }
-            
         }
     }
 

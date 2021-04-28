@@ -129,7 +129,7 @@ public class Gun_Test : Gun
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment"))))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
                 {
                     direction = (hit.point - Camera.main.transform.position).normalized;
                 }
@@ -143,7 +143,7 @@ public class Gun_Test : Gun
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment")), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide))
                 {
                     if (hit2.transform.CompareTag("Enemy"))
                     {

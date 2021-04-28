@@ -170,16 +170,26 @@ public class PlayerController : MonoBehaviour
             this.weapon_gameObject.SetActive(false);
 
         this.weapon_gameObject = tempWeapon;
-        this.weapon_gameObject.SetActive(true);
+        if (this.weapon_gameObject != null)
+        {
+            this.weapon_gameObject.SetActive(true);
 
-        if (tempWeapon.GetComponent<Gun>() != null)
-        {
-            this.gun = tempWeapon.GetComponent<Gun>();
-            this.projectile = null;
+            if (tempWeapon.GetComponent<Gun>() != null)
+            {
+                this.gun = tempWeapon.GetComponent<Gun>();
+                projectileController.SetProjectile(null);
+                this.projectile = null;
+            }
+            else if (tempWeapon.GetComponent<Projectile>() != null)
+            {
+                this.projectile = tempWeapon.GetComponent<Projectile>();
+                projectileController.SetProjectile(projectile.projectile.GetComponent<Rigidbody>());
+                this.gun = null;
+            }
         }
-        else if (tempWeapon.GetComponent<Projectile>() != null)
+        else
         {
-            this.projectile = tempWeapon.GetComponent<Projectile>();
+            this.projectile = null;
             this.gun = null;
         }
 
@@ -755,7 +765,7 @@ public class PlayerController : MonoBehaviour
 
             if(projectile.GetHaveNum() == 0)
             {
-                inventory.SwapWeapon(1);
+                inventory.SetAnyWeapon();
             }
         }
 
@@ -1303,38 +1313,8 @@ public class PlayerController : MonoBehaviour
 
     public void PickUpWeapon()
     {
-        //if (collisionWeapon.Count == 0)
-        //    return;
-
-        //RaycastHit hit;
-        //if (Physics.Raycast(camPos.position, camPos.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Weapon")))
-        //{
-        //    for (int i = 0; i < collisionWeapon.Count; i++)
-        //    {
-        //        if (hit.transform.gameObject == collisionWeapon[i].gameObject)
-        //        {
-        //            if (collisionWeapon[i].GetComponent<Gun>() != null)
-        //            {
-        //                for (int j = 0; j < slot.Count; j++)
-        //                {
-        //                    if (!slot[j].gameObject.activeSelf)
-        //                    {
-        //                       // collisionWeapon[i].GetComponent<Gun>().SetOwner(this.gameObject, hand, slot[j]);
-        //                       // slot[j].gameObject.SetActive(true);
-        //                        return;
-        //                    }
-        //                }
-        //            }
-        //            else if(collisionWeapon[i].GetComponent<Projectile>() != null)
-        //            {
-
-        //            }
-        //        }
-        //    }
-        //}
-
         RaycastHit hit;
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 5, 1 << LayerMask.NameToLayer("Item")))
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Item")))
         {
 
                 inventory.AddWeapon(hit.transform.parent.gameObject);

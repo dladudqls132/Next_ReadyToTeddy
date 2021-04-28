@@ -13,6 +13,7 @@ public class ThrowProjectile : MonoBehaviour
 
     private Camera cam;
     private Vector3 velocity;
+    public void SetProjectile(Rigidbody temp) { projectile = temp; } 
 
     private void Start()
     {
