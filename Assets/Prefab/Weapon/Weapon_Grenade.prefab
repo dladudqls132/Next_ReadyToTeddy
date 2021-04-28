@@ -40,7 +40,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277300805}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 3, y: 3, z: 3}
@@ -146,11 +146,11 @@ MonoBehaviour:
   aimingPos: {x: 0, y: 0, z: 0}
   aimingRot: {x: 0, y: 0, z: 0}
   haveNum: 1
-  damage: 0
-  maxHaveNum: 0
-  remainingTime: 0
-  explosionRadius: 0
-  explosionPower: 0
+  damage: 2000
+  maxHaveNum: 3
+  remainingTime: 3
+  explosionRadius: 8
+  explosionPower: 100
   particle: {fileID: 0}
   mesh:
   - {fileID: 47055497224119104}

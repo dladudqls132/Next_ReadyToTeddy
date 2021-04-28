@@ -89,11 +89,15 @@ public class Gun : MonoBehaviour
     {
         if (value)
         {
+            mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
+
             this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(aimingRot), Time.deltaTime * 25);
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, aimingPos, Time.deltaTime * 25);
         }
         else
         {
+            mainCam.FovReset();
+
             this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(originRot), Time.deltaTime * 25);
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, originPos, Time.deltaTime * 25);
         }
@@ -141,6 +145,8 @@ public class Gun : MonoBehaviour
 
     public virtual void SetIsReload(bool value)
     {
+        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        mainCam.FovReset();
         isReload = value;
         hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
         hand.GetComponent<Animator>().ResetTrigger("Fire_Auto");

@@ -779,8 +779,7 @@ public class PlayerController : MonoBehaviour
                     if (gun.CanReload() && !isSwap)
                     {
                         isAiming = false;
-                        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                        mainCam.FovReset();
+                   
                         gun.SetIsReload(true);
                         //hand.localRotation = handOriginRot;
                         //hand.localPosition = handOriginPos;
@@ -803,14 +802,8 @@ public class PlayerController : MonoBehaviour
                     if (isAiming)
                     {
                         gun.SetIsReload(false);
-                        mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
-                        mainCam.SetOriginFov(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f);
                     }
-                    else
-                    {
-                        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                        mainCam.FovReset();
-                    }
+
                 }
             }
         

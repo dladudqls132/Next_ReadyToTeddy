@@ -33,8 +33,11 @@ public class Inventory : MonoBehaviour
 
         for(int i = 0; i < slots.Count; i++)
         {
-            slots[i].isEmpty = true;
-            slots[i].transform = player.GetHand().GetChild(i);
+            if (slots[i].slotType != SlotType.Hand)
+            {
+                slots[i].isEmpty = true;
+                slots[i].transform = player.GetHand().GetChild(i);
+            }
         }
     }
 
@@ -104,6 +107,18 @@ public class Inventory : MonoBehaviour
                     }
                 }
             }
+            else
+            {
+                if (weapon.GetComponent<Projectile>() != null)
+                {
+                    if (slots[i].slotType == SlotType.Projectile)
+                    {
+                        weapon.gameObject.SetActive(false);
+                        slots[i].weapon.GetComponent<Projectile>().IncreaseHaveNum();
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -143,7 +158,6 @@ public class Inventory : MonoBehaviour
             {
                 if (slots[slotNum].weapon == player.GetWeaponGameObject())
                 {
-                    slots[slotNum].weapon.GetComponent<Projectile>().IncreaseHaveNum();
                     return;
                 }
                 else

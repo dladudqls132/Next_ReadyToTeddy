@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 [CreateAssetMenu(fileName = "WeaponInfo", menuName = "Scriptable Object Asset/Weapon Info")]
 public class WeaponInfo : ScriptableObject
@@ -36,12 +37,14 @@ public class WeaponInfo : ScriptableObject
         {
             Gun temp = guns[i].prefab.GetComponent<Gun>();
             temp.SetInfo(guns[i].gunType, guns[i].damagePerBullet, guns[i].maxAmmo, guns[i].fireNum, guns[i].spreadAngle_normal, guns[i].spreadAngle_aiming, guns[i].shotDelay);
+            EditorUtility.SetDirty(temp);
         }
 
         for(int i = 0; i < projeciles.Length; i++)
         {
             Projectile temp = projeciles[i].prefab.GetComponent<Projectile>();
             temp.SetInfo(projeciles[i].damage, projeciles[i].explosionPower, projeciles[i].explosionRadius, projeciles[i].maxHaveNum, projeciles[i].remainingTime);
+            EditorUtility.SetDirty(temp);
         }
     }
 
