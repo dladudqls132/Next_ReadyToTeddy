@@ -23,8 +23,11 @@ public class Projectile : MonoBehaviour
     protected Rigidbody rigid;
     protected GameObject owner;
     protected Transform hand;
+    protected FPPCamController mainCam;
 
     [SerializeField] MeshRenderer[] mesh;
+
+    public GameObject GetItem() { return item; }
 
     public void SetHaveNum(int value) { haveNum = value; }
     public int GetHaveNum() { return haveNum; }
@@ -42,13 +45,24 @@ public class Projectile : MonoBehaviour
         this.remainingTime = remainingTime;
     }
 
-    public void SetOwner(GameObject who, Transform hand)
+    public void SetOwner(GameObject who, Transform hand, Transform parent)
     {
         owner = who;
         this.hand = hand;
 
         if (owner != null)
         {
+            Collider[] c = this.GetComponents<Collider>();
+            foreach (Collider temp in c)
+            {
+                temp.enabled = false;
+            }
+
+            rigid.velocity = Vector3.zero;
+            rigid.useGravity = false;
+
+            this.transform.SetParent(parent);
+
             this.transform.localPosition = originPos;
             this.transform.localRotation = Quaternion.Euler(originRot);
 
@@ -61,6 +75,17 @@ public class Projectile : MonoBehaviour
         }
         else
         {
+            this.transform.SetParent(null);
+
+            Collider[] c = this.GetComponents<Collider>();
+            foreach (Collider temp in c)
+            {
+                temp.enabled = true;
+            }
+
+            rigid.useGravity = true;
+            rigid.AddForce(mainCam.transform.forward * 5, ForceMode.Impulse);
+
             for (int i = 0; i < mesh.Length; i++)
             {
                 mesh[i].enabled = false;
@@ -76,6 +101,7 @@ public class Projectile : MonoBehaviour
     {
         currentRemainingTime = remainingTime;
         rigid = this.GetComponent<Rigidbody>();
+        mainCam = Camera.main.transform.GetComponent<FPPCamController>();
 
         for (int i = 0; i < mesh.Length; i++)
         {

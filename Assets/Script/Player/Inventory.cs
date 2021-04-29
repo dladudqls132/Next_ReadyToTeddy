@@ -71,10 +71,38 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void DropWeapon()
+    {
+        if(slots[currentSlotNum].slotType == SlotType.Gun)
+        {
+            if(slots[currentSlotNum].weapon != null)
+            {
+                slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
+                slots[currentSlotNum].weapon = null;
+                slots[currentSlotNum].isEmpty = true;
+                SetAnyWeapon();
+            }
+        }
+    }
+
+    public void ChangeWeapon(GameObject weapon)
+    {
+        if (weapon.GetComponent<Gun>() != null)
+        {
+            if (slots[currentSlotNum].slotType == SlotType.Gun)
+            {
+                slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
+
+                slots[currentSlotNum].weapon = weapon;
+                weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[currentSlotNum].transform);
+                weapon.gameObject.SetActive(false);
+                SwapWeapon(currentSlotNum);
+            }
+        }
+    }
+
     public void AddWeapon(GameObject weapon)
     {
-
-
         for(int i = 0; i < slots.Count; i++)
         {
             if(slots[i].isEmpty)
@@ -86,8 +114,7 @@ public class Inventory : MonoBehaviour
                         slots[i].weapon = weapon;
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
-                        weapon.transform.SetParent(slots[i].transform);
-                        weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand());
+                        weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
 
                         SwapWeapon(i);
                         return;
@@ -100,8 +127,7 @@ public class Inventory : MonoBehaviour
                         slots[i].weapon = weapon;
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
-                        weapon.transform.SetParent(slots[i].transform);
-                        weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand());
+                        weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
 
                         return;
                     }
@@ -137,7 +163,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-        public void SwapWeapon(int slotNum)
+        private void SwapWeapon(int slotNum)
     {
         if (slots[slotNum].slotType == SlotType.Gun)
         {

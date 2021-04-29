@@ -98,6 +98,9 @@ public class PlayerController : MonoBehaviour
     private bool isPushed;
     private Vector3 originAimPos;
     private Quaternion handFireRot;
+    private float pickupTime = 0.5f;
+    private float currentPickupTime;
+    private bool isPickup;
 
 
     private bool isInit = false;
@@ -148,8 +151,14 @@ public class PlayerController : MonoBehaviour
                 return false;
         }
 
-
         tempWeapon = weapon;
+
+        if(tempWeapon == null)
+        {
+            this.weapon_gameObject = tempWeapon;
+            this.gun = null;
+            this.projectile = null;
+        }
 
         isSwap = true;
         
@@ -166,10 +175,13 @@ public class PlayerController : MonoBehaviour
 
     public void SwapWeapon()
     {
-        if(this.weapon_gameObject != null)
+        if (this.weapon_gameObject != null && this.weapon_gameObject.transform.parent != null)
             this.weapon_gameObject.SetActive(false);
 
+
+
         this.weapon_gameObject = tempWeapon;
+
         if (this.weapon_gameObject != null)
         {
             this.weapon_gameObject.SetActive(true);
@@ -344,9 +356,37 @@ public class PlayerController : MonoBehaviour
             //}
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if (!isSwap)
         {
-            PickUpWeapon();
+            if (Input.GetKey(KeyCode.E))
+            {
+                if (!isPickup)
+                {
+                    currentPickupTime += Time.deltaTime;
+
+                    if (currentPickupTime >= pickupTime)
+                    {
+                        currentPickupTime = 0;
+                        isPickup = true;
+                        PickUpWeapon_Change();
+                    }
+                }
+            }
+            else if (Input.GetKeyUp(KeyCode.E))
+            {
+                if (!isPickup)
+                {
+                    PickUpWeapon();
+                }
+
+                currentPickupTime = 0;
+                isPickup = false;
+            }
+
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                inventory.DropWeapon();
+            }
         }
 
         //if (projectile != null)
@@ -1304,14 +1344,21 @@ public class PlayerController : MonoBehaviour
         //weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 
+    public void PickUpWeapon_Change()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
+        {
+            inventory.ChangeWeapon(hit.transform.gameObject);
+        }
+    }
+
     public void PickUpWeapon()
     {
         RaycastHit hit;
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Item")))
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
         {
-
-                inventory.AddWeapon(hit.transform.parent.gameObject);
-            
+            inventory.AddWeapon(hit.transform.gameObject);
         }
     }
 

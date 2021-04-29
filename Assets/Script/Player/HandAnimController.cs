@@ -25,6 +25,7 @@ public class HandAnimController : MonoBehaviour
 
     public void SetIsSwapFinish()
     {
+
         this.GetComponent<Animator>().SetBool("isSwap", false);
         player.SetIsSwap(false);
     }

@@ -47,6 +47,8 @@ public class Gun : MonoBehaviour
     //[SerializeField] private Transform meshRoot;
     [SerializeField] MeshRenderer[] mesh;
 
+    protected Rigidbody rigid;
+
     public Vector3 GetOriginPos() { return originPos; }
     public Vector3 GetOriginRot() { return originRot; }
 
@@ -70,6 +72,7 @@ public class Gun : MonoBehaviour
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
+        rigid = this.GetComponent<Rigidbody>();
 
         //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
 
@@ -111,13 +114,25 @@ public class Gun : MonoBehaviour
     public void SetIsShot(bool value) { isShot = value; } 
     public bool GetIsRecoil() { return isRecoil; }
     public void SetIsRecoil(bool value) { isRecoil = value; }
-    public void SetOwner(GameObject who, Transform hand) 
+
+    public void SetOwner(GameObject who, Transform hand, Transform parent) 
     { 
         owner = who; 
         this.hand = hand;
 
         if (owner != null)
         {
+            Collider[] c = this.GetComponents<Collider>();
+            foreach(Collider temp in c)
+            {
+                temp.enabled = false;
+            }
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+            rigid.useGravity = false;
+
+            this.transform.SetParent(parent);
+
             this.transform.localPosition = originPos;
             this.transform.localRotation = Quaternion.Euler(originRot);
 
@@ -130,6 +145,19 @@ public class Gun : MonoBehaviour
         }
         else
         {
+            this.transform.SetParent(null);
+
+            Collider[] c = this.GetComponents<Collider>();
+            foreach (Collider temp in c)
+            {
+                temp.enabled = true;
+            }
+            rigid.useGravity = true;
+            rigid.AddForce(mainCam.transform.forward * 5, ForceMode.Impulse);
+
+            //this.transform.position = dropPos;
+            //this.transform.rotation = dropRot;
+
             for (int i = 0; i < mesh.Length; i++)
             {
                 mesh[i].enabled = false;

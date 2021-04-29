@@ -154,7 +154,7 @@ public class Gun_AR : Gun
                 else
                 {
                     GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
-                    tempObect.transform.position = hit.point;
+                    tempObect.transform.position = hit2.point;
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                     tempObect.transform.SetParent(hit2.transform, true);
                     tempObect.SetActive(true);
