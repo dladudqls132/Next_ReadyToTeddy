@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEditor;
 
 [CreateAssetMenu(fileName = "EnemyInfo", menuName = "Scriptable Object Asset/EnemyInfo")]
 public class EnemyInfo : ScriptableObject
@@ -28,6 +27,7 @@ public class EnemyInfo : ScriptableObject
         {
             Enemy temp = enemies[i].prefab.GetComponent<Enemy>();
             temp.SetInfo(enemies[i].enemyType, enemies[i].material, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange);
+            EditorUtility.SetDirty(temp);
         }
     }
 
