@@ -10,6 +10,7 @@ public class ThrowProjectile : MonoBehaviour
     [SerializeField] private GameObject cursor;
     [SerializeField] private LayerMask layer;
     [SerializeField] private int lineSegment;
+    [SerializeField] private float throwDistance;
 
     private Camera cam;
     private Vector3 velocity;
@@ -46,12 +47,12 @@ public class ThrowProjectile : MonoBehaviour
         {
             cursor.SetActive(true);
             lineVisual.enabled = true;
-            if (hit.distance < 15)
+            if (hit.distance < throwDistance)
             {
                 lineVisual.enabled = true;
                 //cursor.GetComponent<SpriteRenderer>().color = color;
                 cursor.SetActive(true);
-                cursor.transform.position = hit.point + hit.normal * 0.01f;
+                cursor.transform.position = hit.point + hit.normal * 0.02f;
                 cursor.transform.rotation = Quaternion.LookRotation(hit.normal);
               
                 Vector3 Vo = CalculateVelocity(hit.point, throwPos.position, Mathf.Clamp(Vector3.Distance(hit.point, throwPos.position) / 8.0f, 0.25f, 0.65f));
@@ -73,7 +74,7 @@ public class ThrowProjectile : MonoBehaviour
             else
             {
                 cursor.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 0 / 255f, 0 / 255f, 152 / 255f);
-                cursor.transform.position = hit.point + Vector3.up * 0.01f;
+                cursor.transform.position = hit.point + Vector3.up * 0.02f;
                 cursor.transform.rotation = Quaternion.LookRotation(hit.normal);
                 lineVisual.enabled = false;
             }

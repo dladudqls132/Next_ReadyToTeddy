@@ -135,12 +135,21 @@ public class Gun_AR : Gun
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
             {
-                if (hit2.transform.CompareTag("Enemy"))
+                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
-                    Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                    enemy.DecreaseHp(owner, damagePerBullet, hit2.point, shotDir * 200);
+                    Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+
+                    if (!hit2.transform.CompareTag("Head"))
+                    {
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, shotDir.normalized * 50);
+                    }
+                    else
+                    {
+                        enemy.DecreaseHp(owner, damagePerBullet * 10, hit2.point, hit2.transform, shotDir.normalized * 50);
+                    }
+
                     GameManager.Instance.GetCrosshair().ResetAttack();
                     if (enemy.GetIsDead())
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
@@ -154,6 +163,8 @@ public class Gun_AR : Gun
                 else
                 {
                     GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                    tempObect.transform.SetParent(null);
+                    tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
                     tempObect.transform.position = hit2.point;
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                     tempObect.transform.SetParent(hit2.transform, true);

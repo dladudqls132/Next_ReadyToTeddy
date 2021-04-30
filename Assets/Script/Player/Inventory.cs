@@ -23,6 +23,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private List<Slot> slots = new List<Slot>();
     [SerializeField] private int currentSlotNum;
     [SerializeField] private PlayerController player;
+    [SerializeField] private int tempWeaponNum;
 
     public int GetCurrentSlotNum() { return currentSlotNum; }
 
@@ -46,9 +47,7 @@ public class Inventory : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-
             SwapWeapon(0);
-
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2))
         {
@@ -58,9 +57,7 @@ public class Inventory : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-
             SwapWeapon(2);
-
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
@@ -169,9 +166,6 @@ public class Inventory : MonoBehaviour
         {
             if (slots[slotNum].weapon != null)
             {
-                if (slots[slotNum].weapon == player.GetWeaponGameObject())
-                    return;
-
                 if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
                 {
                     currentSlotNum = slotNum;
@@ -182,17 +176,12 @@ public class Inventory : MonoBehaviour
         {
             if (slots[slotNum].weapon != null)
             {
-                if (slots[slotNum].weapon == player.GetWeaponGameObject())
-                {
-                    return;
-                }
-                else
-                {
+                
                     if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
                     {
                         currentSlotNum = slotNum;
                     }
-                }
+                
             }
         }
         else if(slots[slotNum].slotType == SlotType.Hand)

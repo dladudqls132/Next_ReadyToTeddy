@@ -41,7 +41,8 @@ public class Enemy_MeleeTest : Enemy
         state = Enemy_State.None;
         agent.isStopped = true;
         currentHp = maxHp;
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
     }
 
     private void Update()

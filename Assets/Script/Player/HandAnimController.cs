@@ -21,6 +21,7 @@ public class HandAnimController : MonoBehaviour
     public void SetSwapGun()
     {
         player.SwapWeapon();
+        this.GetComponent<Animator>().SetBool("isSwap", false);
     }
 
     public void SetIsSwapFinish()

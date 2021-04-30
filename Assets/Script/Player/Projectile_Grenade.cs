@@ -36,7 +36,7 @@ public class Projectile_Grenade : Projectile
                 currentRemainingTime = remainingTime;
 
                 Vector3 explosionPos = transform.position;
-                Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius);
+                Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide);
                 foreach (Collider hit in colliders)
                 {
                     
@@ -50,31 +50,33 @@ public class Projectile_Grenade : Projectile
 
                         if (rb.CompareTag("Player"))
                         {
-                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius))
+                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")))
                             {
-                                if (!hit2.transform.CompareTag("Player"))
+                                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
                                     continue;
 
                                 PlayerController temp = rb.GetComponent<PlayerController>();
-
+                                //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
                                 //temp.SetIsPushed(true);
                             }
                         }
                         else if (rb.CompareTag("Enemy"))
                         {
-                           
-                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius))
+                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")))
                             {
-                                if (!hit2.transform.CompareTag("Enemy"))
+                                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
                                 {
+                                    Debug.Log(hit2.transform.name);
                                     continue;
                                 }
 
                                 if (GameManager.Instance.GetIsCombat())
                                 {
+                                    Debug.Log(rb.transform);
                                     Enemy temp = rb.GetComponent<Enemy>();
-                                    temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
-                                    rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                            
+                                    temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
+                                    //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
                                 }
                             }
                         }

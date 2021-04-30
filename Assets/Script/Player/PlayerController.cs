@@ -109,6 +109,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
+    public GameObject GetTempWeaponGameObject() { return tempWeapon; }
     public Gun GetGun() { return gun; }
     public bool GetIsAiming() { return isAiming; }
     public void SetIsJumpByObject(bool value, float power) { isJumpByObject = value; currentJumpPower = power; }
@@ -139,6 +140,13 @@ public class PlayerController : MonoBehaviour
 
     public bool SetWeapon(SlotType type, GameObject weapon)
     {
+
+        if (weapon == this.weapon_gameObject)
+        {
+            hand.GetComponent<Animator>().SetBool("isSwap", false);
+            return false;
+        }
+
         if (type == SlotType.Projectile)
         {
             if (weapon.GetComponent<Projectile>().GetHaveNum() == 0)
@@ -169,6 +177,7 @@ public class PlayerController : MonoBehaviour
         mainCam.FovReset();
 
         hand.GetComponent<Animator>().SetBool("isSwap", true);
+        //hand.GetComponent<Animator>().SetTrigger("isSwap_test");
 
         return true;
     }
@@ -356,33 +365,34 @@ public class PlayerController : MonoBehaviour
             //}
         }
 
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            if (!isPickup)
+            {
+                currentPickupTime += Time.deltaTime;
+
+                if (currentPickupTime >= pickupTime)
+                {
+                    currentPickupTime = 0;
+                    isPickup = true;
+                    PickUpWeapon_Change();
+                }
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.E))
+        {
+            if (!isPickup)
+            {
+                PickUpWeapon();
+            }
+
+            currentPickupTime = 0;
+            isPickup = false;
+        }
+
         if (!isSwap)
         {
-            if (Input.GetKey(KeyCode.E))
-            {
-                if (!isPickup)
-                {
-                    currentPickupTime += Time.deltaTime;
-
-                    if (currentPickupTime >= pickupTime)
-                    {
-                        currentPickupTime = 0;
-                        isPickup = true;
-                        PickUpWeapon_Change();
-                    }
-                }
-            }
-            else if (Input.GetKeyUp(KeyCode.E))
-            {
-                if (!isPickup)
-                {
-                    PickUpWeapon();
-                }
-
-                currentPickupTime = 0;
-                isPickup = false;
-            }
-
             if (Input.GetKeyDown(KeyCode.G))
             {
                 inventory.DropWeapon();

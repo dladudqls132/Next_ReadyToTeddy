@@ -25,6 +25,7 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private Transform firePos;
     [SerializeField] private float shotDelay_min;
     [SerializeField] private float shotDelay_max;
+    [SerializeField] private GameObject gun;
     private float shotDelay;
     private float currentShotDelay;
 
@@ -80,7 +81,15 @@ public class Enemy_ShooterTest : Enemy
         state = Enemy_State.None;
         agent.isStopped = true;
         currentHp = maxHp;
-        this.gameObject.SetActive(false);
+
+        GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
+        gun.SetActive(false);
+
+        temp.GetComponent<Rigidbody>().useGravity = true;
+        temp.GetComponent<Rigidbody>().isKinematic = false;
+        temp.GetComponent<Collider>().enabled = true;
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
     }
 
     // Update is called once per frame

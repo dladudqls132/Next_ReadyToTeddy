@@ -137,22 +137,33 @@ public class Gun_Test : Gun
                     direction = Camera.main.transform.forward;
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
-              
+
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
                 {
-                    if (hit2.transform.CompareTag("Enemy"))
+                    if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
-                        Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, shotDir * 330);
+                        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+
+                        if (!hit2.transform.CompareTag("Head"))
+                        {
+                            Debug.Log(hit2.transform);
+                            Debug.Log(shotDir.normalized * 100);
+                            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, shotDir.normalized * 200);
+                        }
+                        else
+                        {
+                            enemy.DecreaseHp(owner, damagePerBullet * 10, hit2.point, hit2.transform, shotDir.normalized * 50);
+                        }
+
                         GameManager.Instance.GetCrosshair().ResetAttack();
                         if (enemy.GetIsDead())
                             GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        else if(!GameManager.Instance.GetCrosshair().GetIsKill())
+                        else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                             GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                     }
                     else if(hit.transform.CompareTag("InteractiveObject"))
@@ -161,8 +172,10 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-       
+
                         GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                        tempObect.transform.SetParent(null);
+                        tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
                         tempObect.transform.position = hit2.point;
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
                         tempObect.transform.SetParent(hit2.transform, true);

@@ -98,14 +98,18 @@ public class Enemy : MonoBehaviour
 
     protected virtual void SetDead(bool value) {}
 
-    public void SetRagdoll(Vector3 damagedVelocity)
+    public void SetRagdoll(Transform damagedTrs, Vector3 damagedVelocity)
     {
-        GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
-        
-        temp.SetActive(true);
-        temp.transform.position = this.transform.position;
-        temp.transform.rotation = this.transform.rotation;
-        temp.GetComponent<Enemy_RagdollController>().AddForce(damagedVelocity);
+        //GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
+
+        //temp.SetActive(true);
+        //temp.transform.position = this.transform.position;
+        //temp.transform.rotation = this.transform.rotation;
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        if(this.GetComponent<Enemy_RagdollController>() != null)
+            this.GetComponent<Enemy_RagdollController>().AddForce(damagedTrs, damagedVelocity);
+        anim.enabled = false;
     }
 
     protected void GoToPatrolNode()
@@ -142,7 +146,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void CheckingHp(Vector3 damagedVelocity)
+    protected void CheckingHp(Transform damagedTrs, Vector3 damagedVelocity)
     {
         if (!isDead)
         {
@@ -156,7 +160,8 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
-                SetRagdoll(damagedVelocity);
+                //SetRagdoll(damagedVelocity);
+                SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
@@ -187,7 +192,7 @@ public class Enemy : MonoBehaviour
         CheckingHp();
     }
 
-    public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
+    public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity)
     {
         if (!GameManager.Instance.GetIsCombat())
         {
@@ -208,6 +213,30 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = attackObj;
 
-        CheckingHp(damagedVelocity);
+        CheckingHp(damagedTrs, damagedVelocity);
     }
+
+    //public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
+    //{
+    //    //if (!GameManager.Instance.GetIsCombat())
+    //    //{
+    //    //    return;
+    //    //}
+
+    //    //currentHp -= damage;
+
+    //    //GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
+
+    //    //if (effect == null)
+    //    //    return;
+
+    //    //effect.transform.SetParent(null);
+    //    //effect.transform.position = damagedPos;
+    //    //effect.transform.rotation = Quaternion.identity;
+    //    //effect.SetActive(true);
+
+    //    //whoAttackThis = attackObj;
+
+    //    //CheckingHp(damagedVelocity);
+    //}
 }

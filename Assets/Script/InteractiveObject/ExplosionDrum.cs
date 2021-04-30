@@ -21,17 +21,40 @@ public class ExplosionDrum : InteractiveObject
 
                 if (rb != null)
                 {
-                    rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+
+                    RaycastHit hit2;
 
                     if (rb.CompareTag("Player"))
                     {
-                        PlayerController temp = rb.GetComponent<PlayerController>();
-                        temp.SetIsPushed(true);
+                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius))
+                        {
+                            if (!hit2.transform.CompareTag("Player"))
+                                continue;
+
+                            PlayerController temp = rb.GetComponent<PlayerController>();
+                            //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                            //temp.SetIsPushed(true);
+                        }
                     }
-                    else if(rb.CompareTag("Enemy"))
+                    else if (rb.CompareTag("Enemy"))
                     {
-                        Enemy temp = rb.GetComponent<Enemy>();
-                        temp.DecreaseHp(this.gameObject, 50, hit.ClosestPoint(explosionPos), (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
+
+                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius))
+                        {
+                            if (!LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
+                            {
+
+                                continue;
+                            }
+
+                            if (GameManager.Instance.GetIsCombat())
+                            {
+                                Enemy temp = rb.GetComponent<Enemy>();
+
+                                temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
+                                //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                            }
+                        }
                     }
                 }
             }

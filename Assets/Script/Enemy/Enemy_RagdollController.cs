@@ -37,12 +37,15 @@ public class Enemy_RagdollController : MonoBehaviour
 
     private void Update()
     {
-        currentDisappearTime += Time.deltaTime;
-
-        if(currentDisappearTime >= disappearTime)
+        if (this.GetComponent<Enemy>().GetIsDead())
         {
-            currentDisappearTime = 0;
-            ResetRagdoll();
+            currentDisappearTime += Time.deltaTime;
+
+            if (currentDisappearTime >= disappearTime)
+            {
+                currentDisappearTime = 0;
+                ResetRagdoll();
+            }
         }
     }
 
@@ -52,13 +55,19 @@ public class Enemy_RagdollController : MonoBehaviour
         {
             bodyParts[i].transform.localPosition = bodyParts[i].originPos;
             bodyParts[i].transform.localRotation = bodyParts[i].originRot;
+            bodyParts[i].transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            bodyParts[i].transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
 
+        this.GetComponent<Animator>().enabled = true;
         this.gameObject.SetActive(false);
     }
 
-    public void AddForce(Vector3 force)
+    public void AddForce(Transform trs, Vector3 force)
     {
-        spineRigid.AddForce(force, ForceMode.Impulse);
+        if(!trs.GetComponent<Enemy_RagdollController>())
+            trs.GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
+        else
+            spineRigid.AddForce(force, ForceMode.Impulse);
     }
 }
