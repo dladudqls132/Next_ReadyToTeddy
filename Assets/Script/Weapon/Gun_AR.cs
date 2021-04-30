@@ -147,7 +147,7 @@ public class Gun_AR : Gun
                     }
                     else
                     {
-                        enemy.DecreaseHp(owner, damagePerBullet * 10, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 50, 50));
+                        enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 50, 50));
                     }
 
                     GameManager.Instance.GetCrosshair().ResetAttack();
