@@ -143,11 +143,11 @@ public class Gun_AR : Gun
 
                     if (!hit2.transform.CompareTag("Head"))
                     {
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, shotDir.normalized * 50);
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 50, 50));
                     }
                     else
                     {
-                        enemy.DecreaseHp(owner, damagePerBullet * 10, hit2.point, hit2.transform, shotDir.normalized * 50);
+                        enemy.DecreaseHp(owner, damagePerBullet * 10, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 50, 50));
                     }
 
                     GameManager.Instance.GetCrosshair().ResetAttack();
