@@ -151,11 +151,7 @@ public class Inventory : MonoBehaviour
         {
             if (!slots[i].isEmpty)
             {
-                if (player.SetWeapon(slots[i].slotType, slots[i].weapon))
-                {
-                    currentSlotNum = i;
-                    return;
-                }
+                SwapWeapon(i);
             }
         }
     }

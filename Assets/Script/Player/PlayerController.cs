@@ -159,6 +159,7 @@ public class PlayerController : MonoBehaviour
                 return false;
         }
 
+        Debug.Log(weapon);
         tempWeapon = weapon;
 
         if(tempWeapon == null)
@@ -212,6 +213,7 @@ public class PlayerController : MonoBehaviour
         {
             this.projectile = null;
             this.gun = null;
+
         }
 
 

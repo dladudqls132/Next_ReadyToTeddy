@@ -32,9 +32,8 @@ public class Projectile : MonoBehaviour
     public void SetHaveNum(int value) { haveNum = value; }
     public int GetHaveNum() { return haveNum; }
 
-    public void DecreaseHaveNum() { haveNum -= 1; }
+    public void DecreaseHaveNum() { haveNum -= 1; if (haveNum == 0) this.gameObject.SetActive(false); }
     public void IncreaseHaveNum() { haveNum += 1; }
-
 
     public void SetInfo(float damage, float explosionPower, float explosionRadius, int maxHaveNum, float remainingTime)
     {
