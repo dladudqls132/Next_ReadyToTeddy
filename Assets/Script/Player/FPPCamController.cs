@@ -137,21 +137,21 @@ public class FPPCamController : MonoBehaviour
         if (GameManager.Instance.GetPlayer().GetGun() != null)
         {
 
-                if (GameManager.Instance.GetPlayer().GetGun().GetIsReload())
-                {
-        
-                    //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
-                    if(!this.GetComponent<Animator>().GetBool("isReload"))
-                        this.GetComponent<Animator>().SetBool("isReload", true);
+            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload())
+            {
 
-                    transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY));
-                }
-                else
-                {
+                //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
+                if (!this.GetComponent<Animator>().GetBool("isReload"))
+                    this.GetComponent<Animator>().SetBool("isReload", true);
+
+                transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY));
+            }
+            else
+            {
                 if (this.GetComponent<Animator>().GetBool("isReload"))
-                        this.GetComponent<Animator>().SetBool("isReload", false);
-                    transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
-                }
+                    this.GetComponent<Animator>().SetBool("isReload", false);
+                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+            }
 
         }
         else
@@ -166,20 +166,18 @@ public class FPPCamController : MonoBehaviour
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
-        rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
-        rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
-
+        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen)
+        {
+            rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
+            rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
+        }
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
 
         currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
         rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
 
-
-
         currentReturnSpeed += Time.deltaTime;
-
-
 
         if (isShake)
 

@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] protected GameObject item;
     [SerializeField] public GameObject projectile;
+    [SerializeField] protected Sprite sprite;
     [SerializeField] protected Vector3 originPos;
     [SerializeField] protected Vector3 originRot;
     [SerializeField] protected Vector3 aimingPos;
@@ -28,6 +29,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] MeshRenderer[] mesh;
 
     public GameObject GetItem() { return item; }
+    public Sprite GetSprite() { return sprite; }
 
     public void SetHaveNum(int value) { haveNum = value; }
     public int GetHaveNum() { return haveNum; }

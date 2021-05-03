@@ -20,7 +20,8 @@ public class Gun : MonoBehaviour
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
     [SerializeField] protected Transform shotPos;
-    
+    [SerializeField] protected Sprite sprite;
+
     [SerializeField] protected int fireNum = 0;
     [SerializeField] protected bool isShot;
     [SerializeField] protected bool canShot;
@@ -51,6 +52,8 @@ public class Gun : MonoBehaviour
 
     public Vector3 GetOriginPos() { return originPos; }
     public Vector3 GetOriginRot() { return originRot; }
+    public Sprite GetSprite() { return sprite; }
+    public float GetShotDelay() { return shotDelay; }
 
     protected Vector3 direction;
 
@@ -131,6 +134,7 @@ public class Gun : MonoBehaviour
             rigid.angularVelocity = Vector3.zero;
             rigid.useGravity = false;
 
+           // this.gameObject.SetActive(false);
             this.transform.SetParent(parent);
 
             this.transform.localPosition = originPos;
@@ -145,6 +149,7 @@ public class Gun : MonoBehaviour
         }
         else
         {
+            //this.gameObject.SetActive(true);
             this.transform.SetParent(null);
 
             Collider[] c = this.GetComponents<Collider>();
