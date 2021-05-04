@@ -124,7 +124,7 @@ Shader "Custom/ToonShader"
 			float4 result = float4(diffuse.x, diffuse.y, diffuse.z, 1) + _AmbientColor;
 
 
-			if (outLine.x < 0.2f)
+			if (outLine.x < 0.15f)
 			{
 				result = float4(0.0, 0.0, 0.0, result.w);
 
