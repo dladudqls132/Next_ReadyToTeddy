@@ -15,12 +15,15 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Vector3 originRot;
     [SerializeField] protected Vector3 aimingPos;
     [SerializeField] protected Vector3 aimingRot;
+    [SerializeField] protected Vector3 recoil;
+    [SerializeField] protected float recoilMagnitude;
 
     [SerializeField] protected GameObject item;
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
     [SerializeField] protected Transform shotPos;
     [SerializeField] protected Sprite sprite;
+    [SerializeField] protected string text;
 
     [SerializeField] protected int fireNum = 0;
     [SerializeField] protected bool isShot;
@@ -54,6 +57,9 @@ public class Gun : MonoBehaviour
     public Vector3 GetOriginRot() { return originRot; }
     public Sprite GetSprite() { return sprite; }
     public float GetShotDelay() { return shotDelay; }
+    public float GetReloadTime() { return reloadTime; }
+    public string GetText() { return text; }
+    public float GetRecoil() { return recoilMagnitude; }
 
     protected Vector3 direction;
 
@@ -76,6 +82,7 @@ public class Gun : MonoBehaviour
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
         rigid = this.GetComponent<Rigidbody>();
+        recoilMagnitude = recoil.magnitude;
 
         //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
 
@@ -181,7 +188,7 @@ public class Gun : MonoBehaviour
         mainCam.SetOriginFov(mainCam.GetRealOriginFov());
         mainCam.FovReset();
         isReload = value;
-        hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
+        //hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
         hand.GetComponent<Animator>().ResetTrigger("Fire_Auto");
     }
 

@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] protected GameObject item;
     [SerializeField] public GameObject projectile;
     [SerializeField] protected Sprite sprite;
+    [SerializeField] protected string text;
     [SerializeField] protected Vector3 originPos;
     [SerializeField] protected Vector3 originRot;
     [SerializeField] protected Vector3 aimingPos;
@@ -19,6 +20,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] protected float explosionRadius;
     [SerializeField] protected float explosionPower;
     [SerializeField] protected ParticleSystem particle;
+    
     protected float currentRemainingTime;
     protected bool isThrown;
     protected Rigidbody rigid;
@@ -33,6 +35,9 @@ public class Projectile : MonoBehaviour
 
     public void SetHaveNum(int value) { haveNum = value; }
     public int GetHaveNum() { return haveNum; }
+    public int GetMaxHaveNum() { return maxHaveNum; }
+    public float GetDamage() { return damage; }
+    public string GetText() { return text; }
 
     public void DecreaseHaveNum() { haveNum -= 1; if (haveNum == 0) this.gameObject.SetActive(false); }
     public void IncreaseHaveNum() { haveNum += 1; }
@@ -94,8 +99,6 @@ public class Projectile : MonoBehaviour
 
             item.SetActive(true);
         }
-
-        this.gameObject.SetActive(false);
     }
 
     virtual protected void Start()

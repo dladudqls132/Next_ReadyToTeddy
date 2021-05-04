@@ -43,8 +43,9 @@ GameObject:
   - component: {fileID: 7227812678552526547}
   - component: {fileID: 47055497224119104}
   - component: {fileID: -3197929399880922404}
-  - component: {fileID: 5839746335338916120}
   - component: {fileID: 4840075160859156687}
+  - component: {fileID: 555716697}
+  - component: {fileID: 555716702}
   m_Layer: 10
   m_Name: Weapon_Grenade
   m_TagString: Untagged
@@ -129,6 +130,7 @@ MonoBehaviour:
   item: {fileID: 277300805}
   projectile: {fileID: 2731157901539131877, guid: 64d48a0010bc14744aa40f9c00d40cbd,
     type: 3}
+  sprite: {fileID: 21300000, guid: 92dbf231d69c4b34da60be7d570ac1a1, type: 3}
   originPos: {x: 0, y: 0, z: 0}
   originRot: {x: 0, y: 0, z: 0}
   aimingPos: {x: 0, y: 0, z: 0}
@@ -143,19 +145,6 @@ MonoBehaviour:
   mesh:
   - {fileID: 47055497224119104}
   projectileType: 0
---- !u!65 &5839746335338916120
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2731157901539131877}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4840075160859156687
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -172,6 +161,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!135 &555716697
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731157901539131877}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &555716702
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2731157901539131877}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.49999997
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1546556148
 PrefabInstance:
   m_ObjectHideFlags: 0

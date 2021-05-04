@@ -73,8 +73,8 @@ public class PlayerController : MonoBehaviour
     private bool isLanding = false;
     [SerializeField] private float landingReboundSpeed = 0;
     [SerializeField] private float skill1_range;
-    [SerializeField] private float kickWallTime;
-    [SerializeField] private float currentKickWallTime;
+    //[SerializeField] private float kickWallTime;
+    //[SerializeField] private float currentKickWallTime;
     private bool isSwap;
     private bool isAimingProjectile;
 
@@ -265,7 +265,7 @@ public class PlayerController : MonoBehaviour
         currentClimbuUpPower = climbUpPower;
         originBodyColliderCenter = bodyCollider.center;
         originBodyColliderHeight = bodyCollider.height;
-        currentKickWallTime = 0;
+        //currentKickWallTime = 0;
         originAimPos = aimPos.localPosition;
         projectileController = this.GetComponent<ThrowProjectile>();
         //currentWeaponNum = 1;
@@ -307,7 +307,7 @@ public class PlayerController : MonoBehaviour
             currentClimbuUpPower = climbUpPower;
             originBodyColliderCenter = bodyCollider.center;
             originBodyColliderHeight = bodyCollider.height;
-            currentKickWallTime = 0;
+            //currentKickWallTime = 0;
             originAimPos = aimPos.position;
             projectileController = this.GetComponent<ThrowProjectile>();
             //currentWeaponNum = 1;
@@ -658,28 +658,28 @@ public class PlayerController : MonoBehaviour
                     //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
                     if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
-                        if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
-                        {
-                            if (Input.GetKey(KeyCode.Space))
-                            {
-                                if (!isClimbing)
-                                {
-                                    currentKickWallTime = 0;
-                                }
-                                isJump = false;
-                                isJumpByObject = false;
-                                isClimbing = true;
-                                isSlide = false;
-                                isDash = false;
-                                isJump = false;
-                                isJumpByObject = false;
-                                //canJump = false;
+                        //if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
+                        //{
+                        //    if (Input.GetKey(KeyCode.Space))
+                        //    {
+                        //        //if (!isClimbing)
+                        //        //{
+                        //        //    currentKickWallTime = 0;
+                        //        //}
+                        //        isJump = false;
+                        //        isJumpByObject = false;
+                        //        isClimbing = true;
+                        //        isSlide = false;
+                        //        isDash = false;
+                        //        isJump = false;
+                        //        isJumpByObject = false;
+                        //        //canJump = false;
 
-                                rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
-                                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                                mainCam.FovReset();
-                            }
-                        }
+                        //        rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
+                        //        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                        //        mainCam.FovReset();
+                        //    }
+                        //}
                     }
                     else if (moveDirection != Vector3.zero)
                     {
@@ -818,7 +818,7 @@ public class PlayerController : MonoBehaviour
 
             if (projectile.GetHaveNum() == 0)
             {
-                inventory.SetAnyWeapon();
+                inventory.DestroyWeapon(3);
             }
         }
 
@@ -903,25 +903,25 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            if (isClimbing)
-            {
-                if (canClimb)
-                {
-                    if (currentKickWallTime < kickWallTime)
-                    {
-                        if (rigid.velocity.magnitude >= walkSpeed)
-                            rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * rigid.velocity.magnitude, ForceMode.Impulse);
-                        else
-                            rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * 8, ForceMode.Impulse);
-                    }
-                }
-                canClimb = false;
-            }
+        //if (Input.GetKeyUp(KeyCode.Space))
+        //{
+        //    if (isClimbing)
+        //    {
+        //        if (canClimb)
+        //        {
+        //            if (currentKickWallTime < kickWallTime)
+        //            {
+        //                if (rigid.velocity.magnitude >= walkSpeed)
+        //                    rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * rigid.velocity.magnitude, ForceMode.Impulse);
+        //                else
+        //                    rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * 8, ForceMode.Impulse);
+        //            }
+        //        }
+        //        canClimb = false;
+        //    }
 
-            isClimbing = false;
-        }
+        //    isClimbing = false;
+        //}
 
         //스킬
         //if(Input.GetKeyDown(KeyCode.Q))
@@ -988,7 +988,7 @@ public class PlayerController : MonoBehaviour
         if (isClimbing)
         {
             currentClimbPower += Time.deltaTime * (Physics.gravity.y / 3.2f);
-            currentKickWallTime += Time.deltaTime;
+            //currentKickWallTime += Time.deltaTime;
         }
         else
         {

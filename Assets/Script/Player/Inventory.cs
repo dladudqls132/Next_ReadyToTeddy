@@ -114,6 +114,18 @@ public class Inventory : MonoBehaviour
                 SetAnyWeapon();
             }
         }
+        else if(slots[slotNum].slotType == SlotType.Projectile)
+        {
+            if (slots[slotNum].weapon != null)
+            {
+                slots[slotNum].weapon.SetActive(true);
+                slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
+                slots[slotNum].weapon = null;
+                slots[slotNum].isEmpty = true;
+                UI_Inventory.UpdateSlot(slotNum);
+                SetAnyWeapon();
+            }
+        }
     }
 
     public void ChangeWeapon(GameObject weapon)
@@ -223,6 +235,23 @@ public class Inventory : MonoBehaviour
                         return;
                     }
                 }
+            }
+        }
+    }
+
+    public void DestroyWeapon(int slotNum)
+    {
+        if (slots[slotNum].slotType == SlotType.Projectile)
+        {
+            if (slots[slotNum].weapon != null)
+            {
+                //Destroy(slots[slotNum].weapon);
+                slots[slotNum].weapon.SetActive(false);
+                slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
+                slots[slotNum].weapon = null;
+                slots[slotNum].isEmpty = true;
+                UI_Inventory.UpdateSlot(slotNum);
+                SetAnyWeapon();
             }
         }
     }

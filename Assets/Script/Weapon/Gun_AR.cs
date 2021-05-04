@@ -104,13 +104,15 @@ public class Gun_AR : Gun
             {
                 currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.02f, 0.015f);
-                handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 15.0f, 3.0f);
             }
             else
             {
                 currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.02f, 0.015f);
-                handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 15.0f, 3.0f);
             }
 
             hand.GetComponent<Animator>().SetTrigger("Fire_Auto");

@@ -109,13 +109,15 @@ public class Gun_Test : Gun
             {
                 currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.05f, 0.06f);
-                handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 30.0f, 20.0f);
             }
             else
             {
                 currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.05f, 0.06f);
-                handFireRot = mainCam.SetFireRecoilRot(new Vector3(4.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(4.0f, 2.5f, 0.0f), 30.0f, 20.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
             }
 
 
