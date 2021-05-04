@@ -50,6 +50,7 @@ public class Gun : MonoBehaviour
 
     //[SerializeField] private Transform meshRoot;
     [SerializeField] MeshRenderer[] mesh;
+    public AnimationClip weaponAnimation;
 
     protected Rigidbody rigid;
 
