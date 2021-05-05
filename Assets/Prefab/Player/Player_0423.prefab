@@ -162,9 +162,9 @@ MonoBehaviour:
   bodyCollider: {fileID: 8115680107376114390}
   groundCollider: {fileID: 8115680107376114391}
   hand: {fileID: 0}
-  lastPos_hand: {x: 0, y: 0, z: 0}
   weapon_gameObject: {fileID: 0}
-  weapon: {fileID: 0}
+  tempWeapon: {fileID: 0}
+  gun: {fileID: 0}
   projectile: {fileID: 0}
   checkingGroundRayPos: {fileID: 289421373218827764}
   isDead: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
   keepComboTime: 10
   downComboTime: 2
   decreaseHpValuePerSecond: 1
-  walkSpeed: 7.7
+  walkSpeed: 7.3
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
@@ -196,9 +196,8 @@ MonoBehaviour:
   useGravity: 0
   landingReboundSpeed: 40
   skill1_range: 10
-  kickWallTime: 0.3
-  currentKickWallTime: 0
-  currentWeaponNum: 0
+  inventory: {fileID: 0}
+  collisionWeapon: []
 --- !u!114 &289421373718779601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +328,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   lineSegment: 20
+  throwDistance: 30
 --- !u!1 &8115680107842811880
 GameObject:
   m_ObjectHideFlags: 0
