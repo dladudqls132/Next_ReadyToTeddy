@@ -37,13 +37,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
     protected float currentCombatTime;
-    [SerializeField] protected float returnToPatorlTime;
+    protected float returnToPatorlTime;
     protected float currentReturnToPatrolTime;
-    [SerializeField] protected Transform[] patrolNode;
-    [SerializeField] protected Transform currentDestPatrolNode;
+    protected Transform[] patrolNode;
+    protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;
-    [SerializeField] protected bool isRunAway;
+    protected bool isRunAway;
     [SerializeField] protected float increaseSuccessRate;
+    [SerializeField] protected float potionDropRate;
+    [SerializeField] protected float magazineDropRate;
 
     private GameObject whoAttackThis;
     protected Animator anim;
@@ -57,6 +59,17 @@ public class Enemy : MonoBehaviour
     public float GetMaxHp() { return maxHp; }
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
+
+    public void SetInfo(EnemyType enemyType, CharacterMaterial material, float hp, float speed_min, float speed_max, float detectRange, float attackRange)
+    {
+        this.enemyType = enemyType;
+        this.material = material;
+        this.maxHp = hp;
+        this.speed_min = speed_min;
+        this.speed_max = speed_max;
+        this.detectRange = detectRange;
+        this.attackRange = attackRange;
+    }
 
     virtual protected void Start()
     {
@@ -78,11 +91,27 @@ public class Enemy : MonoBehaviour
         if (this.GetComponent<NavMeshAgent>() != null)
             agent = this.GetComponent<NavMeshAgent>();
 
-        if (patrolNode.Length != 0)
-        {
-            currentDestPatrolNode = patrolNode[0];
-            currentDestPatrolNodeIndex = 0;
-        }
+        //if (patrolNode.Length != 0)
+        //{
+        //    currentDestPatrolNode = patrolNode[0];
+        //    currentDestPatrolNodeIndex = 0;
+        //}
+    }
+
+    protected virtual void SetDead(bool value) {}
+
+    public void SetRagdoll(Transform damagedTrs, Vector3 damagedVelocity)
+    {
+        //GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
+
+        //temp.SetActive(true);
+        //temp.transform.position = this.transform.position;
+        //temp.transform.rotation = this.transform.rotation;
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        if(this.GetComponent<Enemy_RagdollController>() != null)
+            this.GetComponent<Enemy_RagdollController>().AddForce(damagedTrs, damagedVelocity);
+        anim.enabled = false;
     }
 
     protected void GoToPatrolNode()
@@ -126,10 +155,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    protected void CheckingHp(bool isUpCombo)
+    protected void CheckingHp(Transform damagedTrs, Vector3 damagedVelocity)
     {
         if (!isDead)
         {
+
             if (currentHp <= 0)
             {
                 //if (isUpCombo)
@@ -139,15 +169,38 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
+                //SetRagdoll(damagedVelocity);
+                SetRagdoll(damagedTrs, damagedVelocity);
+                SetDead(true);
 
-                isDead = true;
+                float itemDropRate = Random.Range(0.0f, 100.0f);
+                Debug.Log(itemDropRate);
+                if(itemDropRate <= magazineDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position, this.transform.rotation);
+                }
+                else if(itemDropRate <= magazineDropRate + potionDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position, this.transform.rotation);
+                }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
             }
         }
     }
 
-    public void DecreaseHp(float value, bool isUpCombo)
+    protected void CheckingHp()
+    {
+        if (!isDead)
+        {
+            if (currentHp <= 0)
+            {
+                isDead = true;
+            }
+        }
+    }
+
+    public void DecreaseHp(float value)
     {
         if (!GameManager.Instance.GetIsCombat())
             return;
@@ -156,15 +209,17 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = null;
 
-        CheckingHp(isUpCombo);
+        CheckingHp();
     }
 
-    public void DecreaseHp(GameObject attackObj, float value, Vector3 damagedPos, bool isUpCombo)
+    public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity)
     {
         if (!GameManager.Instance.GetIsCombat())
+        {
             return;
+        }
 
-        currentHp -= value;
+        currentHp -= damage;
 
         GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
 
@@ -178,6 +233,30 @@ public class Enemy : MonoBehaviour
 
         whoAttackThis = attackObj;
 
-        CheckingHp(isUpCombo);
+        CheckingHp(damagedTrs, damagedVelocity);
     }
+
+    //public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
+    //{
+    //    //if (!GameManager.Instance.GetIsCombat())
+    //    //{
+    //    //    return;
+    //    //}
+
+    //    //currentHp -= damage;
+
+    //    //GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
+
+    //    //if (effect == null)
+    //    //    return;
+
+    //    //effect.transform.SetParent(null);
+    //    //effect.transform.position = damagedPos;
+    //    //effect.transform.rotation = Quaternion.identity;
+    //    //effect.SetActive(true);
+
+    //    //whoAttackThis = attackObj;
+
+    //    //CheckingHp(damagedVelocity);
+    //}
 }

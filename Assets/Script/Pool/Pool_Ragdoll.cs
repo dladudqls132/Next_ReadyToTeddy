@@ -14,6 +14,7 @@ public class Pool_Ragdoll : MonoBehaviour
         {
             this.prefab = Instantiate(info.prefab, parent);
             this.enemyType = info.enemyType;
+            prefab.GetComponent<Enemy_RagdollController>().Init();
             this.prefab.SetActive(false);
         }
     }

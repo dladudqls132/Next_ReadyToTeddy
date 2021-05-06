@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class Gun_Test : Gun
 {
-    [SerializeField] private GameObject bulletHit = null;
-    [SerializeField] private float spreadAngle = 0;
-    [SerializeField] private float fireNum = 0;
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -17,6 +13,8 @@ public class Gun_Test : Gun
     // Update is called once per frame
     void Update()
     {
+        //CheckingParent();
+
         if (owner != null)
         {
             if (isShot)
@@ -37,35 +35,37 @@ public class Gun_Test : Gun
                 }
             }
 
-            if (isReload)
-            {
-                currentReloadTime -= Time.deltaTime;
+            //if (isReload)
+            //{
+            //    currentReloadTime -= Time.deltaTime;
 
-                if (currentReloadTime <= 0)
-                {
-                    currentReloadTime = reloadTime;
-                    currentAmmo = maxAmmo;
+            //    if (currentReloadTime <= 0)
+            //    {
+            //        currentReloadTime = reloadTime;
+            //        currentAmmo = maxAmmo;
 
-                    if (currentAmmo >= maxAmmo)
-                    {
-                        isReload = false;
-                    }
-                }
-            }
-            else
-            {
-                currentReloadTime = reloadTime;
-            }
+            //        if (currentAmmo >= maxAmmo)
+            //        {
+            //            isReload = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    currentReloadTime = reloadTime;
+            //}
 
-            if (currentAmmo <= 0 && !isShot)
+            if (CanReload() && currentAmmo <= 0)
             {
-                isReload = true;
+                SetIsReload(true);
             }
 
             if (currentAmmo > 0 && !isShot)
                 canShot = true;
             else
+            {
                 canShot = false;
+            }
         }
         else
         {
@@ -77,6 +77,25 @@ public class Gun_Test : Gun
         }
     }
 
+    public override void SetIsReload(bool value)
+    {
+        base.SetIsReload(value);
+
+        if (value)
+        {
+
+            hand.GetComponent<Animator>().SetBool("isReload_Shotgun", true);
+
+        }
+    }
+
+    public override void SetIsReloadFinish()
+    {
+        base.SetIsReloadFinish();
+
+        hand.GetComponent<Animator>().SetBool("isReload_Shotgun", false);
+    }
+
     override public bool Fire()
     {
         if (isReload)
@@ -84,9 +103,23 @@ public class Gun_Test : Gun
 
         if (canShot)
         {
-            mainCam.Shake(0.05f, 0.06f);
-            handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f) / 1.8f;
-            hand.GetComponent<Animator>().SetTrigger("isFire_SemiAuto");
+            if (!owner.GetComponent<PlayerController>().GetIsAiming())
+            {
+                currentSpreadAngle = spreadAngle_normal;
+                mainCam.Shake(0.05f, 0.06f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 30.0f, 20.0f);
+            }
+            else
+            {
+                currentSpreadAngle = spreadAngle_aiming;
+                mainCam.Shake(0.05f, 0.06f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(4.0f, 2.5f, 0.0f), 30.0f, 20.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
+            }
+
+
+            hand.GetComponent<Animator>().SetTrigger("Fire_SemiAuto");
 
             isReload = false;
             isRecoil = false;
@@ -96,7 +129,7 @@ public class Gun_Test : Gun
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
                 {
                     direction = (hit.point - Camera.main.transform.position).normalized;
                 }
@@ -104,22 +137,31 @@ public class Gun_Test : Gun
                     direction = Camera.main.transform.forward;
 
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
-              
-                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
+
+                Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
                 {
-                    if (hit2.transform.CompareTag("Enemy"))
+                    if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
-                        Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, true);
+                        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+
+                        if (!hit2.transform.CompareTag("Head"))
+                        {
+                            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 80, 80));
+                        }
+                        else
+                        {
+                            enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 50, 50));
+                        }
+
                         GameManager.Instance.GetCrosshair().ResetAttack();
                         if (enemy.GetIsDead())
                             GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        else if(!GameManager.Instance.GetCrosshair().GetIsKill())
+                        else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                             GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                     }
                     else if(hit.transform.CompareTag("InteractiveObject"))
@@ -128,9 +170,14 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-                        GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
+
+                        GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                        tempObect.transform.SetParent(null);
+                        tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
+                        tempObect.transform.position = hit2.point;
                         tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                        tempObect.transform.SetParent(hit2.transform);
+                        tempObect.transform.SetParent(hit2.transform, true);
+                        tempObect.SetActive(true);
                     }
                 }
 
@@ -146,7 +193,7 @@ public class Gun_Test : Gun
         return false;
     }
 
-    protected override void ResetInfo()
+    override public void ResetInfo()
     {
         base.ResetInfo();
     }
