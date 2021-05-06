@@ -101,10 +101,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraMoveSpeed: 600
   cameraFollow: {fileID: 0}
+  rotY: 0
+  rotX: 0
   isFovMove: 0
   isShake: 0
   shakeTime: 0
   shakeAmount: 0
+  isRecoil: 0
+  isFire: 0
+  rotationSpeed: 0
+  returnSpeed: 0
+  recoilRotation: {x: 2, y: 2, z: 2}
+  recoilRotationAiming: {x: 0.5, y: 0.5, z: 1}
+  isAiming: 0
+  currentRotation: {x: 0, y: 0, z: 0}
+  rot: {x: 0, y: 0, z: 0}
 --- !u!114 &5242491733932854698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,8 +170,8 @@ MonoBehaviour:
       colorBlindnessType: 0
       colorBlindnessStrength: 1
   m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
   breakBeforeColorGrading: 0
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
