@@ -5,7 +5,9 @@ using UnityEngine;
 public enum GunType
 {
     AR,
-    ShotGun
+    ShotGun,
+    Flamethrower,
+    ChainLightning
 }
 
 public class Gun : MonoBehaviour
@@ -16,7 +18,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Vector3 aimingPos;
     [SerializeField] protected Vector3 aimingRot;
     [SerializeField] protected Vector3 recoil;
-    [SerializeField] protected float recoilMagnitude;
+    protected float recoilMagnitude;
 
     [SerializeField] protected GameObject item;
     [SerializeField] protected GameObject owner;
@@ -35,6 +37,7 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float reloadTime = 1;
     protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
+    [SerializeField] protected int maxAmmo_aMag;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
     
@@ -78,7 +81,7 @@ public class Gun : MonoBehaviour
 
     protected virtual void Start()
     {
-        currentAmmo = maxAmmo;
+        currentAmmo = maxAmmo_aMag;
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
@@ -119,6 +122,8 @@ public class Gun : MonoBehaviour
 
     public GunType GetGunType() { return gunType; }
     public int GetMaxAmmoCount() { return maxAmmo; }
+    public int GetMaxAmmo_aMagCount() { return maxAmmo_aMag; }
+    public void SetMaxAmmoCount(int ammo) { maxAmmo = ammo; }
     public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
@@ -193,12 +198,26 @@ public class Gun : MonoBehaviour
         hand.GetComponent<Animator>().ResetTrigger("Fire_Auto");
     }
 
-    virtual public void SetIsReloadFinish() { }
+    virtual public void SetIsReloadFinish() 
+    {
+        isReload = false;
+
+        if (maxAmmo >= (maxAmmo_aMag - currentAmmo))
+        {
+            maxAmmo -= maxAmmo_aMag - currentAmmo;
+            currentAmmo = maxAmmo_aMag;
+        }
+        else
+        {
+            currentAmmo += maxAmmo;
+            maxAmmo = 0;
+        }
+    }
 
     public Quaternion GetHandFireRot() { return Quaternion.Euler(handFireRot); }
 
     virtual public bool Fire() { return false; }
-    public bool CanReload() { if (currentAmmo < maxAmmo && !isReload) return true; return false; }
+    public bool CanReload() { if (maxAmmo > 0 && currentAmmo < maxAmmo_aMag && !isReload) { return true; } return false; }
 
     virtual public void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
 

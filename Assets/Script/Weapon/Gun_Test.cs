@@ -55,7 +55,7 @@ public class Gun_Test : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if (currentAmmo <= 0 && !isShot)
+            if (CanReload() && currentAmmo <= 0)
             {
                 SetIsReload(true);
             }
@@ -91,9 +91,7 @@ public class Gun_Test : Gun
 
     public override void SetIsReloadFinish()
     {
-        isReload = false;
-
-        currentAmmo = maxAmmo;
+        base.SetIsReloadFinish();
 
         hand.GetComponent<Animator>().SetBool("isReload_Shotgun", false);
     }

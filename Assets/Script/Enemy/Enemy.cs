@@ -37,13 +37,15 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float attackRange;
     [SerializeField] protected float combatTime;
     protected float currentCombatTime;
-    [SerializeField] protected float returnToPatorlTime;
+    protected float returnToPatorlTime;
     protected float currentReturnToPatrolTime;
-    [SerializeField] protected Transform[] patrolNode;
-    [SerializeField] protected Transform currentDestPatrolNode;
+    protected Transform[] patrolNode;
+    protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;
-    [SerializeField] protected bool isRunAway;
+    protected bool isRunAway;
     [SerializeField] protected float increaseSuccessRate;
+    [SerializeField] protected float potionDropRate;
+    [SerializeField] protected float magazineDropRate;
 
     private GameObject whoAttackThis;
     protected Animator anim;
@@ -89,11 +91,11 @@ public class Enemy : MonoBehaviour
         if (this.GetComponent<NavMeshAgent>() != null)
             agent = this.GetComponent<NavMeshAgent>();
 
-        if (patrolNode.Length != 0)
-        {
-            currentDestPatrolNode = patrolNode[0];
-            currentDestPatrolNodeIndex = 0;
-        }
+        //if (patrolNode.Length != 0)
+        //{
+        //    currentDestPatrolNode = patrolNode[0];
+        //    currentDestPatrolNodeIndex = 0;
+        //}
     }
 
     protected virtual void SetDead(bool value) {}
@@ -163,6 +165,17 @@ public class Enemy : MonoBehaviour
                 //SetRagdoll(damagedVelocity);
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
+
+                float itemDropRate = Random.Range(0.0f, 100.0f);
+                Debug.Log(itemDropRate);
+                if(itemDropRate <= magazineDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position, this.transform.rotation);
+                }
+                else if(itemDropRate <= magazineDropRate + potionDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position, this.transform.rotation);
+                }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
             }

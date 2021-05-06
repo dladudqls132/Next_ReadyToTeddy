@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.Animations;
-
 
 public class HandAnimController : MonoBehaviour
 {
@@ -10,18 +8,16 @@ public class HandAnimController : MonoBehaviour
     [SerializeField] private PlayerController player;
 
     [SerializeField] private UnityEngine.Animations.Rigging.Rig handIK;
-    [SerializeField] private Transform weaponLeftGrip;
-    [SerializeField] private Transform weaponRightGrip;
+    [SerializeField] public Transform weaponLeftGrip;
+    [SerializeField] public Transform weaponRightGrip;
 
     Animator anim;
-    AnimatorOverrideController overrides;
 
     private void Start()
     {
         player = GameManager.Instance.GetPlayer();
 
         anim = this.GetComponent<Animator>();
-        overrides = anim.runtimeAnimatorController as AnimatorOverrideController;
     }
 
 
@@ -76,19 +72,5 @@ public class HandAnimController : MonoBehaviour
 
         this.GetComponent<Animator>().SetBool("isSwap", false);
         player.SetIsSwap(false);
-    }
-
-    [ContextMenu("Save weapon pose")]
-    void SaveWeaponPose()
-    {
-        GameObjectRecorder recorder = new GameObjectRecorder(gameObject);
-
-        //recorder.BindComponentsOfType<Transform>(this.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(weaponLeftGrip.gameObject, false);
-        recorder.BindComponentsOfType<Transform>(weaponRightGrip.gameObject, false);
-
-        recorder.TakeSnapshot(0.0f);
-        recorder.SaveToClip(player.GetWeaponGameObject().GetComponent<Gun>().weaponAnimation);
-        //recorder.SaveToClip(temp);
     }
 }

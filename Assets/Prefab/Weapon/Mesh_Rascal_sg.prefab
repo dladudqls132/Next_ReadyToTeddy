@@ -4972,12 +4972,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 1
-  originPos: {x: 0, y: 0, z: 0.099}
+  originPos: {x: 0.007, y: -0.028, z: 0.142}
   originRot: {x: 0, y: -1, z: 0}
-  aimingPos: {x: 0, y: 0, z: 0.099}
+  aimingPos: {x: 0, y: -0.009, z: 0.099}
   aimingRot: {x: 0, y: 0, z: 0}
   recoil: {x: 8, y: 2.5, z: 0}
-  recoilMagnitude: 0
+  recoilMagnitude: 8.381527
   item: {fileID: 242320486473171272}
   owner: {fileID: 0}
   hand: {fileID: 0}
@@ -4989,10 +4989,11 @@ MonoBehaviour:
   canShot: 0
   isRecoil: 0
   shotDelay: 0.35
-  currentShotDelay: 0
+  currentShotDelay: 0.35
   isReload: 0
   reloadTime: 1.2
   maxAmmo: 20
+  maxAmmo_aMag: 20
   currentAmmo: 20
   damagePerBullet: 8
   muzzleFlash: {fileID: 3445093644222006478}

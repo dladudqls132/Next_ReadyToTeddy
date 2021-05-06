@@ -85,6 +85,25 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public Gun GetWeapon(GunType type)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].weapon != null)
+            {
+                if (slots[i].weapon.GetComponent<Gun>() != null)
+                {
+                    if (slots[i].weapon.GetComponent<Gun>().GetGunType() == type)
+                    {
+                        return slots[i].weapon.GetComponent<Gun>();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public void DropWeapon()
     {
         if (slots[currentSlotNum].slotType == SlotType.Gun)
