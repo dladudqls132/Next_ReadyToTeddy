@@ -76,6 +76,7 @@ GameObject:
   - component: {fileID: 289421373718779601}
   - component: {fileID: 152165709}
   - component: {fileID: 152165708}
+  - component: {fileID: 289421374833627408}
   m_Layer: 11
   m_Name: Player_0423
   m_TagString: Player
@@ -329,6 +330,39 @@ MonoBehaviour:
     m_Bits: 256
   lineSegment: 20
   throwDistance: 30
+--- !u!114 &289421374833627408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8115680107376114384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13ce5b9853cc1e341be80cf6c7f97391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots:
+  - slotType: 1
+    transform: {fileID: 0}
+    weapon: {fileID: 0}
+    isEmpty: 0
+  - slotType: 1
+    transform: {fileID: 0}
+    weapon: {fileID: 0}
+    isEmpty: 0
+  - slotType: 0
+    transform: {fileID: 0}
+    weapon: {fileID: 0}
+    isEmpty: 0
+  - slotType: 2
+    transform: {fileID: 0}
+    weapon: {fileID: 0}
+    isEmpty: 0
+  currentSlotNum: 0
+  player: {fileID: 0}
+  isOpen: 0
+  UI_Inventory: {fileID: 0}
 --- !u!1 &8115680107842811880
 GameObject:
   m_ObjectHideFlags: 0
