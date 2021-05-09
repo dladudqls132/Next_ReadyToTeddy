@@ -67,9 +67,10 @@ public class Gun : MonoBehaviour
 
     protected Vector3 direction;
 
-    public void SetInfo(GunType gunType, float damagePerBullet, int maxAmmo, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
+    public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
     {
         this.gunType = gunType;
+        this.sprite = sprite;
         this.damagePerBullet = damagePerBullet;
         this.maxAmmo = maxAmmo;
         this.currentAmmo = maxAmmo;
