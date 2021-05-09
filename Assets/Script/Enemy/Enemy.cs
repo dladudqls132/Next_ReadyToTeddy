@@ -60,7 +60,7 @@ public class Enemy : MonoBehaviour
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
 
-    public void SetInfo(EnemyType enemyType, CharacterMaterial material, float hp, float speed_min, float speed_max, float detectRange, float attackRange)
+    public void SetInfo(EnemyType enemyType, CharacterMaterial material, float hp, float speed_min, float speed_max, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
         this.enemyType = enemyType;
         this.material = material;
@@ -69,6 +69,8 @@ public class Enemy : MonoBehaviour
         this.speed_max = speed_max;
         this.detectRange = detectRange;
         this.attackRange = attackRange;
+        this.potionDropRate = potionDropRate;
+        this.magazineDropRate = magazineDropRate;
     }
 
     virtual protected void Start()
