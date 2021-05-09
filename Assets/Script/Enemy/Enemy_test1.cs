@@ -30,7 +30,12 @@ public class Enemy_test1 : Enemy
         //target = GameManager.Instance.GetPlayer().transform;
 
         anim = this.GetComponent<Animator>();
-        state = Enemy_State.Patrol;
+        if (patrolNode.Length != 0)
+            state = Enemy_State.Patrol;
+        else
+        {
+            state = Enemy_State.None;
+        }
         //agent = this.GetComponent<NavMeshAgent>();
         originPos = this.transform.position;
     }
