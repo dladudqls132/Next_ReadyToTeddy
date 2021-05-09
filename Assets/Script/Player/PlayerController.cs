@@ -79,7 +79,6 @@ public class PlayerController : MonoBehaviour
     private bool isAimingProjectile;
 
     [SerializeField] private Inventory inventory;
-    [SerializeField] private GameObject defalutWeapon;
 
     private bool isMoveAim;
     private Vector3 climbUpPos = Vector3.zero;
@@ -285,8 +284,6 @@ public class PlayerController : MonoBehaviour
      
         inventory = this.GetComponent<Inventory>();
         inventory.Init();
-
-        inventory.AddWeapon(defalutWeapon);
 
         isInit = true;
     }
