@@ -42,5 +42,10 @@ public class UI_Ammo : MonoBehaviour
                 image_reload.enabled = false;
             }
         }
+        else
+        {
+            image_lowAmmoCount.enabled = false;
+            image_reload.enabled = false;
+        }
     }
 }

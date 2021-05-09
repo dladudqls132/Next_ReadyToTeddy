@@ -58,6 +58,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                 case ButtonType.Settings:
                     break;
                 case ButtonType.Mainmenu:
+                    GameManager.Instance.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
                     break;
                 case ButtonType.GameStart:
                     GameManager.Instance.LoadScene("GameTest2", UnityEngine.SceneManagement.LoadSceneMode.Single);

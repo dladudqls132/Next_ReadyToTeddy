@@ -44,6 +44,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Time.timeScale = 1;
+
         player = FindObjectOfType<PlayerController>();
 
         if(player != null)

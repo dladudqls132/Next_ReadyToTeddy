@@ -69,8 +69,11 @@ public class Inventory : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
-            isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
+            if (UI_Inventory != null)
+            {
+                UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
+                isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
+            }
 
             if (isOpen)
             {
@@ -313,6 +316,7 @@ public class Inventory : MonoBehaviour
         }
         else if (slots[slotNum].slotType == SlotType.Hand)
         {
+            if(player != null)
             if (player.SetWeapon(slots[slotNum].slotType, slots[slotNum].weapon))
             {
                 currentSlotNum = slotNum;
