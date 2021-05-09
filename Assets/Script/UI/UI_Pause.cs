@@ -8,6 +8,8 @@ public class UI_Pause : MonoBehaviour
     [SerializeField] private GameObject root;
     [SerializeField] private UI_Button[] buttons;
 
+    public GameObject GetRoot() { return root; }
+
     public void Init()
     {
         buttons = root.GetComponentsInChildren<UI_Button>();

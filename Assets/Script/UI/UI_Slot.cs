@@ -109,4 +109,9 @@ public class UI_Slot : MonoBehaviour, IDragHandler, IDropHandler, IEndDragHandle
     {
         itemInfo.gameObject.SetActive(false);
     }
+
+    void OnDisable()
+    {
+        itemInfo.gameObject.SetActive(false);
+    }
 }

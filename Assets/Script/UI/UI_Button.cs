@@ -22,7 +22,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private GameObject image_on;
     [SerializeField] private GameObject image_off;
     [SerializeField] private GameObject question;
-    private GameObject temp;
+    [SerializeField] private string loadSceneName;
 
     public void SetActiveFalse()
     {
@@ -61,7 +61,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     GameManager.Instance.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
                     break;
                 case ButtonType.GameStart:
-                    GameManager.Instance.LoadScene("GameTest2", UnityEngine.SceneManagement.LoadSceneMode.Single);
+                    GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
                     break;
                 case ButtonType.Credit:
                     break;

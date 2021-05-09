@@ -91,7 +91,15 @@ public class GameManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            SetIsPause(!isPause);
+            if (UI_pause != null)
+            {
+                if(player.GetInventory().isOpen)
+                {
+                    player.GetInventory().ToggleInventory();
+                }
+                else
+                    SetIsPause(!isPause);
+            }
         }
     }
 

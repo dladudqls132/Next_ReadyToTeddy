@@ -67,15 +67,20 @@ public class Inventory : MonoBehaviour
             SwapWeapon(3);
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && !GameManager.Instance.GetIsPause())
         {
-            if (UI_Inventory != null)
-            {
-                UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
-                isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
-            }
+            ToggleInventory();
+        }
+    }
 
-            if (isOpen)
+    public void ToggleInventory()
+    {
+        if (UI_Inventory != null)
+        {
+            UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
+            this.isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
+
+            if (this.isOpen)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
