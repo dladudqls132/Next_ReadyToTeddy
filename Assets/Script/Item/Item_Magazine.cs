@@ -10,7 +10,6 @@ public class Item_Magazine : Item
     {
         if (player.GetInventory().GetWeapon(gunType) != null)
         {
-            Debug.Log("asd");
             //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
             rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
         }
