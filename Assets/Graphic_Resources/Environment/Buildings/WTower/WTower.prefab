@@ -9,8 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2441926209753025691}
+  - component: {fileID: 1604759746523193394}
+  - component: {fileID: 8500536006742446834}
   m_Layer: 0
-  m_Name: Wtower
+  m_Name: WTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,6 +33,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1604759746523193394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4785843051832263206}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.8626099, y: 3.0816486, z: 9.671558}
+  m_Center: {x: 0.2477417, y: -0.03634286, z: 0.105656624}
+--- !u!65 &8500536006742446834
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4785843051832263206}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.26593018, y: 1, z: 7.2240114}
+  m_Center: {x: -1.9758911, y: -3.6239356e-15, z: -1.2550116}
 --- !u!1001 &7542631444061840207
 PrefabInstance:
   m_ObjectHideFlags: 0

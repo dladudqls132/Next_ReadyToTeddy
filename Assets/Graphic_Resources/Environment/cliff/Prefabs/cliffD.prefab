@@ -9,12 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7393064191428781707}
+  - component: {fileID: -301051431220739946}
+  - component: {fileID: 2420386660028295901}
+  - component: {fileID: 5436261111691133478}
+  - component: {fileID: 5335480337161112498}
   m_Layer: 0
   m_Name: cliffD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7393064191428781707
 Transform:
@@ -31,6 +35,58 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &-301051431220739946
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473663257241812973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 22.222279, y: 32.820713, z: 12.53791}
+  m_Center: {x: 7.8721714, y: 15.9103565, z: 1.9043484}
+--- !u!65 &2420386660028295901
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473663257241812973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 13.02541, y: 32.794792, z: 10.957003}
+  m_Center: {x: -8.944294, y: 15.897396, z: 1.3761663}
+--- !u!65 &5436261111691133478
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473663257241812973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.87405, y: 29.008862, z: 9.939348}
+  m_Center: {x: 20.387732, y: 14.004431, z: 0.5309925}
+--- !u!65 &5335480337161112498
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4473663257241812973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.156929, y: 24.337074, z: 4.944351}
+  m_Center: {x: -17.064709, y: 11.668537, z: -1.9721756}
 --- !u!1001 &4107573318573371469
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117,6 +173,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: cliffD_mesh
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 51e2f762d299ea34e9b456025037e251,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 51e2f762d299ea34e9b456025037e251, type: 3}
