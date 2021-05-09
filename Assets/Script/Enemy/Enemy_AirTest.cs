@@ -134,17 +134,17 @@ public class Enemy_AirTest : Enemy
         {
             RaycastHit fireHit;
 
-            if (Physics.Raycast(firePos.position, firePos.forward, out fireHit, Mathf.Infinity))
-            {
-                if (fireHit.transform.CompareTag("Player"))
-                {
-                    fireHit.transform.GetComponent<PlayerController>().DecreaseHp(damage);
-                }
-                else if (fireHit.transform.CompareTag("Enemy"))
-                {
-                    fireHit.transform.GetComponent<Enemy>().DecreaseHp(this.gameObject, damage, fireHit.point, false);
-                }
-            }
+            //if (Physics.Raycast(firePos.position, firePos.forward, out fireHit, Mathf.Infinity))
+            //{
+            //    if (fireHit.transform.CompareTag("Player"))
+            //    {
+            //        fireHit.transform.GetComponent<PlayerController>().DecreaseHp(damage);
+            //    }
+            //    else if (fireHit.transform.CompareTag("Enemy"))
+            //    {
+            //        fireHit.transform.GetComponent<Enemy>().DecreaseHp(this.gameObject, damage, fireHit.point, firePo);
+            //    }
+            //}
             if (state == Enemy_State.Targeting)
                 behavior = Enemy_Behavior.Aiming;
             else

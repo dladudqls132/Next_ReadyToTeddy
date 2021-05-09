@@ -29,8 +29,10 @@ public class UI_Ammo : MonoBehaviour
             {
                 image_lowAmmoCount.enabled = true;
 
-                if(!gun.GetIsReload() && gun.GetCurrentAmmoCount() <= 1)
+                if (!gun.GetIsReload() && gun.GetCurrentAmmoCount() <= 1)
+                {
                     image_reload.enabled = true;
+                }
                 else
                     image_reload.enabled = false;
             }

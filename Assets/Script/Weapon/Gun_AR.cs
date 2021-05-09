@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Gun_AR : Gun
 {
-    [SerializeField] private GameObject bulletHit = null;
-    [SerializeField] private float spreadAngle = 0;
-    [SerializeField] private float fireNum = 0;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -17,6 +14,8 @@ public class Gun_AR : Gun
     // Update is called once per frame
     void Update()
     {
+        //CheckingParent();
+
         if (owner != null)
         {
             if (isShot)
@@ -37,44 +36,59 @@ public class Gun_AR : Gun
                 }
             }
 
-            if (isReload)
-            {
-                currentReloadTime -= Time.deltaTime;
+            //if (isReload)
+            //{
+            //    currentReloadTime -= Time.deltaTime;
 
-                if (currentReloadTime <= 0)
-                {
-                    currentReloadTime = reloadTime;
-                    currentAmmo = maxAmmo;
+            //    if (currentReloadTime <= 0)
+            //    {
+            //        currentReloadTime = reloadTime;
+            //        currentAmmo = maxAmmo;
 
-                    if (currentAmmo >= maxAmmo)
-                    {
-                        isReload = false;
-                    }
-                }
-            }
-            else
-            {
-                currentReloadTime = reloadTime;
-            }
+            //        if (currentAmmo >= maxAmmo)
+            //        {
+            //            isReload = false;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    currentReloadTime = reloadTime;
+            //}
 
-            if (currentAmmo <= 0 && !isShot)
+            if (CanReload() && currentAmmo <= 0)
             {
-                isReload = true;
+                SetIsReload(true);
             }
 
             if (currentAmmo > 0 && !isShot)
                 canShot = true;
             else
+            {
                 canShot = false;
+            }
         }
         else
         {
-            canShot = false;
-            isReload = false;
-            currentReloadTime = reloadTime;
-            currentShotDelay = shotDelay;
-            isShot = false;
+            ResetInfo();
         }
+    }
+
+    public override void SetIsReload(bool value)
+    {
+        base.SetIsReload(value);
+
+        if (value)
+        {
+            hand.GetComponent<Animator>().SetBool("isReload_AR", true);
+        }
+    }
+
+    public override void SetIsReloadFinish()
+    {
+        base.SetIsReloadFinish();
+
+        hand.GetComponent<Animator>().SetBool("isReload_AR", false);
     }
 
     override public bool Fire()
@@ -84,9 +98,22 @@ public class Gun_AR : Gun
 
         if (canShot)
         {
-            mainCam.Shake(0.02f, 0.015f);
-            handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-            hand.GetComponent<Animator>().SetTrigger("isFire_Auto");
+            if (!owner.GetComponent<PlayerController>().GetIsAiming())
+            {
+                currentSpreadAngle = spreadAngle_normal;
+                mainCam.Shake(0.02f, 0.015f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 15.0f, 3.0f);
+            }
+            else
+            {
+                currentSpreadAngle = spreadAngle_aiming;
+                mainCam.Shake(0.02f, 0.015f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 15.0f, 3.0f);
+            }
+
+            hand.GetComponent<Animator>().SetTrigger("Fire_Auto");
 
             isReload = false;
             isRecoil = false;
@@ -94,7 +121,7 @@ public class Gun_AR : Gun
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Ignore Raycast"))))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
             {
                 direction = (hit.point - Camera.main.transform.position).normalized;
             }
@@ -103,17 +130,26 @@ public class Gun_AR : Gun
 
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
-            Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, GameManager.Instance.GetPlayer().GetIsAiming() ? spreadAngle / 180 : spreadAngle / 180 * 2);
+            Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast")), QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
             {
-                if (hit2.transform.CompareTag("Enemy"))
+                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
-                    Enemy enemy = hit2.transform.GetComponent<Enemy>();
-                    enemy.DecreaseHp(owner, damagePerBullet, hit2.point, true);
+                    Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+
+                    if (!hit2.transform.CompareTag("Head"))
+                    {
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 1, 1));
+                    }
+                    else
+                    {
+                        enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(shotDir.normalized * 1, 1));
+                    }
+
                     GameManager.Instance.GetCrosshair().ResetAttack();
                     if (enemy.GetIsDead())
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
@@ -126,9 +162,13 @@ public class Gun_AR : Gun
                 }
                 else
                 {
-                    GameObject tempObect = Instantiate(bulletHit, hit2.point, Quaternion.identity);
+                    GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+                    tempObect.transform.SetParent(null);
+                    tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
+                    tempObect.transform.position = hit2.point;
                     tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                    tempObect.transform.SetParent(hit2.transform);
+                    tempObect.transform.SetParent(hit2.transform, true);
+                    tempObect.SetActive(true);
                 }
             }
 
@@ -143,7 +183,7 @@ public class Gun_AR : Gun
         return false;
     }
 
-    protected override void ResetInfo()
+    override public void ResetInfo()
     {
         base.ResetInfo();
     }

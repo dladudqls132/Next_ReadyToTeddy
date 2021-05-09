@@ -62,7 +62,7 @@ public class RobotMovementController : Enemy
             if (Vector3.Distance(this.transform.position, target.position) <= 1.0f)
             {
                 playerObject.GetComponent<PlayerController>().DecreaseHp(damage);
-                DecreaseHp(10000, false);
+                DecreaseHp(10000);
             }
         }
 

@@ -58,7 +58,8 @@ public class Bullet : MonoBehaviour
             other.GetComponent<PlayerController>().DecreaseHp(damage);
             ActiveFalse();
         }
-        else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
+        else if (!LayerMask.LayerToName(other.gameObject.layer).Equals("Ignore Raycast"))
+        //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
             ActiveFalse();
         }
