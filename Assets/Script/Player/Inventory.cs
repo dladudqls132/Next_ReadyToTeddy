@@ -101,6 +101,7 @@ public class Inventory : MonoBehaviour
             {
                 if (slots[i].weapon.GetComponent<Gun>() != null)
                 {
+
                     if (slots[i].weapon.GetComponent<Gun>().GetGunType() == type)
                     {
                         return slots[i].weapon.GetComponent<Gun>();
