@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour
                 SetDead(true);
 
                 float itemDropRate = Random.Range(0.0f, 100.0f);
-                Debug.Log(itemDropRate);
+
                 if(itemDropRate <= magazineDropRate)
                 {
                     GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position, this.transform.rotation);

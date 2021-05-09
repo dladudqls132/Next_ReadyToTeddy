@@ -7,8 +7,6 @@ public class UI_Pause : MonoBehaviour
     //[SerializeField] private bool isPause = false;
     [SerializeField] private GameObject root;
     [SerializeField] private UI_Button[] buttons;
-    [SerializeField] private Camera cam_UI;
-    [SerializeField] private UI_Button currentButton;
 
     public void Init()
     {
@@ -17,33 +15,6 @@ public class UI_Pause : MonoBehaviour
         foreach (UI_Button child in buttons)
         {
             child.SetActiveFalse();
-        }
-    }
-
-    private void Update()
-    {
-        var ray = cam_UI.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("UI"));
-
-        if(hit.transform != null)
-        {
-            currentButton = hit.transform.GetComponent<UI_Button>();
-            currentButton.OnMouseEnter();
-        }
-        else
-        {
-            if (currentButton != null)
-            {
-                currentButton.OnMouseExit();
-                currentButton = null;
-            }
-        }
-
-        if(Input.GetMouseButtonUp(0))
-        {
-            if(currentButton != null)
-                currentButton.OnMouseUp();
         }
     }
 

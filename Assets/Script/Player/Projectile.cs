@@ -42,8 +42,9 @@ public class Projectile : MonoBehaviour
     public void DecreaseHaveNum() { haveNum -= 1; if (haveNum == 0) this.gameObject.SetActive(false); }
     public void IncreaseHaveNum() { haveNum += 1; }
 
-    public void SetInfo(float damage, float explosionPower, float explosionRadius, int maxHaveNum, float remainingTime)
+    public void SetInfo(Sprite sprite, float damage, float explosionPower, float explosionRadius, int maxHaveNum, float remainingTime)
     {
+        this.sprite = sprite;
         this.damage = damage;
         this.explosionPower = explosionPower;
         this.explosionRadius = explosionRadius;
