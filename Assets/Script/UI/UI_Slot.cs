@@ -87,7 +87,8 @@ public class UI_Slot : MonoBehaviour, IDragHandler, IDropHandler, IEndDragHandle
     public void OnEndDrag(PointerEventData eventData)
     {
         tempSlot.SetActive(false);
-        if (eventData.pointerCurrentRaycast.gameObject.GetComponent<UI_Slot>() == null && eventData.pointerCurrentRaycast.gameObject.transform.parent.GetComponent<UI_Slot>() == null)
+  
+        if (eventData.pointerCurrentRaycast.gameObject == null)
         {
             GameManager.Instance.GetPlayer().GetInventory().DropWeapon(tempSlot.GetComponent<UI_DragDrop>().slotNum);
             tempSlot.SetActive(false);
