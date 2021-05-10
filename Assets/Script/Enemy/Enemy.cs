@@ -204,8 +204,8 @@ public class Enemy : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
-        if (!GameManager.Instance.GetIsCombat())
-            return;
+        //if (!GameManager.Instance.GetIsCombat())
+        //    return;
 
         currentHp -= value;
 
@@ -216,10 +216,10 @@ public class Enemy : MonoBehaviour
 
     public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity)
     {
-        if (!GameManager.Instance.GetIsCombat())
-        {
-            return;
-        }
+        //if (!GameManager.Instance.GetIsCombat())
+        //{
+        //    return;
+        //}
 
         currentHp -= damage;
 

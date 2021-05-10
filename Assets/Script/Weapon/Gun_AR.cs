@@ -78,10 +78,7 @@ public class Gun_AR : Gun
     {
         base.SetIsReload(value);
 
-        if (value)
-        {
-            hand.GetComponent<Animator>().SetBool("isReload_AR", true);
-        }
+        hand.GetComponent<Animator>().SetBool("isReload_AR", value);
     }
 
     public override void SetIsReloadFinish()
@@ -133,7 +130,7 @@ public class Gun_AR : Gun
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
-
+    
             RaycastHit hit2;
             if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
             {

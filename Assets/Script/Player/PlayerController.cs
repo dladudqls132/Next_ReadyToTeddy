@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
         if (gun != null)
         {
             if (this.gun.GetIsReload())
-                return false;
+                this.gun.SetIsReload(false);
         }
 
         tempWeapon = weapon;

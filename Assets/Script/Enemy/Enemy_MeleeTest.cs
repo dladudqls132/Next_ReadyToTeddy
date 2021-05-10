@@ -41,6 +41,7 @@ public class Enemy_MeleeTest : Enemy
         state = Enemy_State.None;
         agent.isStopped = true;
         currentHp = maxHp;
+        this.GetComponent<Collider>().enabled = false;
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }

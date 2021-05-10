@@ -35,12 +35,14 @@ public class HandAnimController : MonoBehaviour
             {
                 if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.AR)
                 {
+                
                     anim.SetBool("Hand_AR", true);
                     anim.SetBool("Hand_Shotgun", false);
                     anim.SetBool("Hand_Empty", false);
                 }
                 else if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.ShotGun)
                 {
+           
                     anim.SetBool("Hand_AR", false);
                     anim.SetBool("Hand_Shotgun", true);
                     anim.SetBool("Hand_Empty", false);
@@ -58,6 +60,7 @@ public class HandAnimController : MonoBehaviour
         }
         else
         {
+            Debug.Log("asd");
             anim.SetBool("Hand_AR", false);
             anim.SetBool("Hand_Shotgun", false);
             anim.SetBool("Hand_Empty", true);

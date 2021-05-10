@@ -81,12 +81,7 @@ public class Gun_Test : Gun
     {
         base.SetIsReload(value);
 
-        if (value)
-        {
-
-            hand.GetComponent<Animator>().SetBool("isReload_Shotgun", true);
-
-        }
+        hand.GetComponent<Animator>().SetBool("isReload_Shotgun", value);
     }
 
     public override void SetIsReloadFinish()
