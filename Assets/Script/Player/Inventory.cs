@@ -43,8 +43,8 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        UI_Inventory = FindObjectOfType<UI_Inventory>();
-        UI_Inventory.transform.GetChild(0).gameObject.SetActive(false);
+        //UI_Inventory = FindObjectOfType<UI_Inventory>();
+        //UI_Inventory.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -66,11 +66,16 @@ public class Inventory : MonoBehaviour
         {
             SwapWeapon(3);
         }
-
-        if (Input.GetKeyDown(KeyCode.Tab) && !GameManager.Instance.GetIsPause())
+        else if(Input.GetKeyDown(KeyCode.G))
         {
-            ToggleInventory();
+            SwapWeapon(4);
         }
+
+
+        //if (Input.GetKeyDown(KeyCode.Tab) && !GameManager.Instance.GetIsPause())
+        //{
+        //    ToggleInventory();
+        //}
     }
 
     public void ToggleInventory()
@@ -122,7 +127,7 @@ public class Inventory : MonoBehaviour
                 slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
                 slots[currentSlotNum].weapon = null;
                 slots[currentSlotNum].isEmpty = true;
-                UI_Inventory.UpdateSlot(currentSlotNum);
+                //UI_Inventory.UpdateSlot(currentSlotNum);
                 SetAnyWeapon();
             }
         }
@@ -138,7 +143,7 @@ public class Inventory : MonoBehaviour
                 slots[slotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
                 slots[slotNum].weapon = null;
                 slots[slotNum].isEmpty = true;
-                UI_Inventory.UpdateSlot(slotNum);
+                //UI_Inventory.UpdateSlot(slotNum);
                 SetAnyWeapon();
             }
         }
@@ -150,7 +155,7 @@ public class Inventory : MonoBehaviour
                 slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
                 slots[slotNum].weapon = null;
                 slots[slotNum].isEmpty = true;
-                UI_Inventory.UpdateSlot(slotNum);
+                //UI_Inventory.UpdateSlot(slotNum);
                 SetAnyWeapon();
             }
         }
@@ -167,7 +172,7 @@ public class Inventory : MonoBehaviour
                 slots[currentSlotNum].weapon = weapon;
                 weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[currentSlotNum].transform);
                 weapon.gameObject.SetActive(false);
-                UI_Inventory.UpdateSlot(currentSlotNum);
+                //UI_Inventory.UpdateSlot(currentSlotNum);
                 SwapWeapon(currentSlotNum);
             }
         }
@@ -191,8 +196,8 @@ public class Inventory : MonoBehaviour
                         slots[changedSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changedSlotNum].transform);
                         slots[changeSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changeSlotNum].transform);
 
-                        UI_Inventory.UpdateSlot(changedSlotNum);
-                        UI_Inventory.UpdateSlot(changeSlotNum);
+                        //UI_Inventory.UpdateSlot(changedSlotNum);
+                        //UI_Inventory.UpdateSlot(changeSlotNum);
                         SwapWeapon(currentSlotNum);
 
                         return true;
@@ -205,8 +210,8 @@ public class Inventory : MonoBehaviour
                         slots[changeSlotNum].weapon = null;
                         slots[changeSlotNum].isEmpty = true;
 
-                        UI_Inventory.UpdateSlot(changedSlotNum);
-                        UI_Inventory.UpdateSlot(changeSlotNum);
+                        //UI_Inventory.UpdateSlot(changedSlotNum);
+                        //UI_Inventory.UpdateSlot(changeSlotNum);
                         SwapWeapon(2);
 
                         return true;
@@ -232,7 +237,7 @@ public class Inventory : MonoBehaviour
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
                         weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
-                        UI_Inventory.UpdateSlot(i);
+                        //UI_Inventory.UpdateSlot(i);
 
                         SwapWeapon(i);
                         return;
@@ -246,7 +251,7 @@ public class Inventory : MonoBehaviour
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
                         weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
-                        UI_Inventory.UpdateSlot(i);
+                        //UI_Inventory.UpdateSlot(i);
 
                         return;
                     }
@@ -271,6 +276,7 @@ public class Inventory : MonoBehaviour
     {
         if (slots[slotNum].slotType == SlotType.Projectile)
         {
+            Debug.Log("asd");
             if (slots[slotNum].weapon != null)
             {
                 //Destroy(slots[slotNum].weapon);
@@ -278,7 +284,7 @@ public class Inventory : MonoBehaviour
                 slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
                 slots[slotNum].weapon = null;
                 slots[slotNum].isEmpty = true;
-                UI_Inventory.UpdateSlot(slotNum);
+                //UI_Inventory.UpdateSlot(slotNum);
                 SetAnyWeapon();
             }
         }
@@ -296,7 +302,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private void SwapWeapon(int slotNum)
+    public void SwapWeapon(int slotNum)
     {
         if (slots[slotNum].slotType == SlotType.Gun)
         {

@@ -102,7 +102,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    virtual protected void Start()
+    virtual protected void Awake()
     {
         currentRemainingTime = remainingTime;
         rigid = this.GetComponent<Rigidbody>();

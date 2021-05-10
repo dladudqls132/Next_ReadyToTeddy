@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
     private bool isAimingProjectile;
 
     [SerializeField] private Inventory inventory;
+    [SerializeField] private GameObject[] weapons;
 
     private bool isMoveAim;
     private Vector3 climbUpPos = Vector3.zero;
@@ -290,44 +291,14 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        if (!isInit)
+        for (int i = 0; i < weapons.Length; i++)
         {
-            rigid = this.GetComponent<Rigidbody>();
-            currentSlidingCoolTime = 0;
-            headBobValue = 0;
-            headOriginY = camPos.localPosition.y;
-            mainCam = Camera.main.transform.GetComponent<FPPCamController>();
-            if (hand == null)
-                hand = mainCam.transform.Find("HandPos");
-            currentHP = maxHP;
-            handOriginPos = hand.parent.localPosition;
-            handOriginRot = hand.parent.localRotation;
-            currentCombatTime = combatTime;
-            currentWPressTime = WPressTime;
-            currentDashPower = dashPower;
-            currentClimbUpTime = climbUpTime;
-            currentClimbuUpPower = climbUpPower;
-            originBodyColliderCenter = bodyCollider.center;
-            originBodyColliderHeight = bodyCollider.height;
-            //currentKickWallTime = 0;
-            originAimPos = aimPos.position;
-            projectileController = this.GetComponent<ThrowProjectile>();
-            //currentWeaponNum = 1;
+            GameObject temp = Instantiate(weapons[i]);
 
-            //for(int i = 0; i < hand.childCount; i++)
-            //{
-            //    slot.Add(hand.GetChild(i));
-            //}
-
-
-            //hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
-
-            //weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).gameObject;
-            //weapon = weapon_gameObject.GetComponent<Gun>();
-
-            //if (weapon.GetOwner() == null)
-            //    weapon.SetOwner(this.gameObject, hand);
+            inventory.AddWeapon(temp);
         }
+
+        inventory.SwapWeapon(0);
     }
 
     // Update is called once per frame
@@ -371,38 +342,38 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.E))
-        {
-            if (!isPickup)
-            {
-                currentPickupTime += Time.deltaTime;
+        //if (Input.GetKey(KeyCode.E))
+        //{
+        //    if (!isPickup)
+        //    {
+        //        currentPickupTime += Time.deltaTime;
 
-                if (currentPickupTime >= pickupTime)
-                {
-                    currentPickupTime = 0;
-                    isPickup = true;
-                    PickUpWeapon_Change();
-                }
-            }
-        }
-        else if (Input.GetKeyUp(KeyCode.E))
-        {
-            if (!isPickup)
-            {
-                PickUpWeapon();
-            }
+        //        if (currentPickupTime >= pickupTime)
+        //        {
+        //            currentPickupTime = 0;
+        //            isPickup = true;
+        //            PickUpWeapon_Change();
+        //        }
+        //    }
+        //}
+        //else if (Input.GetKeyUp(KeyCode.E))
+        //{
+        //    if (!isPickup)
+        //    {
+        //        PickUpWeapon();
+        //    }
 
-            currentPickupTime = 0;
-            isPickup = false;
-        }
+        //    currentPickupTime = 0;
+        //    isPickup = false;
+        //}
 
-        if (!isSwap)
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                inventory.DropWeapon();
-            }
-        }
+        //if (!isSwap)
+        //{
+        //    if (Input.GetKeyDown(KeyCode.G))
+        //    {
+        //        inventory.DropWeapon();
+        //    }
+        //}
 
         //if (projectile != null)
         //{
@@ -820,7 +791,7 @@ public class PlayerController : MonoBehaviour
 
             if (projectile.GetHaveNum() == 0)
             {
-                inventory.DestroyWeapon(3);
+                inventory.DestroyWeapon(4);
             }
         }
 

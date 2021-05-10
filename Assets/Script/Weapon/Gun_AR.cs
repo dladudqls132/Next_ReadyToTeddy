@@ -6,9 +6,9 @@ public class Gun_AR : Gun
 {
 
     // Start is called before the first frame update
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
     }
 
     // Update is called once per frame
@@ -172,7 +172,7 @@ public class Gun_AR : Gun
                 }
             }
 
-            muzzleFlash.Play();
+             muzzleFlash.Play();
             isShot = true;
 
             currentAmmo--;

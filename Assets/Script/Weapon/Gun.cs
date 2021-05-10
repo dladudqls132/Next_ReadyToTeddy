@@ -80,7 +80,7 @@ public class Gun : MonoBehaviour
         this.shotDelay = shotDelay;
     }
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         currentAmmo = maxAmmo_aMag;
         currentReloadTime = reloadTime;

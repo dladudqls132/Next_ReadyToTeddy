@@ -11,9 +11,9 @@ public class Projectile_Grenade : Projectile
 {
     [SerializeField] private ProjectileType projectileType;
 
-    override protected void Start()
+    override protected void Awake()
     {
-        base.Start();
+        base.Awake();
     }
 
     //private void OnCollisionStay(Collision collision)

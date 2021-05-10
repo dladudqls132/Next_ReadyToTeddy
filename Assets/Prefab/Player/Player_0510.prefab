@@ -77,7 +77,6 @@ GameObject:
   - component: {fileID: 1166985257174778463}
   - component: {fileID: 1166985257174778462}
   - component: {fileID: 1456296400983264770}
-  - component: {fileID: 1166985257326780172}
   m_Layer: 11
   m_Name: Player_0510
   m_TagString: Player
@@ -199,6 +198,10 @@ MonoBehaviour:
   landingReboundSpeed: 40
   skill1_range: 10
   inventory: {fileID: 0}
+  weapons:
+  - {fileID: 1745712563323169272, guid: 755db1d60a819784e949d71d3b1dff26, type: 3}
+  - {fileID: 2314137261922342597, guid: 386da91217bc6d446a4b90aea7215db9, type: 3}
+  - {fileID: 2731157901539131877, guid: 999598ad633838840ab1ab9824aba44a, type: 3}
   collisionWeapon: []
 --- !u!114 &1456296399904524739
 MonoBehaviour:
@@ -352,40 +355,11 @@ MonoBehaviour:
     transform: {fileID: 0}
     weapon: {fileID: 0}
     isEmpty: 0
-  - slotType: 0
-    transform: {fileID: 0}
-    weapon: {fileID: 0}
-    isEmpty: 0
-  - slotType: 2
-    transform: {fileID: 0}
-    weapon: {fileID: 0}
-    isEmpty: 0
-  currentSlotNum: 0
-  player: {fileID: 0}
-  isOpen: 0
-  UI_Inventory: {fileID: 0}
---- !u!114 &1166985257326780172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6958420859628283330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ce5b9853cc1e341be80cf6c7f97391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots:
   - slotType: 1
     transform: {fileID: 0}
     weapon: {fileID: 0}
     isEmpty: 0
   - slotType: 1
-    transform: {fileID: 0}
-    weapon: {fileID: 0}
-    isEmpty: 0
-  - slotType: 0
     transform: {fileID: 0}
     weapon: {fileID: 0}
     isEmpty: 0
