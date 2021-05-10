@@ -276,7 +276,6 @@ public class Inventory : MonoBehaviour
     {
         if (slots[slotNum].slotType == SlotType.Projectile)
         {
-            Debug.Log("asd");
             if (slots[slotNum].weapon != null)
             {
                 //Destroy(slots[slotNum].weapon);

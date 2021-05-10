@@ -110,9 +110,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 036a5153f233ad146a42b6c5ebd74727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item: {fileID: 0}
+  projectile: {fileID: 0}
+  sprite: {fileID: 0}
+  text: 
+  originPos: {x: 0, y: 0, z: 0}
+  originRot: {x: 0, y: 0, z: 0}
+  aimingPos: {x: 0, y: 0, z: 0}
+  aimingRot: {x: 0, y: 0, z: 0}
+  haveNum: 0
+  damage: 0
+  maxHaveNum: 0
   remainingTime: 3
   explosionRadius: 5
   explosionPower: 100
+  particle: {fileID: 6527742569514885964, guid: ad017c63d88641a4cbea8adc7bc5f44a,
+    type: 3}
+  mesh: []
   projectileType: 0
 --- !u!135 &8239869697268387835
 SphereCollider:

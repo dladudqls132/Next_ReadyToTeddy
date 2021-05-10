@@ -181,6 +181,7 @@ public class Gun_Test : Gun
                     }
                 }
 
+                muzzleFlash.time = 0;
                 muzzleFlash.Play();
                 isShot = true;
             }

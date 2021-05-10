@@ -25,7 +25,7 @@ public class UI_Ammo : MonoBehaviour
         {
             text_ammoCount.text = gun.GetCurrentAmmoCount().ToString() + " / " + gun.GetMaxAmmoCount().ToString();
 
-            if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmoCount() / 3)
+            if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
             {
                 image_lowAmmoCount.enabled = true;
 

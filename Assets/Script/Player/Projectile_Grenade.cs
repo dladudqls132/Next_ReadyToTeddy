@@ -34,6 +34,7 @@ public class Projectile_Grenade : Projectile
             if(currentRemainingTime <= 0)
             {
                 currentRemainingTime = remainingTime;
+                Instantiate(particle, this.transform.position, particle.gameObject.transform.rotation);
 
                 Vector3 explosionPos = transform.position;
                 Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide);

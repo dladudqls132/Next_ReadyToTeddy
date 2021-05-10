@@ -170,6 +170,9 @@ public class PlayerController : MonoBehaviour
             this.projectile = null;
         }
 
+        if(projectile != null)
+            projectileController.ResetInfo();
+
         isSwap = true;
 
         handFireRot = Quaternion.Euler(0, 0, 0);
