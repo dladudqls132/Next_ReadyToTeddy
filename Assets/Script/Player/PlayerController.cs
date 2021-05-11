@@ -11,7 +11,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CapsuleCollider groundCollider = null;
     [SerializeField] private Transform hand = null;
 
-
     private Quaternion lastAngle_hand;
     private Vector3 lastPos_hand;
 
@@ -106,7 +105,12 @@ public class PlayerController : MonoBehaviour
 
     private bool isInit = false;
 
-    [SerializeField] private List<GameObject> collisionWeapon = new List<GameObject>();
+    private List<GameObject> collisionWeapon = new List<GameObject>();
+
+    [SerializeField] private float dashRefillTime;
+    private float currentDashRefillTime;
+    [SerializeField] private int dashCount;
+    [SerializeField] private int currentDashCount;
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
@@ -273,6 +277,7 @@ public class PlayerController : MonoBehaviour
         //currentKickWallTime = 0;
         originAimPos = aimPos.localPosition;
         projectileController = this.GetComponent<ThrowProjectile>();
+        currentDashCount = dashCount;
         //currentWeaponNum = 1;
         //for (int i = 0; i < hand.childCount - 1; i++)
         //{
@@ -307,6 +312,21 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(currentDashCount < dashCount)
+        {
+            currentDashRefillTime += Time.deltaTime;
+
+            if(currentDashRefillTime >= dashRefillTime)
+            {
+                currentDashCount++;
+                currentDashRefillTime = 0;
+            }
+        }
+        else
+        {
+            currentDashRefillTime = 0;
+        }
+
         if (isDead || GameManager.Instance.GetIsPause() || isPushed)
         {
             if (isDead)
@@ -712,9 +732,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp && moveDirection != Vector3.zero)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp && moveDirection != Vector3.zero && currentDashCount > 0 && !isDash)
         {
             isDash = true;
+            currentDashCount--;
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
                 mainCam.FovMove(mainCam.GetOriginFov() - 2.0f, 0.1f, 0.1f);
             if (Vector3.Dot(forward, moveDirection) < 0)
