@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
     private bool isFire;
     private Rigidbody rigid;
     private float lifeTime = 15.0f;
-    private float currentLifeTime = 0;
+    [SerializeField] private float currentLifeTime = 0;
     private bool isDestroyed;
     private SphereCollider coll;
     private TrailRenderer trail;
@@ -25,6 +25,7 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
         if(isFire)
         {
             rigid.velocity = dir * speed;
@@ -32,10 +33,17 @@ public class Bullet : MonoBehaviour
 
         if(isDestroyed)
         {
-            ActiveFalse();
             if(trail.positionCount <= 0)
             {
                 ResetInfo();
+            }
+        }
+        else
+        {
+            currentLifeTime += Time.deltaTime;
+            if (currentLifeTime >= lifeTime)
+            {
+                ActiveFalse();
             }
         }
     }
@@ -72,12 +80,13 @@ public class Bullet : MonoBehaviour
         rigid.velocity = Vector3.zero;
         coll.enabled = false;
         isDestroyed = true;
+        currentLifeTime = 0;
         this.GetComponent<MeshRenderer>().enabled = false;
     }
 
     void ResetInfo()
     {
-        currentLifeTime = lifeTime;
+        currentLifeTime = 0;
         rigid.velocity = Vector3.zero;
         isFire = false;
         coll.enabled = true;
