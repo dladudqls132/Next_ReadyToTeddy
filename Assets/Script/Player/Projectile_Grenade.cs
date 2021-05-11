@@ -73,7 +73,6 @@ public class Projectile_Grenade : Projectile
 
                                 if (GameManager.Instance.GetIsCombat())
                                 {
-                                    Debug.Log(rb.transform);
                                     Enemy temp = rb.GetComponent<Enemy>();
                             
                                     temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);

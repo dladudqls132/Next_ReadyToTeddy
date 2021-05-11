@@ -12,6 +12,7 @@ public class HandAnimController : MonoBehaviour
     [SerializeField] public Transform weaponRightGrip;
 
     Animator anim;
+    private float horizontal;
 
     private void Start()
     {
@@ -60,7 +61,6 @@ public class HandAnimController : MonoBehaviour
         }
         else
         {
-            Debug.Log("asd");
             anim.SetBool("Hand_AR", false);
             anim.SetBool("Hand_Shotgun", false);
             anim.SetBool("Hand_Empty", true);
@@ -75,5 +75,12 @@ public class HandAnimController : MonoBehaviour
 
         this.GetComponent<Animator>().SetBool("isSwap", false);
         player.SetIsSwap(false);
+    }
+
+    private void Update()
+    {
+        
+        horizontal = Mathf.Lerp(horizontal, GameManager.Instance.GetPlayer().moveInput.x, Time.deltaTime * 20);
+        anim.SetFloat("horizontal", horizontal);
     }
 }

@@ -82,14 +82,14 @@ public class PlayerController : MonoBehaviour
 
     private bool isMoveAim;
     private Vector3 climbUpPos = Vector3.zero;
-    private Vector2 moveInput = Vector2.zero;
+    public Vector2 moveInput = Vector2.zero;
     private Rigidbody rigid = null;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 slidingDirection = Vector3.zero;
     private Vector3 dashDirection = Vector3.zero;
     private float headBobValue = 0;
     private float headOriginY = 0;
-    private Vector3 handOriginPos = Vector3.zero;
+    [SerializeField] private Vector3 handOriginPos = Vector3.zero;
     private Quaternion handOriginRot = Quaternion.identity;
     private Vector3 result = Vector3.zero;
     private Vector3 originBodyColliderCenter;
@@ -619,10 +619,10 @@ public class PlayerController : MonoBehaviour
             if (!isDash)
                 useGravity = true;
             groundCollider.enabled = false;
-            if (isGrounded && !isJump && !isJumpByObject)
-            {
-                rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
-            }
+            //if (isGrounded && !isJump && !isJumpByObject)
+            //{
+            //    rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
+            //}
 
             isGrounded = false;
             isLanding = false;
@@ -880,7 +880,7 @@ public class PlayerController : MonoBehaviour
                 mainCam.FovReset();
             }
             isJump = true;
-
+            hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
             canJump = false;
 
@@ -1126,7 +1126,7 @@ public class PlayerController : MonoBehaviour
                     if (!isCrouch && !isSlide)
                     {
                         camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY, camPos.localPosition.z), Time.deltaTime * 8);
-                        headBobValue = 0;
+                        //headBobValue = Mathf.Lerp(headBobValue, 0, Time.deltaTime * 15);
                     }
                 }
             }
@@ -1134,7 +1134,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             isLanding = false;
-            headBobValue = 0;
+            //headBobValue = Mathf.Lerp(headBobValue, 0, Time.deltaTime * 15);
             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
         }
 
@@ -1178,14 +1178,17 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         gun.SetIsAiming(false);
-                        Vector3 temp1 = new Vector3(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, lastAngle_hand.eulerAngles.z);
-                        Vector3 temp2 = handFireRot.eulerAngles;
-                        lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(temp1 + temp2), Time.deltaTime * 30);
-                        lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(lastAngle_hand.eulerAngles.x, lastAngle_hand.eulerAngles.y, -moveInput.x * 3), Time.deltaTime * 6);
+                        lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+                        //lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
+                        //Vector3 temp1 = new Vector3(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, lastAngle_hand.eulerAngles.z);
+                        //Vector3 temp2 = handFireRot.eulerAngles;
+                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(temp1 + temp2), Time.deltaTime * 30);
+                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(lastAngle_hand.eulerAngles.x, lastAngle_hand.eulerAngles.y, -moveInput.x * 3), Time.deltaTime * 6);
                         lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(hand.localPosition.x, lastPos_hand.y, hand.localPosition.z), Time.deltaTime * 30);
-                        if(moveInput != Vector2.zero && !gun.GetIsShot())
+                        if (moveInput != Vector2.zero && !gun.GetIsShot())
                         {
-                            lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y - 0.01f, lastPos_hand.z) + new Vector3(0, Mathf.Abs(Mathf.Sin(headBobValue)) / 60f, 0), Time.deltaTime * 6);
+                            if(!isLanding)
+                                lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(0, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
                         }
                         else
                         {
@@ -1213,12 +1216,11 @@ public class PlayerController : MonoBehaviour
             hand.localPosition = lastPos_hand;
             hand.localRotation = lastAngle_hand;
         }
-
     }
 
     private void LateUpdate()
     {
-        HandAnimation();
+        //HandAnimation();
     }
 
     //public void SwapWeapon(GameObject weapon)
