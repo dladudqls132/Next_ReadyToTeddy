@@ -16,76 +16,12 @@ Shader "Custom/ToonShader"
 		//_SpecularColor("Specular Color", Color) = (0.9,0.9,0.9,1)
 			// Controls the size of the specular reflection.
 			_Glossiness("Glossiness", Float) = 32
-	
 
-	_OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
-	_OutlineWidth("Outline Width", Range(0, 10)) = 2
 
 	}
 		SubShader
 	{
-		 Tags {
-	  "Queue" = "Transparent+110"
-	  "RenderType" = "Transparent"
-	  "DisableBatching" = "True"
-	}
-
-	Pass {
-	  Name "Fill"
-	  Cull Off
-	
-	  ZWrite Off
-	  Blend SrcAlpha OneMinusSrcAlpha
-	  ColorMask RGB
-
-	  Stencil {
-		Ref 1
-		Comp NotEqual
-	  }
-
-	  CGPROGRAM
-	  #include "UnityCG.cginc"
-
-	  #pragma vertex vert
-	  #pragma fragment frag
-
-	  struct appdata {
-		float4 vertex : POSITION;
-		float3 normal : NORMAL;
-		float3 smoothNormal : TEXCOORD3;
-		UNITY_VERTEX_INPUT_INSTANCE_ID
-	  };
-
-	  struct v2f {
-		float4 position : SV_POSITION;
-		fixed4 color : COLOR;
-		UNITY_VERTEX_OUTPUT_STEREO
-	  };
-
-	  uniform fixed4 _OutlineColor;
-	  uniform float _OutlineWidth;
-
-	  v2f vert(appdata input) {
-		v2f output;
-
-		UNITY_SETUP_INSTANCE_ID(input);
-		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-
-		float3 normal = any(input.smoothNormal) ? input.smoothNormal : input.normal;
-		float3 viewPosition = UnityObjectToViewPos(input.vertex);
-		float3 viewNormal = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, normal));
-
-		output.position = UnityViewToClipPos(viewPosition + viewNormal * -viewPosition.z * _OutlineWidth / (350 * (length(ObjSpaceViewDir(input.vertex)))));
-		output.color = _OutlineColor;
-
-		return output;
-	  }
-
-	  fixed4 frag(v2f input) : SV_Target {
-		return input.color;
-	  }
-	  ENDCG
-	}
+		  
 
 				Tags
 		{
@@ -135,7 +71,7 @@ Shader "Custom/ToonShader"
 			// depending on platform target.
 			//SHADOW_COORDS(2)
 				//UNITY_FOG_COORDS(6)
-				LIGHTING_COORDS(1, 2) // LIGHTING COORDS HERE ---------------------------------------
+				LIGHTING_COORDS(6, 7) // LIGHTING COORDS HERE ---------------------------------------
 		};
 
 		sampler2D _MainTex;
@@ -197,16 +133,10 @@ Shader "Custom/ToonShader"
 			float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
 			float NdotH = dot(normal, halfVector);
 
-			float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _Glossiness);
-			float specularIntensitySmooth = specularIntensity > 0.5 ? 1 : 0;
-			float4 specular = specularIntensitySmooth * _SpecularColor;
-
 			float4 sample = tex2D(_MainTex, i.uv);
 			half3 fTangnetNormal = UnpackNormal(tex2D(_BumpTex, i.uv));
 			fTangnetNormal.xy *= 1.0f; // 노말강도 조절
 			float3 worldNormal = Fuc_TangentNormal2WorldNormal(fTangnetNormal, i.T, i.B, i.N);
-			//fixed fNDotL = dot(i.lightDir, worldNormal);
-			//float3 lightDir = normalize(_WorldSpaceLightPos0 - i.pos);
 
 			float3 outLine = dot(viewDir, normal);
 			fixed last = sample * NdotL;
@@ -228,7 +158,10 @@ Shader "Custom/ToonShader"
 			return (result) * sample;
 		}
 		ENDCG
+
 	}
+
+
 
 		// Shadow casting support.
 		UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
