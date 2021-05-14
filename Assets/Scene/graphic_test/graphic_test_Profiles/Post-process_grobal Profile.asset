@@ -1,5 +1,31 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7620531504818951031
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  spectralLut:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  intensity:
+    overrideState: 1
+    value: 0.079
+  fastMode:
+    overrideState: 0
+    value: 0
 --- !u!114 &-2539592942119716163
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -45,6 +71,7 @@ MonoBehaviour:
   - {fileID: 9035448862878209867}
   - {fileID: 99705511631223163}
   - {fileID: -2539592942119716163}
+  - {fileID: -7620531504818951031}
 --- !u!114 &99705511631223163
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -107,10 +134,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 2
+    value: 1.85
   threshold:
     overrideState: 1
-    value: 0.75
+    value: 1.03
   softKnee:
     overrideState: 0
     value: 0.5
@@ -130,12 +157,12 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   dirtTexture:
-    overrideState: 0
-    value: {fileID: 0}
+    overrideState: 1
+    value: {fileID: 2800000, guid: 9b743bf4caeef774eb29021e6e028fce, type: 3}
     defaultState: 1
   dirtIntensity:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1.58
 --- !u!114 &9035448862878209867
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -188,8 +215,8 @@ MonoBehaviour:
     overrideState: 0
     value: 1
   temperature:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: -5.3
   tint:
     overrideState: 0
     value: 0
@@ -207,10 +234,10 @@ MonoBehaviour:
     value: 0
   postExposure:
     overrideState: 1
-    value: 1.12
+    value: 0.35
   contrast:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 11.4
   mixerRedOutRedIn:
     overrideState: 0
     value: 100
@@ -222,13 +249,13 @@ MonoBehaviour:
     value: 0
   mixerGreenOutRedIn:
     overrideState: 0
-    value: 0
+    value: -13
   mixerGreenOutGreenIn:
     overrideState: 0
-    value: 100
+    value: 166
   mixerGreenOutBlueIn:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 18
   mixerBlueOutRedIn:
     overrideState: 0
     value: 0
@@ -240,13 +267,13 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 1
-    value: {x: 1, y: 0.9745485, z: 0.92273414, w: 0}
+    value: {x: 1, y: 0.9076667, z: 0.68945825, w: -0.09756097}
   gamma:
     overrideState: 1
-    value: {x: 1, y: 0.9475003, z: 0.83907384, w: 0}
+    value: {x: 1, y: 0.712181, z: 0.8838574, w: 0.15609756}
   gain:
     overrideState: 1
-    value: {x: 0.9105118, y: 0.91120595, z: 1, w: 0}
+    value: {x: 0.9483928, y: 1, z: 0.9292541, w: -0.03902439}
   masterCurve:
     overrideState: 0
     value:
