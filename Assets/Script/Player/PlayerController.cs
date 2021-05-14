@@ -1183,20 +1183,16 @@ public class PlayerController : MonoBehaviour
                     {
                         gun.SetIsAiming(false);
                         lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
-                        //lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
-                        //Vector3 temp1 = new Vector3(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, lastAngle_hand.eulerAngles.z);
-                        //Vector3 temp2 = handFireRot.eulerAngles;
-                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(temp1 + temp2), Time.deltaTime * 30);
-                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(lastAngle_hand.eulerAngles.x, lastAngle_hand.eulerAngles.y, -moveInput.x * 3), Time.deltaTime * 6);
-                        lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(hand.localPosition.x, lastPos_hand.y, hand.localPosition.z), Time.deltaTime * 25);
-                        if (moveInput != Vector2.zero && !gun.GetIsShot())
+                   
+                        if (moveInput == Vector2.zero)
                         {
-                            if(!isLanding)
-                                lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
+                            lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 20);
                         }
                         else
                         {
-                            lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
+                            lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
+                            lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
+
                         }
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
