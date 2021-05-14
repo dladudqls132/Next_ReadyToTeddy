@@ -182,11 +182,11 @@ public class Enemy : MonoBehaviour
 
                 if(itemDropRate <= magazineDropRate)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position, this.transform.rotation);
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
                 }
                 else if(itemDropRate <= magazineDropRate + potionDropRate)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position, this.transform.rotation);
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
                 }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);

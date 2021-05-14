@@ -478,7 +478,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 78
+  m_RootOrder: 79
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &92277531
 PrefabInstance:
@@ -5148,6 +5148,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_0510
       objectReference: {fileID: 0}
+    - target: {fileID: 6958420859628283331, guid: 0b4c12cc056eb824fa0473083a99bd23,
+        type: 3}
+      propertyPath: weapons.Array.data[0]
+      value: 
+      objectReference: {fileID: 5978284671447750407, guid: ea0bf6f262de08345ac0dc64d7d680a5,
+        type: 3}
     - target: {fileID: 6958420859628283335, guid: 0b4c12cc056eb824fa0473083a99bd23,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7332,7 +7338,7 @@ PrefabInstance:
     - target: {fileID: 5027605912874013490, guid: d6882fcf37b2f7542bf52d26baa00246,
         type: 3}
       propertyPath: m_RootOrder
-      value: 79
+      value: 78
       objectReference: {fileID: 0}
     - target: {fileID: 5027605912874013490, guid: d6882fcf37b2f7542bf52d26baa00246,
         type: 3}
@@ -9781,7 +9787,7 @@ PrefabInstance:
     - target: {fileID: 5027605912874013490, guid: d6882fcf37b2f7542bf52d26baa00246,
         type: 3}
       propertyPath: m_RootOrder
-      value: 37
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5027605912874013490, guid: d6882fcf37b2f7542bf52d26baa00246,
         type: 3}
@@ -10577,7 +10583,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 32
+  m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1542919678 &1129424306
 StreamingController:
@@ -13973,7 +13979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 36
+  m_RootOrder: 37
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1573617747 stripped
 Transform:
@@ -19589,6 +19595,16 @@ PrefabInstance:
       propertyPath: volumeTrigger
       value: 
       objectReference: {fileID: 59874121}
+    - target: {fileID: 577944170699312155, guid: 2e31866e7607aeb44813f98741bdf41d,
+        type: 3}
+      propertyPath: aimingMoveRndTime
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 577944170699312155, guid: 2e31866e7607aeb44813f98741bdf41d,
+        type: 3}
+      propertyPath: isAiming
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 577944170699312158, guid: 2e31866e7607aeb44813f98741bdf41d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19702,7 +19718,7 @@ PrefabInstance:
     - target: {fileID: 4696790329397801309, guid: 75961af2d6418ee419e80635ecc52422,
         type: 3}
       propertyPath: m_RootOrder
-      value: 33
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 4696790329397801309, guid: 75961af2d6418ee419e80635ecc52422,
         type: 3}

@@ -34,8 +34,12 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private bool isFire;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float returnSpeed;
+    [SerializeField] private float aimingMoveRndTime;
+    private float currentAimingMoveRndTime;
     private float currentReturnSpeed;
-    private Vector3 tempDir;
+    
+    private Vector2 tempDir;
+    private Vector2 currentTempDir;
 
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
@@ -43,7 +47,7 @@ public class FPPCamController : MonoBehaviour
     [Header("Aiming: ")]
     [SerializeField] private Vector3 recoilRotationAiming = new Vector3(0.5f, 0.5f, 1.0f);
 
-    public bool isAiming;
+    private bool isAiming;
 
     [SerializeField] private Vector3 currentRotation;
     [SerializeField] private Vector3 rot;
@@ -163,6 +167,7 @@ public class FPPCamController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        isAiming = GameManager.Instance.GetPlayer().GetIsAiming();
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
@@ -178,12 +183,12 @@ public class FPPCamController : MonoBehaviour
         rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
 
         currentReturnSpeed += Time.deltaTime;
-
+        Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);
         if (isShake)
 
         {
 
-            transform.position = Random.insideUnitSphere * shakeAmount + cameraFollow.position;
+            transform.position = Random.insideUnitSphere * shakeAmount + cameraFollow.position + temp;
 
             currentShakeTime -= Time.deltaTime;
 
@@ -197,7 +202,36 @@ public class FPPCamController : MonoBehaviour
         else
 
         {
-            this.transform.position = cameraFollow.position;
+            if (!isAiming)
+            {
+                this.transform.position = cameraFollow.position + temp;
+                currentAimingMoveRndTime = 0;
+                tempDir = Vector2.zero;
+                currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 15f);
+            }
+            else
+            {
+                if (!Input.GetMouseButton(0))
+                {
+                    this.transform.position = cameraFollow.position + temp;
+
+                    currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
+                    currentAimingMoveRndTime += Time.deltaTime;
+                    if (currentAimingMoveRndTime > aimingMoveRndTime)
+                    {
+                        currentAimingMoveRndTime = 0;
+                        tempDir = Random.insideUnitCircle * 0.1f;
+
+                    }
+                }
+                else
+                {
+                    currentAimingMoveRndTime = 0;
+                    tempDir = currentTempDir;
+                    
+                    this.transform.position = cameraFollow.position + temp;
+                }
+            }
 
             //canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
