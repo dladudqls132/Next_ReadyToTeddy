@@ -134,8 +134,8 @@ Shader "Custom/ToonShader"
 			// into the TEXCOORD2 semantic with varying precision 
 			// depending on platform target.
 			//SHADOW_COORDS(2)
-				UNITY_FOG_COORDS(2)
-				LIGHTING_COORDS(3, 4) // LIGHTING COORDS HERE ---------------------------------------
+				//UNITY_FOG_COORDS(6)
+				LIGHTING_COORDS(1, 2) // LIGHTING COORDS HERE ---------------------------------------
 		};
 
 		sampler2D _MainTex;
@@ -205,11 +205,11 @@ Shader "Custom/ToonShader"
 			half3 fTangnetNormal = UnpackNormal(tex2D(_BumpTex, i.uv));
 			fTangnetNormal.xy *= 1.0f; // 노말강도 조절
 			float3 worldNormal = Fuc_TangentNormal2WorldNormal(fTangnetNormal, i.T, i.B, i.N);
-			fixed fNDotL = dot(i.lightDir, worldNormal);
+			//fixed fNDotL = dot(i.lightDir, worldNormal);
 			//float3 lightDir = normalize(_WorldSpaceLightPos0 - i.pos);
 
 			float3 outLine = dot(viewDir, normal);
-			fixed last = sample * fNDotL;
+			fixed last = sample * NdotL;
 			float3 diffuse = last + lightIntensity;
 			diffuse = clamp(diffuse, 0.1f, 1.0f);
 			diffuse = ceil((diffuse * 3)) / 3;
