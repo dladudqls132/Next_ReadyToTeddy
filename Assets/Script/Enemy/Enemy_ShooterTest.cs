@@ -25,6 +25,7 @@ public class Enemy_ShooterTest : Enemy
     [SerializeField] private Transform firePos;
     [SerializeField] private float shotDelay_min;
     [SerializeField] private float shotDelay_max;
+    [SerializeField] private GameObject gun;
     private float shotDelay;
     private float currentShotDelay;
 
@@ -73,17 +74,29 @@ public class Enemy_ShooterTest : Enemy
         rigs.Build();
     }
 
+    protected override void SetDead(bool value)
+    {
+        isDead = value;
+        behavior = Enemy_Behavior.Idle;
+        state = Enemy_State.None;
+        agent.isStopped = true;
+        currentHp = maxHp;
+
+        GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
+        gun.SetActive(false);
+
+        temp.GetComponent<Rigidbody>().useGravity = true;
+        temp.GetComponent<Rigidbody>().isKinematic = false;
+        temp.GetComponent<Collider>().enabled = true;
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (isDead)
         {
-            behavior = Enemy_Behavior.Idle;
-            state = Enemy_State.None;
-            agent.isStopped = true;
-            currentHp = maxHp;
-            this.gameObject.SetActive(false);
-
             return;
         }
 

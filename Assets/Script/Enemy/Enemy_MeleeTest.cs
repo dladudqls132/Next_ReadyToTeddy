@@ -34,16 +34,22 @@ public class Enemy_MeleeTest : Enemy
         anim = this.GetComponent<Animator>();
     }
 
+    protected override void SetDead(bool value)
+    {
+        isDead = value;
+        behavior = Enemy_Behavior.Idle;
+        state = Enemy_State.None;
+        agent.isStopped = true;
+        currentHp = maxHp;
+        this.GetComponent<Collider>().enabled = false;
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
+    }
+
     private void Update()
     {
         if(isDead)
         {
-            behavior = Enemy_Behavior.Idle;
-            state = Enemy_State.None;
-            agent.isStopped = true;
-            currentHp = maxHp;
-            this.gameObject.SetActive(false);
-
             return;
         }
 
