@@ -107,7 +107,7 @@ public class Gun_AR : Gun
                 currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.02f, 0.015f);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
 
             hand.GetComponent<Animator>().SetTrigger("Fire_Auto");
@@ -140,11 +140,11 @@ public class Gun_AR : Gun
 
                     if (!hit2.transform.CompareTag("Head"))
                     {
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(direction * 1, 1));
+                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20));
                     }
                     else
                     {
-                        enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(direction * 1, 1));
+                        enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5));
                     }
 
                     GameManager.Instance.GetCrosshair().ResetAttack();

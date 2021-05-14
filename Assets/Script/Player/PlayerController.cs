@@ -503,6 +503,7 @@ public class PlayerController : MonoBehaviour
             if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
             {
                 isLanding = true;
+                hand.GetComponent<Animator>().SetTrigger("Landing");
                 headBobValue = Mathf.PI;
             }
 
@@ -1188,7 +1189,7 @@ public class PlayerController : MonoBehaviour
                         if (moveInput != Vector2.zero && !gun.GetIsShot())
                         {
                             if(!isLanding)
-                                lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(0, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
+                                lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
                         }
                         else
                         {
