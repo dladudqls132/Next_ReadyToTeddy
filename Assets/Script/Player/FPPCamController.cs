@@ -212,7 +212,7 @@ public class FPPCamController : MonoBehaviour
             }
             else
             {
-                if (!Input.GetMouseButton(0))
+                if (!Input.GetMouseButton(0) && GameManager.Instance.GetPlayer().GetIsGrounded())
                 {
                     this.transform.position = cameraFollow.position + temp;
 

@@ -146,114 +146,7 @@ public class PlayerController : MonoBehaviour
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
 
-    public bool SetWeapon(SlotType type, GameObject weapon)
-    {
 
-        if (weapon == this.weapon_gameObject)
-        {
-            hand.GetComponent<Animator>().SetBool("isSwap", false);
-            return false;
-        }
-
-        if (type == SlotType.Projectile)
-        {
-            if (weapon.GetComponent<Projectile>().GetHaveNum() == 0)
-                return false;
-        }
-
-        if (gun != null)
-        {
-            if (this.gun.GetIsReload())
-                this.gun.SetIsReload(false);
-        }
-
-        tempWeapon = weapon;
-
-        if (tempWeapon == null)
-        {
-            //this.weapon_gameObject = tempWeapon;
-            this.gun = null;
-            this.projectile = null;
-        }
-
-        if(projectile != null)
-            projectileController.ResetInfo();
-
-        isSwap = true;
-
-        handFireRot = Quaternion.Euler(0, 0, 0);
-
-        isAiming = false;
-        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-        mainCam.FovReset();
-
-        hand.GetComponent<Animator>().SetBool("isSwap", true);
-        //hand.GetComponent<Animator>().SetTrigger("isSwap_test");
-
-        return true;
-    }
-
-    public bool SwapWeapon()
-    {
-        if ((this.weapon_gameObject != null && this.weapon_gameObject.transform.parent != null) || (tempWeapon == null && this.weapon_gameObject.transform.parent != null))
-        {
-            this.weapon_gameObject.SetActive(false);
-        }
-
-        this.weapon_gameObject = tempWeapon;
-
-        if (this.weapon_gameObject != null)
-        {
-            this.weapon_gameObject.SetActive(true);
-
-            if (tempWeapon.GetComponent<Gun>() != null)
-            {
-                this.gun = tempWeapon.GetComponent<Gun>();
-                projectileController.SetProjectile(null);
-                this.projectile = null;
-            }
-            else if (tempWeapon.GetComponent<Projectile>() != null)
-            {
-                this.projectile = tempWeapon.GetComponent<Projectile>();
-                projectileController.SetProjectile(projectile.projectile.GetComponent<Rigidbody>());
-                this.gun = null;
-            }
-
-            return true;
-        }
-        else
-        {
-            this.projectile = null;
-            this.gun = null;
-            return false;
-        }
-
-
-        //for (int i = 0; i < hand.childCount; i++)
-        //{
-        //    hand.GetChild(i).gameObject.SetActive(false);
-        //}
-
-        //hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
-
-
-        //weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).gameObject;
-
-        //if (currentWeaponNum != 4)
-        //{
-        //    gun = weapon_gameObject.GetComponent<Gun>();
-        //    projectile = null;
-
-        //    if (gun.GetOwner() == null)
-        //        gun.SetOwner(this.gameObject, hand);
-        //}
-        //else
-        //{
-        //    projectile = weapon_gameObject.GetComponent<Projectile>();
-        //    gun = null;
-
-        //}
-    }
 
     // Start is called before the first frame update
     public void Init()
@@ -292,7 +185,7 @@ public class PlayerController : MonoBehaviour
 
         //if (gun.GetOwner() == null)
         //    gun.SetOwner(this.gameObject, hand);
-     
+
         inventory = this.GetComponent<Inventory>();
         inventory.Init();
 
@@ -314,11 +207,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentDashCount < dashCount)
+        if (currentDashCount < dashCount)
         {
             currentDashRefillTime += Time.deltaTime;
 
-            if(currentDashRefillTime >= dashRefillTime)
+            if (currentDashRefillTime >= dashRefillTime)
             {
                 currentDashCount++;
                 currentDashRefillTime = 0;
@@ -604,7 +497,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        if (isCrouch)
+                        if (isCrouch || isAiming)
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
                         {
@@ -972,7 +865,6 @@ public class PlayerController : MonoBehaviour
             mainCam.FovReset();
             currentClimbUpTime -= Time.deltaTime;
 
-
             if (currentClimbuUpPower <= 2)
             {
                 currentClimbuUpPower = 2;
@@ -1067,7 +959,6 @@ public class PlayerController : MonoBehaviour
         }
 
 
-
         HeadBob();
         HandAnimation();
         //DecreaseHpPerSecond();
@@ -1076,6 +967,89 @@ public class PlayerController : MonoBehaviour
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
         this.transform.rotation = Quaternion.LookRotation(forward);
+    }
+
+    public bool SetWeapon(SlotType type, GameObject weapon)
+    {
+
+        if (weapon == this.weapon_gameObject)
+        {
+            hand.GetComponent<Animator>().SetBool("isSwap", false);
+            return false;
+        }
+
+        if (type == SlotType.Projectile)
+        {
+            if (weapon.GetComponent<Projectile>().GetHaveNum() == 0)
+                return false;
+        }
+
+        if (gun != null)
+        {
+            if (this.gun.GetIsReload())
+                this.gun.SetIsReload(false);
+        }
+
+        tempWeapon = weapon;
+
+        if (tempWeapon == null)
+        {
+            //this.weapon_gameObject = tempWeapon;
+            this.gun = null;
+            this.projectile = null;
+        }
+
+        if (projectile != null)
+            projectileController.ResetInfo();
+
+        isSwap = true;
+
+        handFireRot = Quaternion.Euler(0, 0, 0);
+
+        isAiming = false;
+        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        mainCam.FovReset();
+
+        hand.GetComponent<Animator>().SetBool("isSwap", true);
+        //hand.GetComponent<Animator>().SetTrigger("isSwap_test");
+
+        return true;
+    }
+
+    public bool SwapWeapon()
+    {
+        if ((this.weapon_gameObject != null && this.weapon_gameObject.transform.parent != null) || (tempWeapon == null && this.weapon_gameObject.transform.parent != null))
+        {
+            this.weapon_gameObject.SetActive(false);
+        }
+
+        this.weapon_gameObject = tempWeapon;
+
+        if (this.weapon_gameObject != null)
+        {
+            this.weapon_gameObject.SetActive(true);
+
+            if (tempWeapon.GetComponent<Gun>() != null)
+            {
+                this.gun = tempWeapon.GetComponent<Gun>();
+                projectileController.SetProjectile(null);
+                this.projectile = null;
+            }
+            else if (tempWeapon.GetComponent<Projectile>() != null)
+            {
+                this.projectile = tempWeapon.GetComponent<Projectile>();
+                projectileController.SetProjectile(projectile.projectile.GetComponent<Rigidbody>());
+                this.gun = null;
+            }
+
+            return true;
+        }
+        else
+        {
+            this.projectile = null;
+            this.gun = null;
+            return false;
+        }
     }
 
     private void HeadBob()
@@ -1120,7 +1094,10 @@ public class PlayerController : MonoBehaviour
                         }
                         else
                         {
-                            headBobValue += Time.deltaTime * walkSpeed * 1.0f;
+                            if(isCrouch || isAiming)
+                                headBobValue += Time.deltaTime * walkSpeed * 0.85f;
+                            else
+                                headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                         }
 
                         if (isCrouch)
@@ -1187,19 +1164,21 @@ public class PlayerController : MonoBehaviour
                         float temp = hand.localRotation.eulerAngles.z;
                         if (temp > 180)
                             temp -= 360;
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(0, 0, temp / 3) + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(hand.localRotation.eulerAngles.x / 2, 0, temp / 3) + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
 
+                        if (!isLanding)
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)) + new Vector3(Mathf.Sin(headBobValue) / 600, Mathf.Abs(Mathf.Sin(headBobValue)) / 500f, 0), Time.deltaTime * 30);
 
-                        if (moveInput == Vector2.zero)
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
-                        }
-                        else
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, -0.08f, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 500, Mathf.Abs(Mathf.Sin(headBobValue)) / 300f, 0), Time.deltaTime * 10);
+                        //if (moveInput == Vector2.zero)
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                        //}
+                        //else
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, -0.08f, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 500, Mathf.Abs(Mathf.Sin(headBobValue)) / 300f, 0), Time.deltaTime * 10);
 
-                        }
+                        //}
 
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
@@ -1208,17 +1187,18 @@ public class PlayerController : MonoBehaviour
                     {
                         gun.SetIsAiming(false);
                         lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 20);
-                   
-                        if (moveInput == Vector2.zero)
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
-                        }
-                        else
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
+                        if (!isLanding)
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 15);
+                        //if (moveInput == Vector2.zero)
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
+                        //}
+                        //else
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 15);
+                        //    //lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
 
-                        }
+                        //}
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
                     }
