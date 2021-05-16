@@ -56,7 +56,7 @@ public class Gun_AR : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if (CanReload() && currentAmmo <= 0)
+            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
             {
                 SetIsReload(true);
             }

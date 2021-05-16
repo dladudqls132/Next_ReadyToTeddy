@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour
     public Transform GetHand() { return hand; }
     public Inventory GetInventory() { return inventory; }
     public int GetCurrentDashCount() { return currentDashCount; }
+    public bool GetIsSwap() { return isSwap; }
 
     public bool SetWeapon(SlotType type, GameObject weapon)
     {
