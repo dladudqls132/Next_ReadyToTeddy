@@ -40,6 +40,7 @@ public class FPPCamController : MonoBehaviour
     
     private Vector2 tempDir;
     private Vector2 currentTempDir;
+    private Vector2 smoothTemp;
 
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
@@ -215,8 +216,9 @@ public class FPPCamController : MonoBehaviour
                 {
                     this.transform.position = cameraFollow.position + temp;
 
-                    currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
-                    currentAimingMoveRndTime += Time.deltaTime;
+                    //currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
+                    currentTempDir = Vector2.SmoothDamp(currentTempDir, tempDir, ref smoothTemp, 1);
+               currentAimingMoveRndTime += Time.deltaTime;
                     if (currentAimingMoveRndTime > aimingMoveRndTime)
                     {
                         currentAimingMoveRndTime = 0;

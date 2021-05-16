@@ -1198,7 +1198,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         gun.SetIsAiming(false);
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 20);
                    
                         if (moveInput == Vector2.zero)
                         {
