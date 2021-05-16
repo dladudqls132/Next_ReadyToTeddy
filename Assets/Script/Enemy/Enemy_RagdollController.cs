@@ -12,7 +12,7 @@ struct BodyPart
 
 public class Enemy_RagdollController : MonoBehaviour
 {
-    [SerializeField] private Rigidbody spineRigid;
+     public Rigidbody spineRigid;
     private float disappearTime = 10.0f;
     private float currentDisappearTime;
     [SerializeField] private List<BodyPart> bodyParts  = new List<BodyPart>();

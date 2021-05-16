@@ -173,8 +173,8 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
                 //SetRagdoll(damagedVelocity);
-                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                     LayerMask.NameToLayer("Enemy"), true);
+                //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                //     LayerMask.NameToLayer("Enemy"), true);
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 

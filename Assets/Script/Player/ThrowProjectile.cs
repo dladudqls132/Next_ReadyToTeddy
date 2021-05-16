@@ -55,9 +55,9 @@ public class ThrowProjectile : MonoBehaviour
                 cursor.transform.position = hit.point + hit.normal * 0.02f;
                 cursor.transform.rotation = Quaternion.LookRotation(hit.normal);
               
-                Vector3 Vo = CalculateVelocity(hit.point, throwPos.position, Mathf.Clamp(Vector3.Distance(hit.point, throwPos.position) / 8.0f, 0.25f, 0.65f));
+                Vector3 Vo = CalculateVelocity(hit.point, throwPos.position, Mathf.Clamp(Vector3.Distance(hit.point, throwPos.position) / 8.0f, 0.25f, 1.0f));
 
-                Visualize(Vo, Mathf.Clamp(Vector3.Distance(hit.point, throwPos.position) / 8.0f, 0.25f, 0.65f));
+                Visualize(Vo, Mathf.Clamp(Vector3.Distance(hit.point, throwPos.position) / 8.0f, 0.25f, 1.0f));
                 velocity = Vo;
                 //transform.rotation = Quaternion.LookRotation(Vo);
 

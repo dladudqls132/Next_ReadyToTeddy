@@ -806,21 +806,30 @@ public class PlayerController : MonoBehaviour
 
             else if (projectile != null)
             {
-                if(projectileController.AimingProjectile())
+                if (projectileController.AimingProjectile())
                     isAimingProjectile = true;
                 else
+                {
                     isAimingProjectile = false;
+                }
             }
         }
-        else if (Input.GetMouseButtonUp(0) && isAimingProjectile)
+        else if (Input.GetMouseButtonUp(0))
         {
-            projectileController.LaunchProjectile();
-            projectile.DecreaseHaveNum();
-            isAimingProjectile = false;
-
-            if (projectile.GetHaveNum() == 0)
+            if (isAimingProjectile)
             {
-                inventory.DestroyWeapon(4);
+                projectileController.LaunchProjectile();
+                projectile.DecreaseHaveNum();
+                isAimingProjectile = false;
+
+                if (projectile.GetHaveNum() == 0)
+                {
+                    inventory.DestroyWeapon(4);
+                }
+            }
+            else
+            {
+                projectileController.ResetInfo();
             }
         }
 

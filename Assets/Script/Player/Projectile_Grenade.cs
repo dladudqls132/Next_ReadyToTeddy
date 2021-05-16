@@ -37,11 +37,9 @@ public class Projectile_Grenade : Projectile
                 Instantiate(particle, this.transform.position, particle.gameObject.transform.rotation);
 
                 Vector3 explosionPos = transform.position;
-                Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide);
+                Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Collide);
                 foreach (Collider hit in colliders)
                 {
-                    
-
                     Rigidbody rb = hit.GetComponent<Rigidbody>();
 
                     if (rb != null)
@@ -61,23 +59,22 @@ public class Projectile_Grenade : Projectile
                                 //temp.SetIsPushed(true);
                             }
                         }
-                        else if (rb.CompareTag("Enemy"))
+                        else if(rb.CompareTag("Enemy"))
                         {
                             if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")))
                             {
                                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
-                                {
-                                    Debug.Log(hit2.transform.name);
                                     continue;
-                                }
+                                
+                                    if (GameManager.Instance.GetIsCombat())
+                                    {
+                                        Enemy temp = rb.transform.root.GetComponent<Enemy>();
 
-                                if (GameManager.Instance.GetIsCombat())
-                                {
-                                    Enemy temp = rb.GetComponent<Enemy>();
-                            
-                                    temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
-                                    //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
-                                }
+                                        temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), temp.GetComponent<Enemy_RagdollController>().spineRigid.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100));
+
+                                        //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                                    }
+                                
                             }
                         }
                     }
