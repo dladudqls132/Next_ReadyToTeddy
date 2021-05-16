@@ -124,7 +124,7 @@ public class Gun_Test : Gun
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
                 {
                     direction = (hit.point - Camera.main.transform.position).normalized;
                 }
@@ -142,15 +142,16 @@ public class Gun_Test : Gun
                 {
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
+                        
                         Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
                         if (!hit2.transform.CompareTag("Head"))
                         {
-                            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(direction * 80, 80));
+                            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70));
                         }
                         else
                         {
-                            enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(direction * 50, 50));
+                            enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70));
                         }
 
                         GameManager.Instance.GetCrosshair().ResetAttack();

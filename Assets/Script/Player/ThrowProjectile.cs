@@ -38,7 +38,7 @@ public class ThrowProjectile : MonoBehaviour
         ResetInfo();
     }
 
-    public void AimingProjectile()
+    public bool AimingProjectile()
     {
         Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -50,7 +50,7 @@ public class ThrowProjectile : MonoBehaviour
             if (hit.distance < throwDistance)
             {
                 lineVisual.enabled = true;
-                //cursor.GetComponent<SpriteRenderer>().color = color;
+                cursor.GetComponent<SpriteRenderer>().color = Color.green;
                 cursor.SetActive(true);
                 cursor.transform.position = hit.point + hit.normal * 0.02f;
                 cursor.transform.rotation = Quaternion.LookRotation(hit.normal);
@@ -70,19 +70,26 @@ public class ThrowProjectile : MonoBehaviour
                 //    //getBulletNum--;
                 //    //GameManager.Instance.soundController.PlaySFXOneShot("Sound_ingame_throw_2", 0.25f, Random.Range(0.85f, 0.95f));
                 //}
+
+                return true;
             }
             else
             {
+                cursor.GetComponent<SpriteRenderer>().color = Color.red;
                 cursor.GetComponent<SpriteRenderer>().color = new Color(255 / 255f, 0 / 255f, 0 / 255f, 152 / 255f);
                 cursor.transform.position = hit.point + Vector3.up * 0.02f;
                 cursor.transform.rotation = Quaternion.LookRotation(hit.normal);
                 lineVisual.enabled = false;
+
+                return false;
             }
         }
         else
         {
             cursor.SetActive(false);
             lineVisual.enabled = false;
+
+            return false;
         }
     }
 

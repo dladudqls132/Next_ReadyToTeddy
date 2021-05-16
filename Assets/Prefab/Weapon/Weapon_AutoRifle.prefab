@@ -14497,7 +14497,7 @@ MonoBehaviour:
   gunType: 0
   originPos: {x: 0, y: -0.1049999, z: 0.02678719}
   originRot: {x: 0, y: -1, z: 0}
-  aimingPos: {x: 0, y: -0.1049999, z: 0.02678719}
+  aimingPos: {x: 0, y: -0.1, z: 0.02678719}
   aimingRot: {x: 0, y: 0, z: 0}
   recoil: {x: 1, y: 1, z: 0}
   item: {fileID: 512545738532535633}
@@ -14514,9 +14514,10 @@ MonoBehaviour:
   currentShotDelay: 0
   isReload: 0
   reloadTime: 1.2
-  maxAmmo: 30
-  maxAmmo_aMag: 30
-  currentAmmo: 30
+  maxAmmo: 100
+  maxAmmo_aMag: 50
+  haveAmmo: 30
+  currentAmmo: 100
   damagePerBullet: 20
   muzzleFlash: {fileID: 1478704672958757143}
   spreadAngle_normal: 3

@@ -10,9 +10,15 @@ public class Item_Magazine : Item
     {
         if (player.GetInventory().GetWeapon(gunType) != null)
         {
-            //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
-            rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+            if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+            {
+                this.GetComponent<Collider>().isTrigger = true;
+                //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
+                rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+            }
+
         }
+
     }
 
     private void Update()
@@ -23,9 +29,13 @@ public class Item_Magazine : Item
         {
             if(player.GetInventory().GetWeapon(gunType) != null)
             {
-                Gun temp = player.GetInventory().GetWeapon(gunType);
-                temp.SetMaxAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
-                Destroy(this.gameObject);
+                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                {
+                    Gun temp = player.GetInventory().GetWeapon(gunType);
+                    //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
+                    temp.AddAmmo(temp.GetMaxAmmo_aMagCount());
+                    Destroy(this.gameObject);
+                }
             }
         }
         else
