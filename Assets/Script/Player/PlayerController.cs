@@ -1191,7 +1191,7 @@ public class PlayerController : MonoBehaviour
                         else
                         {
                             lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
-                            lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
+                            lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 300, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
 
                         }
                         hand.localRotation = lastAngle_hand;
