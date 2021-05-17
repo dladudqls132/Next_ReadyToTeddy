@@ -38,7 +38,7 @@ public class UI_Ammo : MonoBehaviour
         {
             image_gun.sprite = gun.GetSprite();
 
-            text_ammoCount.text = gun.GetCurrentAmmoCount().ToString() + " / " + gun.GetMaxAmmoCount().ToString();
+            text_ammoCount.text = gun.GetCurrentAmmoCount().ToString() + " / " + gun.GetHaveAmmoCount().ToString();
 
             if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
             {

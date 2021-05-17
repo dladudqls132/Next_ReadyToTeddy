@@ -35,6 +35,25 @@ public class Enemy_RagdollController : MonoBehaviour
         }
     }
 
+
+    public void Start()
+    {
+        Component[] components = GetComponentsInChildren(typeof(Transform));
+
+        //For each of the transforms, create a BodyPart instance and store the transform 
+        foreach (Component c in components)
+        {
+            if (c.GetComponent<Rigidbody>() != null)
+            {
+                BodyPart bodyPart = new BodyPart();
+                bodyPart.transform = c as Transform;
+                bodyPart.originRot = bodyPart.transform.localRotation;
+                bodyPart.originPos = bodyPart.transform.localPosition;
+                bodyParts.Add(bodyPart);
+            }
+        }
+    }
+
     private void Update()
     {
         if (this.GetComponent<Enemy>().GetIsDead())
@@ -65,9 +84,20 @@ public class Enemy_RagdollController : MonoBehaviour
 
     public void AddForce(Transform trs, Vector3 force)
     {
-        if(!trs.GetComponent<Enemy_RagdollController>())
-            trs.GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
+        //if(!trs.GetComponent<Enemy_RagdollController>())
+        //    trs.GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
+        //else  
+        //    spineRigid.AddForce(force, ForceMode.Impulse);
+        
+        for(int i = 0; i < bodyParts.Count; i++)
+        {
+            bodyParts[i].transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            bodyParts[i].transform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+
+        if(trs.CompareTag("Head"))
+            spineRigid.GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
         else
-            spineRigid.AddForce(force, ForceMode.Impulse);
+            trs.GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
     }
 }

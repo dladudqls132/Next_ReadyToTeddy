@@ -110,7 +110,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6958420859628283330}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.5
   m_UseGravity: 0
@@ -200,9 +200,11 @@ MonoBehaviour:
   skill1_range: 10
   inventory: {fileID: 0}
   weapons:
-  - {fileID: 1745712563323169272, guid: 755db1d60a819784e949d71d3b1dff26, type: 3}
+  - {fileID: 5978284671447750407, guid: ea0bf6f262de08345ac0dc64d7d680a5, type: 3}
   - {fileID: 2314137261922342597, guid: 386da91217bc6d446a4b90aea7215db9, type: 3}
   - {fileID: 2731157901539131877, guid: 999598ad633838840ab1ab9824aba44a, type: 3}
+  moveInput: {x: 0, y: 0}
+  handOriginPos: {x: 0, y: 0, z: 0}
   dashRefillTime: 1
   dashCount: 3
   currentDashCount: 0

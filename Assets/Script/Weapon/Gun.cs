@@ -38,6 +38,7 @@ public class Gun : MonoBehaviour
     protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int maxAmmo_aMag;
+    [SerializeField] protected int haveAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
     
@@ -67,12 +68,13 @@ public class Gun : MonoBehaviour
 
     protected Vector3 direction;
 
-    public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
+    public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
     {
         this.gunType = gunType;
         this.sprite = sprite;
         this.damagePerBullet = damagePerBullet;
         this.maxAmmo = maxAmmo;
+        this.maxAmmo_aMag = maxAmmo_aMag;
         this.currentAmmo = maxAmmo;
         this.fireNum = fireNum;
         this.spreadAngle_normal = spreadAngle_normal;
@@ -88,7 +90,7 @@ public class Gun : MonoBehaviour
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
         rigid = this.GetComponent<Rigidbody>();
         recoilMagnitude = recoil.magnitude;
-
+        haveAmmo = maxAmmo_aMag;
         //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
 
         //foreach(MeshRenderer m in tempMesh)
@@ -125,6 +127,8 @@ public class Gun : MonoBehaviour
     public int GetMaxAmmoCount() { return maxAmmo; }
     public int GetMaxAmmo_aMagCount() { return maxAmmo_aMag; }
     public void SetMaxAmmoCount(int ammo) { maxAmmo = ammo; }
+    public void AddAmmo(int ammo) { haveAmmo += ammo; if (haveAmmo > maxAmmo) haveAmmo = maxAmmo; }
+    public int GetHaveAmmoCount() { return haveAmmo; }
     public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }
     public bool GetIsShot() { return isShot; }
@@ -203,22 +207,22 @@ public class Gun : MonoBehaviour
     {
         isReload = false;
 
-        if (maxAmmo >= (maxAmmo_aMag - currentAmmo))
+        if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
         {
-            maxAmmo -= maxAmmo_aMag - currentAmmo;
+            haveAmmo -= maxAmmo_aMag - currentAmmo;
             currentAmmo = maxAmmo_aMag;
         }
         else
         {
-            currentAmmo += maxAmmo;
-            maxAmmo = 0;
+            currentAmmo += haveAmmo;
+            haveAmmo = 0;
         }
     }
 
     public Quaternion GetHandFireRot() { return Quaternion.Euler(handFireRot); }
 
     virtual public bool Fire() { return false; }
-    public bool CanReload() { if (maxAmmo > 0 && currentAmmo < maxAmmo_aMag && !isReload) { return true; } return false; }
+    public bool CanReload() { if (haveAmmo > 0 && currentAmmo < maxAmmo_aMag && !isReload) { return true; } return false; }
 
     virtual public void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
 

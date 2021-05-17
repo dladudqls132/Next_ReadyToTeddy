@@ -8,6 +8,7 @@ Shader "Custom/ToonShader"
 	{
 		_Color("Color", Color) = (1,1,1,1)
 		_MainTex("Main Texture", 2D) = "white" {}
+		_BumpTex("NormalMap", 2D) = "bump" {}
 	// Ambient light is applied uniformly to all surfaces on the object.
 	[HDR]
 	_AmbientColor("Ambient Color", Color) = (0.4,0.4,0.4,1)
@@ -15,76 +16,12 @@ Shader "Custom/ToonShader"
 		//_SpecularColor("Specular Color", Color) = (0.9,0.9,0.9,1)
 			// Controls the size of the specular reflection.
 			_Glossiness("Glossiness", Float) = 32
-	
 
-	_OutlineColor("Outline Color", Color) = (1, 1, 1, 1)
-	_OutlineWidth("Outline Width", Range(0, 10)) = 2
 
 	}
 		SubShader
 	{
-		 Tags {
-	  "Queue" = "Transparent+110"
-	  "RenderType" = "Transparent"
-	  "DisableBatching" = "True"
-	}
-
-	Pass {
-	  Name "Fill"
-	  Cull Off
-	
-	  ZWrite Off
-	  Blend SrcAlpha OneMinusSrcAlpha
-	  ColorMask RGB
-
-	  Stencil {
-		Ref 1
-		Comp NotEqual
-	  }
-
-	  CGPROGRAM
-	  #include "UnityCG.cginc"
-
-	  #pragma vertex vert
-	  #pragma fragment frag
-
-	  struct appdata {
-		float4 vertex : POSITION;
-		float3 normal : NORMAL;
-		float3 smoothNormal : TEXCOORD3;
-		UNITY_VERTEX_INPUT_INSTANCE_ID
-	  };
-
-	  struct v2f {
-		float4 position : SV_POSITION;
-		fixed4 color : COLOR;
-		UNITY_VERTEX_OUTPUT_STEREO
-	  };
-
-	  uniform fixed4 _OutlineColor;
-	  uniform float _OutlineWidth;
-
-	  v2f vert(appdata input) {
-		v2f output;
-
-		UNITY_SETUP_INSTANCE_ID(input);
-		UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-
-		float3 normal = any(input.smoothNormal) ? input.smoothNormal : input.normal;
-		float3 viewPosition = UnityObjectToViewPos(input.vertex);
-		float3 viewNormal = normalize(mul((float3x3)UNITY_MATRIX_IT_MV, normal));
-
-		output.position = UnityViewToClipPos(viewPosition + viewNormal * -viewPosition.z * _OutlineWidth / (350 * (length(ObjSpaceViewDir(input.vertex)))));
-		output.color = _OutlineColor;
-
-		return output;
-	  }
-
-	  fixed4 frag(v2f input) : SV_Target {
-		return input.color;
-	  }
-	  ENDCG
-	}
+		  
 
 				Tags
 		{
@@ -116,6 +53,7 @@ Shader "Custom/ToonShader"
 			float4 vertex : POSITION;
 			float4 uv : TEXCOORD0;
 			float3 normal : NORMAL;
+			float4 tangent : TANGENT;
 		};
 
 		struct v2f
@@ -123,28 +61,48 @@ Shader "Custom/ToonShader"
 			float4 pos : SV_POSITION;
 			float3 worldNormal : NORMAL;
 			float2 uv : TEXCOORD0;
-			float3 viewDir : TEXCOORD1;
+			float3 T : TEXCOORD1;
+			float3 B : TEXCOORD2;
+			float3 N : TEXCOORD3;
+			float3 lightDir : TEXCOORD4;
+			float3 viewDir : TEXCOORD5;
 			// Macro found in Autolight.cginc. Declares a vector4
 			// into the TEXCOORD2 semantic with varying precision 
 			// depending on platform target.
 			//SHADOW_COORDS(2)
-				UNITY_FOG_COORDS(2)
-				LIGHTING_COORDS(3, 4) // LIGHTING COORDS HERE ---------------------------------------
+				//UNITY_FOG_COORDS(6)
+				LIGHTING_COORDS(6, 7) // LIGHTING COORDS HERE ---------------------------------------
 		};
 
 		sampler2D _MainTex;
+		sampler2D _BumpTex;
 		float4 _MainTex_ST;
+		void Fuc_LocalNormal2TBN(half3 localnormal, float4 tangent, inout half3 T, inout half3  B, inout half3 N)
+		{
+			half fTangentSign = tangent.w * unity_WorldTransformParams.w;
+			N = normalize(UnityObjectToWorldNormal(localnormal));
+			T = normalize(UnityObjectToWorldDir(tangent.xyz));
+			B = normalize(cross(N, T) * fTangentSign);
+		}
 
+		half3 Fuc_TangentNormal2WorldNormal(half3 fTangnetNormal, half3 T, half3  B, half3 N)
+		{
+			float3x3 TBN = float3x3(T, B, N);
+			TBN = transpose(TBN);
+			return mul(TBN, fTangnetNormal);
+		}
 		v2f vert(appdata v)
 		{
 			v2f o;
 			o.pos = UnityObjectToClipPos(v.vertex);
 			o.worldNormal = UnityObjectToWorldNormal(v.normal);
-			o.viewDir = WorldSpaceViewDir(v.vertex);
+			o.lightDir = WorldSpaceLightDir(v.vertex);
+			o.viewDir = normalize(WorldSpaceViewDir(v.vertex));
 			o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 			// Defined in Autolight.cginc. Assigns the above shadow coordinate
 			// by transforming the vertex from world space to shadow-map space.
 			//TRANSFER_SHADOW(o)
+			Fuc_LocalNormal2TBN(v.normal, v.tangent, o.T, o.B, o.N);
 				UNITY_TRANSFER_FOG(o, o.vertex);
 			TRANSFER_VERTEX_TO_FRAGMENT(o) // TRANSFER DONE HERE -------------------------------
 			return o;
@@ -175,16 +133,14 @@ Shader "Custom/ToonShader"
 			float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
 			float NdotH = dot(normal, halfVector);
 
-			float specularIntensity = pow(NdotH * lightIntensity, _Glossiness * _Glossiness);
-			float specularIntensitySmooth = specularIntensity > 0.5 ? 1 : 0;
-			float4 specular = specularIntensitySmooth * _SpecularColor;
-
 			float4 sample = tex2D(_MainTex, i.uv);
-
-			float3 lightDir = normalize(_WorldSpaceLightPos0 - i.pos);
+			half3 fTangnetNormal = UnpackNormal(tex2D(_BumpTex, i.uv));
+			fTangnetNormal.xy *= 1.0f; // 노말강도 조절
+			float3 worldNormal = Fuc_TangentNormal2WorldNormal(fTangnetNormal, i.T, i.B, i.N);
 
 			float3 outLine = dot(viewDir, normal);
-			float3 diffuse = lightIntensity;
+			fixed last = sample * NdotL;
+			float3 diffuse = last + lightIntensity;
 			diffuse = clamp(diffuse, 0.1f, 1.0f);
 			diffuse = ceil((diffuse * 3)) / 3;
 
@@ -202,7 +158,10 @@ Shader "Custom/ToonShader"
 			return (result) * sample;
 		}
 		ENDCG
+
 	}
+
+
 
 		// Shadow casting support.
 		UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"

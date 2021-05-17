@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour
     public Transform GetHand() { return hand; }
     public Inventory GetInventory() { return inventory; }
     public int GetCurrentDashCount() { return currentDashCount; }
+    public bool GetIsSwap() { return isSwap; }
 
     public bool SetWeapon(SlotType type, GameObject weapon)
     {
@@ -503,6 +504,7 @@ public class PlayerController : MonoBehaviour
             if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
             {
                 isLanding = true;
+                hand.GetComponent<Animator>().SetTrigger("Landing");
                 headBobValue = Mathf.PI;
             }
 
@@ -804,8 +806,10 @@ public class PlayerController : MonoBehaviour
 
             else if (projectile != null)
             {
-                projectileController.AimingProjectile();
-                isAimingProjectile = true;
+                if(projectileController.AimingProjectile())
+                    isAimingProjectile = true;
+                else
+                    isAimingProjectile = false;
             }
         }
         else if (Input.GetMouseButtonUp(0) && isAimingProjectile)
@@ -1155,6 +1159,7 @@ public class PlayerController : MonoBehaviour
         {
             if (gun.GetIsReload())
             {
+                gun.SetIsAiming(false);
                 lastAngle_hand = hand.localRotation;
                 lastPos_hand = Vector3.Lerp(lastPos_hand, handOriginPos, Time.deltaTime * 15);
 
@@ -1170,29 +1175,40 @@ public class PlayerController : MonoBehaviour
                     if (isAiming)
                     {
                         gun.SetIsAiming(true);
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(Quaternion.Euler(0, 0, 0).eulerAngles + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
-                        lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f), Time.deltaTime * 20);
+                        float temp = hand.localRotation.eulerAngles.z;
+                        if (temp > 180)
+                            temp -= 360;
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(0, 0, temp / 3) + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
+
+
+                        if (moveInput == Vector2.zero)
+                        {
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                        }
+                        else
+                        {
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, -0.08f, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 500, Mathf.Abs(Mathf.Sin(headBobValue)) / 300f, 0), Time.deltaTime * 10);
+
+                        }
+
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
                     }
                     else
                     {
                         gun.SetIsAiming(false);
-                        lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
-                        //lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
-                        //Vector3 temp1 = new Vector3(hand.localRotation.eulerAngles.x, hand.localRotation.eulerAngles.y, lastAngle_hand.eulerAngles.z);
-                        //Vector3 temp2 = handFireRot.eulerAngles;
-                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(temp1 + temp2), Time.deltaTime * 30);
-                        //lastAngle_hand = Quaternion.Slerp(lastAngle_hand, Quaternion.Euler(lastAngle_hand.eulerAngles.x, lastAngle_hand.eulerAngles.y, -moveInput.x * 3), Time.deltaTime * 6);
-                        lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(hand.localPosition.x, lastPos_hand.y, hand.localPosition.z), Time.deltaTime * 30);
-                        if (moveInput != Vector2.zero && !gun.GetIsShot())
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+                   
+                        if (moveInput == Vector2.zero)
                         {
-                            if(!isLanding)
-                                lastPos_hand = Vector3.Slerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(0, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 30);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
                         }
                         else
                         {
-                            lastPos_hand = Vector3.Slerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
+
                         }
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;

@@ -113,6 +113,7 @@ public class Enemy : MonoBehaviour
         this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         if(this.GetComponent<Enemy_RagdollController>() != null)
             this.GetComponent<Enemy_RagdollController>().AddForce(damagedTrs, damagedVelocity);
+
         anim.enabled = false;
     }
 
@@ -172,6 +173,8 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
                 //SetRagdoll(damagedVelocity);
+                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                     LayerMask.NameToLayer("Enemy"), true);
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
@@ -179,11 +182,11 @@ public class Enemy : MonoBehaviour
 
                 if(itemDropRate <= magazineDropRate)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position, this.transform.rotation);
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
                 }
                 else if(itemDropRate <= magazineDropRate + potionDropRate)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position, this.transform.rotation);
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
                 }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);

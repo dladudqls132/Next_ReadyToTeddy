@@ -116,7 +116,7 @@ public class Enemy_MeleeTest : Enemy
                 }
                 else
                 {
-                    if (Vector3.Distance(this.transform.position, target.position) <= attackRange - 1)
+                    if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
                     {
                         agent.isStopped = true;
 
