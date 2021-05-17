@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mat_Lightning01
-  m_Shader: {fileID: 4800000, guid: 94e0b0f9601a5034cb50066886c49beb, type: 3}
+  m_Name: Mat_lighting03
+  m_Shader: {fileID: 4800000, guid: b203918b99582664aa759a29bae0aace, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -35,6 +35,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveTexture:
+        m_Texture: {fileID: 2800000, guid: ed2cf0efcc6b5224e8fd3ac550dc00a5, type: 3}
+        m_Scale: {x: 2, y: 2}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -44,23 +48,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 3d5fa62b047209b4dbfb2a1ec3efd472, type: 3}
+        m_Texture: {fileID: 2800000, guid: 70c6d9a65a15e2040a3f2fc22664b2d3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _Noise:
-        m_Texture: {fileID: 2800000, guid: e199ee8112362864f831425463b09fda, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NoiseTexture01:
-        m_Texture: {fileID: 2800000, guid: e199ee8112362864f831425463b09fda, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NoiseTexture02:
-        m_Texture: {fileID: 2800000, guid: e199ee8112362864f831425463b09fda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -69,10 +61,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: e199ee8112362864f831425463b09fda, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _tex4coord:
@@ -87,20 +75,23 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _Dissolve: 1
     - _DstBlend: 0
-    - _Float4: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Ins: 9
+    - _Ins: 15
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Pow: 3.435294
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
+    - _Speed: 5.06
     - _SrcBlend: 1
     - _UVSec: 0
+    - _UseParticle: 1
     - _Useparticle: 0
     - _ZWrite: 1
     - __dirty: 0
