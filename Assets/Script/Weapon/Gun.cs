@@ -200,7 +200,8 @@ public class Gun : MonoBehaviour
         mainCam.FovReset();
         isReload = value;
         //hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
-        hand.GetComponent<Animator>().ResetTrigger("Fire_Auto");
+        hand.GetComponent<Animator>().ResetTrigger("Fire_AR");
+        hand.GetComponent<Animator>().ResetTrigger("Fire_SG");
     }
 
     virtual public void SetIsReloadFinish() 

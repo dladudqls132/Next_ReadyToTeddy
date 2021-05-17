@@ -709,6 +709,11 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            if(weapon_gameObject.GetComponent<Gun_FlameThrower>() != null)
+            {
+                weapon_gameObject.GetComponent<Gun_FlameThrower>().Off();
+            }
+
             if (isAimingProjectile)
             {
                 projectileController.LaunchProjectile();

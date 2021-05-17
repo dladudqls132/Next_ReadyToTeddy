@@ -114,7 +114,7 @@ public class Gun_Test : Gun
             }
 
 
-            hand.GetComponent<Animator>().SetTrigger("Fire_SemiAuto");
+            hand.GetComponent<Animator>().SetTrigger("Fire_SG");
 
             isReload = false;
             isRecoil = false;
