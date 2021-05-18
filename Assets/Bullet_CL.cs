@@ -67,30 +67,26 @@ public class Bullet_CL : Bullet
             for (int i = 0; i < coll.Length; i++)
             {
 
-                if(coll[i].CompareTag("Enemy"))
+                if(coll[i].CompareTag("Enemy") && other.transform != coll[i].transform)
                 {
                     num++;
-                    //Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
-                    //tempBullet.gameObject.SetActive(true);
-                    //tempBullet.SetFire(other.GetComponent<Collider>().bounds.center, coll[i].transform, 150, 0);
-                    //tempBullet.GetComponent<Bullet_CL>().ignoreTrs = other.transform;
-                    //tempBullet.GetComponent<Bullet_CL>().temp = true;
 
                     GameObject temp = Instantiate(chain);
-                    temp.GetComponent<Chain>().SetLine(other.transform, coll[i].transform, 1.0f);
-                    coll[i].GetComponent<Enemy>().SetRigidity(true, 1);
+                    temp.GetComponent<Chain>().SetLine(other.transform, coll[i].transform, 3.0f);
+                    coll[i].GetComponent<Enemy>().SetRigidity(true, 3);
                     GameObject tempHit = Instantiate(hitEffect, coll[i].GetComponent<Collider>().bounds.center, Quaternion.identity, coll[i].transform);
-                    tempHit.GetComponent<HitEffect>().SetHitEffect(1.0f);
+                    tempHit.GetComponent<HitEffect>().SetHitEffect(3.0f);
 
                     if (num == 2)
                         break;
                 }
             }
+            GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
+            hit.GetComponent<HitEffect>().SetHitEffect(3.0f);
 
-            other.GetComponent<Enemy>().SetRigidity(true, 1);
+            other.GetComponent<Enemy>().SetRigidity(true, 3);
 
-           
-                ActiveFalse();
+            ActiveFalse();
         }
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))

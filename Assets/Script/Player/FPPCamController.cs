@@ -142,7 +142,7 @@ public class FPPCamController : MonoBehaviour
         if (GameManager.Instance.GetPlayer().GetGun() != null)
         {
 
-            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload())
+            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload() && (GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.AR || GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.ShotGun))
             {
 
                 //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);

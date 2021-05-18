@@ -683,20 +683,27 @@ public class PlayerController : MonoBehaviour
 
             if (gun != null)
             {
-                if (gun.Fire())
+                if (gun.GetGunType() == GunType.ChainLightning)
                 {
                     handFireRot = gun.GetHandFireRot();
-
-                    if (isGrounded && !isSlide)
+                    gun.GetComponent<Gun_ChainLightning>().Charging();
+                }
+                else
+                {
+                    if (gun.Fire())
                     {
-                        isCombat = true;
-                        isRun = false;
-                    }
+                        handFireRot = gun.GetHandFireRot();
 
-                    currentCombatTime = combatTime;
+                        if (isGrounded && !isSlide)
+                        {
+                            isCombat = true;
+                            isRun = false;
+                        }
+
+                        currentCombatTime = combatTime;
+                    }
                 }
             }
-
             else if (projectile != null)
             {
                 if (projectileController.AimingProjectile())
@@ -709,9 +716,13 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            if(weapon_gameObject.GetComponent<Gun_FlameThrower>() != null)
+            if (gun.GetGunType() == GunType.ChainLightning)
             {
-                weapon_gameObject.GetComponent<Gun_FlameThrower>().Off();
+                gun.GetComponent<Gun_ChainLightning>().Fire();
+            }
+            else if (gun.GetGunType() == GunType.Flamethrower)
+            {
+                gun.GetComponent<Gun_FlameThrower>().Off();
             }
 
             if (isAimingProjectile)

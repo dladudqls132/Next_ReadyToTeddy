@@ -87,6 +87,38 @@ public class Gun_ChainLightning : Gun
         hand.GetComponent<Animator>().SetBool("isReload_CL", false);
     }
 
+    public bool Charging()
+    {
+        if (isReload)
+            return false;
+
+        if (canShot)
+        {
+            if (!owner.GetComponent<PlayerController>().GetIsAiming())
+            {
+                currentSpreadAngle = spreadAngle_normal;
+                mainCam.Shake(0.1f, 0.015f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
+                Debug.Log(handFireRot);
+            }
+            else
+            {
+                currentSpreadAngle = spreadAngle_aiming;
+                mainCam.Shake(0.02f, 0.015f);
+                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
+            }
+
+            isReload = false;
+            isRecoil = false;
+
+            return true;
+        }
+
+        return false;
+    }
+
     override public bool Fire()
     {
         if (isReload)
@@ -97,9 +129,9 @@ public class Gun_ChainLightning : Gun
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
                 currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.02f, 0.015f);
+                mainCam.Shake(0.1f, 0.015f);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
             }
             else
             {
@@ -126,7 +158,7 @@ public class Gun_ChainLightning : Gun
 
             Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
             tempBullet.gameObject.SetActive(true);
-            tempBullet.SetFire(shotPos.position, ray.direction, 30, 0);
+            tempBullet.SetFire(shotPos.position, ray.direction, 40, 0);
 
             //float temp = Random.Range(-Mathf.PI, Mathf.PI);
 

@@ -105,6 +105,7 @@ public class Enemy_ShooterTest : Enemy
         {
             agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
+            anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 12));
 
             if (currentRigidityTime >= rigidityTime)
             {

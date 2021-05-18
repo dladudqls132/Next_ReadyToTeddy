@@ -57,8 +57,8 @@ public class Enemy_MeleeTest : Enemy
         {
             agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
-
-            if(currentRigidityTime >= rigidityTime)
+            AnimFalse();
+            if (currentRigidityTime >= rigidityTime)
             {
                 isRigidity = false;
                 currentRigidityTime = 0;
@@ -199,48 +199,38 @@ public class Enemy_MeleeTest : Enemy
         switch (behavior)
         {
             case Enemy_Behavior.Idle:
-                anim.SetBool("isAttack", false);
-                anim.SetBool("isRunningAttack", false);
-                anim.SetBool("isJumping", false);
-                anim.SetBool("isWalking", false);
-                anim.SetBool("isRunning", false);
+                AnimFalse();
                 break;
             case Enemy_Behavior.Walk:
-                anim.SetBool("isAttack", false);
-                anim.SetBool("isRunningAttack", false);
-                anim.SetBool("isJumping", false);
+                AnimFalse();
                 anim.SetBool("isWalking", true);
-                anim.SetBool("isRunning", false);
                 break;
             case Enemy_Behavior.Run:
-                anim.SetBool("isAttack", false);
-                anim.SetBool("isRunningAttack", false);
-                anim.SetBool("isJumping", false);
-                anim.SetBool("isWalking", false);
+                AnimFalse();
                 anim.SetBool("isRunning", true);
                 break;
             case Enemy_Behavior.Attack:
-                anim.SetBool("isRunningAttack", false);
-                anim.SetBool("isJumping", false);
-                anim.SetBool("isWalking", false);
-                anim.SetBool("isRunning", false);
+                AnimFalse();
                 anim.SetBool("isAttack", true);
                 break;
             case Enemy_Behavior.RunningAttack:
-                anim.SetBool("isAttack", false);
-                anim.SetBool("isJumping", false);
-                anim.SetBool("isWalking", false);
-                anim.SetBool("isRunning", false);
+                AnimFalse();
                 anim.SetBool("isRunningAttack", true);
                 break;
             case Enemy_Behavior.Jump:
-                anim.SetBool("isAttack", false);
-                anim.SetBool("isRunningAttack", false);
-                anim.SetBool("isWalking", false);
-                anim.SetBool("isRunning", false);
+                AnimFalse();
                 anim.SetBool("isJumping", true);
                 break;
         }
+    }
+
+    void AnimFalse()
+    {
+        anim.SetBool("isAttack", false);
+        anim.SetBool("isJumping", false);
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isRunning", false);
+        anim.SetBool("isRunningAttack", false);
     }
 
     void Attack()
