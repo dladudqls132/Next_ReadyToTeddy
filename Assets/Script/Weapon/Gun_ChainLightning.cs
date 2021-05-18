@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Gun_ChainLightning : Gun
 {
-    [SerializeField] private GameObject bullet;
     // Start is called before the first frame update
     protected override void Awake()
     {

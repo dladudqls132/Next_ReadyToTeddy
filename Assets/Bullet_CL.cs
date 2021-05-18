@@ -5,8 +5,7 @@ using UnityEngine;
 public class Bullet_CL : Bullet
 {
     public GameObject chain;
-    public Transform ignoreTrs;
-    public bool temp;
+    public GameObject hitEffect;
 
     // Update is called once per frame
     override protected void FixedUpdate()
@@ -80,6 +79,8 @@ public class Bullet_CL : Bullet
                     GameObject temp = Instantiate(chain);
                     temp.GetComponent<Chain>().SetLine(other.transform, coll[i].transform, 1.0f);
                     coll[i].GetComponent<Enemy>().SetRigidity(true, 1);
+                    GameObject tempHit = Instantiate(hitEffect, coll[i].GetComponent<Collider>().bounds.center, Quaternion.identity, coll[i].transform);
+                    tempHit.GetComponent<HitEffect>().SetHitEffect(1.0f);
 
                     if (num == 2)
                         break;
@@ -88,7 +89,7 @@ public class Bullet_CL : Bullet
 
             other.GetComponent<Enemy>().SetRigidity(true, 1);
 
-            if (ignoreTrs != other.transform)
+           
                 ActiveFalse();
         }
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
