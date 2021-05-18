@@ -129,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 3
-  originPos: {x: 0, y: 0, z: 0}
-  originRot: {x: 0, y: 0, z: 0}
+  originPos: {x: 0.004, y: -0.027, z: 0.142}
+  originRot: {x: 0, y: -2.243, z: 0}
   aimingPos: {x: 0, y: 0, z: 0}
   aimingRot: {x: 0, y: 0, z: 0}
   recoil: {x: 0, y: 0, z: 0}
@@ -144,13 +144,13 @@ MonoBehaviour:
   isShot: 0
   canShot: 0
   isRecoil: 0
-  shotDelay: 0
+  shotDelay: 2
   currentShotDelay: 0
   isReload: 0
   reloadTime: 1
-  maxAmmo: 0
-  maxAmmo_aMag: 0
-  haveAmmo: 0
+  maxAmmo: 8
+  maxAmmo_aMag: 4
+  haveAmmo: 4
   currentAmmo: 0
   damagePerBullet: 0
   muzzleFlash: {fileID: 0}
@@ -161,7 +161,8 @@ MonoBehaviour:
   isPlayerEnter: 0
   mesh:
   - {fileID: 2622237103842620633}
-  weaponAnimation: {fileID: 0}
+  weaponAnimation: {fileID: 7400000, guid: 9c317d4062b88ed46bcf12f9f9c3a03f, type: 2}
+  bullet: {fileID: 1034243819072066626, guid: 6b736e5323849bc4f986f21307d69814, type: 3}
 --- !u!54 &4711642351927516155
 Rigidbody:
   m_ObjectHideFlags: 0

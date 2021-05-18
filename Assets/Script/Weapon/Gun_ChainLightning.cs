@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Gun_ChainLightning : Gun
 {
+    [SerializeField] private GameObject bullet;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -109,64 +110,68 @@ public class Gun_ChainLightning : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
 
-            hand.GetComponent<Animator>().SetTrigger("Fire_Auto");
+            hand.GetComponent<Animator>().SetTrigger("Fire_CL");
 
             isReload = false;
             isRecoil = false;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            //RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
-            {
-                direction = (hit.point - Camera.main.transform.position).normalized;
-            }
-            else
-                direction = Camera.main.transform.forward;
+            //if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
+            //{
+            //    direction = (hit.point - Camera.main.transform.position).normalized;
+            //}
+            //else
+            //    direction = Camera.main.transform.forward;
 
-            float temp = Random.Range(-Mathf.PI, Mathf.PI);
+            Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
+            tempBullet.gameObject.SetActive(true);
+            tempBullet.SetFire(shotPos.position, ray.direction, 30, 0);
 
-            Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
+            //float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
-            //Debug.DrawRay(shotPos.position, shotDir * 1000);
+            //Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
-            RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
-            {
-                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
-                {
-                    Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+            ////Debug.DrawRay(shotPos.position, shotDir * 1000);
 
-                    if (!hit2.transform.CompareTag("Head"))
-                    {
-                        enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20));
-                    }
-                    else
-                    {
-                        enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5));
-                    }
+            //RaycastHit hit2;
+            //if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            //{
+            //    if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
+            //    {
+            //        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
-                    GameManager.Instance.GetCrosshair().ResetAttack();
-                    if (enemy.GetIsDead())
-                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                    else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-                }
-                else if (hit.transform.CompareTag("InteractiveObject"))
-                {
-                    hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
-                }
-                else
-                {
-                    GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
-                    tempObect.transform.SetParent(null);
-                    tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
-                    tempObect.transform.position = hit2.point;
-                    tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-                    tempObect.transform.SetParent(hit2.transform, true);
-                    tempObect.SetActive(true);
-                }
-            }
+            //        if (!hit2.transform.CompareTag("Head"))
+            //        {
+            //            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20));
+            //        }
+            //        else
+            //        {
+            //            enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5));
+            //        }
+
+            //        GameManager.Instance.GetCrosshair().ResetAttack();
+            //        if (enemy.GetIsDead())
+            //            GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+            //        else if (!GameManager.Instance.GetCrosshair().GetIsKill())
+            //            GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+            //    }
+            //    else if (hit.transform.CompareTag("InteractiveObject"))
+            //    {
+            //        hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+            //    }
+            //    else
+            //    {
+            //        GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
+            //        tempObect.transform.SetParent(null);
+            //        tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
+            //        tempObect.transform.position = hit2.point;
+            //        tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
+            //        tempObect.transform.SetParent(hit2.transform, true);
+            //        tempObect.SetActive(true);
+            //    }
+            //}
 
             //muzzleFlash.Play();
             isShot = true;

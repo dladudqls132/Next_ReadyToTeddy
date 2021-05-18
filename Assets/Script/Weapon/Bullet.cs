@@ -4,26 +4,29 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Vector3 dir;
-    private float speed;
-    private float damage;
-    private bool isFire;
-    private Rigidbody rigid;
-    private float lifeTime = 15.0f;
-    [SerializeField] private float currentLifeTime = 0;
-    private bool isDestroyed;
-    private SphereCollider coll;
-    private TrailRenderer trail;
+    protected Vector3 dir;
+    protected float speed;
+    protected float damage;
+    protected bool isFire;
+    protected Rigidbody rigid;
+    protected float lifeTime = 15.0f;
+    [SerializeField] protected float currentLifeTime = 0;
+    protected bool isDestroyed;
+    protected SphereCollider coll;
+    [SerializeField] protected TrailRenderer trail;
+    [SerializeField] protected Transform target;
 
-    private void Start()
+    protected void Start()
     {
         rigid = this.GetComponent<Rigidbody>();
         coll = this.GetComponent<SphereCollider>();
-        trail = this.GetComponent<TrailRenderer>();
+
+        if(trail == null)
+         trail = this.GetComponent<TrailRenderer>();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    virtual protected void FixedUpdate()
     {
 
         if(isFire)
@@ -59,7 +62,18 @@ public class Bullet : MonoBehaviour
         this.transform.rotation = Quaternion.LookRotation(direction);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void SetFire(Vector3 pos, Transform target, float speed, float damage)
+    {
+        isFire = true;
+        this.target = target;
+        this.speed = speed;
+        this.damage = damage;
+
+        this.transform.position = pos;
+        this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
+    }
+
+    virtual protected void OnTriggerEnter(Collider other)
     {
 
         if (other.CompareTag("Player"))
@@ -67,24 +81,25 @@ public class Bullet : MonoBehaviour
             other.GetComponent<PlayerController>().DecreaseHp(damage);
             ActiveFalse();
         }
-        else if (!LayerMask.LayerToName(other.gameObject.layer).Equals("Ignore Raycast"))
+        else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Default") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
             ActiveFalse();
         }
     }
 
-    void ActiveFalse()
+    virtual protected void ActiveFalse()
     {
         isFire = false;
         rigid.velocity = Vector3.zero;
         coll.enabled = false;
         isDestroyed = true;
+        
         currentLifeTime = 0;
         this.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    void ResetInfo()
+    virtual protected void ResetInfo()
     {
         currentLifeTime = 0;
         rigid.velocity = Vector3.zero;

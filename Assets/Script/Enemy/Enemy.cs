@@ -46,6 +46,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float increaseSuccessRate;
     [SerializeField] protected float potionDropRate;
     [SerializeField] protected float magazineDropRate;
+    [SerializeField] protected bool isRigidity;
+    [SerializeField] protected float rigidityTime;
+    protected float currentRigidityTime;
 
     private GameObject whoAttackThis;
     protected Animator anim;
@@ -242,6 +245,11 @@ public class Enemy : MonoBehaviour
         CheckingHp(damagedTrs, damagedVelocity);
     }
 
+    public void SetRigidity(bool value, float time)
+    {
+        isRigidity = value;
+        rigidityTime = time;
+    }
     //public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
     //{
     //    //if (!GameManager.Instance.GetIsCombat())

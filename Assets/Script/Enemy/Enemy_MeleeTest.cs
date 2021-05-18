@@ -53,6 +53,20 @@ public class Enemy_MeleeTest : Enemy
             return;
         }
 
+        if (isRigidity)
+        {
+            agent.isStopped = true;
+            currentRigidityTime += Time.deltaTime;
+
+            if(currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+            }
+            else
+                return;
+        }
+
         if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
             state = Enemy_State.Chase;
 

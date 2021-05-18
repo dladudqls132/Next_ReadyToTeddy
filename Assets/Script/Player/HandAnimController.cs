@@ -36,9 +36,10 @@ public class HandAnimController : MonoBehaviour
             {
                 if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.AR)
                 {
-                
                     anim.SetBool("Hand_AR", true);
                     anim.SetBool("Hand_Shotgun", false);
+                    anim.SetBool("Hand_CL", false);
+                    anim.SetBool("Hand_FT", false);
                     anim.SetBool("Hand_Empty", false);
                 }
                 else if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.ShotGun)
@@ -46,6 +47,24 @@ public class HandAnimController : MonoBehaviour
            
                     anim.SetBool("Hand_AR", false);
                     anim.SetBool("Hand_Shotgun", true);
+                    anim.SetBool("Hand_CL", false);
+                    anim.SetBool("Hand_FT", false);
+                    anim.SetBool("Hand_Empty", false);
+                }
+                else if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.ChainLightning)
+                {
+                    anim.SetBool("Hand_AR", false);
+                    anim.SetBool("Hand_Shotgun", false);
+                    anim.SetBool("Hand_CL", true);
+                    anim.SetBool("Hand_FT", false);
+                    anim.SetBool("Hand_Empty", false);
+                }
+                else if (player.GetWeaponGameObject().GetComponent<Gun>().GetGunType() == GunType.Flamethrower)
+                {
+                    anim.SetBool("Hand_AR", false);
+                    anim.SetBool("Hand_Shotgun", false);
+                    anim.SetBool("Hand_CL", false);
+                    anim.SetBool("Hand_FT", true);
                     anim.SetBool("Hand_Empty", false);
                 }
             }
@@ -53,6 +72,8 @@ public class HandAnimController : MonoBehaviour
             {
                 anim.SetBool("Hand_AR", false);
                 anim.SetBool("Hand_Shotgun", false);
+                anim.SetBool("Hand_CL", false);
+                anim.SetBool("Hand_FT", false);
                 anim.SetBool("Hand_Empty", true);
             }
 
