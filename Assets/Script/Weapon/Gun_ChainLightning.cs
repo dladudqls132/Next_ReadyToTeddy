@@ -100,7 +100,6 @@ public class Gun_ChainLightning : Gun
                 mainCam.Shake(0.1f, 0.015f);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
-                Debug.Log(handFireRot);
             }
             else
             {
