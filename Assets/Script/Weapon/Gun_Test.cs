@@ -81,14 +81,14 @@ public class Gun_Test : Gun
     {
         base.SetIsReload(value);
 
-        hand.GetComponent<Animator>().SetBool("isReload_Shotgun", value);
+        hand.GetComponent<Animator>().SetBool("isReload_SG", value);
     }
 
     public override void SetIsReloadFinish()
     {
         base.SetIsReloadFinish();
 
-        hand.GetComponent<Animator>().SetBool("isReload_Shotgun", false);
+        hand.GetComponent<Animator>().SetBool("isReload_SG", false);
     }
 
     override public bool Fire()

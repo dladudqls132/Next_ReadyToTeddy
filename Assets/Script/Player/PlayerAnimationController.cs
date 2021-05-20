@@ -53,6 +53,12 @@ public class PlayerAnimationController : MonoBehaviour
                 anim.SetBool("CL", false);
                 anim.SetBool("FT", true);
             }
+
+            anim.SetBool("isReload", player.GetGun().GetIsReload());
+        }
+        else
+        {
+            anim.SetBool("isReload", false);
         }
     }
 }

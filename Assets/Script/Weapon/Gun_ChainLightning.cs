@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Gun_ChainLightning : Gun
 {
+    Vector3 temp;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -75,9 +76,9 @@ public class Gun_ChainLightning : Gun
 
     public override void SetIsReload(bool value)
     {
-        base.SetIsReload(value);
+        //base.SetIsReload(value);
 
-        hand.GetComponent<Animator>().SetBool("isReload_CL", value);
+        //hand.GetComponent<Animator>().SetBool("isReload_CL", value);
     }
 
     public override void SetIsReloadFinish()
@@ -116,6 +117,10 @@ public class Gun_ChainLightning : Gun
         }
 
         return false;
+    }
+    private void LateUpdate()
+    {
+        temp = shotPos.position;
     }
 
     override public bool Fire()
@@ -157,7 +162,7 @@ public class Gun_ChainLightning : Gun
 
             Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
             tempBullet.gameObject.SetActive(true);
-            tempBullet.SetFire(shotPos.position, ray.direction, 40, damagePerBullet, stunTime);
+            tempBullet.SetFire(temp, ray.direction, 40, damagePerBullet, stunTime);
 
             //float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
