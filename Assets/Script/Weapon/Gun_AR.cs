@@ -144,6 +144,7 @@ public class Gun_AR : Gun
                     }
                     else
                     {
+                     
                         enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
                     }
 

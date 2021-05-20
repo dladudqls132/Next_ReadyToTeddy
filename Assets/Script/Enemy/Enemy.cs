@@ -112,6 +112,7 @@ public class Enemy : MonoBehaviour
         //temp.SetActive(true);
         //temp.transform.position = this.transform.position;
         //temp.transform.rotation = this.transform.rotation;
+        
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         if(this.GetComponent<Enemy_RagdollController>() != null)
@@ -178,6 +179,7 @@ public class Enemy : MonoBehaviour
                 //SetRagdoll(damagedVelocity);
                 //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                 //     LayerMask.NameToLayer("Enemy"), true);
+
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
@@ -245,7 +247,6 @@ public class Enemy : MonoBehaviour
 
        // whoAttackThis = attackObj;
         anim.SetTrigger("isDamaged");
-
         CheckingHp(damagedTrs, damagedVelocity);
     }
 
@@ -276,7 +277,6 @@ public class Enemy : MonoBehaviour
 
         // whoAttackThis = attackObj;
         anim.SetTrigger("isDamaged");
-
         CheckingHp(damagedTrs, damagedVelocity);
     }
 
