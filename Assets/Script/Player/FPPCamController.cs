@@ -55,6 +55,7 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private Vector3 currentRotation;
     [SerializeField] private Vector3 rot;
 
+    public float GetCurrentFov() { return Camera.main.fieldOfView; }
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
     public void SetOriginFov(float value) { originFov = value; }
@@ -100,7 +101,8 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 13);
+            if(!GameManager.Instance.GetIsPause())
+                mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime / timeToOrigin);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
             {
@@ -151,19 +153,19 @@ public class FPPCamController : MonoBehaviour
                 if (!this.GetComponent<Animator>().GetBool("isReload"))
                     this.GetComponent<Animator>().SetBool("isReload", true);
 
-                transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY));
+                transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
             else
             {
                 if (this.GetComponent<Animator>().GetBool("isReload"))
                     this.GetComponent<Animator>().SetBool("isReload", false);
-                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
 
         }
         else
         {
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
         }
     }
 
@@ -205,7 +207,7 @@ public class FPPCamController : MonoBehaviour
         else
 
         {
-            shakeVec = Vector3.zero;
+            shakeVec = Vector3.Lerp(shakeVec, Vector3.zero, Time.deltaTime * 15);
             if (!isAiming)
             {
                 this.transform.position = cameraFollow.position + temp;
@@ -281,9 +283,10 @@ public class FPPCamController : MonoBehaviour
     {
         isFovMove = false;
 
+        originFov = realOriginFov;
         destFov = 0;
         this.timeToDest = 0;
-        this.timeToOrigin = 0;
+        this.timeToOrigin = 0.1f;
         fovStopTime = 0;
         fovTimer = 0;
     }

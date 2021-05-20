@@ -633,10 +633,25 @@ public class PlayerController : MonoBehaviour
         {
             isDash = true;
             currentDashCount--;
+
+            if(moveInput.x > 0)
+            {
+                mainCam.GetComponent<Animator>().SetBool("isDash_Right", true);
+            }
+            else if(moveInput.x < 0)
+            {
+                mainCam.GetComponent<Animator>().SetBool("isDash_Left", true);
+            }
+
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
-                mainCam.FovMove(mainCam.GetOriginFov() - 2.0f, 0.1f, 0.1f);
+            {
+                mainCam.FovMove(mainCam.GetCurrentFov() - 5.0f, 0.05f, 0.16f, 0.04f);
+            }
             if (Vector3.Dot(forward, moveDirection) < 0)
-                mainCam.FovMove(mainCam.GetOriginFov() + 2.0f, 0.1f, 0.1f);
+            {
+                mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
+            }
+            
 
             if (isJump)
             {
@@ -669,6 +684,8 @@ public class PlayerController : MonoBehaviour
 
             if (currentDashPower <= walkSpeed)
             {
+                mainCam.GetComponent<Animator>().SetBool("isDash_Right", false);
+                mainCam.GetComponent<Animator>().SetBool("isDash_Left", false);
                 isDash = false;
                 currentDashPower = dashPower;
             }
@@ -753,6 +770,7 @@ public class PlayerController : MonoBehaviour
                 {
                     isAiming = false;
 
+                    mainCam.FovReset();
                     gun.SetIsReload(true);
                     //hand.localRotation = handOriginRot;
                     //hand.localPosition = handOriginPos;
@@ -774,9 +792,15 @@ public class PlayerController : MonoBehaviour
 
                 if (isAiming)
                 {
+                    
+                    mainCam.FovMove(52, 0.07f, 1000);
+                    mainCam.SetOriginFov(52);
                     gun.SetIsReload(false);
                 }
-
+                else
+                {
+                    mainCam.FovReset();
+                }
             }
         }
 
@@ -792,8 +816,8 @@ public class PlayerController : MonoBehaviour
             isCrouch = false;
             bodyCollider.center = originBodyColliderCenter;
             bodyCollider.height = originBodyColliderHeight;
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            //mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+            //mainCam.FovReset();
         }
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && canJump && isGrounded)
         {
@@ -942,39 +966,39 @@ public class PlayerController : MonoBehaviour
             currentJumpPower = 0;
         }
 
-        if (isSlide)
-        {
-            //isRun = false;
-            currentSlidingCoolTime = slidingCoolTime;
+        //if (isSlide)
+        //{
+        //    //isRun = false;
+        //    currentSlidingCoolTime = slidingCoolTime;
 
-            if (moveDirection != Vector3.zero)
-            {
-                if (rigid.velocity.magnitude <= walkSpeed)
-                {
-                    isSlide = false;
-                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                    mainCam.FovReset();
-                }
-            }
-            else
-            {
-                if (rigid.velocity.magnitude <= 0.5f)
-                {
-                    isSlide = false;
-                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                    mainCam.FovReset();
-                }
-            }
-        }
-        else
-        {
-            if (currentSlidingCoolTime > 0)
-            {
-                currentSlidingCoolTime -= Time.deltaTime;
-            }
+        //    if (moveDirection != Vector3.zero)
+        //    {
+        //        if (rigid.velocity.magnitude <= walkSpeed)
+        //        {
+        //            isSlide = false;
+        //            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        //            mainCam.FovReset();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (rigid.velocity.magnitude <= 0.5f)
+        //        {
+        //            isSlide = false;
+        //            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        //            mainCam.FovReset();
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    if (currentSlidingCoolTime > 0)
+        //    {
+        //        currentSlidingCoolTime -= Time.deltaTime;
+        //    }
 
-            isSlope = false;
-        }
+        //    isSlope = false;
+        //}
 
 
         HeadBob();
@@ -1204,7 +1228,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         gun.SetIsAiming(false);
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 20);
                         if (!isLanding)
                         {
                             if(gun.GetGunType() == GunType.ChainLightning)
