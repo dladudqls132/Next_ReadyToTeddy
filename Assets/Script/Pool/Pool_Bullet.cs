@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum BulletType
 {
-    Normal
+    Normal,
+    CL
 }
 
 public class Pool_Bullet : MonoBehaviour

@@ -51,7 +51,7 @@ public class ExplosionDrum : InteractiveObject
                             {
                                 Enemy temp = rb.GetComponent<Enemy>();
 
-                                temp.DecreaseHp(this.gameObject, 10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500);
+                                temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), rb.transform, (hit.ClosestPoint(explosionPos) - explosionPos).normalized * 500, EffectType.None);
                                 //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
                             }
                         }

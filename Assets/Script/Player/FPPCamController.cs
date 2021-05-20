@@ -40,6 +40,9 @@ public class FPPCamController : MonoBehaviour
     
     private Vector2 tempDir;
     private Vector2 currentTempDir;
+    private Vector2 smoothTemp;
+
+    public Vector3 shakeVec; 
 
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
@@ -52,6 +55,7 @@ public class FPPCamController : MonoBehaviour
     [SerializeField] private Vector3 currentRotation;
     [SerializeField] private Vector3 rot;
 
+    public float GetCurrentFov() { return Camera.main.fieldOfView; }
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
     public void SetOriginFov(float value) { originFov = value; }
@@ -97,7 +101,8 @@ public class FPPCamController : MonoBehaviour
         }
         else
         {
-            mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime * 13);
+            if(!GameManager.Instance.GetIsPause())
+                mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, originFov, Time.deltaTime / timeToOrigin);
 
             if (Mathf.Abs(mainCamera.fieldOfView - originFov) <= 0.1f)
             {
@@ -141,26 +146,26 @@ public class FPPCamController : MonoBehaviour
         if (GameManager.Instance.GetPlayer().GetGun() != null)
         {
 
-            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload())
+            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload() && (GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.AR || GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.ShotGun))
             {
 
                 //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
                 if (!this.GetComponent<Animator>().GetBool("isReload"))
                     this.GetComponent<Animator>().SetBool("isReload", true);
 
-                transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY));
+                transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
             else
             {
                 if (this.GetComponent<Animator>().GetBool("isReload"))
                     this.GetComponent<Animator>().SetBool("isReload", false);
-                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
 
         }
         else
         {
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY));
+            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
         }
     }
 
@@ -187,8 +192,8 @@ public class FPPCamController : MonoBehaviour
         if (isShake)
 
         {
-
-            transform.position = Random.insideUnitSphere * shakeAmount + cameraFollow.position + temp;
+            shakeVec = Random.insideUnitSphere * shakeAmount;
+            transform.position = shakeVec + cameraFollow.position + temp;
 
             currentShakeTime -= Time.deltaTime;
 
@@ -202,6 +207,7 @@ public class FPPCamController : MonoBehaviour
         else
 
         {
+            shakeVec = Vector3.Lerp(shakeVec, Vector3.zero, Time.deltaTime * 15);
             if (!isAiming)
             {
                 this.transform.position = cameraFollow.position + temp;
@@ -211,12 +217,13 @@ public class FPPCamController : MonoBehaviour
             }
             else
             {
-                if (!Input.GetMouseButton(0))
+                if (!Input.GetMouseButton(0) && GameManager.Instance.GetPlayer().GetIsGrounded())
                 {
                     this.transform.position = cameraFollow.position + temp;
 
-                    currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
-                    currentAimingMoveRndTime += Time.deltaTime;
+                    //currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
+                    currentTempDir = Vector2.SmoothDamp(currentTempDir, tempDir, ref smoothTemp, 1);
+               currentAimingMoveRndTime += Time.deltaTime;
                     if (currentAimingMoveRndTime > aimingMoveRndTime)
                     {
                         currentAimingMoveRndTime = 0;
@@ -276,9 +283,10 @@ public class FPPCamController : MonoBehaviour
     {
         isFovMove = false;
 
+        originFov = realOriginFov;
         destFov = 0;
         this.timeToDest = 0;
-        this.timeToOrigin = 0;
+        this.timeToOrigin = 0.1f;
         fovStopTime = 0;
         fovTimer = 0;
     }

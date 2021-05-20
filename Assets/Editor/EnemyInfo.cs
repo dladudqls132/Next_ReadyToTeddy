@@ -9,7 +9,7 @@ public class EnemyInfo : ScriptableObject
     {
         public GameObject prefab;
         public EnemyType enemyType;
-        public CharacterMaterial material;
+        //public CharacterMaterial material;
         public float hp;
 
         [Range(0, 100)]
@@ -31,7 +31,7 @@ public class EnemyInfo : ScriptableObject
         for(int i = 0; i < enemies.Length; i++)
         {
             Enemy temp = enemies[i].prefab.GetComponent<Enemy>();
-            temp.SetInfo(enemies[i].enemyType, enemies[i].material, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
+            temp.SetInfo(enemies[i].enemyType/*, enemies[i].material*/, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
             EditorUtility.SetDirty(temp);
         }
     }

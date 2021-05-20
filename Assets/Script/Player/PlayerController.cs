@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float WPressTime = 0;
     private float currentWPressTime = 0;
     private bool isPressW = false;
+    private bool isPressMouseButton = false;
     private bool isCrouch = false;
     [SerializeField] private bool canJump = false;
     private bool isJump = false;
@@ -146,114 +147,7 @@ public class PlayerController : MonoBehaviour
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
 
-    public bool SetWeapon(SlotType type, GameObject weapon)
-    {
 
-        if (weapon == this.weapon_gameObject)
-        {
-            hand.GetComponent<Animator>().SetBool("isSwap", false);
-            return false;
-        }
-
-        if (type == SlotType.Projectile)
-        {
-            if (weapon.GetComponent<Projectile>().GetHaveNum() == 0)
-                return false;
-        }
-
-        if (gun != null)
-        {
-            if (this.gun.GetIsReload())
-                this.gun.SetIsReload(false);
-        }
-
-        tempWeapon = weapon;
-
-        if (tempWeapon == null)
-        {
-            //this.weapon_gameObject = tempWeapon;
-            this.gun = null;
-            this.projectile = null;
-        }
-
-        if(projectile != null)
-            projectileController.ResetInfo();
-
-        isSwap = true;
-
-        handFireRot = Quaternion.Euler(0, 0, 0);
-
-        isAiming = false;
-        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-        mainCam.FovReset();
-
-        hand.GetComponent<Animator>().SetBool("isSwap", true);
-        //hand.GetComponent<Animator>().SetTrigger("isSwap_test");
-
-        return true;
-    }
-
-    public bool SwapWeapon()
-    {
-        if ((this.weapon_gameObject != null && this.weapon_gameObject.transform.parent != null) || (tempWeapon == null && this.weapon_gameObject.transform.parent != null))
-        {
-            this.weapon_gameObject.SetActive(false);
-        }
-
-        this.weapon_gameObject = tempWeapon;
-
-        if (this.weapon_gameObject != null)
-        {
-            this.weapon_gameObject.SetActive(true);
-
-            if (tempWeapon.GetComponent<Gun>() != null)
-            {
-                this.gun = tempWeapon.GetComponent<Gun>();
-                projectileController.SetProjectile(null);
-                this.projectile = null;
-            }
-            else if (tempWeapon.GetComponent<Projectile>() != null)
-            {
-                this.projectile = tempWeapon.GetComponent<Projectile>();
-                projectileController.SetProjectile(projectile.projectile.GetComponent<Rigidbody>());
-                this.gun = null;
-            }
-
-            return true;
-        }
-        else
-        {
-            this.projectile = null;
-            this.gun = null;
-            return false;
-        }
-
-
-        //for (int i = 0; i < hand.childCount; i++)
-        //{
-        //    hand.GetChild(i).gameObject.SetActive(false);
-        //}
-
-        //hand.GetChild(currentWeaponNum - 1).gameObject.SetActive(true);
-
-
-        //weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).gameObject;
-
-        //if (currentWeaponNum != 4)
-        //{
-        //    gun = weapon_gameObject.GetComponent<Gun>();
-        //    projectile = null;
-
-        //    if (gun.GetOwner() == null)
-        //        gun.SetOwner(this.gameObject, hand);
-        //}
-        //else
-        //{
-        //    projectile = weapon_gameObject.GetComponent<Projectile>();
-        //    gun = null;
-
-        //}
-    }
 
     // Start is called before the first frame update
     public void Init()
@@ -292,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
         //if (gun.GetOwner() == null)
         //    gun.SetOwner(this.gameObject, hand);
-     
+
         inventory = this.GetComponent<Inventory>();
         inventory.Init();
 
@@ -314,11 +208,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentDashCount < dashCount)
+        if (currentDashCount < dashCount)
         {
             currentDashRefillTime += Time.deltaTime;
 
-            if(currentDashRefillTime >= dashRefillTime)
+            if (currentDashRefillTime >= dashRefillTime)
             {
                 currentDashCount++;
                 currentDashRefillTime = 0;
@@ -604,7 +498,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        if (isCrouch)
+                        if (isCrouch || isAiming)
                             rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed * 0.65f, Time.deltaTime * 20);
                         else
                         {
@@ -739,10 +633,25 @@ public class PlayerController : MonoBehaviour
         {
             isDash = true;
             currentDashCount--;
+
+            if(moveInput.x > 0)
+            {
+                mainCam.GetComponent<Animator>().SetTrigger("Dash_Right");
+            }
+            else if(moveInput.x < 0)
+            {
+                mainCam.GetComponent<Animator>().SetTrigger("Dash_Left");
+            }
+
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
-                mainCam.FovMove(mainCam.GetOriginFov() - 2.0f, 0.1f, 0.1f);
+            {
+                mainCam.FovMove(mainCam.GetCurrentFov() - 5.0f, 0.05f, 0.16f, 0.04f);
+            }
             if (Vector3.Dot(forward, moveDirection) < 0)
-                mainCam.FovMove(mainCam.GetOriginFov() + 2.0f, 0.1f, 0.1f);
+            {
+                mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
+            }
+            
 
             if (isJump)
             {
@@ -775,6 +684,8 @@ public class PlayerController : MonoBehaviour
 
             if (currentDashPower <= walkSpeed)
             {
+                mainCam.GetComponent<Animator>().SetBool("isDash_Right", false);
+                mainCam.GetComponent<Animator>().SetBool("isDash_Left", false);
                 isDash = false;
                 currentDashPower = dashPower;
             }
@@ -784,55 +695,82 @@ public class PlayerController : MonoBehaviour
             currentDashPower = dashPower;
         }
 
-
         if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap && !inventory.isOpen)
         {
-
+            isPressMouseButton = true;
             if (gun != null)
             {
-                if (gun.Fire())
+                if (gun.GetGunType() == GunType.ChainLightning)
                 {
                     handFireRot = gun.GetHandFireRot();
-
-                    if (isGrounded && !isSlide)
+                    gun.GetComponent<Gun_ChainLightning>().Charging();
+                }
+                else
+                {
+                    if (gun.Fire())
                     {
-                        isCombat = true;
-                        isRun = false;
-                    }
+                        handFireRot = gun.GetHandFireRot();
 
-                    currentCombatTime = combatTime;
+                        if (isGrounded && !isSlide)
+                        {
+                            isCombat = true;
+                            isRun = false;
+                        }
+
+                        currentCombatTime = combatTime;
+                    }
                 }
             }
-
             else if (projectile != null)
             {
-                if(projectileController.AimingProjectile())
+                if (projectileController.AimingProjectile())
                     isAimingProjectile = true;
                 else
+                {
                     isAimingProjectile = false;
+                }
             }
         }
-        else if (Input.GetMouseButtonUp(0) && isAimingProjectile)
+        else if (!Input.GetMouseButtonDown(0) && isPressMouseButton)
         {
-            projectileController.LaunchProjectile();
-            projectile.DecreaseHaveNum();
-            isAimingProjectile = false;
-
-            if (projectile.GetHaveNum() == 0)
+            isPressMouseButton = false;
+            if (gun.GetGunType() == GunType.ChainLightning)
             {
-                inventory.DestroyWeapon(4);
+                if (!isSwap)
+                    gun.GetComponent<Gun_ChainLightning>().Fire();
+            }
+            else if (gun.GetGunType() == GunType.Flamethrower)
+            {
+                gun.GetComponent<Gun_FlameThrower>().Off();
+            }
+
+            if (isAimingProjectile)
+            {
+                projectileController.LaunchProjectile();
+                projectile.DecreaseHaveNum();
+                isAimingProjectile = false;
+
+                if (projectile.GetHaveNum() == 0)
+                {
+                    inventory.DestroyWeapon(4);
+                }
+            }
+            else
+            {
+                projectileController.ResetInfo();
             }
         }
+
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-
             if (gun != null)
             {
-                if (gun.CanReload() && !isSwap)
+                if (gun.CanReload() && gun.GetGunType() != GunType.Flamethrower && !isSwap)
                 {
                     isAiming = false;
 
+                    mainCam.FovReset();
                     gun.SetIsReload(true);
                     //hand.localRotation = handOriginRot;
                     //hand.localPosition = handOriginPos;
@@ -847,16 +785,22 @@ public class PlayerController : MonoBehaviour
 
         if (gun != null)
         {
-            if (Input.GetMouseButtonDown(1) && !gun.GetIsReload())
+            if (Input.GetMouseButtonDown(1) && !gun.GetIsReload() && gun.GetGunType() != GunType.Flamethrower && gun.GetGunType() != GunType.ChainLightning)
             {
                 isAiming = !isAiming;
                 isMoveAim = true;
 
                 if (isAiming)
                 {
+                    
+                    mainCam.FovMove(52, 0.07f, 1000);
+                    mainCam.SetOriginFov(52);
                     gun.SetIsReload(false);
                 }
-
+                else
+                {
+                    mainCam.FovReset();
+                }
             }
         }
 
@@ -872,8 +816,8 @@ public class PlayerController : MonoBehaviour
             isCrouch = false;
             bodyCollider.center = originBodyColliderCenter;
             bodyCollider.height = originBodyColliderHeight;
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            //mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+            //mainCam.FovReset();
         }
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && canJump && isGrounded)
         {
@@ -963,7 +907,6 @@ public class PlayerController : MonoBehaviour
             mainCam.FovReset();
             currentClimbUpTime -= Time.deltaTime;
 
-
             if (currentClimbuUpPower <= 2)
             {
                 currentClimbuUpPower = 2;
@@ -1023,40 +966,39 @@ public class PlayerController : MonoBehaviour
             currentJumpPower = 0;
         }
 
-        if (isSlide)
-        {
-            //isRun = false;
-            currentSlidingCoolTime = slidingCoolTime;
+        //if (isSlide)
+        //{
+        //    //isRun = false;
+        //    currentSlidingCoolTime = slidingCoolTime;
 
-            if (moveDirection != Vector3.zero)
-            {
-                if (rigid.velocity.magnitude <= walkSpeed)
-                {
-                    isSlide = false;
-                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                    mainCam.FovReset();
-                }
-            }
-            else
-            {
-                if (rigid.velocity.magnitude <= 0.5f)
-                {
-                    isSlide = false;
-                    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                    mainCam.FovReset();
-                }
-            }
-        }
-        else
-        {
-            if (currentSlidingCoolTime > 0)
-            {
-                currentSlidingCoolTime -= Time.deltaTime;
-            }
+        //    if (moveDirection != Vector3.zero)
+        //    {
+        //        if (rigid.velocity.magnitude <= walkSpeed)
+        //        {
+        //            isSlide = false;
+        //            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        //            mainCam.FovReset();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (rigid.velocity.magnitude <= 0.5f)
+        //        {
+        //            isSlide = false;
+        //            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        //            mainCam.FovReset();
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    if (currentSlidingCoolTime > 0)
+        //    {
+        //        currentSlidingCoolTime -= Time.deltaTime;
+        //    }
 
-            isSlope = false;
-        }
-
+        //    isSlope = false;
+        //}
 
 
         HeadBob();
@@ -1067,6 +1009,89 @@ public class PlayerController : MonoBehaviour
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
         this.transform.rotation = Quaternion.LookRotation(forward);
+    }
+
+    public bool SetWeapon(SlotType type, GameObject weapon)
+    {
+
+        if (weapon == this.weapon_gameObject)
+        {
+            hand.GetComponent<Animator>().SetBool("isSwap", false);
+            return false;
+        }
+
+        if (type == SlotType.Projectile)
+        {
+            if (weapon.GetComponent<Projectile>().GetHaveNum() == 0)
+                return false;
+        }
+
+        if (gun != null)
+        {
+            if (this.gun.GetIsReload())
+                this.gun.SetIsReload(false);
+        }
+
+        tempWeapon = weapon;
+
+        if (tempWeapon == null)
+        {
+            //this.weapon_gameObject = tempWeapon;
+            this.gun = null;
+            this.projectile = null;
+        }
+
+        if (projectile != null)
+            projectileController.ResetInfo();
+
+        isSwap = true;
+
+        handFireRot = Quaternion.Euler(0, 0, 0);
+
+        isAiming = false;
+        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+        mainCam.FovReset();
+
+        hand.GetComponent<Animator>().SetBool("isSwap", true);
+        //hand.GetComponent<Animator>().SetTrigger("isSwap_test");
+
+        return true;
+    }
+
+    public bool SwapWeapon()
+    {
+        if ((this.weapon_gameObject != null && this.weapon_gameObject.transform.parent != null) || (tempWeapon == null && this.weapon_gameObject.transform.parent != null))
+        {
+            this.weapon_gameObject.SetActive(false);
+        }
+
+        this.weapon_gameObject = tempWeapon;
+
+        if (this.weapon_gameObject != null)
+        {
+            this.weapon_gameObject.SetActive(true);
+
+            if (tempWeapon.GetComponent<Gun>() != null)
+            {
+                this.gun = tempWeapon.GetComponent<Gun>();
+                projectileController.SetProjectile(null);
+                this.projectile = null;
+            }
+            else if (tempWeapon.GetComponent<Projectile>() != null)
+            {
+                this.projectile = tempWeapon.GetComponent<Projectile>();
+                projectileController.SetProjectile(projectile.projectile.GetComponent<Rigidbody>());
+                this.gun = null;
+            }
+
+            return true;
+        }
+        else
+        {
+            this.projectile = null;
+            this.gun = null;
+            return false;
+        }
     }
 
     private void HeadBob()
@@ -1111,7 +1136,10 @@ public class PlayerController : MonoBehaviour
                         }
                         else
                         {
-                            headBobValue += Time.deltaTime * walkSpeed * 1.0f;
+                            if(isCrouch || isAiming)
+                                headBobValue += Time.deltaTime * walkSpeed * 0.85f;
+                            else
+                                headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                         }
 
                         if (isCrouch)
@@ -1154,7 +1182,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandAnimation()
     {
-
         if (gun != null)
         {
             if (gun.GetIsReload())
@@ -1162,6 +1189,7 @@ public class PlayerController : MonoBehaviour
                 gun.SetIsAiming(false);
                 lastAngle_hand = hand.localRotation;
                 lastPos_hand = Vector3.Lerp(lastPos_hand, handOriginPos, Time.deltaTime * 15);
+                handFireRot = Quaternion.Euler(Vector3.zero);
 
                 hand.localPosition = lastPos_hand;
                 hand.localRotation = lastAngle_hand;
@@ -1178,19 +1206,21 @@ public class PlayerController : MonoBehaviour
                         float temp = hand.localRotation.eulerAngles.z;
                         if (temp > 180)
                             temp -= 360;
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(0, 0, temp / 3) + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(hand.localRotation.eulerAngles.x, 0, temp / 3) + handFireRot.eulerAngles * 2), Time.deltaTime * 20);
 
+                        if (!isLanding)
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)) + new Vector3(Mathf.Sin(headBobValue) / 600, Mathf.Abs(Mathf.Sin(headBobValue)) / 500f, 0), Time.deltaTime * 30);
 
-                        if (moveInput == Vector2.zero)
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
-                        }
-                        else
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, -0.08f, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 500, Mathf.Abs(Mathf.Sin(headBobValue)) / 300f, 0), Time.deltaTime * 10);
+                        //if (moveInput == Vector2.zero)
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                        //}
+                        //else
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(0, -0.08f, 0.087f - (0.2245002f - hand.localPosition.z)), Time.deltaTime * 30);
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, -0.08f, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 500, Mathf.Abs(Mathf.Sin(headBobValue)) / 300f, 0), Time.deltaTime * 10);
 
-                        }
+                        //}
 
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
@@ -1199,17 +1229,26 @@ public class PlayerController : MonoBehaviour
                     {
                         gun.SetIsAiming(false);
                         lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
-                   
-                        if (moveInput == Vector2.zero)
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
-                        }
-                        else
-                        {
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
 
+                        if (!isLanding)
+                        {
+                            if(gun.GetGunType() == GunType.ChainLightning)
+                                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0) + mainCam.shakeVec / 2, Time.deltaTime * 15);
+                            else
+                            {
+                                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 15);
+                            }
                         }
+                        //if (moveInput == Vector2.zero)
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
+                        //}
+                        //else
+                        //{
+                        //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 15);
+                        //    //lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
+
+                        //}
                         hand.localRotation = lastAngle_hand;
                         hand.localPosition = lastPos_hand;
                     }
@@ -1236,6 +1275,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
+       
         //HandAnimation();
     }
 

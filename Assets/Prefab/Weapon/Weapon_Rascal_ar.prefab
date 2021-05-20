@@ -14607,7 +14607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunType: 0
-  originPos: {x: -0.011, y: 0.001, z: 0.125}
+  originPos: {x: -0.011, y: -0.0208, z: 0.1261}
   originRot: {x: -2.75, y: -2.139, z: 0}
   aimingPos: {x: 0, y: -0.026, z: 0.147}
   aimingRot: {x: 0, y: 0, z: 0}
@@ -14615,7 +14615,7 @@ MonoBehaviour:
   item: {fileID: 8798964837057864459}
   owner: {fileID: 0}
   hand: {fileID: 0}
-  shotPos: {fileID: 0}
+  shotPos: {fileID: 6778132508753604730}
   sprite: {fileID: 21300000, guid: 13ad109983f69c44494b2daedc42bbf4, type: 3}
   text: 
   fireNum: 1
@@ -14629,14 +14629,16 @@ MonoBehaviour:
   maxAmmo: 100
   maxAmmo_aMag: 50
   haveAmmo: 50
-  currentAmmo: 100
+  currentAmmo: 50
   damagePerBullet: 20
   muzzleFlash: {fileID: 2281832395714330176}
-  spreadAngle_normal: 2.5
+  spreadAngle_normal: 2
   spreadAngle_aiming: 0
   currentSpreadAngle: 0
   isDroped: 1
   isPlayerEnter: 0
+  stunTime: 0
+  refillTime: 0
   mesh:
   - {fileID: 5554938804388420518}
   - {fileID: 4298868805346983784}

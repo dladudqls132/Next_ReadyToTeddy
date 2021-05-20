@@ -117,10 +117,13 @@ Shader "Custom/ToonShader"
 
 		float4 frag(v2f i) : SV_Target
 		{
-			float3 normal = normalize(i.worldNormal);
+			//float3 normal = normalize(i.worldNormal);
 			float3 viewDir = normalize(i.viewDir);
 
-			float NdotL = dot(_WorldSpaceLightPos0, normal);
+			half3 fTangnetNormal = UnpackNormal(tex2D(_BumpTex, i.uv));
+			fTangnetNormal.xy *= 1.0f; // 노말강도 조절
+			float3 worldNormal = Fuc_TangentNormal2WorldNormal(fTangnetNormal, i.T, i.B, i.N);
+			float NdotL = dot(_WorldSpaceLightPos0, worldNormal);
 
 
 			float shadow = LIGHT_ATTENUATION(i);
@@ -130,15 +133,13 @@ Shader "Custom/ToonShader"
 			float4 light = lightIntensity * _LightColor0;
 
 
-			float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
-			float NdotH = dot(normal, halfVector);
+			//float3 halfVector = normalize(_WorldSpaceLightPos0 + viewDir);
+			//float NdotH = dot(normal, halfVector);
 
 			float4 sample = tex2D(_MainTex, i.uv);
-			half3 fTangnetNormal = UnpackNormal(tex2D(_BumpTex, i.uv));
-			fTangnetNormal.xy *= 1.0f; // 노말강도 조절
-			float3 worldNormal = Fuc_TangentNormal2WorldNormal(fTangnetNormal, i.T, i.B, i.N);
 
-			float3 outLine = dot(viewDir, normal);
+			//NdotL = dot(_WorldSpaceLightPos0, worldNormal);
+			//float3 outLine = dot(viewDir, normal);
 			fixed last = sample * NdotL;
 			float3 diffuse = last + lightIntensity;
 			diffuse = clamp(diffuse, 0.1f, 1.0f);

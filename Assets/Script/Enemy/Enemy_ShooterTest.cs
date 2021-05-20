@@ -100,12 +100,27 @@ public class Enemy_ShooterTest : Enemy
             return;
         }
 
+
+        if (isRigidity)
+        {
+            agent.isStopped = true;
+            currentRigidityTime += Time.deltaTime;
+            anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 12));
+
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+            }
+            else
+                return;
+        }
+
         if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
             state = Enemy_State.Chase;
 
         if (state == Enemy_State.None)
             return;
-
 
         currentShotDelay -= Time.deltaTime;
 

@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] protected EnemyType enemyType;
     [SerializeField] protected Enemy_State state;
-    [SerializeField] protected CharacterMaterial material;
+    //[SerializeField] protected CharacterMaterial material;
     [SerializeField] protected Transform eye;
     [SerializeField] protected Transform target;
     [SerializeField] protected GameObject spreadBlood;
@@ -46,8 +46,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float increaseSuccessRate;
     [SerializeField] protected float potionDropRate;
     [SerializeField] protected float magazineDropRate;
+    [SerializeField] protected bool isRigidity;
+    [SerializeField] protected float rigidityTime;
+    protected float currentRigidityTime;
 
-    private GameObject whoAttackThis;
+    //private GameObject whoAttackThis;
     protected Animator anim;
     protected float originAttackRange;
     protected NavMeshAgent agent;
@@ -60,10 +63,10 @@ public class Enemy : MonoBehaviour
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
 
-    public void SetInfo(EnemyType enemyType, CharacterMaterial material, float hp, float speed_min, float speed_max, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
+    public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float hp, float speed_min, float speed_max, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
         this.enemyType = enemyType;
-        this.material = material;
+        //this.material = material;
         this.maxHp = hp;
         this.speed_min = speed_min;
         this.speed_max = speed_max;
@@ -173,8 +176,8 @@ public class Enemy : MonoBehaviour
                 //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
                 //}
                 //SetRagdoll(damagedVelocity);
-                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                     LayerMask.NameToLayer("Enemy"), true);
+                //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                //     LayerMask.NameToLayer("Enemy"), true);
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
@@ -212,12 +215,12 @@ public class Enemy : MonoBehaviour
 
         currentHp -= value;
 
-        whoAttackThis = null;
+       // whoAttackThis = null;
 
         CheckingHp();
     }
 
-    public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity)
+    public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType)
     {
         //if (!GameManager.Instance.GetIsCombat())
         //{
@@ -226,21 +229,63 @@ public class Enemy : MonoBehaviour
 
         currentHp -= damage;
 
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(material);
+        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
 
         if (effect == null)
             return;
 
-        effect.transform.SetParent(null);
+        if (effectType != EffectType.Lightning)
+            effect.transform.SetParent(null);
+        else
+            effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
+
         effect.transform.position = damagedPos;
         effect.transform.rotation = Quaternion.identity;
         effect.SetActive(true);
 
-        whoAttackThis = attackObj;
+       // whoAttackThis = attackObj;
+        anim.SetTrigger("isDamaged");
 
         CheckingHp(damagedTrs, damagedVelocity);
     }
 
+    public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType, float stunTime)
+    {
+        //if (!GameManager.Instance.GetIsCombat())
+        //{
+        //    return;
+        //}
+
+        currentHp -= damage;
+
+        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
+
+        if (effect == null)
+            return;
+
+        if (effectType != EffectType.Lightning)
+            effect.transform.SetParent(null);
+        else
+            effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);
+
+        SetRigidity(true, stunTime);
+
+        effect.transform.position = damagedPos;
+        effect.transform.rotation = Quaternion.identity;
+        effect.SetActive(true);
+
+        // whoAttackThis = attackObj;
+        anim.SetTrigger("isDamaged");
+
+        CheckingHp(damagedTrs, damagedVelocity);
+    }
+
+    public void SetRigidity(bool value, float time)
+    {
+        isRigidity = value;
+        rigidityTime = time;
+        currentRigidityTime = 0;
+    }
     //public void DecreaseHp(GameObject attackObj, float damage, Vector3 damagedPos, Vector3 damagedVelocity)
     //{
     //    //if (!GameManager.Instance.GetIsCombat())
