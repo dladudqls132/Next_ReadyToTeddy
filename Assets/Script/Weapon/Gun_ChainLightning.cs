@@ -133,8 +133,8 @@ public class Gun_ChainLightning : Gun
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
                 currentSpreadAngle = spreadAngle_normal;
-                mainCam.FovMove(78, 0.05f, 0.15f, 0.4f);
-                mainCam.Shake(0.6f, 0.08f);
+                mainCam.FovMove(78, 0.05f, 0.23f, 0.4f);
+                mainCam.Shake(0.6f, 0.07f);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 //handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
             }

@@ -636,11 +636,11 @@ public class PlayerController : MonoBehaviour
 
             if(moveInput.x > 0)
             {
-                mainCam.GetComponent<Animator>().SetBool("isDash_Right", true);
+                mainCam.GetComponent<Animator>().SetTrigger("Dash_Right");
             }
             else if(moveInput.x < 0)
             {
-                mainCam.GetComponent<Animator>().SetBool("isDash_Left", true);
+                mainCam.GetComponent<Animator>().SetTrigger("Dash_Left");
             }
 
             if (Vector3.Dot(forward, moveDirection) > 0.5f)
@@ -1228,7 +1228,8 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         gun.SetIsAiming(false);
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 20);
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+
                         if (!isLanding)
                         {
                             if(gun.GetGunType() == GunType.ChainLightning)
