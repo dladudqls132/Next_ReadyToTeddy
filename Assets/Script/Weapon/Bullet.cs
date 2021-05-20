@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;
     [SerializeField] protected Transform target;
+    [SerializeField] protected float stunTime;
 
     protected void Start()
     {
@@ -68,6 +69,30 @@ public class Bullet : MonoBehaviour
         this.target = target;
         this.speed = speed;
         this.damage = damage;
+
+        this.transform.position = pos;
+        this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
+    }
+
+    public void SetFire(Vector3 pos, Vector3 direction, float speed, float damage, float stunTime)
+    {
+        isFire = true;
+        this.dir = direction;
+        this.speed = speed;
+        this.damage = damage;
+        this.stunTime = stunTime;
+
+        this.transform.position = pos;
+        this.transform.rotation = Quaternion.LookRotation(direction);
+    }
+
+    public void SetFire(Vector3 pos, Transform target, float speed, float damage, float stunTime)
+    {
+        isFire = true;
+        this.target = target;
+        this.speed = speed;
+        this.damage = damage;
+        this.stunTime = stunTime;
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);

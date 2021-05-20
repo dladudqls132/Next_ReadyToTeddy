@@ -5,12 +5,23 @@ using UnityEngine;
 public class Gun_FlameThrower : Gun
 {
     [SerializeField] private ParticleSystem fire;
-    private bool isFire;
+    [SerializeField] private List<float> originSpeed_min = new List<float>();
+    [SerializeField] private List<float> originSpeed_max = new List<float>();
+    //[SerializeField] private float refillTime;
+    private float currentRefillTime;
 
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
+
+        fire.GetComponentInChildren<Fire>().damage = damagePerBullet;
+
+        for (int i = 0; i < fire.transform.childCount; i++)
+        {
+            originSpeed_min.Add(fire.transform.GetChild(i).GetComponent<ParticleSystem>().main.startSpeed.constantMin);
+            originSpeed_max.Add(fire.transform.GetChild(i).GetComponent<ParticleSystem>().main.startSpeed.constantMax);
+        }
     }
 
     // Update is called once per frame
@@ -22,12 +33,25 @@ public class Gun_FlameThrower : Gun
         {
             if (isShot)
             {
+                currentRefillTime = 0;
                 currentShotDelay -= Time.deltaTime;
 
                 if (currentShotDelay <= 0)
                 {
                     currentAmmo--;
                     currentShotDelay = shotDelay;
+                }
+            }
+            else
+            {
+                currentRefillTime += Time.deltaTime;
+
+                if(currentRefillTime >= refillTime)
+                {
+                    currentRefillTime = 0;
+
+                    if(currentAmmo < maxAmmo_aMag)
+                        currentAmmo++;
                 }
             }
 
@@ -73,15 +97,16 @@ public class Gun_FlameThrower : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
-            {
-                SetIsReload(true);
-            }
+            //if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
+            //{
+            //    SetIsReload(true);
+            //}
 
             if (currentAmmo > 0)
                 canShot = true;
             else
             {
+                Off();
                 canShot = false;
             }
         }
@@ -93,10 +118,10 @@ public class Gun_FlameThrower : Gun
 
     public override void SetIsReload(bool value)
     {
-        base.SetIsReload(value);
+        //base.SetIsReload(value);
 
         Off();
-        hand.GetComponent<Animator>().SetBool("isReload_FT", value);
+        //hand.GetComponent<Animator>().SetBool("isReload_FT", value);
     }
 
     public override void SetIsReloadFinish()
@@ -109,7 +134,8 @@ public class Gun_FlameThrower : Gun
     public void Off()
     {
         isShot = false;
-        fire.Stop();
+        if(fire != null)
+            fire.Stop();
     }
 
     private void OnDisable()
@@ -144,7 +170,31 @@ public class Gun_FlameThrower : Gun
             isReload = false;
             isRecoil = false;
             
-            fire.transform.SetParent(null);
+            if(fire.transform.parent != null)
+                fire.transform.SetParent(null);
+
+            if (GameManager.Instance.GetPlayer().moveInput.y > 0)
+            {
+                for (int i = 0; i < fire.transform.childCount; i++)
+                {
+                    float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
+                    var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
+                    main.startSpeed = rnd + GameManager.Instance.GetPlayer().GetWalkSpeed();
+                }
+            }
+            else
+            {
+                for (int i = 0; i < fire.transform.childCount; i++)
+                {
+                    float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
+                    var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
+                    main.startSpeed = rnd;
+                }
+            }
+
+            //var main = fire.main;
+            //main.startSpeed = 3;
+
             fire.transform.position = shotPos.position;
             fire.transform.rotation = Camera.main.transform.rotation;
 

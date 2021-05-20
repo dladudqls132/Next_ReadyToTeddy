@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CharacterMaterial
+public enum EffectType
 {
     None,
-    Iron
+    Normal,
+    Lightning
 }
 
 public class Pool_DamagedEffect : MonoBehaviour
@@ -14,13 +15,13 @@ public class Pool_DamagedEffect : MonoBehaviour
     struct EffectInfo
     {
         public GameObject prefab;
-        public CharacterMaterial material;
+        public EffectType effectType;
 
         public EffectInfo(EffectInfo info)
         {
             this.prefab = Instantiate(info.prefab);
             this.prefab.SetActive(false);
-            this.material = info.material;
+            this.effectType = info.effectType;
         }
     }
 
@@ -50,11 +51,11 @@ public class Pool_DamagedEffect : MonoBehaviour
         }
     }
 
-    public GameObject GetDamagedEffect(CharacterMaterial material)
+    public GameObject GetDamagedEffect(EffectType effectType)
     {
         for(int i = 0; i < damagedEffects.Count; i++)
         {
-            if (damagedEffects[i].material == material)
+            if (damagedEffects[i].effectType == effectType)
             {
                 if (!damagedEffects[i].prefab.activeSelf)
                     return damagedEffects[i].prefab;

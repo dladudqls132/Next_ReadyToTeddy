@@ -17,6 +17,8 @@ public class WeaponInfo : ScriptableObject
         public float spreadAngle_normal;
         public float spreadAngle_aiming;
         public float shotDelay;
+        public float stunTime;
+        public float refillTime;
     }
 
     [System.Serializable]
@@ -37,7 +39,7 @@ public class WeaponInfo : ScriptableObject
         for (int i = 0; i < guns.Length; i++)
         {
             Gun temp = guns[i].prefab.GetComponent<Gun>();
-            temp.SetInfo(guns[i].gunType, guns[i].sprite,  guns[i].damagePerBullet, guns[i].maxAmmo, guns[i].maxAmmo_aMag, guns[i].fireNum, guns[i].spreadAngle_normal, guns[i].spreadAngle_aiming, guns[i].shotDelay);
+            temp.SetInfo(guns[i].gunType, guns[i].sprite,  guns[i].damagePerBullet, guns[i].maxAmmo, guns[i].maxAmmo_aMag, guns[i].fireNum, guns[i].spreadAngle_normal, guns[i].spreadAngle_aiming, guns[i].shotDelay, guns[i].stunTime, guns[i].refillTime);
             EditorUtility.SetDirty(temp);
         }
 

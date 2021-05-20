@@ -22,8 +22,8 @@ public class Chain : MonoBehaviour
     {
         if(link)
         {
-            line.SetPosition(0, start.GetComponent<Collider>().bounds.center);
-            line.SetPosition(1, end.GetComponent<Collider>().bounds.center);
+            line.SetPosition(0, start.GetComponent<Enemy_RagdollController>().spineRigid.position);
+            line.SetPosition(1, end.GetComponent<Enemy_RagdollController>().spineRigid.position);
 
             currentLinkTime += Time.deltaTime;
 

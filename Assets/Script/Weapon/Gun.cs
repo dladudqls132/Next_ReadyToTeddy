@@ -6,8 +6,8 @@ public enum GunType
 {
     AR,
     ShotGun,
-    Flamethrower,
-    ChainLightning
+    ChainLightning,
+    Flamethrower
 }
 
 public class Gun : MonoBehaviour
@@ -52,6 +52,9 @@ public class Gun : MonoBehaviour
     [SerializeField] protected bool isDroped;
     [SerializeField] protected bool isPlayerEnter;
 
+    [SerializeField] protected float stunTime;
+    [SerializeField] protected float refillTime;
+
     //[SerializeField] private Transform meshRoot;
     [SerializeField] MeshRenderer[] mesh;
     public AnimationClip weaponAnimation;
@@ -68,18 +71,20 @@ public class Gun : MonoBehaviour
 
     protected Vector3 direction;
 
-    public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay)
+    public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay, float stunTime, float refillTime)
     {
         this.gunType = gunType;
         this.sprite = sprite;
         this.damagePerBullet = damagePerBullet;
         this.maxAmmo = maxAmmo;
         this.maxAmmo_aMag = maxAmmo_aMag;
-        this.currentAmmo = maxAmmo;
+        this.currentAmmo = maxAmmo_aMag;
         this.fireNum = fireNum;
         this.spreadAngle_normal = spreadAngle_normal;
         this.spreadAngle_aiming = spreadAngle_aiming;
         this.shotDelay = shotDelay;
+        this.stunTime = stunTime;
+        this.refillTime = refillTime;
     }
 
     protected virtual void Awake()
@@ -224,6 +229,7 @@ public class Gun : MonoBehaviour
 
     virtual public bool Fire() { return false; }
     public bool CanReload() { if (haveAmmo > 0 && currentAmmo < maxAmmo_aMag && !isReload) { return true; } return false; }
+    public Vector3 GetShotPos() { return shotPos.position; }
 
     virtual public void ResetInfo() { owner = null; hand = null; isShot = false; canShot = false; isRecoil = false; currentShotDelay = shotDelay; isReload = false; currentReloadTime = reloadTime; }
 

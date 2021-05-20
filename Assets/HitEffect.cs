@@ -8,8 +8,9 @@ public class HitEffect : MonoBehaviour
     [SerializeField] private float lifeTime;
     private float currentLifeTime;
 
-    public void SetHitEffect(float time)
+    public void SetHitEffect(Transform parent, float time)
     {
+        this.transform.SetParent(parent);
         isSet = true;
         lifeTime = time;
     }
@@ -19,11 +20,15 @@ public class HitEffect : MonoBehaviour
     {
         if(isSet)
         {
+            this.transform.position = this.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position;
+
             currentLifeTime += Time.deltaTime;
 
             if(currentLifeTime >= lifeTime)
             {
-                Destroy(this.gameObject);
+                currentLifeTime = 0;
+                this.transform.SetParent(null);
+                this.gameObject.SetActive(false);
             }
         }
     }

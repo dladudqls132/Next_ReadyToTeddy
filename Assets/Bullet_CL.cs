@@ -67,24 +67,29 @@ public class Bullet_CL : Bullet
             for (int i = 0; i < coll.Length; i++)
             {
 
-                if(coll[i].CompareTag("Enemy") && other.transform != coll[i].transform)
+                if(coll[i].CompareTag("Enemy") && other.transform != coll[i].transform && !coll[i].GetComponent<Enemy>().GetIsDead())
                 {
                     num++;
 
                     GameObject temp = Instantiate(chain);
-                    temp.GetComponent<Chain>().SetLine(other.transform, coll[i].transform, 3.0f);
-                    coll[i].GetComponent<Enemy>().SetRigidity(true, 3);
-                    GameObject tempHit = Instantiate(hitEffect, coll[i].GetComponent<Collider>().bounds.center, Quaternion.identity, coll[i].transform);
-                    tempHit.GetComponent<HitEffect>().SetHitEffect(3.0f);
+                    temp.GetComponent<Chain>().SetLine(other.transform, coll[i].transform, stunTime);
+
+                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Enemy_RagdollController>().spineRigid.position, other.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
+                    //coll[i].GetComponent<Enemy>().SetRigidity(true, stunTime);
+                    //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
+                    //tempHit.GetComponent<HitEffect>().SetHitEffect(coll[i].GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
+
+
 
                     if (num == 2)
                         break;
                 }
             }
-            GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
-            hit.GetComponent<HitEffect>().SetHitEffect(3.0f);
+            //GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
+            //hit.GetComponent<HitEffect>().SetHitEffect(other.GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-            other.GetComponent<Enemy>().SetRigidity(true, 3);
+            other.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Enemy_RagdollController>().spineRigid.position, other.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
+            //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
             ActiveFalse();
         }

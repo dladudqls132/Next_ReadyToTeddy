@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float WPressTime = 0;
     private float currentWPressTime = 0;
     private bool isPressW = false;
+    private bool isPressMouseButton = false;
     private bool isCrouch = false;
     [SerializeField] private bool canJump = false;
     private bool isJump = false;
@@ -678,76 +679,13 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap && !inventory.isOpen)
-        {
-
-            if (gun != null)
-            {
-                if (gun.GetGunType() == GunType.ChainLightning)
-                {
-                    handFireRot = gun.GetHandFireRot();
-                    gun.GetComponent<Gun_ChainLightning>().Charging();
-                }
-                else
-                {
-                    if (gun.Fire())
-                    {
-                        handFireRot = gun.GetHandFireRot();
-
-                        if (isGrounded && !isSlide)
-                        {
-                            isCombat = true;
-                            isRun = false;
-                        }
-
-                        currentCombatTime = combatTime;
-                    }
-                }
-            }
-            else if (projectile != null)
-            {
-                if (projectileController.AimingProjectile())
-                    isAimingProjectile = true;
-                else
-                {
-                    isAimingProjectile = false;
-                }
-            }
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            if (gun.GetGunType() == GunType.ChainLightning)
-            {
-                gun.GetComponent<Gun_ChainLightning>().Fire();
-            }
-            else if (gun.GetGunType() == GunType.Flamethrower)
-            {
-                gun.GetComponent<Gun_FlameThrower>().Off();
-            }
-
-            if (isAimingProjectile)
-            {
-                projectileController.LaunchProjectile();
-                projectile.DecreaseHaveNum();
-                isAimingProjectile = false;
-
-                if (projectile.GetHaveNum() == 0)
-                {
-                    inventory.DestroyWeapon(4);
-                }
-            }
-            else
-            {
-                projectileController.ResetInfo();
-            }
-        }
+       
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-
             if (gun != null)
             {
-                if (gun.CanReload() && !isSwap)
+                if (gun.CanReload() && gun.GetGunType() != GunType.Flamethrower && !isSwap)
                 {
                     isAiming = false;
 
@@ -765,7 +703,7 @@ public class PlayerController : MonoBehaviour
 
         if (gun != null)
         {
-            if (Input.GetMouseButtonDown(1) && !gun.GetIsReload())
+            if (Input.GetMouseButtonDown(1) && !gun.GetIsReload() && gun.GetGunType() != GunType.Flamethrower)
             {
                 isAiming = !isAiming;
                 isMoveAim = true;
@@ -1204,7 +1142,14 @@ public class PlayerController : MonoBehaviour
                         gun.SetIsAiming(false);
                         lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 20);
                         if (!isLanding)
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 15);
+                        {
+                            if(gun.GetGunType() == GunType.ChainLightning)
+                                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0) + mainCam.shakeVec / 2, Time.deltaTime * 15);
+                            else
+                            {
+                                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 15);
+                            }
+                        }
                         //if (moveInput == Vector2.zero)
                         //{
                         //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
@@ -1241,6 +1186,70 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Input.GetMouseButton(0) && !isClimbUp && !isClimbing && !isSwap && !inventory.isOpen)
+        {
+            isPressMouseButton = true;
+            if (gun != null)
+            {
+                if (gun.GetGunType() == GunType.ChainLightning)
+                {
+                    handFireRot = gun.GetHandFireRot();
+                    gun.GetComponent<Gun_ChainLightning>().Charging();
+                }
+                else
+                {
+                    if (gun.Fire())
+                    {
+                        handFireRot = gun.GetHandFireRot();
+
+                        if (isGrounded && !isSlide)
+                        {
+                            isCombat = true;
+                            isRun = false;
+                        }
+
+                        currentCombatTime = combatTime;
+                    }
+                }
+            }
+            else if (projectile != null)
+            {
+                if (projectileController.AimingProjectile())
+                    isAimingProjectile = true;
+                else
+                {
+                    isAimingProjectile = false;
+                }
+            }
+        }
+        else if (!Input.GetMouseButtonDown(0) && isPressMouseButton)
+        {
+            isPressMouseButton = false;
+            if (gun.GetGunType() == GunType.ChainLightning)
+            {
+                gun.GetComponent<Gun_ChainLightning>().Fire();
+            }
+            else if (gun.GetGunType() == GunType.Flamethrower)
+            {
+                gun.GetComponent<Gun_FlameThrower>().Off();
+            }
+
+            if (isAimingProjectile)
+            {
+                projectileController.LaunchProjectile();
+                projectile.DecreaseHaveNum();
+                isAimingProjectile = false;
+
+                if (projectile.GetHaveNum() == 0)
+                {
+                    inventory.DestroyWeapon(4);
+                }
+            }
+            else
+            {
+                projectileController.ResetInfo();
+            }
+        }
         //HandAnimation();
     }
 

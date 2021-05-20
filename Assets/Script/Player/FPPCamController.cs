@@ -42,6 +42,8 @@ public class FPPCamController : MonoBehaviour
     private Vector2 currentTempDir;
     private Vector2 smoothTemp;
 
+    public Vector3 shakeVec; 
+
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
 
@@ -188,8 +190,8 @@ public class FPPCamController : MonoBehaviour
         if (isShake)
 
         {
-
-            transform.position = Random.insideUnitSphere * shakeAmount + cameraFollow.position + temp;
+            shakeVec = Random.insideUnitSphere * shakeAmount;
+            transform.position = shakeVec + cameraFollow.position + temp;
 
             currentShakeTime -= Time.deltaTime;
 
@@ -203,6 +205,7 @@ public class FPPCamController : MonoBehaviour
         else
 
         {
+            shakeVec = Vector3.zero;
             if (!isAiming)
             {
                 this.transform.position = cameraFollow.position + temp;
