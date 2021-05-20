@@ -684,8 +684,8 @@ public class PlayerController : MonoBehaviour
 
             if (currentDashPower <= walkSpeed)
             {
-                mainCam.GetComponent<Animator>().SetBool("isDash_Right", false);
-                mainCam.GetComponent<Animator>().SetBool("isDash_Left", false);
+                //mainCam.GetComponent<Animator>().SetBool("isDash_Right", false);
+                //mainCam.GetComponent<Animator>().SetBool("isDash_Left", false);
                 isDash = false;
                 currentDashPower = dashPower;
             }
