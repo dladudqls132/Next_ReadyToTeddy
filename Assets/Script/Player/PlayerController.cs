@@ -734,16 +734,18 @@ public class PlayerController : MonoBehaviour
         else if (!Input.GetMouseButtonDown(0) && isPressMouseButton)
         {
             isPressMouseButton = false;
-            if (gun.GetGunType() == GunType.ChainLightning)
+            if (gun != null)
             {
-                if (!isSwap)
-                    gun.GetComponent<Gun_ChainLightning>().Fire();
+                if (gun.GetGunType() == GunType.ChainLightning)
+                {
+                    if (!isSwap)
+                        gun.GetComponent<Gun_ChainLightning>().Fire();
+                }
+                else if (gun.GetGunType() == GunType.Flamethrower)
+                {
+                    gun.GetComponent<Gun_FlameThrower>().Off();
+                }
             }
-            else if (gun.GetGunType() == GunType.Flamethrower)
-            {
-                gun.GetComponent<Gun_FlameThrower>().Off();
-            }
-
             if (isAimingProjectile)
             {
                 projectileController.LaunchProjectile();
