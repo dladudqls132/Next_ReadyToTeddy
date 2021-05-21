@@ -25,6 +25,7 @@ public class Bullet_CL : Bullet
             currentLifeTime += Time.deltaTime;
             if (currentLifeTime >= lifeTime)
             {
+                Debug.Log("asd");
                 ActiveFalse();
             }
         }

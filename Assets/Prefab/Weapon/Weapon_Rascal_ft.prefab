@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 7264355967299916527}
   - component: {fileID: 5740149356627243623}
   m_Layer: 10
-  m_Name: Weapon_Rascal_FT
+  m_Name: Weapon_Rascal_ft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,12 +624,17 @@ PrefabInstance:
     - target: {fileID: 5987377454238723261, guid: 789a189ae37741541b4df9d404fc2ee3,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5987377454238723261, guid: 789a189ae37741541b4df9d404fc2ee3,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5987377454238723261, guid: 789a189ae37741541b4df9d404fc2ee3,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5987377454238723262, guid: 789a189ae37741541b4df9d404fc2ee3,
         type: 3}

@@ -159,9 +159,27 @@ public class Enemy_ShooterTest : Enemy
             {
                 behavior = Enemy_Behavior.Attack;
 
-                Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
-                tempBullet.gameObject.SetActive(true);
-                tempBullet.SetFire(firePos.position, shotDir, bulletSpeed, damage);
+                if (enemyType == EnemyType.Gunner_Normal)
+                {
+                    Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                    tempBullet1.gameObject.SetActive(true);
+                    Bullet tempBullet2 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                    tempBullet2.gameObject.SetActive(true);
+                    Bullet tempBullet3 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                    tempBullet3.gameObject.SetActive(true);
+
+                    Vector3 tempDir1 = Quaternion.Euler(0, 30, 0) * shotDir;
+                    Vector3 tempDir2 = Quaternion.Euler(0, -30, 0) * shotDir;
+                    tempBullet1.SetFire(firePos.position, shotDir, bulletSpeed, damage);
+                    tempBullet2.SetFire(firePos.position, tempDir1, bulletSpeed, damage);
+                    tempBullet3.SetFire(firePos.position, tempDir2, bulletSpeed, damage);
+                }
+                else
+                {
+                    Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                    tempBullet.gameObject.SetActive(true);
+                    tempBullet.SetFire(firePos.position, shotDir, bulletSpeed, damage);
+                }
 
                 currentShotDelay = shotDelay;
             }

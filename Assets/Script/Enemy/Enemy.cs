@@ -54,6 +54,7 @@ public class Enemy : MonoBehaviour
     protected Animator anim;
     protected float originAttackRange;
     protected NavMeshAgent agent;
+    protected Rigidbody rigid;
 
     ParticleSystem.Burst[] bursts;
 
@@ -95,6 +96,8 @@ public class Enemy : MonoBehaviour
 
         if (this.GetComponent<NavMeshAgent>() != null)
             agent = this.GetComponent<NavMeshAgent>();
+
+        rigid = this.GetComponent<Rigidbody>();
 
         //if (patrolNode.Length != 0)
         //{

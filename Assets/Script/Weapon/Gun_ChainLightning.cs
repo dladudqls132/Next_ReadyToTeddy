@@ -163,7 +163,7 @@ public class Gun_ChainLightning : Gun
 
             Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
             tempBullet.gameObject.SetActive(true);
-            tempBullet.SetFire(temp, ray.direction, 40, damagePerBullet, stunTime);
+            tempBullet.SetFire(temp, ray.direction, 60, damagePerBullet, stunTime);
 
             //float temp = Random.Range(-Mathf.PI, Mathf.PI);
 

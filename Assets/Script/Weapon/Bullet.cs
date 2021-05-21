@@ -9,8 +9,8 @@ public class Bullet : MonoBehaviour
     protected float damage;
     protected bool isFire;
     protected Rigidbody rigid;
-    protected float lifeTime = 15.0f;
-    [SerializeField] protected float currentLifeTime = 0;
+    [SerializeField] protected float lifeTime = 8.0f;
+    protected float currentLifeTime = 0;
     protected bool isDestroyed;
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;

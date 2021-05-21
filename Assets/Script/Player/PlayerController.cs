@@ -485,7 +485,6 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-
                         rigid.velocity = Vector3.Lerp(rigid.velocity, result.normalized * walkSpeed, Time.deltaTime * 8);
                     }
                 }
@@ -1171,6 +1170,8 @@ public class PlayerController : MonoBehaviour
             //headBobValue = Mathf.Lerp(headBobValue, 0, Time.deltaTime * 15);
             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
         }
+
+        mainCam.GetComponent<Animator>().SetFloat("horizontal", Mathf.Lerp(mainCam.GetComponent<Animator>().GetFloat("horizontal"), moveInput.x, Time.deltaTime * 10));
 
         if (isCrouch)
         {
