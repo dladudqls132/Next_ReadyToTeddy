@@ -62,7 +62,7 @@ public class Bullet_CL : Bullet
 
         if (other.CompareTag("Enemy"))
         {
-            Collider[] coll = Physics.OverlapSphere(this.transform.position, 10, 1 << LayerMask.NameToLayer("Enemy"));
+            Collider[] coll = Physics.OverlapSphere(this.transform.position, 10, 1 << LayerMask.NameToLayer("Root"));
 
             int num = 0;
             for (int i = 0; i < coll.Length; i++)

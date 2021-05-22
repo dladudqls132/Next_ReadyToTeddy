@@ -39,8 +39,7 @@ public class Enemy_MeleeTest : Enemy
         isDead = value;
         behavior = Enemy_Behavior.Idle;
         state = Enemy_State.None;
-        rigid.velocity = Vector3.zero;
-        rigid.angularVelocity = Vector3.zero;
+
         if(agent.enabled)
             agent.isStopped = true;
         else
@@ -48,8 +47,13 @@ public class Enemy_MeleeTest : Enemy
             agent.enabled = true;
             agent.isStopped = true;
         }
+
         currentHp = maxHp;
         this.GetComponent<Collider>().enabled = false;
+
+        rigid.useGravity = false;
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }
@@ -58,7 +62,6 @@ public class Enemy_MeleeTest : Enemy
     {
         if(isDead)
         {
-            rigid.useGravity = false;
             return;
         }
 
