@@ -88,6 +88,9 @@ public class Enemy_ShooterTest : Enemy
         temp.GetComponent<Rigidbody>().useGravity = true;
         temp.GetComponent<Rigidbody>().isKinematic = false;
         temp.GetComponent<Collider>().enabled = true;
+
+        rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }

@@ -217,7 +217,7 @@ public class Enemy : MonoBehaviour
     {
         //if (!GameManager.Instance.GetIsCombat())
         //    return;
-
+        if (isDead) return;
         currentHp -= value;
 
        // whoAttackThis = null;
@@ -231,6 +231,7 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
+        if (isDead) return;
 
         currentHp -= damage;
 
@@ -259,6 +260,8 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
+
+        if (isDead) return;
 
         currentHp -= damage;
 
