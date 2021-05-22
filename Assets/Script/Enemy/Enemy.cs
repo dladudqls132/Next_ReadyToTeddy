@@ -169,6 +169,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isDead)
         {
+            //Debug.Log(currentHp);
 
             if (currentHp <= 0)
             {
@@ -182,7 +183,6 @@ public class Enemy : MonoBehaviour
                 //SetRagdoll(damagedVelocity);
                 //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                 //     LayerMask.NameToLayer("Enemy"), true);
-
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
