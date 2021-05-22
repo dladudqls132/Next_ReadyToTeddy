@@ -335,7 +335,6 @@ public class PlayerController : MonoBehaviour
 
         RaycastHit hit;
 
-
         if (Physics.SphereCast(checkingGroundRayPos.position, 0.25f, Vector3.down, out hit, 0.2f, 1 << LayerMask.NameToLayer("Enviroment")))
         {
             if (currentJumpPower <= jumpPower / 2)
@@ -1008,6 +1007,11 @@ public class PlayerController : MonoBehaviour
         //UpdateComboDamage();
 
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
+
+        //if (moveInput == Vector2.zero && isGrounded)
+        //{
+        //    rigid.velocity = Vector3.zero;
+        //}
 
         this.transform.rotation = Quaternion.LookRotation(forward);
     }

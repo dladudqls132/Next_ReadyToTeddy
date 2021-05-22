@@ -85,7 +85,9 @@ public class Enemy_MeleeTest : Enemy
         //공격중이 아닐때
         if (behavior != Enemy_Behavior.Attack && behavior != Enemy_Behavior.RunningAttack)
         {
-            if(currentAttackDelay > 0)
+            agent.enabled = true;
+
+            if (currentAttackDelay > 0)
                 currentAttackDelay -= Time.deltaTime;
             if(currentAttackAfterTime > 0)
                 currentAttackAfterTime -= Time.deltaTime;
@@ -144,11 +146,14 @@ public class Enemy_MeleeTest : Enemy
                         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 20);
                     }
                 }
-
             }
+
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
         }
         else // 공격중일때
         {
+            agent.enabled = false;
             if (canAttackTurn)
             {
                 Vector3 dir = (target.position - this.transform.position).normalized;
@@ -159,8 +164,18 @@ public class Enemy_MeleeTest : Enemy
                 agent.isStopped = true;
         }
 
-        //Jump
-        if (agent.isOnOffMeshLink)
+        //if (Vector3.Distance(this.transform.position, target.position) <= attackRange / 1.5f)
+        //{
+        //    //rigid.velocity = Vector3.zero;
+        //    //rigid.angularVelocity = Vector3.zero;
+        //    rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        //}
+        //else
+        //{
+        //    rigid.constraints = RigidbodyConstraints.FreezeRotation;
+        //}
+            //Jump
+            if (agent.isOnOffMeshLink)
         {
             //currentShotDelay = shotDelay;
             agent.isStopped = false;
@@ -192,6 +207,17 @@ public class Enemy_MeleeTest : Enemy
         //}
 
         AnimationUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        if (Vector3.Distance(this.transform.position, target.position) <= attackRange / 1.5f)
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+            //rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        }
+
     }
 
     void AnimationUpdate()
