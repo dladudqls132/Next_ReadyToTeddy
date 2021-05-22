@@ -142,7 +142,6 @@ public class Gun_Test : Gun
                 {
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
-                        
                         Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
                         if (!hit2.transform.CompareTag("Head"))

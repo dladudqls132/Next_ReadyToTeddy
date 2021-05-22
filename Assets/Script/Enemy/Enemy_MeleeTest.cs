@@ -37,23 +37,26 @@ public class Enemy_MeleeTest : Enemy
     protected override void SetDead(bool value)
     {
         isDead = value;
-        behavior = Enemy_Behavior.Idle;
-        state = Enemy_State.None;
-
-        if (agent.enabled)
-            agent.isStopped = true;
-        else
+        if (isDead)
         {
-            agent.enabled = true;
-            agent.isStopped = true;
+            behavior = Enemy_Behavior.Idle;
+            state = Enemy_State.None;
+
+            if (agent.enabled)
+                agent.isStopped = true;
+            else
+            {
+                agent.enabled = true;
+                agent.isStopped = true;
+            }
+
+            currentHp = maxHp;
+            this.GetComponent<Collider>().enabled = false;
+
+            rigid.useGravity = false;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
         }
-
-        currentHp = maxHp;
-        this.GetComponent<Collider>().enabled = false;
-
-        rigid.useGravity = false;
-        rigid.velocity = Vector3.zero;
-        rigid.angularVelocity = Vector3.zero;
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }

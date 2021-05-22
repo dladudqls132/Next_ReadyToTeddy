@@ -77,21 +77,30 @@ public class Enemy_ShooterTest : Enemy
     protected override void SetDead(bool value)
     {
         isDead = value;
-        behavior = Enemy_Behavior.Idle;
-        state = Enemy_State.None;
-        agent.isStopped = true;
-        currentHp = maxHp;
 
-        GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
-        gun.SetActive(false);
+        if (isDead)
+        {
+            behavior = Enemy_Behavior.Idle;
+            state = Enemy_State.None;
+            agent.isStopped = true;
+            currentHp = maxHp;
 
-        temp.GetComponent<Rigidbody>().useGravity = true;
-        temp.GetComponent<Rigidbody>().isKinematic = false;
-        temp.GetComponent<Collider>().enabled = true;
+            GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
+            gun.SetActive(false);
 
-        rigid.useGravity = false;
-        rigid.velocity = Vector3.zero;
-        rigid.angularVelocity = Vector3.zero;
+            temp.GetComponent<Rigidbody>().useGravity = true;
+            temp.GetComponent<Rigidbody>().isKinematic = false;
+            temp.GetComponent<Collider>().enabled = true;
+
+            rigid.useGravity = false;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+
+            aimRig.weight = 0;
+            bodyRig.weight = 0;
+
+            this.GetComponent<Collider>().enabled = false;
+        }
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }
@@ -111,6 +120,8 @@ public class Enemy_ShooterTest : Enemy
                 agent.isStopped = true;
             behavior = Enemy_Behavior.Idle;
             AnimFalse();
+            aimRig.weight = 0;
+            bodyRig.weight = 0;
             currentRigidityTime += Time.deltaTime;
             anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 12));
 
