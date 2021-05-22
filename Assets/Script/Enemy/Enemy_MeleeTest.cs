@@ -40,7 +40,7 @@ public class Enemy_MeleeTest : Enemy
         behavior = Enemy_Behavior.Idle;
         state = Enemy_State.None;
 
-        if(agent.enabled)
+        if (agent.enabled)
             agent.isStopped = true;
         else
         {
@@ -60,16 +60,18 @@ public class Enemy_MeleeTest : Enemy
 
     private void Update()
     {
-        if(isDead)
+        if (isDead)
         {
             return;
         }
 
         if (isRigidity)
         {
-            if(agent.enabled)
+            if (agent.enabled)
                 agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
+            behavior = Enemy_Behavior.Idle;
+
             AnimFalse();
             if (currentRigidityTime >= rigidityTime)
             {
@@ -102,7 +104,7 @@ public class Enemy_MeleeTest : Enemy
 
             if (currentAttackDelay > 0)
                 currentAttackDelay -= Time.deltaTime;
-            if(currentAttackAfterTime > 0)
+            if (currentAttackAfterTime > 0)
                 currentAttackAfterTime -= Time.deltaTime;
 
             if (currentAttackDelay <= 0)
@@ -187,8 +189,8 @@ public class Enemy_MeleeTest : Enemy
         //{
         //    rigid.constraints = RigidbodyConstraints.FreezeRotation;
         //}
-            //Jump
-            if (agent.isOnOffMeshLink)
+        //Jump
+        if (agent.isOnOffMeshLink)
         {
             //currentShotDelay = shotDelay;
             agent.isStopped = false;
@@ -300,6 +302,6 @@ public class Enemy_MeleeTest : Enemy
         //    behavior = Enemy_Behavior.Run;
         //}
         //else
-            behavior = Enemy_Behavior.Idle;
+        behavior = Enemy_Behavior.Idle;
     }
 }

@@ -107,8 +107,10 @@ public class Enemy_ShooterTest : Enemy
 
         if (isRigidity)
         {
-            if(agent.enabled)
-            agent.isStopped = true;
+            if (agent.enabled)
+                agent.isStopped = true;
+            behavior = Enemy_Behavior.Idle;
+            AnimFalse();
             currentRigidityTime += Time.deltaTime;
             anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 12));
 
@@ -130,9 +132,9 @@ public class Enemy_ShooterTest : Enemy
         currentShotDelay -= Time.deltaTime;
 
         RaycastHit hit;
-        if(Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
+        if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
         {
-            if(!hit.transform.CompareTag("Player"))
+            if (!hit.transform.CompareTag("Player"))
             {
                 canSee = false;
             }
@@ -154,7 +156,7 @@ public class Enemy_ShooterTest : Enemy
                 int dir = Random.Range(-1, 2);
                 aimingWalkDir = new Vector2(dir, 0);
 
-                if(Physics.Raycast(this.transform.position + this.transform.up * 0.3f, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(this.transform.position + this.transform.up * 0.3f, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     aimingWalkDir = new Vector2(-aimingWalkDir.x, aimingWalkDir.y);
                 }
@@ -194,10 +196,10 @@ public class Enemy_ShooterTest : Enemy
                 shotDir = ((aimPos.position + Random.insideUnitSphere * 0.1f + target.GetComponent<Rigidbody>().velocity * 0.25f) - firePos.position).normalized;
             }
 
-            if(!isDodge)
+            if (!isDodge)
                 currentDodgeCoolTime -= Time.deltaTime;
 
-            if(currentDodgeCoolTime <= 0)
+            if (currentDodgeCoolTime <= 0)
             {
                 if (Vector3.Distance(this.transform.position, target.position) <= 3.5f)
                 {
@@ -258,7 +260,7 @@ public class Enemy_ShooterTest : Enemy
         //    aimRig.weight = Mathf.Lerp(aimRig.weight, 0, Time.deltaTime * 15);
         //}
 
-   
+
         //Move
         if (Vector3.Dot(this.transform.forward, target.position - this.transform.position) <= 0.5f)
         {
@@ -311,11 +313,18 @@ public class Enemy_ShooterTest : Enemy
                 break;
         }
 
-        if(canSee)
+        if (canSee)
         {
-            
+
             anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), aimingWalkDir.x, Time.deltaTime * 12));
         }
+    }
+
+    void AnimFalse()
+    {
+        anim.SetBool("isAiming", false);
+        anim.SetBool("isJumping", false);
+        anim.SetBool("isWalking", false);
     }
 
     void DodgeFalse()
@@ -336,7 +345,7 @@ public class Enemy_ShooterTest : Enemy
     //        spine1.rotation = Quaternion.LookRotation(dir);
     //        spine1.rotation *= Quaternion.Inverse(this.transform.rotation);
     //        spine1.rotation *= oringinRot_Spine1;
-            
+
     //        dir = (target.position - spine2.position).normalized;
     //        spine2.rotation = Quaternion.LookRotation(dir);
     //        spine2.rotation *= Quaternion.Inverse(this.transform.rotation);
