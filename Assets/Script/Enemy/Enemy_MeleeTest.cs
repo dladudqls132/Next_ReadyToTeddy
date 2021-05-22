@@ -67,7 +67,8 @@ public class Enemy_MeleeTest : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
+            if(agent.enabled)
+                agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             AnimFalse();
             if (currentRigidityTime >= rigidityTime)
