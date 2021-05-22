@@ -76,15 +76,18 @@ public class Gun_ChainLightning : Gun
 
     public override void SetIsReload(bool value)
     {
-        //base.SetIsReload(value);
+        base.SetIsReload(value);
 
-        //hand.GetComponent<Animator>().SetBool("isReload_CL", value);
+        hand.GetComponent<Animator>().SetBool("isReload_CL", value);
+
+        this.GetComponent<Animator>().SetBool("isReload", value);
     }
 
     public override void SetIsReloadFinish()
     {
         base.SetIsReloadFinish();
 
+        this.GetComponent<Animator>().SetBool("isReload", false);
         hand.GetComponent<Animator>().SetBool("isReload_CL", false);
     }
 

@@ -42,18 +42,18 @@ public class Gun_FlameThrower : Gun
                     currentShotDelay = shotDelay;
                 }
             }
-            else
-            {
-                currentRefillTime += Time.deltaTime;
+            //else
+            //{
+            //    currentRefillTime += Time.deltaTime;
 
-                if(currentRefillTime >= refillTime)
-                {
-                    currentRefillTime = 0;
+            //    if(currentRefillTime >= refillTime)
+            //    {
+            //        currentRefillTime = 0;
 
-                    if(currentAmmo < maxAmmo_aMag)
-                        currentAmmo++;
-                }
-            }
+            //        if(currentAmmo < maxAmmo_aMag)
+            //            currentAmmo++;
+            //    }
+            //}
 
             //if (isShot)
             //{
@@ -113,6 +113,22 @@ public class Gun_FlameThrower : Gun
         else
         {
             ResetInfo();
+        }
+    }
+
+    public void RefillAmmo()
+    {
+        if (!isShot)
+        {
+            currentRefillTime += Time.deltaTime;
+
+            if (currentRefillTime >= refillTime)
+            {
+                currentRefillTime = 0;
+
+                if (currentAmmo < maxAmmo_aMag)
+                    currentAmmo++;
+            }
         }
     }
 

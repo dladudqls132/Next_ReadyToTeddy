@@ -71,7 +71,19 @@ public class Inventory : MonoBehaviour
             SwapWeapon(4);
         }
 
-
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].weapon != null)
+            {
+                if (slots[i].weapon.GetComponent<Gun>() != null)
+                {
+                    if (slots[i].weapon.GetComponent<Gun>().GetGunType() == GunType.Flamethrower)
+                    {
+                        slots[i].weapon.GetComponent<Gun_FlameThrower>().RefillAmmo();                
+                    }
+                }
+            }
+        }
         //if (Input.GetKeyDown(KeyCode.Tab) && !GameManager.Instance.GetIsPause())
         //{
         //    ToggleInventory();

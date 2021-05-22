@@ -146,12 +146,20 @@ public class FPPCamController : MonoBehaviour
         if (GameManager.Instance.GetPlayer().GetGun() != null)
         {
 
-            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload() && (GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.AR || GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.ShotGun))
+            if (GameManager.Instance.GetPlayer().GetGun().GetIsReload() && (GameManager.Instance.GetPlayer().GetGun().GetGunType() != GunType.Flamethrower))
             {
 
                 //Debug.Log(this.GetComponent<Animator>().rootRotation.eulerAngles);
-                if (!this.GetComponent<Animator>().GetBool("isReload"))
-                    this.GetComponent<Animator>().SetBool("isReload", true);
+                if (GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.ChainLightning)
+                {
+                    if (!this.GetComponent<Animator>().GetBool("isReload_CL"))
+                        this.GetComponent<Animator>().SetBool("isReload_CL", true);
+                }
+                else
+                {
+                    if (!this.GetComponent<Animator>().GetBool("isReload"))
+                        this.GetComponent<Animator>().SetBool("isReload", true);
+                }
 
                 transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
@@ -159,6 +167,9 @@ public class FPPCamController : MonoBehaviour
             {
                 if (this.GetComponent<Animator>().GetBool("isReload"))
                     this.GetComponent<Animator>().SetBool("isReload", false);
+                if (this.GetComponent<Animator>().GetBool("isReload_CL"))
+                    this.GetComponent<Animator>().SetBool("isReload_CL", false);
+
                 transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
             }
 
