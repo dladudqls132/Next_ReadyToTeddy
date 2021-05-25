@@ -39,7 +39,7 @@ public class RobotMovementController : Enemy
 	{
 		base.Start();
 
-		target = GameManager.Instance.GetPlayer().GetCamPos();
+        target = GameManager.Instance.GetPlayer().GetCamPos();
 		sphereCollider = GetComponent<SphereCollider>();
 		playerObject = GameManager.Instance.GetPlayer().gameObject;
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
@@ -56,13 +56,14 @@ public class RobotMovementController : Enemy
 
             currentHp = maxHp;
             this.GetComponent<Collider>().enabled = false;
-            this.gameObject.SetActive(false);
 
             rigid.useGravity = false;
             rigid.velocity = Vector3.zero;
             rigid.angularVelocity = Vector3.zero;
 
-            Instantiate(explosion, this.transform.position, Quaternion.identity);
+            explosion.transform.SetParent(null);
+            explosion.gameObject.SetActive(true);
+            explosion.Play();
 
             Vector3 explosionPos = transform.position;
             Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore);
@@ -108,6 +109,8 @@ public class RobotMovementController : Enemy
                 }
             }
         }
+
+        this.gameObject.SetActive(false);
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }
