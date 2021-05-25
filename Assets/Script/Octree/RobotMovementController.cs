@@ -66,6 +66,19 @@ public class RobotMovementController : Enemy
             }
         }
 
+        if (this.GetComponent<RoomInfo>().GetRoom() != null && target.root.GetComponent<RoomInfo>().GetRoom() != null)
+        {
+
+            if (this.GetComponent<RoomInfo>().GetRoom() == target.root.GetComponent<RoomInfo>().GetRoom())
+            {
+                state = Enemy_State.Chase;
+                anim.SetBool("isChase", true);
+            }
+        }
+
+        if (state == Enemy_State.None || state == Enemy_State.Return)
+            return;
+
         if (CanSeePlayer())
         {
             Vector3 dir = (target.position - transform.position).normalized;
@@ -80,6 +93,7 @@ public class RobotMovementController : Enemy
 
             rigidbody.velocity = move * acceleration * 1.5f;
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(rigidbody.velocity), Time.deltaTime * 12);
+            //this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x + -90, this.transform.rotation.eulerAngles.y, this.transform.rotation.eulerAngles.z);
             //line.enabled = true;
             //line.SetPosition(0, this.transform.position);
             //line.SetPosition(1, target.position + Vector3.down * 0.1f);

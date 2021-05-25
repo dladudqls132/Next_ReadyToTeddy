@@ -133,9 +133,14 @@ public class Enemy_ShooterTest : Enemy
             else
                 return;
         }
+        if (this.GetComponent<RoomInfo>().GetRoom() != null && target.GetComponent<RoomInfo>().GetRoom() != null)
+        {
 
-        if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
-            state = Enemy_State.Chase;
+            if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
+            {
+                state = Enemy_State.Chase;
+            }
+        }
 
         if (state == Enemy_State.None)
             return;
@@ -143,7 +148,7 @@ public class Enemy_ShooterTest : Enemy
         currentShotDelay -= Time.deltaTime;
 
         RaycastHit hit;
-        if (Physics.Raycast(firePos.position, (aimPos.position - firePos.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
+        if (Physics.Raycast(eye.position, (aimPos.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
         {
             if (!hit.transform.CompareTag("Player"))
             {
@@ -157,6 +162,9 @@ public class Enemy_ShooterTest : Enemy
 
         if (canSee)
         {
+            bodyRig.weight = Mathf.Lerp(bodyRig.weight, 1, Time.deltaTime * 15);
+            aimRig.weight = Mathf.Lerp(aimRig.weight, 1, Time.deltaTime * 15);
+            anim.SetLayerWeight(1, 1);
             agent.isStopped = true;
 
             currentRndAimingWalkTime -= Time.deltaTime;
@@ -222,6 +230,11 @@ public class Enemy_ShooterTest : Enemy
         }
         else
         {
+            bodyRig.weight = Mathf.Lerp(bodyRig.weight, 0, Time.deltaTime * 15);
+            aimRig.weight = Mathf.Lerp(aimRig.weight, 0, Time.deltaTime * 15);
+
+            anim.SetLayerWeight(1, 0);
+
             agent.isStopped = false;
             agent.SetDestination(target.position);
             behavior = Enemy_Behavior.Walk;
@@ -292,9 +305,6 @@ public class Enemy_ShooterTest : Enemy
                 this.transform.rotation = Quaternion.Lerp(this.transform.rotation, rot, Time.deltaTime * 12.0f);
             }
         }
-
-        bodyRig.weight = Mathf.Lerp(bodyRig.weight, 1, Time.deltaTime * 15);
-        aimRig.weight = Mathf.Lerp(aimRig.weight, 1, Time.deltaTime * 15);
 
         AnimationUpdate();
     }
