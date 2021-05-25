@@ -22,8 +22,19 @@ public class Chain : MonoBehaviour
     {
         if(link)
         {
-            line.SetPosition(0, start.GetComponent<Enemy_RagdollController>().spineRigid.position);
-            line.SetPosition(1, end.GetComponent<Enemy_RagdollController>().spineRigid.position);
+            if (start.gameObject.activeSelf)
+            {
+                line.SetPosition(0, start.GetComponent<Enemy_RagdollController>().spineRigid.position);
+            }
+            else
+                line.SetPosition(0, end.GetComponent<Enemy_RagdollController>().spineRigid.position);
+
+            if (end.gameObject.activeSelf)
+            {
+                line.SetPosition(1, end.GetComponent<Enemy_RagdollController>().spineRigid.position);
+            }
+            else
+                line.SetPosition(1, start.GetComponent<Enemy_RagdollController>().spineRigid.position);
 
             currentLinkTime += Time.deltaTime;
 

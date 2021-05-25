@@ -122,6 +122,8 @@ public class Enemy_ShooterTest : Enemy
             AnimFalse();
             aimRig.weight = 0;
             bodyRig.weight = 0;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
             currentRigidityTime += Time.deltaTime;
             anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 12));
 
@@ -165,6 +167,7 @@ public class Enemy_ShooterTest : Enemy
             bodyRig.weight = Mathf.Lerp(bodyRig.weight, 1, Time.deltaTime * 15);
             aimRig.weight = Mathf.Lerp(aimRig.weight, 1, Time.deltaTime * 15);
             anim.SetLayerWeight(1, 1);
+
             agent.isStopped = true;
 
             currentRndAimingWalkTime -= Time.deltaTime;

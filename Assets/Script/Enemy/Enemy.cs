@@ -210,7 +210,7 @@ public class Enemy : MonoBehaviour
         {
             if (currentHp <= 0)
             {
-                isDead = true;
+                SetDead(true);
             }
         }
     }

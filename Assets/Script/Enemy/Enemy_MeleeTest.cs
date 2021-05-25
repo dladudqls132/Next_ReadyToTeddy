@@ -74,6 +74,8 @@ public class Enemy_MeleeTest : Enemy
                 agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             behavior = Enemy_Behavior.Idle;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
 
             AnimFalse();
             if (currentRigidityTime >= rigidityTime)
