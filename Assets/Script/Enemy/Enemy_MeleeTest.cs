@@ -74,6 +74,8 @@ public class Enemy_MeleeTest : Enemy
                 agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             behavior = Enemy_Behavior.Idle;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
 
             AnimFalse();
             if (currentRigidityTime >= rigidityTime)
@@ -85,8 +87,14 @@ public class Enemy_MeleeTest : Enemy
                 return;
         }
 
-        if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
-            state = Enemy_State.Chase;
+        if (this.GetComponent<RoomInfo>().GetRoom() != null && target.GetComponent<RoomInfo>().GetRoom() != null)
+        {
+
+            if (this.GetComponent<RoomInfo>().GetRoom() == target.GetComponent<RoomInfo>().GetRoom())
+            {
+                state = Enemy_State.Chase;
+            }
+        }
 
 
         if (state == Enemy_State.None || state == Enemy_State.Return)

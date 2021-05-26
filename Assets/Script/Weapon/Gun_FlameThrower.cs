@@ -189,24 +189,24 @@ public class Gun_FlameThrower : Gun
             if(fire.transform.parent != null)
                 fire.transform.SetParent(null);
 
-            if (GameManager.Instance.GetPlayer().moveInput.y > 0)
-            {
-                for (int i = 0; i < fire.transform.childCount; i++)
-                {
-                    float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
-                    var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
-                    main.startSpeed = rnd + GameManager.Instance.GetPlayer().GetWalkSpeed();
-                }
-            }
-            else
-            {
-                for (int i = 0; i < fire.transform.childCount; i++)
-                {
-                    float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
-                    var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
-                    main.startSpeed = rnd;
-                }
-            }
+            //if (GameManager.Instance.GetPlayer().moveInput.y > 0)
+            //{
+            //    for (int i = 0; i < fire.transform.childCount; i++)
+            //    {
+            //        float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
+            //        var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
+            //        main.startSpeed = rnd + GameManager.Instance.GetPlayer().GetWalkSpeed();
+            //    }
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < fire.transform.childCount; i++)
+            //    {
+            //        float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
+            //        var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
+            //        main.startSpeed = rnd;
+            //    }
+            //}
 
             //var main = fire.main;
             //main.startSpeed = 3;
