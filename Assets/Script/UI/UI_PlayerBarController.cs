@@ -13,9 +13,9 @@ public class UI_PlayerBarController : MonoBehaviour
 
     [SerializeField] private BarType barType = 0;
     private PlayerController player = null;
-    private Image image = null;
+    [SerializeField] private Image image = null;
     //private Image image_comboResetTime = null;
-    private Text text = null;
+    [SerializeField] private Text text = null;
     private RectTransform rectTransform = null;
     private float maxWidth;
 
@@ -24,12 +24,12 @@ public class UI_PlayerBarController : MonoBehaviour
         rectTransform = this.GetComponent<RectTransform>();
 
 
-        if (this.transform.Find("Image_Hp") != null)
-            image = this.transform.Find("Image_Hp").GetComponent<Image>();
-        if (this.transform.Find("Image_ComboResetTime") != null)
-            image = this.transform.Find("Image_ComboResetTime").GetComponent<Image>();
-        if (this.transform.Find("Text") != null)
-            text = this.transform.Find("Text").GetComponent<Text>();
+        //if (this.transform.Find("Image_Hp") != null)
+        //    image = this.transform.Find("Image_Hp").GetComponent<Image>();
+        //if (this.transform.Find("Image_ComboResetTime") != null)
+        //    image = this.transform.Find("Image_ComboResetTime").GetComponent<Image>();
+        //if (this.transform.Find("Text") != null)
+        //    text = this.transform.Find("Text").GetComponent<Text>();
 
         maxWidth = image.rectTransform.rect.width;
     }
