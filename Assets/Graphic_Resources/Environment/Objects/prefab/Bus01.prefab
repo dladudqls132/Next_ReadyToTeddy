@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6549307917458870567}
-  m_Layer: 0
-  m_Name: Bus01 1
+  m_Layer: 8
+  m_Name: Bus01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6549307917458870567
 Transform:
@@ -43,12 +43,13 @@ GameObject:
   - component: {fileID: 7464979944012884214}
   - component: {fileID: 5780145960881661779}
   - component: {fileID: 8634459768860332953}
-  m_Layer: 0
+  - component: {fileID: 1852696537664237437}
+  m_Layer: 8
   m_Name: Mesh_bus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7464979944012884214
 Transform:
@@ -111,6 +112,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &1852696537664237437
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7841680755489894988}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5060444177187149915, guid: c8c290ebb99029342a13a7388e63c140, type: 3}
 --- !u!1 &8539011608285150724
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,12 +137,13 @@ GameObject:
   - component: {fileID: 9064472250483582142}
   - component: {fileID: 5360588578902158107}
   - component: {fileID: 7890400696500641745}
-  m_Layer: 0
+  - component: {fileID: 5111387486146909781}
+  m_Layer: 8
   m_Name: Mesh_bed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9064472250483582142
 Transform:
@@ -190,3 +206,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &5111387486146909781
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8539011608285150724}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3996760141626369306, guid: 49b34dfecc6726b42bb579fea676df4c, type: 3}

@@ -99,6 +99,8 @@ public class Enemy : MonoBehaviour
 
         rigid = this.GetComponent<Rigidbody>();
 
+        anim = this.GetComponent<Animator>();
+
         //if (patrolNode.Length != 0)
         //{
         //    currentDestPatrolNode = patrolNode[0];
@@ -208,7 +210,7 @@ public class Enemy : MonoBehaviour
         {
             if (currentHp <= 0)
             {
-                isDead = true;
+                SetDead(true);
             }
         }
     }
@@ -250,7 +252,7 @@ public class Enemy : MonoBehaviour
         effect.SetActive(true);
 
        // whoAttackThis = attackObj;
-        anim.SetTrigger("isDamaged");
+        anim.SetTrigger("Damaged");
         CheckingHp(damagedTrs, damagedVelocity);
     }
 

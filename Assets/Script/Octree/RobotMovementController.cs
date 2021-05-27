@@ -24,9 +24,11 @@ public class RobotMovementController : Enemy
 	[SerializeField] private Octree octree;
 	[SerializeField] private LayerMask playerSeeLayerMask = -1;
 	[SerializeField] private GameObject playerObject;
+    [SerializeField] private float explosionRadius = 5.0f;
+    [SerializeField] private ParticleSystem explosion;
+
 	private Octree.PathRequest oldPath;
 	private Octree.PathRequest newPath;
-	private Rigidbody rigidbody;
 	private Vector3 currentDestination;
 	private Vector3 lastDestination;
 	private SphereCollider sphereCollider;
@@ -37,23 +39,91 @@ public class RobotMovementController : Enemy
 	{
 		base.Start();
 
-		target = GameManager.Instance.GetPlayer().GetCamPos();
+        target = GameManager.Instance.GetPlayer().GetCamPos();
 		sphereCollider = GetComponent<SphereCollider>();
-		rigidbody = GetComponent<Rigidbody>();
 		playerObject = GameManager.Instance.GetPlayer().gameObject;
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
         //line = this.GetComponent<LineRenderer>();
 	}
-	
-	// Update is called once per frame
-	void FixedUpdate ()
-	{
+
+    protected override void SetDead(bool value)
+    {
+        isDead = value;
         if (isDead)
         {
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
+
             currentHp = maxHp;
-            this.gameObject.SetActive(false);
+            this.GetComponent<Collider>().enabled = false;
+
+            rigid.useGravity = false;
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+
+            explosion.transform.SetParent(null);
+            explosion.gameObject.SetActive(true);
+            explosion.Play();
+
+            Vector3 explosionPos = transform.position;
+            Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore);
+            foreach (Collider hit in colliders)
+            {
+                Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+                if (rb != null && rb.transform != this.transform)
+                {
+                    RaycastHit hit2;
+
+                    if (rb.CompareTag("Player"))
+                    {
+                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")))
+                        {
+                            if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
+                                continue;
+
+                            PlayerController temp = rb.GetComponent<PlayerController>();
+                            //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                            //temp.SetIsPushed(true);
+                            temp.DecreaseHp(damage);
+                        }
+                    }
+                    else if (rb.CompareTag("Enemy"))
+                    {
+                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Root")))
+                        {
+                            if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
+                                continue;
+
+                            if (GameManager.Instance.GetIsCombat())
+                            {
+                                Enemy temp = rb.transform.root.GetComponent<Enemy>();
+
+                                temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.GetComponent<Enemy_RagdollController>().spineRigid.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
+
+                                //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
+    }
+
+    // Update is called once per frame
+    void FixedUpdate ()
+	{
+        if (isDead)
+        {
+            //behavior = Enemy_Behavior.Idle;
+            //state = Enemy_State.None;
+            //currentHp = maxHp;
+            //this.gameObject.SetActive(false);
 
             return;
         }
@@ -61,10 +131,87 @@ public class RobotMovementController : Enemy
         {
             if (Vector3.Distance(this.transform.position, target.position) <= 1.0f)
             {
-                playerObject.GetComponent<PlayerController>().DecreaseHp(damage);
+                Instantiate(explosion, this.transform.position, Quaternion.identity);
+
+                Vector3 explosionPos = transform.position;
+                Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore);
+                foreach (Collider hit in colliders)
+                {
+                    Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+                    if (rb != null && rb.transform != this.transform)
+                    {
+                        RaycastHit hit2;
+
+                        if (rb.CompareTag("Player"))
+                        {
+                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")))
+                            {
+                                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
+                                    continue;
+
+                                PlayerController temp = rb.GetComponent<PlayerController>();
+                                //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                                //temp.SetIsPushed(true);
+                                temp.DecreaseHp(damage);
+                            }
+                        }
+                        else if (rb.CompareTag("Enemy"))
+                        {
+                            if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Root")))
+                            {
+                                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
+                                    continue;
+
+                                if (GameManager.Instance.GetIsCombat())
+                                {
+                                    Enemy temp = rb.transform.root.GetComponent<Enemy>();
+
+                                    temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.GetComponent<Enemy_RagdollController>().spineRigid.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
+
+                                    //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
+                                }
+
+                            }
+                        }
+                    }
+                }
+
+                //playerObject.GetComponent<PlayerController>().DecreaseHp(damage);
                 DecreaseHp(10000);
             }
         }
+
+        if (isRigidity)
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+
+            currentRigidityTime += Time.deltaTime;
+            behavior = Enemy_Behavior.Idle;
+
+            AnimFalse();
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+            }
+            else
+                return;
+        }
+
+        if (this.GetComponent<RoomInfo>().GetRoom() != null && target.root.GetComponent<RoomInfo>().GetRoom() != null)
+        {
+
+            if (this.GetComponent<RoomInfo>().GetRoom() == target.root.GetComponent<RoomInfo>().GetRoom())
+            {
+                state = Enemy_State.Chase;
+                anim.SetBool("isChase", true);
+            }
+        }
+
+        if (state == Enemy_State.None || state == Enemy_State.Return)
+            return;
 
         if (CanSeePlayer())
         {
@@ -78,8 +225,9 @@ public class RobotMovementController : Enemy
 
             move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
 
-            rigidbody.velocity = move * acceleration * 1.5f;
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(rigidbody.velocity), Time.deltaTime * 12);
+            rigid.velocity = move * acceleration * 1.5f;
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(rigid.velocity), Time.deltaTime * 12);
+            //this.transform.rotation = Quaternion.Euler(this.transform.rotation.eulerAngles.x + -90, this.transform.rotation.eulerAngles.y, this.transform.rotation.eulerAngles.z);
             //line.enabled = true;
             //line.SetPosition(0, this.transform.position);
             //line.SetPosition(1, target.position + Vector3.down * 0.1f);
@@ -100,24 +248,24 @@ public class RobotMovementController : Enemy
 
             if (!curPath.isCalculating && curPath != null && curPath.Path.Count > 0)
             {
-                currentDestination = curPath.Path[0] + Vector3.ClampMagnitude(rigidbody.position - curPath.Path[0], pathPointRadius);
+                currentDestination = curPath.Path[0] + Vector3.ClampMagnitude(rigid.position - curPath.Path[0], pathPointRadius);
 
                 Vector3 dir = (currentDestination - transform.position).normalized;
 
                 if (dir == Vector3.zero)
                     dir = this.transform.forward;
 
-                rigidbody.velocity = Vector3.MoveTowards(rigidbody.velocity, dir * acceleration, Time.deltaTime * 12);
+                rigid.velocity = Vector3.MoveTowards(rigid.velocity, dir * acceleration, Time.deltaTime * 12);
                 this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
                 float sqrMinReachDistance = minReachDistance * minReachDistance;
 
-                Vector3 predictedPosition = rigidbody.position + rigidbody.velocity * Time.deltaTime;
+                Vector3 predictedPosition = rigid.position + rigid.velocity * Time.deltaTime;
                 float shortestPathDistance = Vector3.SqrMagnitude(predictedPosition - currentDestination);
                 int shortestPathPoint = 0;
 
                 for (int i = 0; i < curPath.Path.Count; i++)
                 {
-                    float sqrDistance = Vector3.SqrMagnitude(rigidbody.position - curPath.Path[i]);
+                    float sqrDistance = Vector3.SqrMagnitude(rigid.position - curPath.Path[i]);
                     if (sqrDistance <= sqrMinReachDistance)
                     {
                         if (i < curPath.Path.Count)
@@ -143,7 +291,7 @@ public class RobotMovementController : Enemy
             }
             else
             {
-                rigidbody.velocity -= rigidbody.velocity * Time.deltaTime * acceleration;
+                rigid.velocity -= rigid.velocity * Time.deltaTime * acceleration;
             }
         }
 
@@ -208,6 +356,11 @@ public class RobotMovementController : Enemy
 
     }
 
+    void AnimFalse()
+    {
+        anim.SetBool("isChase", false);
+    }
+
     private bool CanSeePlayer()
     {
         RaycastHit hit;
@@ -256,10 +409,10 @@ public class RobotMovementController : Enemy
 
     private void OnDrawGizmosSelected()
     {
-        if (rigidbody != null)
+        if (rigid != null)
         {
             Gizmos.color = Color.blue;
-            Vector3 predictedPosition = rigidbody.position + rigidbody.velocity * Time.deltaTime;
+            Vector3 predictedPosition = rigid.position + rigid.velocity * Time.deltaTime;
             Gizmos.DrawWireSphere(predictedPosition, sphereCollider.radius);
         }
 
@@ -271,7 +424,7 @@ public class RobotMovementController : Enemy
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(path.Path[i], minReachDistance);
                 Gizmos.color = Color.red;
-                Gizmos.DrawRay(path.Path[i], Vector3.ClampMagnitude(rigidbody.position - path.Path[i], pathPointRadius));
+                Gizmos.DrawRay(path.Path[i], Vector3.ClampMagnitude(rigid.position - path.Path[i], pathPointRadius));
                 Gizmos.DrawWireSphere(path.Path[i], pathPointRadius);
                 Gizmos.DrawLine(path.path[i], path.Path[i + 1]);
             }
