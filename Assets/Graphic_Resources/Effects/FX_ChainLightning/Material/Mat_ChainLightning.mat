@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Mat_ChainLightning
+  m_Shader: {fileID: 4800000, guid: 4fa3b96c7ab61624183c62a982a7ce1a, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _T_Rascal_cl_A:
+        m_Texture: {fileID: 2800000, guid: f3001358d9bb2a943820370d35fda64f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _T_Rascal_cl_E:
+        m_Texture: {fileID: 2800000, guid: 628db42e63b68b448aa2f31f5bfbc185, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _T_Rascal_cl_N:
+        m_Texture: {fileID: 2800000, guid: fe5a21d29ed5d7e4f8ee514d24132251, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _EmissionIns: 18.4
+    - _EmissionlIns: 9
+    - _Float0: 3.06
+    - _FresnelIns: 1
+    - _FresnelPower: 4
+    - _FresnelScale: 5
+    - _FresnelValue: 15
+    - _Ins: 0
+    - _Intensity: 25
+    - _Metalic: 1
+    - _Smoothness: 0.601
+    - __dirty: 0
+    m_Colors:
+    - _EmissiveColor: {r: 0.57075465, g: 0.8114687, b: 1, a: 0}
+    - _FresnelColor: {r: 0, g: 0.56028366, b: 1, a: 0}
