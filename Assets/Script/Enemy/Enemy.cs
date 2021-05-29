@@ -284,7 +284,7 @@ public class Enemy : MonoBehaviour
         effect.SetActive(true);
 
         // whoAttackThis = attackObj;
-        anim.SetTrigger("isDamaged");
+        anim.SetTrigger("Damaged");
         CheckingHp(damagedTrs, damagedVelocity);
     }
 

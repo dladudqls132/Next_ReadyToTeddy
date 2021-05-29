@@ -7,8 +7,11 @@ public class UI_Ammo : MonoBehaviour
 {
     [SerializeField] private Gun gun = null;
     [SerializeField] private Projectile projectile = null;
-    [SerializeField] private Text text_ammoCount = null;
+    [SerializeField] private Text text_ammoCount_current = null;
+    [SerializeField] private Text text_ammoCount_current_background = null;
+    [SerializeField] private Text text_ammoCount_max = null;
     [SerializeField] private Text text_projectileCount = null;
+    [SerializeField] private Text text_projectileCount_background = null;
     [SerializeField] private Image image_lowAmmoCount = null;
     [SerializeField] private Image image_reload = null;
     [SerializeField] private Image image_gun = null;
@@ -38,7 +41,9 @@ public class UI_Ammo : MonoBehaviour
         {
             image_gun.sprite = gun.GetSprite();
 
-            text_ammoCount.text = gun.GetCurrentAmmoCount().ToString() + " / " + gun.GetHaveAmmoCount().ToString();
+            text_ammoCount_current.text = gun.GetCurrentAmmoCount().ToString();
+            text_ammoCount_current_background.text = gun.GetCurrentAmmoCount().ToString();
+            text_ammoCount_max.text = gun.GetHaveAmmoCount().ToString();
 
             if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
             {
@@ -57,10 +62,10 @@ public class UI_Ammo : MonoBehaviour
                 image_reload.enabled = false;
             }
         }
-        else
+        if(projectile != null)
         {
-            if(projectile != null)
-                text_projectileCount.text = projectile.GetHaveNum().ToString();
+            text_projectileCount.text = projectile.GetHaveNum().ToString();
+            text_projectileCount_background.text = projectile.GetHaveNum().ToString();
 
             image_lowAmmoCount.enabled = false;
             image_reload.enabled = false;

@@ -10,11 +10,9 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Continue,
         Restart,
         Settings,
-        Mainmenu,
-        GameStart,
-        Credit,
         Question_On,
         Question_Off,
+        LoadScene,
         Exit
     }
 
@@ -57,20 +55,15 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     break;
                 case ButtonType.Settings:
                     break;
-                case ButtonType.Mainmenu:
-                    GameManager.Instance.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
-                    break;
-                case ButtonType.GameStart:
-                    GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
-                    break;
-                case ButtonType.Credit:
-                    break;
                 case ButtonType.Question_On:
                     question.SetActive(true);
                     break;
                 case ButtonType.Question_Off:
                     SetActiveFalse();
                     question.SetActive(false);
+                    break;
+                case ButtonType.LoadScene:
+                    GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
                     break;
                 case ButtonType.Exit:
                     Application.Quit();

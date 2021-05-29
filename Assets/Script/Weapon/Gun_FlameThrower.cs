@@ -181,7 +181,7 @@ public class Gun_FlameThrower : Gun
                 //handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
 
-            hand.GetComponent<Animator>().SetTrigger("Fire_FT");
+            //hand.GetComponent<Animator>().SetTrigger("Fire_FT");
 
             isReload = false;
             isRecoil = false;
