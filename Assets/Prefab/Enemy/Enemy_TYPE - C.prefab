@@ -65,7 +65,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2395889723881242791}
   m_Material: {fileID: 13400000, guid: 808d9ece915bbe74b90e59e583ca5a90, type: 2}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1
@@ -240,12 +240,10 @@ MonoBehaviour:
   minReachDistance: 2
   pathPointRadius: 1
   octree: {fileID: 0}
-  playerSeeLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
   playerObject: {fileID: 0}
   explosionRadius: 5
   explosion: {fileID: 7507283692343866604}
+  sphereCollider: {fileID: 3314228020628529929}
 --- !u!114 &-7231035337158100255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,8 +397,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8264825822557441905}
-  m_LocalRotation: {x: 0.0040870956, y: 0.707095, z: 0.0040870956, w: 0.7070949}
-  m_LocalPosition: {x: 0.05389288, y: 0.00000002169796, z: -0.49639145}
+  m_LocalRotation: {x: -0.0077590905, y: 0.71079993, z: 0.15543531, w: 0.6859614}
+  m_LocalPosition: {x: -1.0123633, y: 1.2333024, z: -0.5184872}
   m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
   m_Children:
   - {fileID: 6517173484745470952}
