@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 438859677284037663}
   - component: {fileID: 3582893983808814010}
   - component: {fileID: 1611171913074085744}
-  m_Layer: 0
-  m_Name: Mesh_boss_body
+  - component: {fileID: 8579463992793307688}
+  m_Layer: 8
+  m_Name: Boss_Teddy_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &438859677284037663
 Transform:
@@ -79,3 +80,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &8579463992793307688
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962912846015999653}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4362739081342194911, guid: b161173a80c1f9b48b8413b9997caf63, type: 3}
