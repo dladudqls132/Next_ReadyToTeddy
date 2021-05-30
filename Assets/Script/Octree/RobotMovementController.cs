@@ -364,7 +364,7 @@ public class RobotMovementController : Enemy
         RaycastHit hit;
         if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
         {
-            return hit.transform.gameObject == target.gameObject;
+            return hit.transform.gameObject == target.root.gameObject;
         }
         return false;
     }
