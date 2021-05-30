@@ -37,8 +37,10 @@ public class Enemy_MeleeTest : Enemy
     protected override void SetDead(bool value)
     {
         isDead = value;
+
         if (isDead)
         {
+            this.GetComponentInChildren<SkinnedMeshRenderer>().quality = SkinQuality.Bone1;
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
 
@@ -56,6 +58,10 @@ public class Enemy_MeleeTest : Enemy
             rigid.useGravity = false;
             rigid.velocity = Vector3.zero;
             rigid.angularVelocity = Vector3.zero;
+        }
+        else
+        {
+            this.GetComponentInChildren<SkinnedMeshRenderer>().quality = SkinQuality.Auto;
         }
         //this.gameObject.SetActive(false);
         //anim.enabled = false;

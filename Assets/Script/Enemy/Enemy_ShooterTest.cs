@@ -80,6 +80,8 @@ public class Enemy_ShooterTest : Enemy
 
         if (isDead)
         {
+            this.GetComponentInChildren<SkinnedMeshRenderer>().quality = SkinQuality.Bone1;
+
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
             agent.isStopped = true;
@@ -100,6 +102,10 @@ public class Enemy_ShooterTest : Enemy
             bodyRig.weight = 0;
 
             this.GetComponent<Collider>().enabled = false;
+        }
+        else
+        {
+            this.GetComponentInChildren<SkinnedMeshRenderer>().quality = SkinQuality.Auto;
         }
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
