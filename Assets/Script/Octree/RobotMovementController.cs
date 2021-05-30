@@ -22,8 +22,7 @@ public class RobotMovementController : Enemy
 	[SerializeField] private float minReachDistance = 2f;
 	[SerializeField] private float pathPointRadius = 0.2f;
 	[SerializeField] private Octree octree;
-	[SerializeField] private LayerMask playerSeeLayerMask = -1;
-	[SerializeField] private GameObject playerObject;
+	//[SerializeField] private LayerMask playerSeeLayerMask = -1;
     [SerializeField] private float explosionRadius = 5.0f;
     [SerializeField] private ParticleSystem explosion;
 
@@ -31,7 +30,7 @@ public class RobotMovementController : Enemy
 	private Octree.PathRequest newPath;
 	private Vector3 currentDestination;
 	private Vector3 lastDestination;
-	private SphereCollider sphereCollider;
+	[SerializeField] private SphereCollider sphereCollider;
     Vector3 move;
     //LineRenderer line;
     // Use this for initialization
@@ -40,8 +39,7 @@ public class RobotMovementController : Enemy
 		base.Start();
 
         target = GameManager.Instance.GetPlayer().GetCamPos();
-		sphereCollider = GetComponent<SphereCollider>();
-		playerObject = GameManager.Instance.GetPlayer().gameObject;
+		//sphereCollider = GetComponent<SphereCollider>();
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
         //line = this.GetComponent<LineRenderer>();
 	}
@@ -366,7 +364,7 @@ public class RobotMovementController : Enemy
         RaycastHit hit;
         if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
         {
-            return hit.transform.gameObject == playerObject;
+            return hit.transform.gameObject == target.gameObject;
         }
         return false;
     }

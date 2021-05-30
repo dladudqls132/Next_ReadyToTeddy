@@ -5,6 +5,10 @@ using UnityEngine;
 public class Gun_ChainLightning : Gun
 {
     Vector3 temp;
+    bool isCharge;
+    [SerializeField] float intensify = 0;
+    [SerializeField] MeshRenderer mr;
+
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -56,6 +60,17 @@ public class Gun_ChainLightning : Gun
             //    currentReloadTime = reloadTime;
             //}
 
+            if(isCharge)
+            {
+                intensify = Mathf.Lerp(intensify, 3, Time.deltaTime * 4);
+                mr.material.SetFloat("_Intensity", intensify);
+            }
+            else
+            {
+                intensify = Mathf.Lerp(intensify, 0, Time.deltaTime * 4);
+                mr.material.SetFloat("_Intensity", intensify);
+            }
+
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
             {
                 SetIsReload(true);
@@ -102,6 +117,7 @@ public class Gun_ChainLightning : Gun
             {
                 currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.1f, 0.015f);
+
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 //handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
             }
@@ -113,6 +129,7 @@ public class Gun_ChainLightning : Gun
                 //handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
 
+            isCharge = true;
             isReload = false;
             isRecoil = false;
 
@@ -151,6 +168,7 @@ public class Gun_ChainLightning : Gun
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
 
+            isCharge = false;
             isReload = false;
             isRecoil = false;
 
@@ -226,5 +244,7 @@ public class Gun_ChainLightning : Gun
     override public void ResetInfo()
     {
         base.ResetInfo();
+
+        isCharge = false;
     }
 }

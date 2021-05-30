@@ -159,9 +159,9 @@ public class Gun_Test : Gun
                         else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                             GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                     }
-                    else if(hit.transform.CompareTag("InteractiveObject"))
+                    else if(hit2.transform.CompareTag("InteractiveObject"))
                     {
-                        hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+                        hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
                     }
                     else
                     {

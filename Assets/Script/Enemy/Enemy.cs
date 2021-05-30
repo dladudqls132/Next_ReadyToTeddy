@@ -90,7 +90,8 @@ public class Enemy : MonoBehaviour
         currentCombatTime = combatTime;
         currentReturnToPatrolTime = returnToPatorlTime;
 
-        target = GameManager.Instance.GetPlayer().transform;
+        if(target == null)
+            target = GameManager.Instance.GetPlayer().transform;
 
         speed = Random.Range(speed_min, speed_max);
 

@@ -140,6 +140,7 @@ public class Gun_AR : Gun
 
                     if (!hit2.transform.CompareTag("Head"))
                     {
+               
                         enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
                     }
                     else
@@ -153,9 +154,9 @@ public class Gun_AR : Gun
                     else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                         GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                 }
-                else if (hit.transform.CompareTag("InteractiveObject"))
+                else if (hit2.transform.CompareTag("InteractiveObject"))
                 {
-                    hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+                    hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
                 }
                 else
                 {
