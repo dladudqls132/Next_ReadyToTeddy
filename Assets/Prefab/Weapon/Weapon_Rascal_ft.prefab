@@ -29,7 +29,7 @@ Transform:
   m_Children:
   - {fileID: 3853517788895526349}
   - {fileID: 8467512199143614914}
-  - {fileID: 5201475138509500914}
+  - {fileID: 1710391535197387623}
   m_Father: {fileID: 6791018355886901621}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   - {fileID: 3054978221477490178}
   - {fileID: 8644855558384622653}
   weaponAnimation: {fileID: 7400000, guid: d172bc6f4f71e204a8d3a46dd38c884b, type: 2}
-  fire: {fileID: 5201475138509500913}
+  fire: {fileID: 1710391535197387620}
   originSpeed_min: []
   originSpeed_max: []
 --- !u!1 &6518302096734541065
@@ -450,6 +450,111 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1707675672334022879}
     m_Modifications:
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.m_Bounce.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.radiusScale
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 4353
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.m_Bounce.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.radiusScale
+      value: 0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 4353
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 4353
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144907, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144907, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144907, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563891144907, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8894562711274279507, guid: f0ee598199de6794f8a71f5d3b1c30f0,
         type: 3}
       propertyPath: m_Name
@@ -542,15 +647,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0ee598199de6794f8a71f5d3b1c30f0, type: 3}
---- !u!4 &5201475138509500914 stripped
+--- !u!4 &1710391535197387623 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 8894562711274279518, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+  m_CorrespondingSourceObject: {fileID: 2665013563891144907, guid: f0ee598199de6794f8a71f5d3b1c30f0,
     type: 3}
   m_PrefabInstance: {fileID: 3693109738084639660}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &5201475138509500913 stripped
+--- !u!198 &1710391535197387620 stripped
 ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 8894562711274279517, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+  m_CorrespondingSourceObject: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
     type: 3}
   m_PrefabInstance: {fileID: 3693109738084639660}
   m_PrefabAsset: {fileID: 0}

@@ -90,7 +90,8 @@ public class Enemy : MonoBehaviour
         currentCombatTime = combatTime;
         currentReturnToPatrolTime = returnToPatorlTime;
 
-        target = GameManager.Instance.GetPlayer().transform;
+        if(target == null)
+            target = GameManager.Instance.GetPlayer().transform;
 
         speed = Random.Range(speed_min, speed_max);
 
@@ -248,7 +249,8 @@ public class Enemy : MonoBehaviour
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
 
         effect.transform.position = damagedPos;
-        effect.transform.rotation = Quaternion.identity;
+        effect.transform.rotation = Quaternion.LookRotation(damagedVelocity.normalized);
+        effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
        // whoAttackThis = attackObj;
