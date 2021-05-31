@@ -156,7 +156,7 @@ public class Enemy_ShooterTest : Enemy
         currentShotDelay -= Time.deltaTime;
 
         RaycastHit hit;
-        if (Physics.Raycast(eye.position, (aimPos.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
+        if (Physics.Raycast(eye.position, (aimPos.position - eye.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
             if (!hit.transform.CompareTag("Player"))
             {
@@ -184,7 +184,7 @@ public class Enemy_ShooterTest : Enemy
                 int dir = Random.Range(-1, 2);
                 aimingWalkDir = new Vector2(dir, 0);
 
-                if (Physics.Raycast(this.transform.position + this.transform.up * 0.3f, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(this.transform.position + this.transform.up * 0.3f, this.transform.right * aimingWalkDir.x, 1.0f, 1 << LayerMask.NameToLayer("Enviroment"), QueryTriggerInteraction.Ignore))
                 {
                     aimingWalkDir = new Vector2(-aimingWalkDir.x, aimingWalkDir.y);
                 }

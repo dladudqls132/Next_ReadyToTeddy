@@ -220,7 +220,7 @@ public class Enemy : MonoBehaviour
     {
         //if (!GameManager.Instance.GetIsCombat())
         //    return;
-        if (isDead) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
         currentHp -= value;
 
        // whoAttackThis = null;
@@ -234,7 +234,7 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
-        if (isDead) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
 
         currentHp -= damage;
 
@@ -265,7 +265,7 @@ public class Enemy : MonoBehaviour
         //    return;
         //}
 
-        if (isDead) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
 
         currentHp -= damage;
 

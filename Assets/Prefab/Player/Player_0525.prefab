@@ -68,6 +68,7 @@ Transform:
   - {fileID: 6100122698547951187}
   - {fileID: 6100122699186304115}
   - {fileID: 1657584625699815564}
+  - {fileID: 1021212588659461505}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -0.87700003, z: 0}
@@ -290,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 3693773451208081833, guid: 64d48a0010bc14744aa40f9c00d40cbd,
     type: 3}
-  throwPos: {fileID: 0}
+  throwPos: {fileID: 1021212588659461505}
   cursor: {fileID: 7092195717643279861}
   layer:
     serializedVersion: 2
@@ -334,6 +335,36 @@ MonoBehaviour:
   player: {fileID: 0}
   isOpen: 0
   UI_Inventory: {fileID: 0}
+--- !u!1 &2880029091138689447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1021212588659461505}
+  m_Layer: 11
+  m_Name: ThrowPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1021212588659461505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2880029091138689447}
+  m_LocalRotation: {x: 0.026176045, y: -0.008723655, z: -0.0002281836, w: 0.9996193}
+  m_LocalPosition: {x: 0.14849365, y: 1.1604128, z: 0.21801928}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2306817717154194258}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6100122698547951186
 GameObject:
   m_ObjectHideFlags: 0

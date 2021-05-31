@@ -97,7 +97,8 @@ public class Bullet_CL : Bullet
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
-            ActiveFalse();
+            if(!other.isTrigger)
+                ActiveFalse();
         }
     }
 }
