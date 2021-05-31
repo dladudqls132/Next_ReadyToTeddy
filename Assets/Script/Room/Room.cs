@@ -11,6 +11,7 @@ public class Room : MonoBehaviour
     [SerializeField] private List<Enemy> enemies = new List<Enemy>();
 
     public int GetRoomNum() { return roomNum; }
+    public bool GetIsEnterPlayer() { return isEnterPlayer; }
 
     private void Update()
     {

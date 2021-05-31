@@ -109,7 +109,9 @@ public class Bullet : MonoBehaviour
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Default") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
-            ActiveFalse();
+            
+            if (!other.isTrigger)
+                ActiveFalse();
         }
     }
 

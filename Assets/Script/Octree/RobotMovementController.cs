@@ -75,7 +75,7 @@ public class RobotMovementController : Enemy
 
                     if (rb.CompareTag("Player"))
                     {
-                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")))
+                        if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"), QueryTriggerInteraction.Ignore))
                         {
                             if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
                                 continue;
@@ -362,7 +362,7 @@ public class RobotMovementController : Enemy
     private bool CanSeePlayer()
     {
         RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
             return hit.transform.gameObject == target.root.gameObject;
         }
