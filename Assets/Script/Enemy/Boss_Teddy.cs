@@ -24,6 +24,9 @@ public class Boss_Teddy : Enemy
     private float currentAttackDelay;
     [SerializeField] private GameObject bullet;
     private float originY;
+    [SerializeField] private float dodgeTime;
+    private float currentDodgeTime;
+    [SerializeField] private bool isDodge;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -34,6 +37,41 @@ public class Boss_Teddy : Enemy
         sphereCollider = this.GetComponent<SphereCollider>();
         originY = this.transform.position.y;
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
+    }
+
+    private void Update()
+    {
+        currentDodgeTime += Time.deltaTime;
+
+        if(currentDodgeTime >= dodgeTime)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            {
+                if (hit.transform.root == this.transform)
+                {
+                    anim.ResetTrigger("FireBullet");
+                    anim.ResetTrigger("Dodge_Left");
+                    anim.ResetTrigger("Dodge_Right");
+
+                    int rnd = Random.Range(0, 2);
+                    if(rnd == 0)
+                        anim.SetTrigger("Dodge_Left");
+                    else
+                        anim.SetTrigger("Dodge_Right");
+
+                    isDodge = true;
+                    currentDodgeTime = 0;
+                }
+            }
+        }
+    }
+
+    void SetIsDodgeFalse()
+    {
+        isDodge = false;
     }
 
     private void OnAnimatorMove()
@@ -48,31 +86,42 @@ public class Boss_Teddy : Enemy
 
          if (CanSeePlayer())
         {
-            if (Vector3.Distance(this.transform.position, target.position) <= stoppingDistance)
+            if (isDodge)
             {
-                if (currentAttackDelay >= attackDelay)
+                this.transform.position = transform.position + rootMotionPos;
+                this.transform.rotation = Quaternion.Euler(this.transform.eulerAngles + rootMotionRot);
+
+                rootMotionPos = Vector3.zero;
+                rootMotionRot = Vector3.zero;
+            }
+            else
+            {
+                if (Vector3.Distance(this.transform.position, target.position) <= stoppingDistance)
                 {
-                    anim.SetTrigger("FireBullet");
-                    currentAttackDelay = 0;
+                    if (currentAttackDelay >= attackDelay)
+                    {
+                        anim.SetTrigger("FireBullet");
+                        currentAttackDelay = 0;
+                    }
+
+                    this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
+                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
+                    rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
+
+                    return;
                 }
 
-                this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
+                Vector3 dir = (target.position - transform.position).normalized;
 
-                return;
+                if (dir == Vector3.zero)
+                    dir = this.transform.forward;
+
+                move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
+                move.y = 0;
+
+                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
+                rigid.velocity = move * acceleration * 1.5f;
             }
-
-            Vector3 dir = (target.position - transform.position).normalized;
-
-            if (dir == Vector3.zero)
-                dir = this.transform.forward;
-
-            move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
-            move.y = 0;
-
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
-            rigid.velocity = move * acceleration * 1.5f;
         }
         else
         {
@@ -153,7 +202,7 @@ public class Boss_Teddy : Enemy
     private bool CanSeePlayer()
     {
         RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
         {
             return hit.transform.gameObject == target.gameObject;
         }
