@@ -46,6 +46,10 @@ public class Boss_Teddy : Enemy
     private bool isMeteor;
     [SerializeField] private List<GameObject> containers = new List<GameObject>();
     int dropNum;
+    [SerializeField] private ParticleSystem fireStart;
+    [SerializeField] private float turnDirTime;
+    private float currentTurnDirTime;
+    private Vector3 moveDir;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -55,6 +59,7 @@ public class Boss_Teddy : Enemy
         octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
         sphereCollider = this.GetComponent<SphereCollider>();
         originY = this.transform.position.y;
+        fireStart = Instantiate(fireStart);
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -62,6 +67,7 @@ public class Boss_Teddy : Enemy
     {
         currentDodgeCoolTime += Time.deltaTime;
         currentAttackDelay += Time.deltaTime;
+        currentTurnDirTime += Time.deltaTime;
 
         if (behavior == BossBehavior.Idle)
         {
@@ -181,15 +187,21 @@ public class Boss_Teddy : Enemy
 
         if (currentAttackDelay >= attackDelay)
         {
-            if (Vector3.Distance(this.transform.position, target.position) <= stoppingDistance)
-            {
-                behavior = BossBehavior.FireBullet;
-                ResetTrigger();
-                anim.SetTrigger("FireBullet");
-                currentAttackDelay = 0;
+            //if (Vector3.Distance(this.transform.position, target.position) <= stoppingDistance )
+            //{
+            //    behavior = BossBehavior.FireBullet;
+            //    ResetTrigger();
+            //    anim.SetTrigger("FireBullet");
+            //    currentAttackDelay = 0;
 
-                return;
-            }
+            //    return;
+            //}
+            behavior = BossBehavior.FireBullet;
+            ResetTrigger();
+            anim.SetTrigger("FireBullet");
+            currentAttackDelay = 0;
+
+            return;
         }
     }
 
@@ -219,108 +231,50 @@ public class Boss_Teddy : Enemy
     private void FixedUpdate()
     {
 
-         if (CanSeePlayer())
+        Vector3 dir = (target.position - transform.position).normalized;
+
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
+
+        if (Vector3.Distance(this.transform.position, target.position) >= stoppingDistance)
         {
-            //if (Vector3.Distance(this.transform.position, target.position) <= stoppingDistance)
-            //{
-            //    if (currentAttackDelay >= attackDelay)
-            //    {
-            //        anim.SetTrigger("FireBullet");
-            //        currentAttackDelay = 0;
-            //    }
-
-            //    this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-            //    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-            //    rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
-
-            //    return;
-            //}
-
-            if (behavior == BossBehavior.Idle)
+            if (currentTurnDirTime >= turnDirTime)
             {
-                Vector3 dir = (target.position - transform.position).normalized;
+                int rnd = Random.Range(0, 2);
+                if (rnd == 0)
+                {
+                    moveDir = (this.transform.right + this.transform.forward).normalized;
+                }
+                else
+                {
+                    moveDir = (-this.transform.right + this.transform.forward).normalized;
+                }
 
-                if (dir == Vector3.zero)
-                    dir = this.transform.forward;
-
-                move = Vector3.Lerp(move, dir, Time.deltaTime * 10);
-                move.y = 0;
-
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
-                rigid.velocity = move * acceleration * 1.5f;
+                currentTurnDirTime = 0;
             }
-            //else
-            //{
-            //    if(behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
-            //    {
-            //        this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-            //        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-            //        rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
-            //    }
-            //}
         }
         else
         {
-            //line.enabled = false;
-            if ((newPath == null || !newPath.isCalculating) && Vector3.SqrMagnitude(new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z) - lastDestination) > maxDistanceRebuildPath && !octree.IsBuilding)
+            if (currentTurnDirTime >= turnDirTime)
             {
-                lastDestination = new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z);
-
-                oldPath = newPath;
-                newPath = octree.GetPath(transform.position, lastDestination);
-                newPath.path.Add(new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z));
-            }
-
-            var curPath = Path;
-
-            if (!curPath.isCalculating && curPath != null && curPath.Path.Count > 0)
-            {
-                currentDestination = curPath.Path[0] + Vector3.ClampMagnitude(rigid.position - curPath.Path[0], pathPointRadius);
-
-                Vector3 dir = (currentDestination - transform.position).normalized;
-
-                if (dir == Vector3.zero)
-                    dir = this.transform.forward;
-
-                rigid.velocity = Vector3.MoveTowards(rigid.velocity, dir * acceleration, Time.deltaTime * 12);
-                this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-                float sqrMinReachDistance = minReachDistance * minReachDistance;
-
-                Vector3 predictedPosition = rigid.position + rigid.velocity * Time.deltaTime;
-                float shortestPathDistance = Vector3.SqrMagnitude(predictedPosition - currentDestination);
-                int shortestPathPoint = 0;
-
-                for (int i = 0; i < curPath.Path.Count; i++)
+                int rnd = Random.Range(0, 2);
+                if (rnd == 0)
                 {
-                    float sqrDistance = Vector3.SqrMagnitude(rigid.position - curPath.Path[i]);
-                    if (sqrDistance <= sqrMinReachDistance)
-                    {
-                        if (i < curPath.Path.Count)
-                        {
-                            curPath.Path.RemoveRange(0, i + 1);
-                        }
-                        shortestPathPoint = 0;
-                        break;
-                    }
-
-                    float sqrPredictedDistance = Vector3.SqrMagnitude(predictedPosition - curPath.Path[i]);
-                    if (sqrPredictedDistance < shortestPathDistance)
-                    {
-                        shortestPathDistance = sqrPredictedDistance;
-                        shortestPathPoint = i;
-                    }
+                    moveDir = (this.transform.right).normalized;
+                }
+                else
+                {
+                    moveDir = (-this.transform.right).normalized;
                 }
 
-                if (shortestPathPoint > 0)
-                {
-                    curPath.Path.RemoveRange(0, shortestPathPoint);
-                }
+                currentTurnDirTime = 0;
             }
-            else
-            {
-                rigid.velocity -= rigid.velocity * Time.deltaTime * acceleration;
-            }
+
         }
+
+        move = Vector3.Lerp(move, moveDir, Time.deltaTime * 10);
+        move.y = 0;
+
+        rigid.velocity = move * acceleration * 1.5f;
 
         if (behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
         {
@@ -338,8 +292,18 @@ public class Boss_Teddy : Enemy
 
     private void FireBullet()
     {
-        GameObject temp = Instantiate(bullet, shotPos.position, Quaternion.LookRotation((target.position - this.transform.position).normalized));
-        temp.GetComponent<Bullet_Boss>().Fire((target.position - shotPos.position).normalized, bulletSpeed);
+        //GameObject temp = Instantiate(bullet, shotPos.position, Quaternion.LookRotation((target.position - this.transform.position).normalized));
+        //temp.GetComponent<Bullet_Boss>().Fire((target.position - shotPos.position).normalized, bulletSpeed);
+
+        GameObject temp = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy);
+        temp.transform.position = shotPos.position;
+        temp.transform.rotation = shotPos.rotation;
+        temp.gameObject.SetActive(true);
+        temp.GetComponent<Bullet_Boss>().Fire(((target.position + Vector3.up * 0.5f) - shotPos.position).normalized, bulletSpeed);
+
+        fireStart.transform.rotation = shotPos.rotation;
+        fireStart.transform.position = shotPos.position + shotPos.forward;
+        fireStart.Play();
     }
 
     private bool CanSeePlayer()

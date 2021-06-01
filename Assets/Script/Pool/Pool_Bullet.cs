@@ -5,7 +5,8 @@ using UnityEngine;
 public enum BulletType
 {
     Normal,
-    CL
+    CL,
+    Energy
 }
 
 public class Pool_Bullet : MonoBehaviour
