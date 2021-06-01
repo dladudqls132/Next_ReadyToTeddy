@@ -291,7 +291,7 @@ public class Boss_Teddy : Enemy
     private bool CanSeePlayer()
     {
         RaycastHit hit;
-        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Player"))))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Player"))))
         {
             return hit.transform.gameObject == target.gameObject;
         }
