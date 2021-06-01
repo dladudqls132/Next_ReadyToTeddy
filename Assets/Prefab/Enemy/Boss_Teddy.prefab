@@ -201,8 +201,9 @@ GameObject:
   - component: {fileID: 1486221506669322492}
   - component: {fileID: 1486221506669322495}
   - component: {fileID: 1486221506669322494}
+  - component: {fileID: 392626479}
   m_Layer: 17
-  m_Name: Boss_Teddy_Idle
+  m_Name: Boss_Teddy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +225,7 @@ Transform:
   - {fileID: 1934832376554257728}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -2.7762637, z: 2.0821977}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1486221506669322433
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -248,8 +249,8 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1756816479978500639}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_Material: {fileID: 13400000, guid: 808d9ece915bbe74b90e59e583ca5a90, type: 2}
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.4
@@ -306,7 +307,7 @@ MonoBehaviour:
   spreadBlood: {fileID: 0}
   canSee: 0
   isDead: 0
-  maxHp: 10000
+  maxHp: 1000
   currentHp: 0
   damage: 0
   speed_min: 0
@@ -321,6 +322,7 @@ MonoBehaviour:
   magazineDropRate: 0
   isRigidity: 0
   rigidityTime: 0
+  behavior: 0
   maxDistanceRebuildPath: 1
   acceleration: 1
   minReachDistance: 2
@@ -330,6 +332,22 @@ MonoBehaviour:
   stoppingDistance: 15
   attackDelay: 1
   bullet: {fileID: 7213304148552307993, guid: 8df653627f6460d4da0ac0767821a6a9, type: 3}
+  dodgeCoolTime: 2
+  meteorTime: 5
+  meteorCoolTime: 10
+--- !u!114 &392626479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756816479978500639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72363804d25312f4a948f6323ce29248, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRoom: {fileID: 0}
 --- !u!1 &2567950818581509791
 GameObject:
   m_ObjectHideFlags: 0
