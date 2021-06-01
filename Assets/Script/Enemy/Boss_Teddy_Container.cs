@@ -129,12 +129,17 @@ public class Boss_Teddy_Container : MonoBehaviour
         {
             if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
             {
-                if (rigid.velocity.magnitude > 2)
+                if (rigid.velocity.magnitude > 3)
                 {
                     explosion.transform.position = collision.contacts[0].point;
                     explosion.gameObject.SetActive(true);
                     explosion.Play();
                     Camera.main.GetComponent<FPPCamController>().Shake(1, 0.25f);
+
+                    if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Player"))
+                    {
+                        target.GetComponent<PlayerController>().DecreaseHp(20);
+                    }
                 }
                 rigid.velocity = Vector3.zero;
                 rigid.angularVelocity = Vector3.zero;
