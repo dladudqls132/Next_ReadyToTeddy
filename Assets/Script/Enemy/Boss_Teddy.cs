@@ -40,7 +40,12 @@ public class Boss_Teddy : Enemy
     private float currentMeteorTime;
     [SerializeField] private float meteorCoolTime;
     private float currentMeteorCoolTime;
+    [SerializeField] private float meteorDropCoolTime;
+    private float currentMeteorDropCoolTime;
+    [SerializeField] private float bulletSpeed;
     private bool isMeteor;
+    [SerializeField] private List<GameObject> containers = new List<GameObject>();
+    int dropNum;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -55,15 +60,11 @@ public class Boss_Teddy : Enemy
 
     private void Update()
     {
-        currentMeteorCoolTime += Time.deltaTime;
         currentDodgeCoolTime += Time.deltaTime;
         currentAttackDelay += Time.deltaTime;
 
-
         if (behavior == BossBehavior.Idle)
         {
-           
-
             UpdateBehavior();
         }
         else
@@ -77,12 +78,65 @@ public class Boss_Teddy : Enemy
                     behavior = BossBehavior.Idle;
                     anim.SetBool("isMeteor", false);
                     currentMeteorTime = 0;
+
+                    for (int i = 0; i < containers.Count; i++)
+                    {
+                        containers[i].GetComponent<Boss_Teddy_Container>().ResetPos();
+                        dropNum = 0;
+                    }
+                }
+
+                currentMeteorDropCoolTime += Time.deltaTime;
+
+                if(currentMeteorDropCoolTime >= meteorDropCoolTime)
+                {
+                    currentMeteorDropCoolTime = 0;
+
+                    //Debug.Log(Random.Range(0, containers.Count));
+                    int[] rndNum = new int[containers.Count];
+                    for(int i = 0; i < containers.Count; i++)
+                    {
+                        rndNum[i] = i;
+                    }
+
+                    for(int i = 0; i < containers.Count; i++)
+                    {
+                        int rnd = Random.Range(0, containers.Count);
+
+                        int temp = rndNum[i];
+                        rndNum[i] = rndNum[rnd];
+                        rndNum[rnd] = temp;
+                    }
+
+                    containers[dropNum].GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f);
+                    dropNum++;
+                    dropNum = Mathf.Clamp(dropNum, 0, containers.Count - 1);
+
+                    //int rnd = 0;
+
+                    //while (true)
+                    //{
+                    //    if (containers[rnd].GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f))
+                    //    {
+                    //        break;
+                    //    }
+
+                    //    rnd = Random.Range(0, containers.Count);
+                    //}
+
+                    //for (int i = 0; i < containers.Count; i++)
+                    //{
+
+                    //container.GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f);
+                    //}
                 }
             }
         }
 
         if (behavior != BossBehavior.Meteor)
         {
+            currentMeteorCoolTime += Time.deltaTime;
+
             if (currentDodgeCoolTime >= dodgeCoolTime)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -285,7 +339,7 @@ public class Boss_Teddy : Enemy
     private void FireBullet()
     {
         GameObject temp = Instantiate(bullet, shotPos.position, Quaternion.LookRotation((target.position - this.transform.position).normalized));
-        temp.GetComponent<Bullet_Boss>().Fire((target.position - this.transform.position).normalized, 5);
+        temp.GetComponent<Bullet_Boss>().Fire((target.position - shotPos.position).normalized, bulletSpeed);
     }
 
     private bool CanSeePlayer()

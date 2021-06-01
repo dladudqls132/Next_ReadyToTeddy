@@ -42,7 +42,8 @@ public class FPPCamController : MonoBehaviour
     private Vector2 currentTempDir;
     private Vector2 smoothTemp;
 
-    public Vector3 shakeVec; 
+    public Vector3 shakeVec;
+    private bool overWrite;
 
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
@@ -304,6 +305,8 @@ public class FPPCamController : MonoBehaviour
 
     public void Shake(float shakeTime, float shakeAmount)
     {
+        if (isShake) return;
+
         this.isShake = true;
         this.shakeTime = shakeTime;
         this.shakeAmount = shakeAmount;
