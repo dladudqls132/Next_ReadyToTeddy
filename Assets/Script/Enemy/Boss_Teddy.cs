@@ -73,7 +73,6 @@ public class Boss_Teddy : Enemy
 
                 if (currentMeteorTime >= meteorTime)
                 {
-                    Debug.Log("asd");
                     behavior = BossBehavior.Idle;
                     anim.SetBool("isMeteor", false);
                     currentMeteorTime = 0;

@@ -13,9 +13,7 @@ GameObject:
   - component: {fileID: 4489410446429765504}
   - component: {fileID: 4636117859604075640}
   - component: {fileID: 9114623089638140616}
-  - component: {fileID: 7607678145751362963}
   - component: {fileID: 8191989579950025494}
-  - component: {fileID: 8006641946569359022}
   m_Layer: 8
   m_Name: steelframe01
   m_TagString: Untagged
@@ -35,6 +33,7 @@ Transform:
   m_LocalScale: {x: 0.49621284, y: 0.63248885, z: 0.63248885}
   m_Children:
   - {fileID: 7357317372497464418}
+  - {fileID: 8169139918060582148}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 0}
@@ -118,21 +117,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &7607678145751362963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2687922698183515733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2c34bf44b6a2614999b2e1f6de747c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  isEnterPlayer: 0
-  isOpened: 0
 --- !u!65 &8191989579950025494
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -146,19 +130,66 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 21.293804, y: 1.4968587, z: 18.500357}
   m_Center: {x: 0, y: -0.8868973, z: 9.40821}
---- !u!65 &8006641946569359022
+--- !u!1 &8518242154629823891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8169139918060582148}
+  - component: {fileID: 4127707699481049422}
+  - component: {fileID: 3622154779007094331}
+  m_Layer: 2
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8169139918060582148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8518242154629823891}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3316544743973864687}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4127707699481049422
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2687922698183515733}
+  m_GameObject: {fileID: 8518242154629823891}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 21.293804, y: 13, z: 18.500357}
   m_Center: {x: 0, y: -0.3853697, z: 9.40821}
+--- !u!114 &3622154779007094331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8518242154629823891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2c34bf44b6a2614999b2e1f6de747c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  isEnterPlayer: 0
+  isOpened: 0
 --- !u!1001 &3490284472254816633
 PrefabInstance:
   m_ObjectHideFlags: 0
