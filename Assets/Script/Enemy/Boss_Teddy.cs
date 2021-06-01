@@ -59,6 +59,7 @@ public class Boss_Teddy : Enemy
         currentDodgeCoolTime += Time.deltaTime;
         currentAttackDelay += Time.deltaTime;
 
+
         if (behavior == BossBehavior.Idle)
         {
            
@@ -80,40 +81,44 @@ public class Boss_Teddy : Enemy
             }
         }
 
+        if (behavior != BossBehavior.Meteor)
+        {
+            if (currentDodgeCoolTime >= dodgeCoolTime)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
 
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.transform.root == this.transform)
+                    {
+                        ResetTrigger();
+
+                        int rnd = Random.Range(0, 2);
+                        if (rnd == 0)
+                            anim.SetTrigger("Dodge_Left");
+                        else
+                            anim.SetTrigger("Dodge_Right");
+
+                        behavior = BossBehavior.Dodge;
+                        isDodge = true;
+                        currentDodgeCoolTime = 0;
+
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     void UpdateBehavior()
     {
 
-        if (currentDodgeCoolTime >= dodgeCoolTime)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
-            {
-                if (hit.transform.root == this.transform)
-                {
-                    ResetTrigger();
-
-                    int rnd = Random.Range(0, 2);
-                    if (rnd == 0)
-                        anim.SetTrigger("Dodge_Left");
-                    else
-                        anim.SetTrigger("Dodge_Right");
-
-                    behavior = BossBehavior.Dodge;
-                    isDodge = true;
-                    currentDodgeCoolTime = 0;
-
-                    return;
-                }
-            }
-        }
 
         if (currentMeteorCoolTime >= meteorCoolTime)
         {
+            ResetTrigger();
             behavior = BossBehavior.Meteor;
             anim.SetBool("isMeteor", true);
             currentMeteorCoolTime = 0;
@@ -190,15 +195,15 @@ public class Boss_Teddy : Enemy
                 this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
                 rigid.velocity = move * acceleration * 1.5f;
             }
-            else
-            {
-                if(behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
-                {
-                    this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-                    this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-                    rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
-                }
-            }
+            //else
+            //{
+            //    if(behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
+            //    {
+            //        this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
+            //        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
+            //        rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
+            //    }
+            //}
         }
         else
         {
@@ -261,6 +266,13 @@ public class Boss_Teddy : Enemy
             {
                 rigid.velocity -= rigid.velocity * Time.deltaTime * acceleration;
             }
+        }
+
+        if (behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
+        {
+            this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
+            rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
         }
 
         this.transform.position = transform.position + rootMotionPos;
