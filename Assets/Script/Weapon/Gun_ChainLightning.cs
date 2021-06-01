@@ -62,7 +62,7 @@ public class Gun_ChainLightning : Gun
 
             if(isCharge)
             {
-                intensify = Mathf.Lerp(intensify, 10, Time.deltaTime * 4);
+                intensify = Mathf.Lerp(intensify, 3, Time.deltaTime * 4);
                 mr.material.SetFloat("_Intensity", intensify);
             }
             else
