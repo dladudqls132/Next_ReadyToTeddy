@@ -12,7 +12,7 @@ public class Door : MonoBehaviour
     private void Start()
     {
         player = GameManager.Instance.GetPlayer().transform;
-        anim = this.GetComponent<Animator>();
+        anim = this.transform.parent.GetComponent<Animator>();
     }
 
     // Update is called once per frame

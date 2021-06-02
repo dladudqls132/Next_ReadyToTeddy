@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    protected Vector3 dir;
-    protected float speed;
+    [SerializeField] protected Vector3 dir;
+    [SerializeField] protected float speed;
     protected float damage;
-    protected bool isFire;
+    [SerializeField] protected bool isFire;
     protected Rigidbody rigid;
     [SerializeField] protected float lifeTime = 8.0f;
     protected float currentLifeTime = 0;
-    protected bool isDestroyed;
+    [SerializeField] protected bool isDestroyed;
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;
     [SerializeField] protected Transform target;
