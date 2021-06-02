@@ -34,7 +34,7 @@ public class Enemy_MeleeTest : Enemy
         anim = this.GetComponent<Animator>();
     }
 
-    protected override void SetDead(bool value)
+    public override void SetDead(bool value)
     {
         isDead = value;
 

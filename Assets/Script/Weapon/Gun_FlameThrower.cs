@@ -169,14 +169,14 @@ public class Gun_FlameThrower : Gun
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
                 currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.1f, 0.015f);
+                mainCam.Shake(0.1f, 0.015f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
             }
             else
             {
                 currentSpreadAngle = spreadAngle_aiming;
-                mainCam.Shake(0.05f, 0.015f);
+                mainCam.Shake(0.05f, 0.015f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
                 //handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }

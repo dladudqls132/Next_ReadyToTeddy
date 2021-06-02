@@ -7,7 +7,8 @@ public enum BossBehavior
     Idle,
     Dodge,
     FireBullet,
-    Meteor
+    Meteor,
+    Laser
 }
 
 public class Boss_Teddy : Enemy
@@ -47,9 +48,14 @@ public class Boss_Teddy : Enemy
     [SerializeField] private List<GameObject> containers = new List<GameObject>();
     int dropNum;
     [SerializeField] private ParticleSystem fireStart;
+    [SerializeField] private GameObject laser;
     [SerializeField] private float turnDirTime;
     private float currentTurnDirTime;
     private Vector3 moveDir;
+    [SerializeField] private float laserCoolTime;
+    private float currentLaserCoolTime;
+
+    Quaternion tempRot;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -60,6 +66,10 @@ public class Boss_Teddy : Enemy
         sphereCollider = this.GetComponent<SphereCollider>();
         originY = this.transform.position.y;
         fireStart = Instantiate(fireStart);
+        tempRot = laser.transform.rotation;
+        laser = Instantiate(laser);
+        laser.GetComponent<Boss_Laser>().SetParent(shotPos);
+        laser.SetActive(false);
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -94,18 +104,18 @@ public class Boss_Teddy : Enemy
 
                 currentMeteorDropCoolTime += Time.deltaTime;
 
-                if(currentMeteorDropCoolTime >= meteorDropCoolTime)
+                if (currentMeteorDropCoolTime >= meteorDropCoolTime)
                 {
                     currentMeteorDropCoolTime = 0;
 
                     //Debug.Log(Random.Range(0, containers.Count));
                     int[] rndNum = new int[containers.Count];
-                    for(int i = 0; i < containers.Count; i++)
+                    for (int i = 0; i < containers.Count; i++)
                     {
                         rndNum[i] = i;
                     }
 
-                    for(int i = 0; i < containers.Count; i++)
+                    for (int i = 0; i < containers.Count; i++)
                     {
                         int rnd = Random.Range(0, containers.Count);
 
@@ -117,24 +127,6 @@ public class Boss_Teddy : Enemy
                     containers[dropNum].GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f);
                     dropNum++;
                     dropNum = Mathf.Clamp(dropNum, 0, containers.Count - 1);
-
-                    //int rnd = 0;
-
-                    //while (true)
-                    //{
-                    //    if (containers[rnd].GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f))
-                    //    {
-                    //        break;
-                    //    }
-
-                    //    rnd = Random.Range(0, containers.Count);
-                    //}
-
-                    //for (int i = 0; i < containers.Count; i++)
-                    //{
-
-                    //container.GetComponent<Boss_Teddy_Container>().SetDropReady(target.position, 1.0f);
-                    //}
                 }
             }
         }
@@ -145,43 +137,58 @@ public class Boss_Teddy : Enemy
 
             if (currentDodgeCoolTime >= dodgeCoolTime)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+                if (behavior != BossBehavior.Laser)
                 {
-                    if (hit.transform.root == this.transform)
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+
+                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
                     {
-                        ResetTrigger();
+                        if (hit.transform.root == this.transform)
+                        {
+                            ResetTrigger();
 
-                        int rnd = Random.Range(0, 2);
-                        if (rnd == 0)
-                            anim.SetTrigger("Dodge_Left");
-                        else
-                            anim.SetTrigger("Dodge_Right");
+                            int rnd = Random.Range(0, 2);
+                            if (rnd == 0)
+                                anim.SetTrigger("Dodge_Left");
+                            else
+                                anim.SetTrigger("Dodge_Right");
 
-                        behavior = BossBehavior.Dodge;
-                        isDodge = true;
-                        currentDodgeCoolTime = 0;
+                            behavior = BossBehavior.Dodge;
+                            isDodge = true;
+                            currentDodgeCoolTime = 0;
 
-                        return;
+                            return;
+                        }
                     }
                 }
             }
+        }
+        if (behavior != BossBehavior.Laser)
+        {
+            currentLaserCoolTime += Time.deltaTime;
         }
     }
 
     void UpdateBehavior()
     {
-
-
-
         if (currentMeteorCoolTime >= meteorCoolTime)
         {
             ResetTrigger();
             behavior = BossBehavior.Meteor;
             anim.SetBool("isMeteor", true);
             currentMeteorCoolTime = 0;
+            return;
+        }
+
+        if (currentLaserCoolTime >= laserCoolTime)
+        {
+            ResetTrigger();
+            //laser.SetActive(true);
+            laser.transform.position = shotPos.position;
+            behavior = BossBehavior.Laser;
+            anim.SetTrigger("Laser");
+            currentLaserCoolTime = 0;
             return;
         }
 
@@ -220,6 +227,7 @@ public class Boss_Teddy : Enemy
         anim.ResetTrigger("FireBullet");
         anim.ResetTrigger("Dodge_Left");
         anim.ResetTrigger("Dodge_Right");
+        anim.ResetTrigger("Laser");
     }
 
     private void OnAnimatorMove()
@@ -230,10 +238,16 @@ public class Boss_Teddy : Enemy
 
     private void FixedUpdate()
     {
-
         Vector3 dir = (target.position - transform.position).normalized;
 
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
+        if (behavior == BossBehavior.Laser)
+        {
+            laser.SetActive(true);
+        }
+        else
+        {
+            laser.SetActive(false);
+        }
 
         if (Vector3.Distance(this.transform.position, target.position) >= stoppingDistance)
         {
@@ -271,17 +285,22 @@ public class Boss_Teddy : Enemy
 
         }
 
-        move = Vector3.Lerp(move, moveDir, Time.deltaTime * 10);
+        if (behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor || behavior == BossBehavior.Laser)
+        {
+            //this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
+            //this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
+            move = Vector3.Lerp(move, Vector3.zero, Time.deltaTime * 10);
+        }
+        else
+        {
+            move = Vector3.Lerp(move, moveDir, Time.deltaTime * 10);
+        }
+
         move.y = 0;
 
         rigid.velocity = move * acceleration * 1.5f;
-
-        if (behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor)
-        {
-            this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);
-            rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
-        }
+        this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
 
         this.transform.position = transform.position + rootMotionPos;
         this.transform.rotation = Quaternion.Euler(this.transform.eulerAngles + rootMotionRot);
@@ -311,7 +330,7 @@ public class Boss_Teddy : Enemy
         RaycastHit hit;
         if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Player"))))
         {
-            return hit.transform.gameObject == target.gameObject;
+            return hit.transform.gameObject == target.root.gameObject;
         }
         return false;
     }
@@ -352,27 +371,27 @@ public class Boss_Teddy : Enemy
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (rigid != null)
-        {
-            Gizmos.color = Color.blue;
-            Vector3 predictedPosition = rigid.position + rigid.velocity * Time.deltaTime;
-            Gizmos.DrawWireSphere(predictedPosition, sphereCollider.radius);
-        }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    if (rigid != null)
+    //    {
+    //        Gizmos.color = Color.blue;
+    //        Vector3 predictedPosition = rigid.position + rigid.velocity * Time.deltaTime;
+    //        Gizmos.DrawWireSphere(predictedPosition, sphereCollider.radius);
+    //    }
 
-        if (Path != null)
-        {
-            var path = Path;
-            for (int i = 0; i < path.Path.Count - 1; i++)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(path.Path[i], minReachDistance);
-                Gizmos.color = Color.red;
-                Gizmos.DrawRay(path.Path[i], Vector3.ClampMagnitude(rigid.position - path.Path[i], pathPointRadius));
-                Gizmos.DrawWireSphere(path.Path[i], pathPointRadius);
-                Gizmos.DrawLine(path.path[i], path.Path[i + 1]);
-            }
-        }
-    }
+    //    if (Path != null)
+    //    {
+    //        var path = Path;
+    //        for (int i = 0; i < path.Path.Count - 1; i++)
+    //        {
+    //            Gizmos.color = Color.yellow;
+    //            Gizmos.DrawWireSphere(path.Path[i], minReachDistance);
+    //            Gizmos.color = Color.red;
+    //            Gizmos.DrawRay(path.Path[i], Vector3.ClampMagnitude(rigid.position - path.Path[i], pathPointRadius));
+    //            Gizmos.DrawWireSphere(path.Path[i], pathPointRadius);
+    //            Gizmos.DrawLine(path.path[i], path.Path[i + 1]);
+    //        }
+    //    }
+    //}
 }

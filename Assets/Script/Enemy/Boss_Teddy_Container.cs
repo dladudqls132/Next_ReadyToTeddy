@@ -19,7 +19,6 @@ public class Boss_Teddy_Container : MonoBehaviour
     private bool isReset;
     private Vector3 originPos;
     private Quaternion originRot;
-    [SerializeField] private bool isDrop2;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +45,6 @@ public class Boss_Teddy_Container : MonoBehaviour
 
             if(Vector3.Distance(this.transform.position, originPos) <= 0.5f)
             {
-                isDrop2 = false;
                 isReset = false;
             }
         }
@@ -127,18 +125,22 @@ public class Boss_Teddy_Container : MonoBehaviour
     {
         if (isDrop)
         {
-            if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
+            if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Root") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
             {
                 if (rigid.velocity.magnitude > 3)
                 {
                     explosion.transform.position = collision.contacts[0].point;
                     explosion.gameObject.SetActive(true);
                     explosion.Play();
-                    Camera.main.GetComponent<FPPCamController>().Shake(1, 0.25f);
+                    Camera.main.GetComponent<FPPCamController>().Shake(1, 0.25f, true);
 
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Player"))
                     {
-                        target.GetComponent<PlayerController>().DecreaseHp(20);
+                        collision.transform.GetComponent<PlayerController>().DecreaseHp(20);
+                    }
+                    if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Root"))
+                    {
+                        collision.transform.GetComponent<Enemy>().DecreaseHp(60);
                     }
                 }
                 rigid.velocity = Vector3.zero;

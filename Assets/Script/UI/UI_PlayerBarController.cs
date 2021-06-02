@@ -47,7 +47,7 @@ public class UI_PlayerBarController : MonoBehaviour
 
         if (barType == BarType.HpBar)
         {
-            text.text = player.GetCurrentHp().ToString();
+            text.text = ((int)player.GetCurrentHp()).ToString();
             //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(maxWidth * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
             image.fillAmount = Mathf.Lerp(image.fillAmount, player.GetCurrentHp() / player.GetMaxHp(), Time.deltaTime * 15);
         }

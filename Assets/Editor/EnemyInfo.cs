@@ -24,6 +24,8 @@ public class EnemyInfo : ScriptableObject
         public float potionDropRate;
         [Range(0, 100)]
         public float magazineDropRate;
+
+        public float damage;
     }
 
     public void SetInfo()
@@ -31,7 +33,7 @@ public class EnemyInfo : ScriptableObject
         for(int i = 0; i < enemies.Length; i++)
         {
             Enemy temp = enemies[i].prefab.GetComponent<Enemy>();
-            temp.SetInfo(enemies[i].enemyType/*, enemies[i].material*/, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
+            temp.SetInfo(enemies[i].enemyType/*, enemies[i].material*/, enemies[i].damage, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
             EditorUtility.SetDirty(temp);
         }
     }
