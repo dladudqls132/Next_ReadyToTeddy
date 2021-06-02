@@ -305,7 +305,7 @@ public class FPPCamController : MonoBehaviour
 
     public void Shake(float shakeTime, float shakeAmount, bool overWrite)
     {
-        if (!overWrite) return;
+        if (!overWrite && isShake) return;
 
         this.isShake = true;
         this.shakeTime = shakeTime;
