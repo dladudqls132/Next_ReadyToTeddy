@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -37,14 +36,17 @@ public class RobotMovementController : Enemy
     override protected void Start ()
 	{
 		base.Start();
-
+        acceleration = Random.Range(speed_min, speed_max);
         target = GameManager.Instance.GetPlayer().GetCamPos();
 		//sphereCollider = GetComponent<SphereCollider>();
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
         //line = this.GetComponent<LineRenderer>();
-	}
+        
+        explosion = Instantiate(explosion);
+        explosion.gameObject.SetActive(false);
+    }
 
-    protected override void SetDead(bool value)
+    public override void SetDead(bool value)
     {
         isDead = value;
         if (isDead)
@@ -53,13 +55,13 @@ public class RobotMovementController : Enemy
             state = Enemy_State.None;
 
             currentHp = maxHp;
-            this.GetComponent<Collider>().enabled = false;
+            //this.GetComponent<Collider>().enabled = false;
 
-            rigid.useGravity = false;
+            //rigid.useGravity = false;
             rigid.velocity = Vector3.zero;
             rigid.angularVelocity = Vector3.zero;
 
-            explosion.transform.SetParent(null);
+            explosion.transform.position = this.GetComponent<Enemy_RagdollController>().spineRigid.position;
             explosion.gameObject.SetActive(true);
             explosion.Play();
 
@@ -106,9 +108,16 @@ public class RobotMovementController : Enemy
                     }
                 }
             }
+
+            this.gameObject.SetActive(false);
+        }
+        else
+        {
+            if(anim != null)
+            anim.enabled = true;
+            this.gameObject.SetActive(true);
         }
 
-        this.gameObject.SetActive(false);
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
     }
@@ -129,7 +138,7 @@ public class RobotMovementController : Enemy
         {
             if (Vector3.Distance(this.transform.position, target.position) <= 1.0f)
             {
-                Instantiate(explosion, this.transform.position, Quaternion.identity);
+
 
                 Vector3 explosionPos = transform.position;
                 Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius, (1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore);

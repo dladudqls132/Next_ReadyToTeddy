@@ -74,7 +74,7 @@ public class Enemy_ShooterTest : Enemy
         rigs.Build();
     }
 
-    protected override void SetDead(bool value)
+    public override void SetDead(bool value)
     {
         isDead = value;
 
