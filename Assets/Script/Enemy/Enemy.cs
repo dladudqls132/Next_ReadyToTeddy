@@ -60,8 +60,8 @@ public class Enemy : MonoBehaviour
 
     ParticleSystem.Burst[] bursts;
 
-    public float GetCurrentHP() { return currentHp; }
-    public void SetCurrentHP(float value) { currentHp = value; }
+    public float GetCurrentHp() { return currentHp; }
+    public void SetCurrentHp(float value) { currentHp = value; }
     public float GetMaxHp() { return maxHp; }
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
