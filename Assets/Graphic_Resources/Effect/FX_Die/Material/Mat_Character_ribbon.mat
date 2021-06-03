@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FX_MainToon02
-  m_Shader: {fileID: 4800000, guid: 6f611f24e66e42848b976636cef587ee, type: 3}
+  m_Name: Mat_Character_ribbon
+  m_Shader: {fileID: 4800000, guid: 55d5399ee47cfc9478f0bf09f22f2e05, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -32,7 +32,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DissolveTexture:
-        m_Texture: {fileID: 2800000, guid: 30bbf7eda2701a243abcfcb48763e7de, type: 3}
+        m_Texture: {fileID: 2800000, guid: 33ab5011c64efb342882688f5dea3956, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -41,6 +41,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetalicMap:
+        m_Texture: {fileID: 2800000, guid: aaab77c715db8bb42869d3c967a8adbd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Metalicmap:
@@ -92,13 +96,15 @@ Material:
     - _Dissolve: 1
     - _EdgeIns: 10
     - _EdgeRange: 0.5
+    - _Emissionval: 0
     - _Far: 0
-    - _FresnelIns: 10
+    - _FresnelIns: 0
     - _FresnelPow: 2.65
     - _FresnelScale: 5
     - _Gloss: 0.544
     - _Ins: 2.02
     - _Max: -2.34
+    - _Metalic: 0
     - _MetalicVal: 0
     - _Min: -4.22
     - _Outline_Bold: 0.1
