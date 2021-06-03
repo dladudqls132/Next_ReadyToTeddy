@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FPPCamController : MonoBehaviour
 {
+    private static FPPCamController instance;
     [SerializeField] private float cameraMoveSpeed = 120.0f;
     [SerializeField] Transform cameraFollow = null;
     private Camera mainCamera;
@@ -62,6 +63,20 @@ public class FPPCamController : MonoBehaviour
     public void SetOriginFov(float value) { originFov = value; }
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start()
     {
         Vector3 rot = transform.localRotation.eulerAngles;
@@ -160,7 +175,7 @@ public class FPPCamController : MonoBehaviour
                         this.GetComponent<Animator>().SetBool("isReload", true);
                 }
 
-                if(transform.localRotation.eulerAngles.y >= 170 || transform.localRotation.eulerAngles.y <= 168)
+                if(transform.localRotation.eulerAngles.y >= 200 || transform.localRotation.eulerAngles.y <= 168)
                     transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
                 else
                     transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));

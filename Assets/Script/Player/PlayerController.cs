@@ -147,7 +147,21 @@ public class PlayerController : MonoBehaviour
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
 
+    private static PlayerController instance;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     public void Init()
