@@ -25,7 +25,6 @@ public class Bullet_CL : Bullet
             currentLifeTime += Time.deltaTime;
             if (currentLifeTime >= lifeTime)
             {
-                Debug.Log("asd");
                 ActiveFalse();
             }
         }
@@ -94,9 +93,14 @@ public class Bullet_CL : Bullet
 
             ActiveFalse();
         }
-        else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
+        else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
+            if (LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
+            {
+                other.GetComponent<Boss_EnergyShield>().DecreaseHp();
+            }
+
             if(!other.isTrigger)
                 ActiveFalse();
         }

@@ -177,7 +177,8 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                SetRagdoll(damagedTrs, damagedVelocity);
+                
+                    SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
 
@@ -212,7 +213,18 @@ public class Enemy : MonoBehaviour
             {
                 SetDead(true);
             }
+            else if(currentHp > maxHp)
+            {
+                currentHp = maxHp;
+            }
         }
+    }
+
+    public void IncreaseHp(float value)
+    {
+        currentHp += value;
+
+        CheckingHp();
     }
 
     public void DecreaseHp(float value)

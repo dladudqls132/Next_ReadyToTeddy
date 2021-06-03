@@ -17,6 +17,8 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected Transform target;
     [SerializeField] protected float stunTime;
 
+    public float GetDamage() { return damage; }
+
     protected void Start()
     {
         rigid = this.GetComponent<Rigidbody>();

@@ -16,17 +16,9 @@ public class Boss_Teddy : Enemy
 {
     [Header("Boss")]
     [SerializeField] private BossBehavior behavior;
-    [SerializeField] private float maxDistanceRebuildPath = 1;
     [SerializeField] private float acceleration = 1;
-    [SerializeField] private float minReachDistance = 2f;
-    [SerializeField] private float pathPointRadius = 0.2f;
-    [SerializeField] private Octree octree;
     [SerializeField] private Transform shotPos;
 
-    private Octree.PathRequest oldPath;
-    private Octree.PathRequest newPath;
-    private Vector3 currentDestination;
-    private Vector3 lastDestination;
     Vector3 move;
     Vector3 rootMotionPos;
     Vector3 rootMotionRot;
@@ -59,13 +51,31 @@ public class Boss_Teddy : Enemy
     [SerializeField] private List<Spawner> spawners = new List<Spawner>();
     [SerializeField] private float spawnMobCoolTime;
     private float currentSpawnMobCoolTime;
+    [SerializeField] private GameObject energyShield;
+
+    public override void SetDead(bool value)
+    {
+        isDead = value;
+
+        if (isDead)
+        {
+            laser.SetActive(false);
+            for(int i = 0; i < containers.Count; i++)
+            {
+                containers[i].GetComponent<Boss_Teddy_Container>().SetNone();
+            }
+            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            rigid.useGravity = true;
+        }
+        //this.gameObject.SetActive(false);
+        //anim.enabled = false;
+    }
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
 
-        octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
         sphereCollider = this.GetComponent<SphereCollider>();
         originY = this.transform.position.y;
         fireStart = Instantiate(fireStart);
@@ -80,6 +90,11 @@ public class Boss_Teddy : Enemy
 
     private void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         currentDodgeCoolTime += Time.deltaTime;
         currentAttackDelay += Time.deltaTime;
         currentTurnDirTime += Time.deltaTime;
@@ -138,6 +153,8 @@ public class Boss_Teddy : Enemy
             {
                 bool isAlive = false;
 
+                IncreaseHp(3 * Time.deltaTime);
+
                 for(int i = 0; i < spawners.Count; i++)
                 {
                     if(spawners[i].GetMob().activeSelf)
@@ -149,6 +166,7 @@ public class Boss_Teddy : Enemy
 
                 if(!isAlive)
                 {
+                    Destroy(energyShield);
                     behavior = BossBehavior.Idle;
                 }
             }
@@ -206,6 +224,10 @@ public class Boss_Teddy : Enemy
                 ResetTrigger();
                 currentSpawnMobCoolTime = 0;
                 behavior = BossBehavior.SpawnMob;
+
+                energyShield = Instantiate(energyShield, this.transform.position, Quaternion.identity, this.transform);
+                energyShield.SetActive(true);
+
                 for(int i = 0; i < spawners.Count; i++)
                 {
                     spawners[i].SpawnMob();
@@ -280,6 +302,11 @@ public class Boss_Teddy : Enemy
 
     private void FixedUpdate()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         Vector3 dir = (target.position - transform.position).normalized;
 
         if (behavior == BossBehavior.Laser)
@@ -342,7 +369,9 @@ public class Boss_Teddy : Enemy
 
         rigid.velocity = move * acceleration * 1.5f;
         this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
+
+        if(behavior != BossBehavior.SpawnMob)
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
 
         this.transform.position = transform.position + rootMotionPos;
         this.transform.rotation = Quaternion.Euler(this.transform.eulerAngles + rootMotionRot);
@@ -377,42 +406,7 @@ public class Boss_Teddy : Enemy
         return false;
     }
 
-    private Octree.PathRequest Path
-    {
-        get
-        {
-            if ((newPath == null || newPath.isCalculating) && oldPath != null)
-            {
-                return oldPath;
-            }
-            return newPath;
-        }
-    }
-
-    public bool HasTarget
-    {
-        get
-        {
-            return Path != null && Path.Path.Count > 0;
-
-        }
-    }
-
-    public Vector3 CurrentTargetPosition
-    {
-        get
-        {
-            if (Path != null && Path.Path.Count > 0)
-            {
-                return currentDestination;
-            }
-            else
-            {
-                return new Vector3(target.transform.position.x, this.transform.position.y, target.transform.position.z);
-            }
-        }
-    }
-
+ 
     //private void OnDrawGizmosSelected()
     //{
     //    if (rigid != null)

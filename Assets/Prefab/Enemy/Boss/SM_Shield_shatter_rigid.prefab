@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 453525752742038270}
   - component: {fileID: 5406320279699594561}
   - component: {fileID: 7127469492964968430}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 6355438878725463330}
   - component: {fileID: 814870978985446223}
   - component: {fileID: 7127469492712704263}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 2291617905170725745}
   - component: {fileID: 8225311401339957186}
   - component: {fileID: 7127469493535418318}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +300,7 @@ GameObject:
   - component: {fileID: 5361176827482458082}
   - component: {fileID: 6124326235664906608}
   - component: {fileID: 7127469492434448945}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 3148164445767517921}
   - component: {fileID: 8799379807499490492}
   - component: {fileID: 7127469492948149323}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: 7118861745747791291}
   - component: {fileID: 8477346736680309008}
   - component: {fileID: 7127469494117296271}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -585,7 +585,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4046085351100428793}
-  m_Layer: 0
+  - component: {fileID: 1538495315}
+  - component: {fileID: 1538495314}
+  m_Layer: 18
   m_Name: SM_Shield_shatter_rigid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +603,7 @@ Transform:
   m_GameObject: {fileID: 3705694604879784771}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 148.07552, y: 24.63, z: 66.633026}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 8501579536795462861}
   - {fileID: 3551321793418110152}
@@ -616,6 +618,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1538495315
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3705694604879784771}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.43
+  m_Center: {x: 0, y: 0.06, z: 0}
+--- !u!114 &1538495314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3705694604879784771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b177d8ce7e7d741a037722d7c1fb39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldHp: 4
+  currentShieldHp: 0
+  rigidbodies: []
+  parent: {fileID: 0}
 --- !u!1 &5660526429119005983
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +659,7 @@ GameObject:
   - component: {fileID: 421244283686175326}
   - component: {fileID: 6031181583501984880}
   - component: {fileID: 7127469492429849150}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -724,7 +755,7 @@ GameObject:
   - component: {fileID: 5739928990551846356}
   - component: {fileID: 327493352230161096}
   - component: {fileID: 7127469492427752290}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -820,7 +851,7 @@ GameObject:
   - component: {fileID: 3511535123464809502}
   - component: {fileID: 3725711645401763691}
   - component: {fileID: 7127469493762290505}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +947,7 @@ GameObject:
   - component: {fileID: 4403617683718384828}
   - component: {fileID: 2436601306509309327}
   - component: {fileID: 7127469494189606900}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GeoSphere_shield_Part_8
   m_TagString: Untagged
   m_Icon: {fileID: 0}

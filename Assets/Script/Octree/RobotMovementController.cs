@@ -91,7 +91,7 @@ public class RobotMovementController : Enemy
                     {
                         if (Physics.Raycast(this.transform.position, (hit.ClosestPoint(explosionPos) - this.transform.position).normalized, out hit2, explosionRadius, 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Root")))
                         {
-                            if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment"))
+                            if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enviroment") || hit2.transform.CompareTag("Boss"))
                                 continue;
 
                             if (GameManager.Instance.GetIsCombat())

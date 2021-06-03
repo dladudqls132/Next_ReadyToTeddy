@@ -91,7 +91,18 @@ public class Boss_Teddy_Container : MonoBehaviour
         return true;
     }
 
-    void SetDrop()
+    public void SetNone()
+    {
+        rigid.constraints = RigidbodyConstraints.None;
+        floorRange.Stop();
+        floorRange.gameObject.SetActive(false);
+        isDrop = false;
+        isDrop_ready = false;
+        rigid.useGravity = true;
+        this.GetComponent<Boss_Teddy_Container>().enabled = false;
+    }
+
+    public void SetDrop()
     {
         rigid.constraints = RigidbodyConstraints.None;
         currentDropReadyTime = 0;
@@ -140,7 +151,8 @@ public class Boss_Teddy_Container : MonoBehaviour
                     }
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Root"))
                     {
-                        collision.transform.GetComponent<Enemy>().DecreaseHp(60);
+                        if(!collision.gameObject.CompareTag("Boss"))
+                            collision.transform.GetComponent<Enemy>().DecreaseHp(60);
                     }
                 }
                 rigid.velocity = Vector3.zero;
