@@ -614,6 +614,9 @@ MonoBehaviour:
   magazineDropRate: 0
   isRigidity: 0
   rigidityTime: 0
+  energyShield: {fileID: 3705694604879784771, guid: ef6e3c04cfe8c15488da523acdcefee1,
+    type: 3}
+  shieldHp: 10
   behavior: 0
   acceleration: 2
   shotPos: {fileID: 8929547265050992183}
@@ -632,7 +635,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   fireStart: {fileID: 2872949764700678108, guid: 6c272f814b49c8b46845c53f580607aa,
     type: 3}
   laser: {fileID: 6363677078085436663, guid: 20df0366e2e122c49a73f13a30d665f6, type: 3}
@@ -642,11 +644,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  spawnMobCoolTime: 30
   spawnMobRate: 3
-  energyShield: {fileID: 3705694604879784771, guid: ef6e3c04cfe8c15488da523acdcefee1,
-    type: 3}
-  shieldHp: 10
+  ShieldCoolTime: 0
 --- !u!114 &8019786665595370872
 MonoBehaviour:
   m_ObjectHideFlags: 0
