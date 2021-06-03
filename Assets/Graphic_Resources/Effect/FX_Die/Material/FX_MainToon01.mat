@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FX_MainToon01
-  m_Shader: {fileID: 4800000, guid: 6f611f24e66e42848b976636cef587ee, type: 3}
+  m_Shader: {fileID: 4800000, guid: 951453ca034533747beae1583c95cac9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
@@ -40,6 +40,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -83,6 +87,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 70f6838039305994b9a22b0585c67f53, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _tex4coord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -108,6 +116,7 @@ Material:
     - _RimThreshold: 0.1
     - _SmoothnessVal: 0
     - _SpecIntensity: 0.5764706
+    - _UseParticle: 0
     - _VertexPow: 4
     - _VertexVal: 4
     - _X: 0
@@ -123,3 +132,4 @@ Material:
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimTint: {r: 1, g: 0.4713918, b: 0.44811308, a: 0}
     - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 1}

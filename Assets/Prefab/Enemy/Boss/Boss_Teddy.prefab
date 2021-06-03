@@ -601,7 +601,7 @@ MonoBehaviour:
   spreadBlood: {fileID: 0}
   canSee: 0
   isDead: 0
-  maxHp: 100
+  maxHp: 10000
   currentHp: 0
   damage: 0
   speed_min: 0
@@ -642,10 +642,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   spawnMobCoolTime: 30
+  spawnMobRate: 3
   energyShield: {fileID: 3705694604879784771, guid: ef6e3c04cfe8c15488da523acdcefee1,
     type: 3}
+  shieldHp: 10
 --- !u!114 &8019786665595370872
 MonoBehaviour:
   m_ObjectHideFlags: 0

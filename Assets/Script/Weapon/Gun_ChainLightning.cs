@@ -8,6 +8,7 @@ public class Gun_ChainLightning : Gun
     bool isCharge;
     [SerializeField] float intensify = 0;
     [SerializeField] MeshRenderer mr;
+    [SerializeField] private ParticleSystem spark;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -116,7 +117,7 @@ public class Gun_ChainLightning : Gun
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
                 currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.02f, 0.03f, false);
+                mainCam.Shake(0.01f, 0.03f, false);
 
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 //handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
@@ -128,6 +129,9 @@ public class Gun_ChainLightning : Gun
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
                 //handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
+
+            if(spark.isStopped)
+                spark.Play();
 
             isCharge = true;
             isReload = false;
@@ -167,6 +171,9 @@ public class Gun_ChainLightning : Gun
             }
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
+
+            if (spark.isPlaying)
+                spark.Stop();
 
             isCharge = false;
             isReload = false;

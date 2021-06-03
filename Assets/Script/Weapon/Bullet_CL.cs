@@ -79,7 +79,7 @@ public class Bullet_CL : Bullet
                     //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
                     //tempHit.GetComponent<HitEffect>().SetHitEffect(coll[i].GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-
+                    
 
                     if (num == 2)
                         break;
@@ -99,10 +99,13 @@ public class Bullet_CL : Bullet
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
             {
                 other.GetComponent<Boss_EnergyShield>().DecreaseHp();
-            }
-
-            if(!other.isTrigger)
                 ActiveFalse();
+            }
+            else
+            {
+                if (!other.isTrigger)
+                    ActiveFalse();
+            }
         }
     }
 }

@@ -5,14 +5,25 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject prefab;
-    [SerializeField] private float spawnRate;
+    private float spawnRate;
     private float currentSpawnRate;
     private bool isSpawn;
 
     public GameObject GetMob() { return prefab; }
+    public void SetSpawnRate(float value) { spawnRate = value; }
 
     private void Start()
     {
+        currentSpawnRate = 0;
+        prefab = Instantiate(prefab);
+        prefab.transform.position = this.transform.position;
+        prefab.transform.rotation = this.transform.rotation;
+        prefab.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        currentSpawnRate = 0;
         prefab = Instantiate(prefab);
         prefab.transform.position = this.transform.position;
         prefab.transform.rotation = this.transform.rotation;
@@ -26,25 +37,25 @@ public class Spawner : MonoBehaviour
         prefab.GetComponent<Enemy>().SetDead(false);
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    if(!isSpawn)
-    //        currentSpawnRate += Time.deltaTime;
-    //    else
-    //    {
-    //        if(prefab.GetComponent<Enemy>().GetIsDead())
-    //        {
-    //            isSpawn = false;
-    //        }
-    //    }
+    // Update is called once per frame
+    void Update()
+    {
+        if (!isSpawn)
+            currentSpawnRate += Time.deltaTime;
+        else
+        {
+            if (prefab.GetComponent<Enemy>().GetIsDead())
+            {
+                isSpawn = false;
+            }
+        }
 
-    //    if(currentSpawnRate >= spawnRate)
-    //    {
-    //        SpawnMob();
+        if (currentSpawnRate >= spawnRate)
+        {
+            SpawnMob();
 
-    //        isSpawn = true;
-    //        currentSpawnRate = 0;
-    //    }
-    //}
+            isSpawn = true;
+            currentSpawnRate = 0;
+        }
+    }
 }

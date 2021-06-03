@@ -51,7 +51,9 @@ public class Boss_Teddy : Enemy
     [SerializeField] private List<Spawner> spawners = new List<Spawner>();
     [SerializeField] private float spawnMobCoolTime;
     private float currentSpawnMobCoolTime;
+    [SerializeField] private float spawnMobRate;
     [SerializeField] private GameObject energyShield;
+    [SerializeField] private int shieldHp;
 
     public override void SetDead(bool value)
     {
@@ -63,6 +65,10 @@ public class Boss_Teddy : Enemy
             for(int i = 0; i < containers.Count; i++)
             {
                 containers[i].GetComponent<Boss_Teddy_Container>().SetNone();
+            }
+            for (int i = 0; i < spawners.Count; i++)
+            {
+                spawners[i].gameObject.SetActive(false);
             }
             rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             rigid.useGravity = true;
@@ -85,6 +91,12 @@ public class Boss_Teddy : Enemy
         laser.SetActive(false);
 
         currentSpawnMobCoolTime = spawnMobCoolTime;
+        for(int i = 0; i < spawners.Count; i++)
+        {
+            spawners[i].SetSpawnRate(spawnMobRate);
+        }
+
+        energyShield.GetComponent<Boss_EnergyShield>().SetShieldHp(shieldHp);
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -151,22 +163,11 @@ public class Boss_Teddy : Enemy
             }
             else if(behavior == BossBehavior.SpawnMob)
             {
-                bool isAlive = false;
-
                 IncreaseHp(3 * Time.deltaTime);
 
-                for(int i = 0; i < spawners.Count; i++)
+                if(energyShield.GetComponent<Boss_EnergyShield>().GetIsDestroy())
                 {
-                    if(spawners[i].GetMob().activeSelf)
-                    {
-                        isAlive = true;
-                        break;
-                    }
-                }
-
-                if(!isAlive)
-                {
-                    Destroy(energyShield);
+                    isGod = false;
                     behavior = BossBehavior.Idle;
                 }
             }
@@ -224,14 +225,15 @@ public class Boss_Teddy : Enemy
                 ResetTrigger();
                 currentSpawnMobCoolTime = 0;
                 behavior = BossBehavior.SpawnMob;
+                isGod = true;
+                //for(int i = 0; i < spawners.Count; i++)
+                //{
+                //    spawners[i].gameObject.SetActive(true);
+                //}
 
                 energyShield = Instantiate(energyShield, this.transform.position, Quaternion.identity, this.transform);
                 energyShield.SetActive(true);
 
-                for(int i = 0; i < spawners.Count; i++)
-                {
-                    spawners[i].SpawnMob();
-                }
                 return;
             }
         }

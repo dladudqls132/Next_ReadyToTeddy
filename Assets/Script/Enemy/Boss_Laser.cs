@@ -38,7 +38,7 @@ public class Boss_Laser : MonoBehaviour
     void Update()
     {
         //this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation, Quaternion.LookRotation(GameManager.Instance.GetPlayer().transform.position - this.transform.position), 0.2f);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(GameManager.Instance.GetPlayer().GetAimPos().position - this.transform.position), Time.deltaTime * 8);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(GameManager.Instance.GetPlayer().GetAimPos().position - this.transform.position), Time.deltaTime * 6);
         this.transform.position = parent.position;
     }
 

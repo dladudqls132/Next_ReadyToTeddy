@@ -10,6 +10,11 @@ public class Boss_EnergyShield : MonoBehaviour
 
     [SerializeField]  Transform parent;
 
+    private bool isDestroy;
+
+    public void SetShieldHp(int value) { shieldHp = value; }
+    public bool GetIsDestroy() { return isDestroy; }
+
     private void Start()
     {
         currentShieldHp = shieldHp;
@@ -51,6 +56,7 @@ public class Boss_EnergyShield : MonoBehaviour
 
         if(currentShieldHp <= 0)
         {
+            isDestroy = true;
             this.GetComponent<SphereCollider>().enabled = false;
             parent = this.transform.parent;
             this.transform.SetParent(null);

@@ -56,6 +56,8 @@ public class Enemy : MonoBehaviour
     protected NavMeshAgent agent;
     protected Rigidbody rigid;
 
+    protected bool isGod;
+
     ParticleSystem.Burst[] bursts;
 
     public float GetCurrentHP() { return currentHp; }
@@ -182,22 +184,33 @@ public class Enemy : MonoBehaviour
                 SetDead(true);
 
 
-                if (enemyType == EnemyType.Air_Easy)
-                {
-                    GameManager.Instance.GetItemManager().SpawnMagazine(GunType.ChainLightning, this.transform.position + Vector3.up, this.transform.rotation);
-                }
-                else
-                {
-                    float itemDropRate = Random.Range(0.0f, 100.0f);
+                //if (enemyType == EnemyType.Air_Easy)
+                //{
+                //    GameManager.Instance.GetItemManager().SpawnMagazine(GunType.ChainLightning, this.transform.position + Vector3.up, this.transform.rotation);
+                //}
+                //else
+                //{
+                //    float itemDropRate = Random.Range(0.0f, 100.0f);
 
-                    if (itemDropRate <= magazineDropRate)
-                    {
-                        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
-                    }
-                    else if (itemDropRate <= magazineDropRate + potionDropRate)
-                    {
-                        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
-                    }
+                //    if (itemDropRate <= magazineDropRate)
+                //    {
+                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
+                //    }
+                //    else if (itemDropRate <= magazineDropRate + potionDropRate)
+                //    {
+                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
+                //    }
+                //}
+
+                float itemDropRate = Random.Range(0.0f, 100.0f);
+
+                if (itemDropRate <= magazineDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
+                }
+                else if (itemDropRate <= magazineDropRate + potionDropRate)
+                {
+                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
                 }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
@@ -231,7 +244,7 @@ public class Enemy : MonoBehaviour
     {
         //if (!GameManager.Instance.GetIsCombat())
         //    return;
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
         currentHp -= value;
 
        // whoAttackThis = null;
@@ -245,7 +258,7 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
 
         currentHp -= damage;
 
@@ -276,7 +289,7 @@ public class Enemy : MonoBehaviour
         //    return;
         //}
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()) return;
+        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
 
         currentHp -= damage;
 

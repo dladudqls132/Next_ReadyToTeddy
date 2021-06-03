@@ -140,12 +140,10 @@ public class Gun_AR : Gun
 
                     if (!hit2.transform.CompareTag("Head"))
                     {
-               
                         enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
                     }
                     else
                     {
-                        Debug.Log("asd");
                         enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
                     }
 

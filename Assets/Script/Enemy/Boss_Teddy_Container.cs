@@ -143,7 +143,7 @@ public class Boss_Teddy_Container : MonoBehaviour
                     explosion.transform.position = collision.contacts[0].point;
                     explosion.gameObject.SetActive(true);
                     explosion.Play();
-                    Camera.main.GetComponent<FPPCamController>().Shake(1, 0.25f, true);
+                    Camera.main.GetComponent<FPPCamController>().Shake(0.5f, 0.125f, true);
 
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Player"))
                     {
