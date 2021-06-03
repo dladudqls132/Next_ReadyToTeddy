@@ -43,4 +43,18 @@ public class ItemManager : MonoBehaviour
             }
         }
     }
+
+    public void SpawnMagazine(GunType magType, Vector3 pos, Quaternion rot)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].GetComponent<Item_Magazine>() != null)
+            {
+                if (items[i].GetComponent<Item_Magazine>().GetMagType() == magType)
+                {
+                    Instantiate(items[i], pos, rot, null);
+                }
+            }
+        }
+    }
 }

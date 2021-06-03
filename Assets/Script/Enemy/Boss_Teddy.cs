@@ -8,11 +8,13 @@ public enum BossBehavior
     Dodge,
     FireBullet,
     Meteor,
-    Laser
+    Laser,
+    SpawnMob
 }
 
 public class Boss_Teddy : Enemy
 {
+    [Header("Boss")]
     [SerializeField] private BossBehavior behavior;
     [SerializeField] private float maxDistanceRebuildPath = 1;
     [SerializeField] private float acceleration = 1;
@@ -54,8 +56,9 @@ public class Boss_Teddy : Enemy
     private Vector3 moveDir;
     [SerializeField] private float laserCoolTime;
     private float currentLaserCoolTime;
-
-    Quaternion tempRot;
+    [SerializeField] private List<Spawner> spawners = new List<Spawner>();
+    [SerializeField] private float spawnMobCoolTime;
+    private float currentSpawnMobCoolTime;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -66,10 +69,12 @@ public class Boss_Teddy : Enemy
         sphereCollider = this.GetComponent<SphereCollider>();
         originY = this.transform.position.y;
         fireStart = Instantiate(fireStart);
-        tempRot = laser.transform.rotation;
+
         laser = Instantiate(laser);
         laser.GetComponent<Boss_Laser>().SetParent(shotPos);
         laser.SetActive(false);
+
+        currentSpawnMobCoolTime = spawnMobCoolTime;
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -129,49 +134,86 @@ public class Boss_Teddy : Enemy
                     dropNum = Mathf.Clamp(dropNum, 0, containers.Count - 1);
                 }
             }
+            else if(behavior == BossBehavior.SpawnMob)
+            {
+                bool isAlive = false;
+
+                for(int i = 0; i < spawners.Count; i++)
+                {
+                    if(spawners[i].GetMob().activeSelf)
+                    {
+                        isAlive = true;
+                        break;
+                    }
+                }
+
+                if(!isAlive)
+                {
+                    behavior = BossBehavior.Idle;
+                }
+            }
+        }
+
+        if (currentDodgeCoolTime >= dodgeCoolTime)
+        {
+            if (behavior == BossBehavior.Idle || behavior == BossBehavior.FireBullet)
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+                {
+                    if (hit.transform.root == this.transform)
+                    {
+                        ResetTrigger();
+
+                        int rnd = Random.Range(0, 2);
+                        if (rnd == 0)
+                            anim.SetTrigger("Dodge_Left");
+                        else
+                            anim.SetTrigger("Dodge_Right");
+
+                        behavior = BossBehavior.Dodge;
+                        isDodge = true;
+                        currentDodgeCoolTime = 0;
+
+                        return;
+                    }
+                }
+            }
         }
 
         if (behavior != BossBehavior.Meteor)
         {
             currentMeteorCoolTime += Time.deltaTime;
-
-            if (currentDodgeCoolTime >= dodgeCoolTime)
-            {
-                if (behavior != BossBehavior.Laser)
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
-                    {
-                        if (hit.transform.root == this.transform)
-                        {
-                            ResetTrigger();
-
-                            int rnd = Random.Range(0, 2);
-                            if (rnd == 0)
-                                anim.SetTrigger("Dodge_Left");
-                            else
-                                anim.SetTrigger("Dodge_Right");
-
-                            behavior = BossBehavior.Dodge;
-                            isDodge = true;
-                            currentDodgeCoolTime = 0;
-
-                            return;
-                        }
-                    }
-                }
-            }
         }
         if (behavior != BossBehavior.Laser)
         {
             currentLaserCoolTime += Time.deltaTime;
         }
+        if(behavior != BossBehavior.SpawnMob)
+        {
+            currentSpawnMobCoolTime += Time.deltaTime;
+        }
     }
 
     void UpdateBehavior()
     {
+        if(currentHp <= maxHp / 3)
+        {
+            if(currentSpawnMobCoolTime >= spawnMobCoolTime)
+            {
+                ResetTrigger();
+                currentSpawnMobCoolTime = 0;
+                behavior = BossBehavior.SpawnMob;
+                for(int i = 0; i < spawners.Count; i++)
+                {
+                    spawners[i].SpawnMob();
+                }
+                return;
+            }
+        }
+
         if (currentMeteorCoolTime >= meteorCoolTime)
         {
             ResetTrigger();
@@ -285,7 +327,7 @@ public class Boss_Teddy : Enemy
 
         }
 
-        if (behavior == BossBehavior.FireBullet || behavior == BossBehavior.Meteor || behavior == BossBehavior.Laser)
+        if (behavior != BossBehavior.Idle)
         {
             //this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
             //this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 12);

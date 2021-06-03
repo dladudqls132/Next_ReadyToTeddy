@@ -6,6 +6,11 @@ public class Item_Magazine : Item
 {
     [SerializeField] private GunType gunType;
 
+    public GunType GetMagType()
+    {
+        return gunType;
+    }
+
     private void FixedUpdate()
     {
         if (player.GetInventory().GetWeapon(gunType) != null)

@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float speed_min;
     [SerializeField] protected float speed_max;
     [SerializeField] protected float speed;
-    [SerializeField] protected float increaseCombo;
+    protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
     protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;
     protected bool isRunAway;
-    [SerializeField] protected float increaseSuccessRate;
+    protected float increaseSuccessRate;
     [SerializeField] protected float potionDropRate;
     [SerializeField] protected float magazineDropRate;
     [SerializeField] protected bool isRigidity;
@@ -177,28 +177,26 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                //if (isUpCombo)
-                //{
-                //    //GameObject temp = Instantiate(spreadBlood, this.GetComponent<Collider>().bounds.center, Quaternion.LookRotation(this.transform.position - whoAttackThis.transform.position));
-                //    //temp.GetComponent<particle_test>().SetTarget(whoAttackThis.transform);
-                //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(new[] { new ParticleSystem.Burst(0.0f, increaseCombo) });
-                //    //temp.GetComponent<ParticleSystem>().emission.SetBursts(bursts);
-                //}
-                //SetRagdoll(damagedVelocity);
-                //Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                //     LayerMask.NameToLayer("Enemy"), true);
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
-                float itemDropRate = Random.Range(0.0f, 100.0f);
 
-                if(itemDropRate <= magazineDropRate)
+                if (enemyType == EnemyType.Air_Easy)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
+                    GameManager.Instance.GetItemManager().SpawnMagazine(GunType.ChainLightning, this.transform.position + Vector3.up, this.transform.rotation);
                 }
-                else if(itemDropRate <= magazineDropRate + potionDropRate)
+                else
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
+                    float itemDropRate = Random.Range(0.0f, 100.0f);
+
+                    if (itemDropRate <= magazineDropRate)
+                    {
+                        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
+                    }
+                    else if (itemDropRate <= magazineDropRate + potionDropRate)
+                    {
+                        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
+                    }
                 }
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
