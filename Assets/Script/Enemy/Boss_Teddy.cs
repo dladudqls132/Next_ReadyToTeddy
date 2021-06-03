@@ -306,8 +306,11 @@ public class Boss_Teddy : Enemy
 
     private void OnAnimatorMove()
     {
-        rootMotionPos += anim.deltaPosition;
-        rootMotionRot += anim.deltaRotation.eulerAngles;
+        if (anim != null)
+        {
+            rootMotionPos += anim.deltaPosition;
+            rootMotionRot += anim.deltaRotation.eulerAngles;
+        }
     }
 
     private void FixedUpdate()
