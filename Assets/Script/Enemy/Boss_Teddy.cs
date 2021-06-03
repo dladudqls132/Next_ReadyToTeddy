@@ -55,6 +55,11 @@ public class Boss_Teddy : Enemy
     [SerializeField] private GameObject energyShield;
     [SerializeField] private int shieldHp;
 
+    void InvokeLoadScene()
+    {
+        GameManager.Instance.LoadScene("Credit", UnityEngine.SceneManagement.LoadSceneMode.Single);
+    }
+
     public override void SetDead(bool value)
     {
         isDead = value;
@@ -72,6 +77,9 @@ public class Boss_Teddy : Enemy
             }
             rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
             rigid.useGravity = true;
+
+            anim.SetBool("isDead", true);
+            Invoke("InvokeLoadScene", 8.0f);
         }
         //this.gameObject.SetActive(false);
         //anim.enabled = false;
@@ -102,7 +110,7 @@ public class Boss_Teddy : Enemy
 
     private void Update()
     {
-        if (isDead)
+        if (isDead || target.GetComponent<RoomInfo>().GetRoom() != this.GetComponent<RoomInfo>().GetRoom())
         {
             return;
         }

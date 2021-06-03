@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
+    [SerializeField] private bool isVisibleMousePoint;
 
     private static GameManager instance;
 
@@ -85,6 +86,17 @@ public class GameManager : MonoBehaviour
 
         if (itemManager != null)
             itemManager.Init();
+
+        if(isVisibleMousePoint)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     private void Update()
