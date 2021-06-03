@@ -63,19 +63,19 @@ public class FPPCamController : MonoBehaviour
     public void SetOriginFov(float value) { originFov = value; }
 
     // Start is called before the first frame update
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
+    //private void Awake()
+    //{
+    //    DontDestroyOnLoad(this);
 
-        if(instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    //    if(instance == null)
+    //    {
+    //        instance = this;
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
 
     void Start()
     {

@@ -149,19 +149,27 @@ public class PlayerController : MonoBehaviour
 
     private static PlayerController instance;
 
-    private void Awake()
-    {
-        DontDestroyOnLoad(this);
+    //private void Awake()
+    //{
+    //    Debug.Log(isDead);
 
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    //    if (instance == null)
+    //    {
+    //        DontDestroyOnLoad(this);
+    //        instance = this;
+    //    }
+    //    else
+    //    {
+    //        if(isDead)
+    //        {
+    //            Debug.Log(this.gameObject);
+    //            Destroy(instance.gameObject);
+    //            instance = this;
+    //        }
+    //        else
+    //            Destroy(gameObject);
+    //    }
+    //}
 
     // Start is called before the first frame update
     public void Init()
