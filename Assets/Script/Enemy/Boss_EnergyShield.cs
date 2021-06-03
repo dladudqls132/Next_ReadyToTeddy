@@ -12,6 +12,9 @@ public class Boss_EnergyShield : MonoBehaviour
 
     private bool isDestroy;
 
+    public float GetMaxShieldHp() { return shieldHp; }
+    public float GetCurrentShieldHp() { return currentShieldHp; }
+
     public void SetShieldHp(int value) { shieldHp = value; }
     public bool GetIsDestroy() { return isDestroy; }
 

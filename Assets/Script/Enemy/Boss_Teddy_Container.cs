@@ -138,7 +138,7 @@ public class Boss_Teddy_Container : MonoBehaviour
         {
             if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Root") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
             {
-                if (rigid.velocity.magnitude > 3)
+                if (rigid.velocity.magnitude > 6)
                 {
                     explosion.transform.position = collision.contacts[0].point;
                     explosion.gameObject.SetActive(true);

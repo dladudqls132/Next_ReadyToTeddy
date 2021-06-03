@@ -9,7 +9,7 @@ public enum BossBehavior
     FireBullet,
     Meteor,
     Laser,
-    SpawnMob
+    Shield
 }
 
 public class Boss_Teddy : Enemy
@@ -49,11 +49,11 @@ public class Boss_Teddy : Enemy
     [SerializeField] private float laserCoolTime;
     private float currentLaserCoolTime;
     [SerializeField] private List<Spawner> spawners = new List<Spawner>();
-    [SerializeField] private float spawnMobCoolTime;
-    private float currentSpawnMobCoolTime;
     [SerializeField] private float spawnMobRate;
-    [SerializeField] private GameObject energyShield;
-    [SerializeField] private int shieldHp;
+    [SerializeField] private float ShieldCoolTime;
+    private float currentShieldCoolTime;
+
+    public BossBehavior GetCurrentBehavior() { return behavior; }
 
     void InvokeLoadScene()
     {
@@ -98,7 +98,7 @@ public class Boss_Teddy : Enemy
         laser.GetComponent<Boss_Laser>().SetParent(shotPos);
         laser.SetActive(false);
 
-        currentSpawnMobCoolTime = spawnMobCoolTime;
+        currentShieldCoolTime = ShieldCoolTime;
         for(int i = 0; i < spawners.Count; i++)
         {
             spawners[i].SetSpawnRate(spawnMobRate);
@@ -169,7 +169,7 @@ public class Boss_Teddy : Enemy
                     dropNum = Mathf.Clamp(dropNum, 0, containers.Count - 1);
                 }
             }
-            else if(behavior == BossBehavior.SpawnMob)
+            else if(behavior == BossBehavior.Shield)
             {
                 IncreaseHp(3 * Time.deltaTime);
 
@@ -218,9 +218,9 @@ public class Boss_Teddy : Enemy
         {
             currentLaserCoolTime += Time.deltaTime;
         }
-        if(behavior != BossBehavior.SpawnMob)
+        if(behavior != BossBehavior.Shield)
         {
-            currentSpawnMobCoolTime += Time.deltaTime;
+            currentShieldCoolTime += Time.deltaTime;
         }
     }
 
@@ -228,11 +228,11 @@ public class Boss_Teddy : Enemy
     {
         if(currentHp <= maxHp / 3)
         {
-            if(currentSpawnMobCoolTime >= spawnMobCoolTime)
+            if(currentShieldCoolTime >= ShieldCoolTime)
             {
                 ResetTrigger();
-                currentSpawnMobCoolTime = 0;
-                behavior = BossBehavior.SpawnMob;
+                currentShieldCoolTime = 0;
+                behavior = BossBehavior.Shield;
                 isGod = true;
                 //for(int i = 0; i < spawners.Count; i++)
                 //{
@@ -380,7 +380,7 @@ public class Boss_Teddy : Enemy
         rigid.velocity = move * acceleration * 1.5f;
         this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(this.transform.position.x, originY, this.transform.position.z), Time.deltaTime * 12);
 
-        if(behavior != BossBehavior.SpawnMob)
+        if(behavior != BossBehavior.Shield)
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 12);
 
         this.transform.position = transform.position + rootMotionPos;

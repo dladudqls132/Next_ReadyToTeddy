@@ -58,6 +58,9 @@ public class Enemy : MonoBehaviour
 
     protected bool isGod;
 
+    [SerializeField] protected GameObject energyShield;
+    [SerializeField] protected int shieldHp;
+
     ParticleSystem.Burst[] bursts;
 
     public float GetCurrentHp() { return currentHp; }
@@ -65,6 +68,7 @@ public class Enemy : MonoBehaviour
     public float GetMaxHp() { return maxHp; }
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
+    public GameObject GetEnergyShield() { return energyShield; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed_min, float speed_max, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {

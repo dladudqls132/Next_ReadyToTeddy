@@ -20,6 +20,26 @@ public class UI_BossBarController : MonoBehaviour
 
     private void Start()
     {
+        if (GameObject.FindGameObjectWithTag("Boss") != null)
+        {
+            if (boss == null)
+            {
+                boss = GameObject.FindGameObjectWithTag("Boss");
+
+                for (int i = 0; i < this.transform.childCount; i++)
+                {
+                    this.transform.GetChild(i).gameObject.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < this.transform.childCount; i++)
+            {
+                this.transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
         rectTransform = this.GetComponent<RectTransform>();
 
 
@@ -36,19 +56,33 @@ public class UI_BossBarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindGameObjectWithTag("Boss") != null)
-        {
-            if(boss == null)
-            {
-                boss = GameObject.FindGameObjectWithTag("Boss");
-            }
-        }
+       
 
         if (boss != null)
         {
             if (barType == BarType.HpBar)
             {
                 image.fillAmount = Mathf.Lerp(image.fillAmount, boss.GetComponent<Enemy>().GetCurrentHp() / boss.GetComponent<Enemy>().GetMaxHp(), Time.deltaTime * 15);
+            }
+            else if(barType == BarType.SheildBar)
+            {
+                if (boss.GetComponent<Boss_Teddy>().GetCurrentBehavior() == BossBehavior.Shield)
+                {
+                    for (int i = 0; i < this.transform.childCount; i++)
+                    {
+                        this.transform.GetChild(i).gameObject.SetActive(true);
+                    }
+                    image.fillAmount = Mathf.Lerp(image.fillAmount, boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetCurrentShieldHp() / boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetMaxShieldHp(), Time.deltaTime * 15);
+                }
+                else
+                {
+                    for (int i = 0; i < this.transform.childCount; i++)
+                    {
+                        this.transform.GetChild(i).gameObject.SetActive(false);
+                    }
+
+
+                }
             }
         }
     }
