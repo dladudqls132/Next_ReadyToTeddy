@@ -30,7 +30,7 @@ public class SoundManager : MonoBehaviour
     {
         if(audioSourceType == AudioSourceType.SFX)
         {
-            audioSource_SFX.pitch = soundInfo.GetInfo(soundName).pitch_min;
+            audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
             audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
         }
         else if(audioSourceType == AudioSourceType.BGM)
