@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Pool_BulletHit pool_bulletHit;
     [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private ItemManager itemManager;
+    [SerializeField] private Settings settings;
+    [SerializeField] private SoundManager soundManager;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -41,6 +43,8 @@ public class GameManager : MonoBehaviour
     public Pool_BulletHit GetPoolBulletHit() { return pool_bulletHit; }
     public Pool_Ragdoll GetPoolRagdoll() { return pool_ragdoll; }
     public ItemManager GetItemManager() { return itemManager; }
+    public Settings GetSettings() { return settings; }
+    public SoundManager GetSoundManager() { return soundManager; }
 
     // Start is called before the first frame update
     void Awake()
@@ -86,6 +90,16 @@ public class GameManager : MonoBehaviour
 
         if (itemManager != null)
             itemManager.Init();
+
+        settings = FindObjectOfType<Settings>();
+
+        if (settings != null)
+            settings.Init();
+
+        soundManager = FindObjectOfType<SoundManager>();
+
+        if (soundManager != null)
+            soundManager.Init();
 
         if(isVisibleMousePoint)
         {

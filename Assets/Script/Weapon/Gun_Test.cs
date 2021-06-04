@@ -113,12 +113,14 @@ public class Gun_Test : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
             }
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.ShotGun_Fire);
 
             hand.GetComponent<Animator>().SetTrigger("Fire_SG");
 
             isReload = false;
             isRecoil = false;
 
+            bool isHitAudioPlay = false;
             for (int i = 0; i < fireNum; i++)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -144,15 +146,24 @@ public class Gun_Test : Gun
                     {
                         Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
+                        //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
+
                         if (!hit2.transform.CompareTag("Head"))
                         {
                             enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+
+                            if(!isHitAudioPlay)
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
                         }
                         else
                         {
                             enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+
+                            if (!isHitAudioPlay)
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
                         }
 
+                        isHitAudioPlay = true;
                         GameManager.Instance.GetCrosshair().ResetAttack();
                         if (enemy.GetIsDead())
                             GameManager.Instance.GetCrosshair().SetAttack_Kill(true);

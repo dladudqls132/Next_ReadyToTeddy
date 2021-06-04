@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6507279743101006098}
   - component: {fileID: 6507279743101006099}
+  - component: {fileID: 6348469470279310182}
   m_Layer: 0
   m_Name: GameManger
   m_TagString: Untagged
@@ -47,5 +48,30 @@ MonoBehaviour:
   UI_pause: {fileID: 0}
   UI_crosshair: {fileID: 0}
   pool_enemy: {fileID: 0}
+  pool_bullet: {fileID: 0}
+  pool_bulletHit: {fileID: 0}
+  pool_ragdoll: {fileID: 0}
+  itemManager: {fileID: 0}
+  settings: {fileID: 6348469470279310182}
   isPause: 0
   isGameOver: 0
+  isCombat: 0
+  isVisibleMousePoint: 0
+--- !u!114 &6348469470279310182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6507279743101006101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487abaff3ae98744eb531ccba0ffd89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    mouseMoveSpeed: 0
+    mainVolume: 0
+    effectVolume: 0
+    backgroundVolume: 0
+  path: 
