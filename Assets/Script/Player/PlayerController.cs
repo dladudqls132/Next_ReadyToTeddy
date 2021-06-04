@@ -819,8 +819,8 @@ public class PlayerController : MonoBehaviour
                         if (isAiming)
                         {
 
-                            mainCam.FovMove(52, 0.07f, 1000);
-                            mainCam.SetOriginFov(52);
+                            //mainCam.FovMove(52, 0.07f, 1000);
+                            //mainCam.SetOriginFov(52);
                             gun.SetIsReload(false);
                         }
                         else

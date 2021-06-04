@@ -51,6 +51,7 @@ public class RobotMovementController : Enemy
         isDead = value;
         if (isDead)
         {
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(AudioSourceType.SFX, SoundType.Explosion);
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
 

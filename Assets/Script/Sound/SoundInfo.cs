@@ -5,7 +5,12 @@ public enum SoundType
 {
     None,
     EnergyGun_Fire,
-    ShotGun_Fire
+    ShotGun_Fire,
+    FlameThrower_Fire,
+    AutoRifle_Fire,
+    Explosion,
+    Hit,
+    WeaknessHit
 }
 
 [System.Serializable]
@@ -17,7 +22,9 @@ public class SoundInfos
     [Range(0, 1)]
     public float volume;
     [Range(0, 3)]
-    public float pitch;
+    public float pitch_min = 1;
+    [Range(0, 3)]
+    public float pitch_max = 1;
 }
 
 [CreateAssetMenu(fileName = "SoundInfo", menuName = "Scriptable Object Asset/SoundInfo")]

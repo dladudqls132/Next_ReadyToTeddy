@@ -9,6 +9,8 @@ public class Gun_FlameThrower : Gun
     [SerializeField] private List<float> originSpeed_max = new List<float>();
     //[SerializeField] private float refillTime;
     private float currentRefillTime;
+    [SerializeField] private float fireSoundRate;
+    private float currentFireSoundRate;
 
     // Start is called before the first frame update
     protected override void Awake()
@@ -27,6 +29,7 @@ public class Gun_FlameThrower : Gun
     // Update is called once per frame
     void Update()
     {
+        currentFireSoundRate += Time.deltaTime;
         //CheckingParent();
 
         if (owner != null)
@@ -182,6 +185,15 @@ public class Gun_FlameThrower : Gun
             }
 
             //hand.GetComponent<Animator>().SetTrigger("Fire_FT");
+
+            if(currentFireSoundRate >= fireSoundRate)
+            {
+                currentFireSoundRate = 0;
+                
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.FlameThrower_Fire);
+            }
+
+
 
             isReload = false;
             isRecoil = false;

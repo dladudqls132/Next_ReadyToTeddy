@@ -55,8 +55,6 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float stunTime;
     [SerializeField] protected float refillTime;
 
-    [SerializeField] protected AudioSource audioSource;
-
     //[SerializeField] private Transform meshRoot;
     [SerializeField] MeshRenderer[] mesh;
     public AnimationClip weaponAnimation;
@@ -72,6 +70,8 @@ public class Gun : MonoBehaviour
     public float GetRecoil() { return recoilMagnitude; }
 
     protected Vector3 direction;
+    [SerializeField] protected bool isAiming;
+    protected bool isAiminged;
 
     public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay, float stunTime, float refillTime)
     {
@@ -99,8 +99,6 @@ public class Gun : MonoBehaviour
         recoilMagnitude = recoil.magnitude;
         haveAmmo = maxAmmo_aMag;
 
-        audioSource = mainCam.GetAudioSource_FX();
-
         for (int i = 0; i < mesh.Length; i++)
         {
             mesh[i].enabled = false;
@@ -109,17 +107,21 @@ public class Gun : MonoBehaviour
 
     public void SetIsAiming(bool value)
     {
+        isAiming = value;
+
         if (value)
         {
             //mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
-
+            mainCam.FovMove(52, 0.07f, 1000);
+            mainCam.SetOriginFov(52);
             this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(aimingRot), Time.deltaTime * 25);
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, aimingPos, Time.deltaTime * 25);
         }
         else
         {
             //mainCam.FovReset();
-
+            if(isAiming)
+                isAiminged = true;
             this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(originRot), Time.deltaTime * 25);
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, originPos, Time.deltaTime * 25);
         }
@@ -204,6 +206,9 @@ public class Gun : MonoBehaviour
             mainCam.FovReset();
             hand.GetComponent<Animator>().ResetTrigger("Fire_AR");
             hand.GetComponent<Animator>().ResetTrigger("Fire_SG");
+
+            if (isAiming)
+                isAiminged = true;
         }
         isReload = value;
         //hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
@@ -212,6 +217,11 @@ public class Gun : MonoBehaviour
     virtual public void SetIsReloadFinish() 
     {
         isReload = false;
+
+        if(isAiminged)
+            SetIsAiming(true);
+
+        isAiminged = false;
 
         if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
         {
