@@ -14,6 +14,8 @@ public class Gun_ChainLightning : Gun
     protected override void Awake()
     {
         base.Awake();
+
+        //audioSource.volume = GameManager.Instance.GetSettings().data.mainVolume;
     }
 
     // Update is called once per frame
@@ -171,6 +173,8 @@ public class Gun_ChainLightning : Gun
             }
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
+
+            audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).volume * GameManager.Instance.GetSettings().data.mainVolume);
 
             if (spark.isPlaying)
                 spark.Stop();

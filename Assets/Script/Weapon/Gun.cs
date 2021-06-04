@@ -55,6 +55,8 @@ public class Gun : MonoBehaviour
     [SerializeField] protected float stunTime;
     [SerializeField] protected float refillTime;
 
+    [SerializeField] protected AudioSource audioSource;
+
     //[SerializeField] private Transform meshRoot;
     [SerializeField] MeshRenderer[] mesh;
     public AnimationClip weaponAnimation;
@@ -96,6 +98,9 @@ public class Gun : MonoBehaviour
         rigid = this.GetComponent<Rigidbody>();
         recoilMagnitude = recoil.magnitude;
         haveAmmo = maxAmmo_aMag;
+
+        if (this.GetComponent<AudioSource>() != null)
+            audioSource = this.GetComponent<AudioSource>();
         //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
 
         //foreach(MeshRenderer m in tempMesh)

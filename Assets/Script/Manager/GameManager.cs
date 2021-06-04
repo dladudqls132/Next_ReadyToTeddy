@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private ItemManager itemManager;
     [SerializeField] private Settings settings;
+    [SerializeField] private SoundInfo soundInfo;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -43,6 +44,7 @@ public class GameManager : MonoBehaviour
     public Pool_Ragdoll GetPoolRagdoll() { return pool_ragdoll; }
     public ItemManager GetItemManager() { return itemManager; }
     public Settings GetSettings() { return settings; }
+    public SoundInfo GetSoundInfo() { return soundInfo; }
 
     // Start is called before the first frame update
     void Awake()
