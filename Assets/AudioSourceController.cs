@@ -11,8 +11,11 @@ public class AudioSourceController : MonoBehaviour
     {
         for(int i = 0; i < audioSourceNum; i++)
         {
-            AudioSource temp = this.gameObject.AddComponent<AudioSource>();
-            audioSources.Add(temp);
+            AudioSource temp = this.GetComponent<AudioSource>();
+            AudioSource temp2 = this.gameObject.AddComponent<AudioSource>();
+            temp2.playOnAwake = false;
+            temp2.spatialBlend = temp.spatialBlend;
+            audioSources.Add(temp2);
         }
     }
 
