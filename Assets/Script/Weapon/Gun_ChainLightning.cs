@@ -174,7 +174,7 @@ public class Gun_ChainLightning : Gun
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
 
-            audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).volume * GameManager.Instance.GetSettings().data.mainVolume);
+            audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.EnergyGun_Fire).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
             if (spark.isPlaying)
                 spark.Stop();
