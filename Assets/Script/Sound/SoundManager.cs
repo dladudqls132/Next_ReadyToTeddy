@@ -20,7 +20,6 @@ public class SoundManager : MonoBehaviour
     {
         if (Camera.main.GetComponent<FPPCamController>() != null)
         {
-            audioSource_SFX = Camera.main.GetComponent<FPPCamController>().GetAudioSource_SFX();
             audioSource_SFX_3D = Camera.main.GetComponent<FPPCamController>().GetAudioSource_SFX_3D();
             audioSource_BGM = Camera.main.GetComponent<FPPCamController>().GetAudioSource_BGM();
         }
@@ -28,7 +27,9 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot(AudioSourceType audioSourceType, SoundType soundName)
     {
-        if(audioSourceType == AudioSourceType.SFX)
+        audioSource_SFX = Camera.main.GetComponent<FPPCamController>().GetAudioSource_SFX();
+
+        if (audioSourceType == AudioSourceType.SFX)
         {
             audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
             audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);

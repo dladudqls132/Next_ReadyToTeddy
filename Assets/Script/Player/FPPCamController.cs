@@ -45,9 +45,12 @@ public class FPPCamController : MonoBehaviour
 
     public Vector3 shakeVec;
     private bool overWrite;
-    [SerializeField] private AudioSource audioSource_SFX;
-    [SerializeField] private AudioSource audioSource_SFX_3D;
+    private AudioSource audioSource_SFX;
+    private AudioSource audioSource_SFX_3D;
     [SerializeField] private AudioSource audioSource_BGM;
+
+    [SerializeField] private AudioSourceController audioSourceController_SFX;
+    [SerializeField] private AudioSourceController audioSourceController_SFX_3D;
 
     [Header("Hipfire: ")]
     [SerializeField] private Vector3 recoilRotation = new Vector3(2f, 2f, 2f);
@@ -65,8 +68,10 @@ public class FPPCamController : MonoBehaviour
     public float GetRealOriginFov() { return realOriginFov; }
     public void SetOriginFov(float value) { originFov = value; }
     public void SetCameraMoveSpeed(float value) { cameraMoveSpeed = value; }
-    public AudioSource GetAudioSource_SFX() { return audioSource_SFX; }
-    public AudioSource GetAudioSource_SFX_3D() { return audioSource_SFX_3D; }
+
+    
+    public AudioSource GetAudioSource_SFX() { return audioSourceController_SFX.GetAudioSource(); }
+    public AudioSource GetAudioSource_SFX_3D() { return audioSourceController_SFX_3D.GetAudioSource(); }
     public AudioSource GetAudioSource_BGM() { return audioSource_BGM; }
 
     // Start is called before the first frame update
