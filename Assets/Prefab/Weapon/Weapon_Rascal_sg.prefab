@@ -4995,7 +4995,7 @@ MonoBehaviour:
   maxAmmo_aMag: 20
   haveAmmo: 20
   currentAmmo: 20
-  damagePerBullet: 8
+  damagePerBullet: 10
   muzzleFlash: {fileID: 5753811239393892683}
   spreadAngle_normal: 10
   spreadAngle_aiming: 10
@@ -5004,7 +5004,6 @@ MonoBehaviour:
   isPlayerEnter: 0
   stunTime: 0
   refillTime: 0
-  audioSource: {fileID: 0}
   mesh:
   - {fileID: 3364975504997257939}
   - {fileID: 5515010225595909303}
@@ -5012,6 +5011,7 @@ MonoBehaviour:
   - {fileID: 5279049758434459306}
   - {fileID: 6978802975959752245}
   weaponAnimation: {fileID: 7400000, guid: a08980301cd02ef40aec0067c9037e02, type: 2}
+  isAiming: 0
 --- !u!54 &2074986249233204841
 Rigidbody:
   m_ObjectHideFlags: 0
