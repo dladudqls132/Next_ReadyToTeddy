@@ -99,15 +99,7 @@ public class Gun : MonoBehaviour
         recoilMagnitude = recoil.magnitude;
         haveAmmo = maxAmmo_aMag;
 
-        if (this.GetComponent<AudioSource>() != null)
-            audioSource = this.GetComponent<AudioSource>();
-        //MeshRenderer[] tempMesh = meshRoot.GetComponentsInChildren<MeshRenderer>();
-
-        //foreach(MeshRenderer m in tempMesh)
-        //{
-        //    m.enabled = false;
-        //}
-
+        audioSource = mainCam.GetAudioSource_FX();
 
         for (int i = 0; i < mesh.Length; i++)
         {

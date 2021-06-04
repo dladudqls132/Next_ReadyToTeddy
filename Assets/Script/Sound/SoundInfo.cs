@@ -4,7 +4,8 @@ using UnityEditor;
 public enum SoundType
 {
     None,
-    EnergyGun_Fire
+    EnergyGun_Fire,
+    ShotGun_Fire
 }
 
 [System.Serializable]

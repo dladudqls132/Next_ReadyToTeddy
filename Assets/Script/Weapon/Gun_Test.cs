@@ -113,6 +113,7 @@ public class Gun_Test : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
             }
 
+            audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.ShotGun_Fire).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.ShotGun_Fire).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
             hand.GetComponent<Animator>().SetTrigger("Fire_SG");
 
