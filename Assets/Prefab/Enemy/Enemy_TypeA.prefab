@@ -276,7 +276,7 @@ Transform:
   - {fileID: 9007834597321550503}
   - {fileID: 4106824694723210891}
   m_Father: {fileID: 2813305806374449117}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1977865230895264728
 GameObject:
@@ -735,8 +735,8 @@ Transform:
   m_LocalPosition: {x: 495.30255, y: 9.998169, z: 247.33548}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3168685696292068075}
   - {fileID: 365484949147750195}
+  - {fileID: 3168685696292068075}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -858,6 +858,8 @@ MonoBehaviour:
   magazineDropRate: 50
   isRigidity: 0
   rigidityTime: 0
+  energyShield: {fileID: 0}
+  shieldHp: 0
   behavior: 0
   attackDelay: 2
   ragdoll: {fileID: 0}
@@ -1774,11 +1776,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5874616921118033099}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: -9.819159e-11}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1.004558, z: 1.001858}
   m_Children: []
   m_Father: {fileID: 2813305806374449117}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &3154855177376362451
 SkinnedMeshRenderer:

@@ -61,6 +61,7 @@ public class FPPCamController : MonoBehaviour
     public float GetOriginFov() { return originFov; }
     public float GetRealOriginFov() { return realOriginFov; }
     public void SetOriginFov(float value) { originFov = value; }
+    public void SetCameraMoveSpeed(float value) { cameraMoveSpeed = value; }
 
     // Start is called before the first frame update
     //private void Awake()
@@ -127,14 +128,14 @@ public class FPPCamController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.PageUp))
-        {
-            cameraMoveSpeed += 5;
-        }
-        else if (Input.GetKeyDown(KeyCode.PageDown))
-        {
-            cameraMoveSpeed -= 5;
-        }
+        //if (Input.GetKeyDown(KeyCode.PageUp))
+        //{
+        //    cameraMoveSpeed += 5;
+        //}
+        //else if (Input.GetKeyDown(KeyCode.PageDown))
+        //{
+        //    cameraMoveSpeed -= 5;
+        //}
 
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         //RaycastHit hit;
