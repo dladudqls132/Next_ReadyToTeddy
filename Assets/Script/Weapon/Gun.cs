@@ -89,6 +89,8 @@ public class Gun : MonoBehaviour
         this.refillTime = refillTime;
     }
 
+
+
     protected virtual void Awake()
     {
         currentAmmo = maxAmmo_aMag;
@@ -127,18 +129,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    public GunType GetGunType() { return gunType; }
-    public int GetMaxAmmoCount() { return maxAmmo; }
-    public int GetMaxAmmo_aMagCount() { return maxAmmo_aMag; }
-    public void SetMaxAmmoCount(int ammo) { maxAmmo = ammo; }
-    public void AddAmmo(int ammo) { haveAmmo += ammo; if (haveAmmo > maxAmmo) haveAmmo = maxAmmo; }
-    public int GetHaveAmmoCount() { return haveAmmo; }
-    public int GetCurrentAmmoCount() { return currentAmmo; }
-    public bool GetIsReload() { return isReload; }
-    public bool GetIsShot() { return isShot; }
-    public void SetIsShot(bool value) { isShot = value; } 
-    public bool GetIsRecoil() { return isRecoil; }
-    public void SetIsRecoil(bool value) { isRecoil = value; }
+
 
     public void SetOwner(GameObject who, Transform hand, Transform parent) 
     { 
@@ -193,10 +184,6 @@ public class Gun : MonoBehaviour
             item.SetActive(true);
         }
     }
-    public GameObject GetOwner() { return owner; }
-
-    public float GetDamagePerBullet() { return damagePerBullet; }
-    public void SetDamagePerBullet(float value) { damagePerBullet = value; }
 
     public virtual void SetIsReload(bool value)
     {
@@ -218,8 +205,11 @@ public class Gun : MonoBehaviour
     {
         isReload = false;
 
-        if(isAiminged)
+        if (isAiminged)
+        {
+            GameManager.Instance.GetPlayer().SetIsAiming(true);
             SetIsAiming(true);
+        }
 
         isAiminged = false;
 
@@ -234,6 +224,25 @@ public class Gun : MonoBehaviour
             haveAmmo = 0;
         }
     }
+
+    public bool GetIsAiming() { return isAiming; }
+    public GunType GetGunType() { return gunType; }
+    public int GetMaxAmmoCount() { return maxAmmo; }
+    public int GetMaxAmmo_aMagCount() { return maxAmmo_aMag; }
+    public void SetMaxAmmoCount(int ammo) { maxAmmo = ammo; }
+    public void AddAmmo(int ammo) { haveAmmo += ammo; if (haveAmmo > maxAmmo) haveAmmo = maxAmmo; }
+    public int GetHaveAmmoCount() { return haveAmmo; }
+    public int GetCurrentAmmoCount() { return currentAmmo; }
+    public bool GetIsReload() { return isReload; }
+    public bool GetIsShot() { return isShot; }
+    public void SetIsShot(bool value) { isShot = value; }
+    public bool GetIsRecoil() { return isRecoil; }
+    public void SetIsRecoil(bool value) { isRecoil = value; }
+
+    public GameObject GetOwner() { return owner; }
+
+    public float GetDamagePerBullet() { return damagePerBullet; }
+    public void SetDamagePerBullet(float value) { damagePerBullet = value; }
 
     public Quaternion GetHandFireRot() { return Quaternion.Euler(handFireRot); }
 

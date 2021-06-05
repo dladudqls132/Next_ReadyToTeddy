@@ -146,6 +146,7 @@ public class PlayerController : MonoBehaviour
     public Inventory GetInventory() { return inventory; }
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
+    public void SetIsAiming(bool value) { isAiming = value; }
 
     private static PlayerController instance;
 

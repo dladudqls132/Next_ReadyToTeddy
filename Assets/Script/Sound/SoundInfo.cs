@@ -10,7 +10,9 @@ public enum SoundType
     AutoRifle_Fire,
     Explosion,
     Hit,
-    WeaknessHit
+    WeaknessHit,
+    Walk_1,
+    Walk_2
 }
 
 [System.Serializable]
