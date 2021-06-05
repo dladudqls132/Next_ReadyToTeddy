@@ -11,6 +11,7 @@ public enum AudioSourceType
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundInfo soundInfo;
+    [SerializeField] private BGMSoundInfo bgmSoundInfo;
 
     [SerializeField] private AudioSourceController audioSourceController_SFX;
     [SerializeField] private AudioSourceController audioSourceController_SFX_3D;
@@ -18,6 +19,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource audioSource_SFX;
     //private AudioSource audioSource_SFX_3D;
     [SerializeField] private AudioSource audioSource_BGM;
+    private BGMSoundType bgm;
 
     // Start is called before the first frame update
     public void Init()
@@ -48,8 +50,6 @@ public class SoundManager : MonoBehaviour
 
         audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
 
-        Debug.Log(audioSource_SFX.isPlaying);
-        Debug.Log(pos);
         audioSource_SFX.transform.position = pos;
 
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
@@ -114,11 +114,20 @@ public class SoundManager : MonoBehaviour
         return audioSource_SFX;
     }
 
-    public void AudioPlayBGM(SoundType soundName, bool loop)
+    public void AudioPlayBGM(BGMSoundType soundName, bool loop)
     {
-        audioSource_BGM.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_BGM.clip = bgmSoundInfo.GetInfo(soundName).clip;
         audioSource_BGM.loop = loop;
+
+        audioSource_BGM.volume = bgmSoundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.backgroundVolume;
+        bgm = soundName;
+
         audioSource_BGM.Stop();
         audioSource_BGM.Play();
+    }
+
+    private void Update()
+    {
+        audioSource_BGM.volume = bgmSoundInfo.GetInfo(bgm).volume * GameManager.Instance.GetSettings().data.backgroundVolume;
     }
 }

@@ -80,7 +80,7 @@ public class Bullet_CL : Bullet
                     //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
                     //tempHit.GetComponent<HitEffect>().SetHitEffect(coll[i].GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-                    
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, coll[i].transform, false);
 
                     if (num == 2)
                         break;
@@ -92,6 +92,7 @@ public class Bullet_CL : Bullet
             other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
             //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, other.transform, false);
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
             ActiveFalse();
         }
