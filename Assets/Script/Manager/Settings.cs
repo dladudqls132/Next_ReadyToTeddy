@@ -77,7 +77,8 @@ public class Settings : MonoBehaviour
 
     public void SetData()
     {
-        cam.SetCameraMoveSpeed(data.mouseMoveSpeed);
+        if(cam != null)
+            cam.SetCameraMoveSpeed(data.mouseMoveSpeed);
     }
 
     public void LoadData()
