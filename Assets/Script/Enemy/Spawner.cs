@@ -52,10 +52,13 @@ public class Spawner : MonoBehaviour
 
         if (currentSpawnRate >= spawnRate)
         {
-            SpawnMob();
+            if (!isSpawn)
+            {
+                SpawnMob();
 
-            isSpawn = true;
-            currentSpawnRate = 0;
+                isSpawn = true;
+                currentSpawnRate = 0;
+            }
         }
     }
 }

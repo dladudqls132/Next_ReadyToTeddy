@@ -11,48 +11,65 @@ public enum AudioSourceType
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] private SoundInfo soundInfo;
-    [SerializeField] private AudioSource audioSource_SFX;
-    [SerializeField] private AudioSource audioSource_SFX_3D;
+
+    [SerializeField] private AudioSourceController audioSourceController_SFX;
+    [SerializeField] private AudioSourceController audioSourceController_SFX_3D;
+
+    private AudioSource audioSource_SFX;
+    //private AudioSource audioSource_SFX_3D;
     [SerializeField] private AudioSource audioSource_BGM;
 
     // Start is called before the first frame update
     public void Init()
     {
-        if (Camera.main.GetComponent<FPPCamController>() != null)
-        {
-            audioSource_BGM = Camera.main.GetComponent<FPPCamController>().GetAudioSource_BGM();
-        }
+
     }
 
-    public void AudioPlayOneShot(AudioSourceType audioSourceType, SoundType soundName)
+    public void SetPauseAll(bool value)
     {
-        audioSource_SFX = Camera.main.GetComponent<FPPCamController>().GetAudioSource_SFX();
 
-        if (audioSourceType == AudioSourceType.SFX)
-        {
-            audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
-            audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
-        }
-        else if(audioSourceType == AudioSourceType.BGM)
-        {
-            audioSource_BGM.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
-            audioSource_BGM.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
-        }
     }
 
-    public void AudioPlayOneShot3D(AudioSourceType audioSourceType, SoundType soundName)
+    public void AudioPlayOneShot(SoundType soundName)
     {
-        audioSource_SFX_3D = Camera.main.GetComponent<FPPCamController>().GetAudioSource_SFX_3D();
+        audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
 
-        if (audioSourceType == AudioSourceType.SFX)
-        {
-            audioSource_SFX_3D.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
-            audioSource_SFX_3D.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
-        }
-        else if (audioSourceType == AudioSourceType.BGM)
-        {
-            audioSource_BGM.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
-            audioSource_BGM.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
-        }
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+
+    }
+
+    public void AudioPlayOneShot3D(SoundType soundName, Vector3 pos, bool loop)
+    {
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+
+        audioSource_SFX.transform.position = pos;
+
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+
+        audioSource_SFX.loop = loop;
+
+        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+    }
+
+    public void AudioPlayOneShot3D(SoundType soundName, Transform parent, bool loop)
+    {
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+
+        audioSource_SFX.transform.position = parent.position;
+        audioSource_SFX.transform.SetParent(parent);
+
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+
+        audioSource_SFX.loop = loop;
+
+        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+    }
+
+    public void AudioPlayBGM(SoundType soundName, bool loop)
+    {
+        audioSource_BGM.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_BGM.loop = loop;
+        audioSource_BGM.Play();
     }
 }

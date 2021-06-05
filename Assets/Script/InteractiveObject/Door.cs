@@ -32,6 +32,7 @@ public class Door : MonoBehaviour
         {
             if (!GameManager.Instance.GetIsCombat())
             {
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.GateOpen, this.transform, false);
                 isOpened = true;
             }
         }

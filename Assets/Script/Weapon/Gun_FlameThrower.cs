@@ -190,7 +190,7 @@ public class Gun_FlameThrower : Gun
             {
                 currentFireSoundRate = 0;
                 
-                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.FlameThrower_Fire);
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.FlameThrower_Fire);
             }
 
 

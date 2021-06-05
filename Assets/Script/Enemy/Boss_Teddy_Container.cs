@@ -106,8 +106,8 @@ public class Boss_Teddy_Container : MonoBehaviour
     {
         rigid.constraints = RigidbodyConstraints.None;
         currentDropReadyTime = 0;
-        floorRange.Stop();
-        floorRange.gameObject.SetActive(false);
+        //floorRange.Stop();
+        //floorRange.gameObject.SetActive(false);
         isDrop = true;
         isDrop_ready = false;
         rigid.useGravity = true;
@@ -138,6 +138,9 @@ public class Boss_Teddy_Container : MonoBehaviour
         {
             if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Root") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
             {
+                floorRange.Stop();
+                floorRange.gameObject.SetActive(false);
+
                 if (rigid.velocity.magnitude > 6)
                 {
                     explosion.transform.position = collision.contacts[0].point;

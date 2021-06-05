@@ -110,7 +110,7 @@ public class Gun_AR : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
             }
 
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.AutoRifle_Fire);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
 
             isReload = false;
@@ -144,12 +144,12 @@ public class Gun_AR : Gun
                     if (!hit2.transform.CompareTag("Head"))
                     {
                         enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
-                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     }
                     else
                     {
                         enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.WeaknessHit);
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 
                     GameManager.Instance.GetCrosshair().ResetAttack();

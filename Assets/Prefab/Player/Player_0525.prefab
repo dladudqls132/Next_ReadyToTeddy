@@ -187,7 +187,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2306817717154194263}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -198,7 +198,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 1a301cf8b82670e4db279ac27a4f29d9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -220,8 +220,26 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 171.80849, y: 11.277238, z: 17.780447}
+  - {x: 171.7709, y: 11.288823, z: 17.943474}
+  - {x: 171.73332, y: 11.293051, z: 18.106503}
+  - {x: 171.69574, y: 11.289922, z: 18.26953}
+  - {x: 171.65814, y: 11.279436, z: 18.432556}
+  - {x: 171.62056, y: 11.261593, z: 18.595585}
+  - {x: 171.58298, y: 11.236392, z: 18.758612}
+  - {x: 171.5454, y: 11.203835, z: 18.921638}
+  - {x: 171.50781, y: 11.16392, z: 19.084667}
+  - {x: 171.47023, y: 11.116649, z: 19.247694}
+  - {x: 171.43265, y: 11.062019, z: 19.41072}
+  - {x: 171.39505, y: 11.000033, z: 19.57375}
+  - {x: 171.35747, y: 10.930691, z: 19.736776}
+  - {x: 171.31989, y: 10.853991, z: 19.899803}
+  - {x: 171.2823, y: 10.769934, z: 20.062832}
+  - {x: 171.24472, y: 10.678519, z: 20.225859}
+  - {x: 171.20714, y: 10.579747, z: 20.388885}
+  - {x: 171.16954, y: 10.4736185, z: 20.551914}
+  - {x: 171.04948, y: 10.111091, z: 21.072702}
+  - {x: 171.16954, y: 10.4736185, z: 20.551914}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -242,8 +260,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 0, b: 0.24185085, a: 1}
+      key1: {r: 0.8000001, g: 0.019607844, b: 0.20784315, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -507,6 +525,12 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 6.0327196
       objectReference: {fileID: 0}
+    - target: {fileID: 5217084276991895108, guid: b7eef4d4afb5b0b44ab516059364fe32,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5aac950f4d144184580df10176a64ce9,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b7eef4d4afb5b0b44ab516059364fe32, type: 3}
 --- !u!1 &7092195717643279861 stripped

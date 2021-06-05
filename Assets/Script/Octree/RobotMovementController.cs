@@ -44,6 +44,8 @@ public class RobotMovementController : Enemy
         
         explosion = Instantiate(explosion);
         explosion.gameObject.SetActive(false);
+
+        SetIsDead(false);
     }
 
     public override void SetDead(bool value)
@@ -51,7 +53,7 @@ public class RobotMovementController : Enemy
         isDead = value;
         if (isDead)
         {
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(AudioSourceType.SFX, SoundType.Explosion);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, this.transform.position, false);
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
 
@@ -116,6 +118,8 @@ public class RobotMovementController : Enemy
             if(anim != null)
             anim.enabled = true;
             this.gameObject.SetActive(true);
+            //Debug.Log("asd");
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Warning_TypeC, this.transform, true);
         }
 
         //this.gameObject.SetActive(false);

@@ -13,7 +13,13 @@ public enum SoundType
     WeaknessHit,
     Walk,
     Jump,
-    Land
+    Land,
+    GateOpen,
+    Dash,
+    Laser,
+    EnergyBall,
+    Warning_Floor,
+    Warning_TypeC
 }
 
 [System.Serializable]

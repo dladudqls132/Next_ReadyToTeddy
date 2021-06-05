@@ -265,6 +265,7 @@ public class Boss_Teddy : Enemy
             laser.transform.position = shotPos.position;
             behavior = BossBehavior.Laser;
             anim.SetTrigger("Laser");
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Laser, this.transform, false);
             currentLaserCoolTime = 0;
             return;
         }
@@ -280,6 +281,7 @@ public class Boss_Teddy : Enemy
 
             //    return;
             //}
+          
             behavior = BossBehavior.FireBullet;
             ResetTrigger();
             anim.SetTrigger("FireBullet");
@@ -401,7 +403,7 @@ public class Boss_Teddy : Enemy
     {
         //GameObject temp = Instantiate(bullet, shotPos.position, Quaternion.LookRotation((target.position - this.transform.position).normalized));
         //temp.GetComponent<Bullet_Boss>().Fire((target.position - shotPos.position).normalized, bulletSpeed);
-
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.EnergyBall, this.transform, false);
         GameObject temp = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy);
         temp.transform.position = shotPos.position;
         temp.transform.rotation = shotPos.rotation;

@@ -74,7 +74,7 @@ public class Bullet_CL : Bullet
                     GameObject temp = Instantiate(chain);
                     temp.GetComponent<Chain>().SetLine(other.transform.root, coll[i].transform, stunTime);
 
-                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     coll[i].GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
                     //coll[i].GetComponent<Enemy>().SetRigidity(true, stunTime);
                     //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
@@ -92,7 +92,7 @@ public class Bullet_CL : Bullet
             other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
             //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
             ActiveFalse();
         }
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))

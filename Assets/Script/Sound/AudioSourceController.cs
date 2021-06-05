@@ -4,27 +4,37 @@ using UnityEngine;
 
 public class AudioSourceController : MonoBehaviour
 {
-    private List<AudioSource> audioSources = new List<AudioSource>();
+    enum AudioSourceType
+    {
+        Normal,
+        World
+    }
+
+    private List<GameObject> audioSources = new List<GameObject>();
+
+    [SerializeField] private GameObject audioSource;
     [SerializeField] private int audioSourceNum;
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < audioSourceNum; i++)
+
+        for (int i = 0; i < audioSourceNum; i++)
         {
-            AudioSource temp = this.GetComponent<AudioSource>();
-            AudioSource temp2 = this.gameObject.AddComponent<AudioSource>();
-            temp2.playOnAwake = false;
-            temp2.spatialBlend = temp.spatialBlend;
-            audioSources.Add(temp2);
+            GameObject temp = Instantiate(audioSource, this.transform);
+            audioSources.Add(temp);
         }
+
     }
 
-    public AudioSource GetAudioSource()
+    public GameObject GetAudioSource()
     {
-        for(int i = 0; i < audioSources.Count; i++)
+        for (int i = 0; i < audioSources.Count; i++)
         {
-            if (!audioSources[i].isPlaying)
-                return audioSources[i];
+            if (!audioSources[i].GetComponent<AudioSource>().isPlaying || !audioSources[i].activeSelf)
+            {
+                audioSources[i].GetComponent<AudioSource>().Stop();
+                return audioSources[i].gameObject;
+            }
         }
 
         return null;

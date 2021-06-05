@@ -113,7 +113,7 @@ public class Gun_Test : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
             }
 
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.ShotGun_Fire);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.ShotGun_Fire);
 
             hand.GetComponent<Animator>().SetTrigger("Fire_SG");
 
@@ -153,14 +153,14 @@ public class Gun_Test : Gun
                             enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
 
                             if(!isHitAudioPlay)
-                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                         }
                         else
                         {
                             enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
 
                             if (!isHitAudioPlay)
-                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                         }
 
                         isHitAudioPlay = true;

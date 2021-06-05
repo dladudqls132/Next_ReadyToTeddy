@@ -420,7 +420,7 @@ public class PlayerController : MonoBehaviour
             if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
             {
                 if(!isLanding)
-                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Land);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Land);
 
                 isLanding = true;
                 hand.GetComponent<Animator>().SetTrigger("Landing");
@@ -655,6 +655,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && !isSlide && !isClimbing && !isClimbUp && moveDirection != Vector3.zero && currentDashCount > 0 && !isDash)
         {
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Dash);
+
             isDash = true;
             currentDashCount--;
 
@@ -863,7 +865,7 @@ public class PlayerController : MonoBehaviour
             hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
             canJump = false;
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Jump);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
 
             if (isJumpByObject)
             {
@@ -1235,7 +1237,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!footstep)
                     {
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Walk);
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Walk);
                         footstep = true;
                     }
                 }
