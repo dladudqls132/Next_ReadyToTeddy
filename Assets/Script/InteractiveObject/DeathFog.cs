@@ -10,7 +10,7 @@ public class DeathFog : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().DecreaseHp(30);
+            other.GetComponent<PlayerController>().DecreaseHp(10);
             other.transform.position = returnPos.position;
         }
     }

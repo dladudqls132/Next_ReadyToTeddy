@@ -233,7 +233,7 @@ public class Boss_Teddy : Enemy
 
     void UpdateBehavior()
     {
-        if(currentHp <= maxHp -100)
+        if(currentHp <= maxHp / 3)
         {
             if(currentShieldCoolTime >= ShieldCoolTime)
             {

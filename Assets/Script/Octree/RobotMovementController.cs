@@ -31,10 +31,11 @@ public class RobotMovementController : Enemy
 	private Vector3 lastDestination;
 	[SerializeField] private SphereCollider sphereCollider;
     Vector3 move;
+    bool isEnabled;
 
     private void OnEnable()
     {
-        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Warning_TypeC, this.transform, true);
+        isEnabled = true;
     }
 
     //LineRenderer line;
@@ -125,7 +126,8 @@ public class RobotMovementController : Enemy
             anim.enabled = true;
             this.gameObject.SetActive(true);
 
-            //GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Warning_TypeC, this.transform, true);
+          
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Warning_TypeC, this.transform, true);
         }
 
         //this.gameObject.SetActive(false);

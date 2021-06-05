@@ -32,32 +32,39 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot(SoundType soundName)
     {
-        if (audioSourceController_SFX.GetAudioSource() != null)
-            audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
+        if (audioSourceController_SFX.GetAudioSource() == null) return;
+
+        audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
 
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+        audioSource_SFX.Stop();
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
     }
 
     public void AudioPlayOneShot3D(SoundType soundName, Vector3 pos, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() != null)
-            audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+        if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
 
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+
+        Debug.Log(audioSource_SFX.isPlaying);
+        Debug.Log(pos);
         audioSource_SFX.transform.position = pos;
 
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
 
         audioSource_SFX.loop = loop;
 
+        audioSource_SFX.Stop();
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
     }
 
     public AudioSource AudioPlayOneShot3D_Get(SoundType soundName, Vector3 pos, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() != null)
-            audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+        if (audioSourceController_SFX_3D.GetAudioSource() == null) return null;
+
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
 
         audioSource_SFX.transform.position = pos;
 
@@ -65,6 +72,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource_SFX.loop = loop;
 
+        audioSource_SFX.Stop();
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
         return audioSource_SFX;
@@ -72,7 +80,8 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot3D(SoundType soundName, Transform parent, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() != null)
+        if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
+
         audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
 
         audioSource_SFX.transform.position = parent.position;
@@ -82,13 +91,15 @@ public class SoundManager : MonoBehaviour
 
         audioSource_SFX.loop = loop;
 
+        audioSource_SFX.Stop();
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
     }
 
     public AudioSource AudioPlayOneShot3D_Get(SoundType soundName, Transform parent, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() != null)
-            audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+        if (audioSourceController_SFX_3D.GetAudioSource() == null) return null;
+
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
 
         audioSource_SFX.transform.position = parent.position;
         audioSource_SFX.transform.SetParent(parent);
@@ -97,6 +108,7 @@ public class SoundManager : MonoBehaviour
 
         audioSource_SFX.loop = loop;
 
+        audioSource_SFX.Stop();
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
         return audioSource_SFX;
@@ -106,6 +118,7 @@ public class SoundManager : MonoBehaviour
     {
         audioSource_BGM.clip = soundInfo.GetInfo(soundName).clip;
         audioSource_BGM.loop = loop;
+        audioSource_BGM.Stop();
         audioSource_BGM.Play();
     }
 }

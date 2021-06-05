@@ -39,7 +39,7 @@ public class Room : MonoBehaviour
         if(other.GetComponent<RoomInfo>() != null)
             other.GetComponent<RoomInfo>().SetRoom(this.transform.root.GetComponent<Room>());
 
-        if(other.CompareTag("Enemy"))
+        if(other.CompareTag("Enemy") || other.CompareTag("Boss"))
         {
             if(!enemies.Contains(other.GetComponent<Enemy>()))
                 enemies.Add(other.GetComponent<Enemy>());
