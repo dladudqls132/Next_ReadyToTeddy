@@ -31,12 +31,6 @@ public class RobotMovementController : Enemy
 	private Vector3 lastDestination;
 	[SerializeField] private SphereCollider sphereCollider;
     Vector3 move;
-    bool isEnabled;
-
-    private void OnEnable()
-    {
-        isEnabled = true;
-    }
 
     //LineRenderer line;
     // Use this for initialization

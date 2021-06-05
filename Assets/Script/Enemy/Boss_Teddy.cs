@@ -170,7 +170,7 @@ public class Boss_Teddy : Enemy
             }
             else if(behavior == BossBehavior.Shield)
             {
-                IncreaseHp(100 * Time.deltaTime);
+                IncreaseHp(50 * Time.deltaTime);
 
                 if (energyShield != null)
                 {

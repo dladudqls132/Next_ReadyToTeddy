@@ -219,17 +219,20 @@ MonoBehaviour:
   isDead: 0
   maxHp: 60
   currentHp: 0
-  damage: 20
+  damage: 15
   speed_min: 3
   speed_max: 5
   speed: 0
   detectRange: 100
   attackRange: 3
   combatTime: 0
-  potionDropRate: 0
-  magazineDropRate: 100
+  potionDropRate: 20
+  magazineDropRate: 80
   isRigidity: 0
   rigidityTime: 0
+  energyShield_prefab: {fileID: 0}
+  energyShield: {fileID: 0}
+  shieldHp: 0
   behavior: 0
   maxDistanceRebuildPath: 1
   acceleration: 3
