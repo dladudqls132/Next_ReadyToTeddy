@@ -84,7 +84,8 @@ public class UI_BossBarController : MonoBehaviour
                         }
                     }
 
-                    image.fillAmount = Mathf.Lerp(image.fillAmount, boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetCurrentShieldHp() / boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetMaxShieldHp(), Time.deltaTime * 15);
+                    if(boss.GetComponent<Enemy>().GetEnergyShield() != null)
+                        image.fillAmount = Mathf.Lerp(image.fillAmount, boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetCurrentShieldHp() / boss.GetComponent<Enemy>().GetEnergyShield().GetComponent<Boss_EnergyShield>().GetMaxShieldHp(), Time.deltaTime * 15);
                 }
                 else
                 {

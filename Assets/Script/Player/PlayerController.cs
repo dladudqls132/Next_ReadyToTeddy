@@ -1447,7 +1447,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckingHp()
     {
-        if (currentHP <= 0)
+        if ((int)currentHP <= 0)
         {
             currentHP = 0;
 
