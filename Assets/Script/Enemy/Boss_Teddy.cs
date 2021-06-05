@@ -38,7 +38,6 @@ public class Boss_Teddy : Enemy
     [SerializeField] private float meteorDropCoolTime;
     private float currentMeteorDropCoolTime;
     [SerializeField] private float bulletSpeed;
-    private bool isMeteor;
     [SerializeField] private List<GameObject> containers = new List<GameObject>();
     int dropNum;
     [SerializeField] private ParticleSystem fireStart;
@@ -46,6 +45,7 @@ public class Boss_Teddy : Enemy
     [SerializeField] private float turnDirTime;
     private float currentTurnDirTime;
     private Vector3 moveDir;
+    [SerializeField] private float laserDamage;
     [SerializeField] private float laserCoolTime;
     private float currentLaserCoolTime;
     [SerializeField] private List<Spawner> spawners = new List<Spawner>();
@@ -246,13 +246,16 @@ public class Boss_Teddy : Enemy
             }
         }
 
-        if (currentMeteorCoolTime >= meteorCoolTime)
+        if (currentHp <= maxHp - maxHp / 3)
         {
-            ResetTrigger();
-            behavior = BossBehavior.Meteor;
-            anim.SetBool("isMeteor", true);
-            currentMeteorCoolTime = 0;
-            return;
+            if (currentMeteorCoolTime >= meteorCoolTime)
+            {
+                ResetTrigger();
+                behavior = BossBehavior.Meteor;
+                anim.SetBool("isMeteor", true);
+                currentMeteorCoolTime = 0;
+                return;
+            }
         }
 
         if (currentLaserCoolTime >= laserCoolTime)
@@ -325,6 +328,7 @@ public class Boss_Teddy : Enemy
         if (behavior == BossBehavior.Laser)
         {
             laser.SetActive(true);
+            laser.GetComponent<Boss_Laser>().SetDamage(laserDamage);
         }
         else
         {

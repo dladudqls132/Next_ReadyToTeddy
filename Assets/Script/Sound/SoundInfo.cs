@@ -11,8 +11,9 @@ public enum SoundType
     Explosion,
     Hit,
     WeaknessHit,
-    Walk_1,
-    Walk_2
+    Walk,
+    Jump,
+    Land
 }
 
 [System.Serializable]

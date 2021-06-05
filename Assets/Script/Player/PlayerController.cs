@@ -419,6 +419,9 @@ public class PlayerController : MonoBehaviour
 
             if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
             {
+                if(!isLanding)
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Land);
+
                 isLanding = true;
                 hand.GetComponent<Animator>().SetTrigger("Landing");
                 headBobValue = Mathf.PI;
@@ -860,6 +863,7 @@ public class PlayerController : MonoBehaviour
             hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
             canJump = false;
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Jump);
 
             if (isJumpByObject)
             {
@@ -1062,8 +1066,10 @@ public class PlayerController : MonoBehaviour
 
         if (gun != null)
         {
-            if (this.gun.GetIsReload())
-                this.gun.SetIsReload(false);
+            if (gun.GetIsReload())
+                gun.SetIsReload(false);
+            if (gun.GetIsAiming())
+                gun.SetIsAiming(false);
         }
 
         tempWeapon = weapon;
@@ -1128,6 +1134,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool footstep;
+
     private void HeadBob()
     {
         if (!isSlide)
@@ -1176,6 +1184,10 @@ public class PlayerController : MonoBehaviour
                                 headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                         }
 
+                       
+
+                        
+
                         if (isCrouch)
                             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
                         else
@@ -1214,6 +1226,56 @@ public class PlayerController : MonoBehaviour
         {
             aimPos.localPosition = originAimPos;
         }
+
+        if (isGrounded)
+        {
+            if (Mathf.Abs(Mathf.Sin(headBobValue)) / 6 <= 0.05f)
+            {
+                if (moveInput != Vector2.zero)
+                {
+                    if (!footstep)
+                    {
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Walk);
+                        footstep = true;
+                    }
+                }
+            }
+            else
+            {
+                footstep = false;
+            }
+        }
+        else
+        {
+            footstep = false;
+        }
+
+        //if (!firstStep)
+        //{
+        //    if (moveInput != Vector2.zero)
+        //    {
+        //        GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Walk_1);
+        //        firstStep = true;
+        //        footstep = true;
+        //    }
+        //}
+        //else
+        //{
+        //    currentFootstepTime += Time.deltaTime;
+
+        //    if(currentFootstepTime >= footstepTime)
+        //    {
+        //        currentFootstepTime = 0;
+        //        GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Walk_1);
+        //    }
+
+        //    if (moveInput == Vector2.zero)
+        //    {
+        //        currentFootstepTime = 0;
+              
+        //        firstStep = false;
+        //    }
+        //}
     }
 
     private void HandAnimation()
@@ -1239,6 +1301,12 @@ public class PlayerController : MonoBehaviour
                     if (isAiming)
                     {
                         gun.SetIsAiming(true);
+                        if (!isDash)
+                        {
+                            mainCam.FovMove(52, 0.07f, 1000);
+                            mainCam.SetOriginFov(52);
+                        }
+
                         float temp = hand.localRotation.eulerAngles.z;
                         if (temp > 180)
                             temp -= 360;

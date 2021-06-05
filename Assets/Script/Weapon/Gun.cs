@@ -114,8 +114,8 @@ public class Gun : MonoBehaviour
         if (value)
         {
             //mainCam.FovMove(mainCam.GetOriginFov() - mainCam.GetOriginFov() / 4f, 0.07f, 1000);
-            mainCam.FovMove(52, 0.07f, 1000);
-            mainCam.SetOriginFov(52);
+            //mainCam.FovMove(52, 0.07f, 1000);
+            //mainCam.SetOriginFov(52);
             this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(aimingRot), Time.deltaTime * 25);
             this.transform.localPosition = Vector3.Lerp(this.transform.localPosition, aimingPos, Time.deltaTime * 25);
         }

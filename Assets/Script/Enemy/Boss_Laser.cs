@@ -7,6 +7,10 @@ public class Boss_Laser : MonoBehaviour
     private Transform parent;
     private BoxCollider coll;
 
+    private float damage;
+
+    public void SetDamage(float value) { damage = value; }
+
     private void Awake()
     {
         coll = this.GetComponent<BoxCollider>();
@@ -46,7 +50,7 @@ public class Boss_Laser : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerController>().DecreaseHp(20 * Time.deltaTime);
+            other.GetComponent<PlayerController>().DecreaseHp(damage * Time.deltaTime);
         }
     }
 }
