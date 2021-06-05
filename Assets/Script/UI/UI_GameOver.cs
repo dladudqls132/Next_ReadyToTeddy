@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_GameOver : MonoBehaviour
 {
     [SerializeField] private Image image;
+    [SerializeField] private string loadSceneName;
 
     // Start is called before the first frame update
     void Start()
@@ -20,10 +21,11 @@ public class UI_GameOver : MonoBehaviour
         {
             image.color = new Color(image.color.r, image.color.g, image.color.b, image.color.a + Time.deltaTime);
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && image.color.a>= 0.9f)
             {
                 Time.timeScale = 1;
-                GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
+                //GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
+                GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
             }
         }
     }

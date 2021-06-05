@@ -140,23 +140,27 @@ public class Gun_AR : Gun
                     Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
                     //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
-                    
+                    GameManager.Instance.GetCrosshair().ResetAttack();
                     if (!hit2.transform.CompareTag("Head"))
                     {
+                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                         enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     }
                     else
                     {
+                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
                         enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 
-                    GameManager.Instance.GetCrosshair().ResetAttack();
                     if (enemy.GetIsDead())
+                    {
+                        GameManager.Instance.GetCrosshair().ResetAttack();
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                    else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                    }
+                    //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
+                    //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                 }
                 else if (hit2.transform.CompareTag("InteractiveObject"))
                 {

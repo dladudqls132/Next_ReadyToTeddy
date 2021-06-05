@@ -19,7 +19,9 @@ public enum SoundType
     EnergyBall,
     Warning_Floor,
     Warning_TypeC,
-    Electric
+    Electric,
+    EnergyBall_Bomb,
+    Container_Drop
 }
 
 [System.Serializable]

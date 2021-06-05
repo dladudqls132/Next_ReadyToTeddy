@@ -75,9 +75,10 @@ public class Boss_Teddy : Enemy
             {
                 spawners[i].gameObject.SetActive(false);
             }
-            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             rigid.useGravity = true;
 
+            rigid.AddForce(Vector3.up * 10, ForceMode.VelocityChange);
             anim.SetBool("isDead", true);
             Invoke("InvokeLoadScene", 8.0f);
         }

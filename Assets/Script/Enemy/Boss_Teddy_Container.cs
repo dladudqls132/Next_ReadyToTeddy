@@ -150,6 +150,7 @@ public class Boss_Teddy_Container : MonoBehaviour
                     explosion.gameObject.SetActive(true);
                     explosion.Play();
                     Camera.main.GetComponent<FPPCamController>().Shake(0.5f, 0.125f, true);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Container_Drop, explosion.transform.position, false);
 
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Player"))
                     {
