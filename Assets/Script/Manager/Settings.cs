@@ -43,10 +43,16 @@ public class Settings : MonoBehaviour
         path = Application.dataPath + "/SettingData.json";
         cam = Camera.main.GetComponent<FPPCamController>();
 
-        if(File.Exists(path))
+        if (File.Exists(path))
             LoadData();
         else
+        {
             data = new Data();
+            data.mouseMoveSpeed = 250;
+            data.mainVolume = 0.5f;
+            data.effectVolume = 0.5f;
+            data.backgroundVolume = 0.5f;
+        }
     }
 
     public void SetData(SettingType settingType, float value)
