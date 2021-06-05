@@ -153,7 +153,7 @@ public class Boss_Teddy_Container : MonoBehaviour
 
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Player"))
                     {
-                        collision.transform.GetComponent<PlayerController>().DecreaseHp(20);
+                        collision.transform.GetComponent<PlayerController>().DecreaseHp(15);
                     }
                     if(LayerMask.LayerToName(collision.gameObject.layer).Equals("Root"))
                     {
