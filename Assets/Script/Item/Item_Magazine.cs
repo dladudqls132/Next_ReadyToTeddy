@@ -29,13 +29,15 @@ public class Item_Magazine : Item
     private void Update()
     {
         UpdateMoveSpeed();
-
-        if(Vector3.Distance(this.transform.position, player.GetAimPos().position) < 0.2f)
+        Debug.Log("asd");
+        if (Vector3.Distance(this.transform.position, player.GetAimPos().position) < 0.2f)
         {
+                
             if(player.GetInventory().GetWeapon(gunType) != null)
             {
                 if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
                 {
+                    
                     Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
                     temp.AddAmmo(temp.GetMaxAmmo_aMagCount());
