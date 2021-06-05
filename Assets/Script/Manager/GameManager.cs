@@ -113,18 +113,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //private void Start()
+    //{
+    //    allAudioSources = FindObjectsOfType<AudioSource>();
+    //}
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (UI_pause != null)
             {
-                if(player.GetInventory().isOpen)
+                if (player.GetInventory().isOpen)
                 {
                     player.GetInventory().ToggleInventory();
                 }
                 else
+                {
                     SetIsPause(!isPause);
+                }
             }
         }
     }
@@ -145,6 +152,8 @@ public class GameManager : MonoBehaviour
         UI_pause.SetIsPause(value);
 
         isPause = value;
+
+        soundManager.SetPauseAll(value);
     }
 
     public bool GetIsPause()

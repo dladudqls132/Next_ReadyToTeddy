@@ -20,16 +20,35 @@ public class SoundManager : MonoBehaviour
     //private AudioSource audioSource_SFX_3D;
     [SerializeField] private AudioSource audioSource_BGM;
     private BGMSoundType bgm;
+    private AudioSource[] allAudioSources;
 
     // Start is called before the first frame update
     public void Init()
     {
+       // allAudioSources = FindObjectsOfType<AudioSource>();
+    }
 
+    public void Start()
+    {
+        allAudioSources = FindObjectsOfType<AudioSource>();
     }
 
     public void SetPauseAll(bool value)
     {
-
+        if (value)
+        {
+            foreach (AudioSource audios in allAudioSources)
+            {
+                audios.Pause();
+            }
+        }
+        else
+        {
+            foreach (AudioSource audios in allAudioSources)
+            {
+                audios.UnPause();
+            }
+        }
     }
 
     public void AudioPlayOneShot(SoundType soundName)

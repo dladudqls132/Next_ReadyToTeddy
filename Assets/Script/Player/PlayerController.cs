@@ -1468,8 +1468,24 @@ public class PlayerController : MonoBehaviour
         CheckingHp();
     }
 
+    private bool isDamaged;
+
+    void IsDamagedFalse()
+    {
+        isDamaged = false;
+    }
+
+    public bool GetIsDamaged()
+    {
+        return isDamaged;
+    }
+
     public void DecreaseHp(float value)
     {
+        isDamaged = true;
+  
+        Invoke("IsDamagedFalse", 0.8f);
+
         currentHP -= value;
 
         CheckingHp();

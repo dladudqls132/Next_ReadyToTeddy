@@ -15,7 +15,7 @@ public class AudioSourceController : MonoBehaviour
     [SerializeField] private GameObject audioSource;
     [SerializeField] private int audioSourceNum;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
 
         for (int i = 0; i < audioSourceNum; i++)
