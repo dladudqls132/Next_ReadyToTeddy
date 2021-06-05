@@ -17,9 +17,15 @@ public class Item_Magazine : Item
         {
             if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
             {
+                UpdateMoveSpeed();
                 this.GetComponent<Collider>().isTrigger = true;
                 //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
                 rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+            }
+            else
+            {
+                moveSpeed = 0;
+                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
             }
 
         }
@@ -28,7 +34,7 @@ public class Item_Magazine : Item
 
     private void Update()
     {
-        UpdateMoveSpeed();
+
 
         if (Vector3.Distance(this.transform.position, player.GetAimPos().position) < 0.2f)
         {
@@ -45,12 +51,6 @@ public class Item_Magazine : Item
                 }
             }
         }
-        else
-        {
-            //if (player.GetInventory().GetWeapon(gunType) != null)
-            //{
-            //    this.transform.position = Vector3.Lerp(this.transform.position, player.GetAimPos().position, Time.deltaTime * 8);
-            //}
-        }
+
     }
 }
