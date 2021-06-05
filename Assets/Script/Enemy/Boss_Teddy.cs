@@ -246,7 +246,7 @@ public class Boss_Teddy : Enemy
             }
         }
 
-        if (currentHp <= maxHp - maxHp / 3)
+        if (currentHp <= maxHp)
         {
             if (currentMeteorCoolTime >= meteorCoolTime)
             {

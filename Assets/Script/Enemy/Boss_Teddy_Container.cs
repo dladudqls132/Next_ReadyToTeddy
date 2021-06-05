@@ -19,6 +19,7 @@ public class Boss_Teddy_Container : MonoBehaviour
     private bool isReset;
     private Vector3 originPos;
     private Quaternion originRot;
+    private AudioSource warningAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -84,9 +85,11 @@ public class Boss_Teddy_Container : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(this.transform.position, (dropPos - this.transform.position).normalized, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
         {
+            warningAudio = GameManager.Instance.GetSoundManager().AudioPlayOneShot3D_Get(SoundType.Warning_Floor, hit.point, true);
             floorRange.transform.position = hit.point;
             floorRange.Play();
         }
+
 
         return true;
     }
@@ -136,10 +139,11 @@ public class Boss_Teddy_Container : MonoBehaviour
     {
         if (isDrop)
         {
-            if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Root") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default"))
+            if (LayerMask.LayerToName(collision.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Player") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Root") || LayerMask.LayerToName(collision.gameObject.layer).Equals("Default") && collision.transform != this.transform)
             {
                 floorRange.Stop();
                 floorRange.gameObject.SetActive(false);
+                //warningAudio.Stop();
 
                 if (rigid.velocity.magnitude > 6)
                 {
@@ -160,6 +164,10 @@ public class Boss_Teddy_Container : MonoBehaviour
                 }
                 rigid.velocity = Vector3.zero;
                 rigid.angularVelocity = Vector3.zero;
+
+                if(warningAudio != null)
+                warningAudio.Stop();
+                warningAudio = null;
             }
         }
     }

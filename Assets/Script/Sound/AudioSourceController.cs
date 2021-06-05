@@ -32,7 +32,7 @@ public class AudioSourceController : MonoBehaviour
         {
             if (!audioSources[i].GetComponent<AudioSource>().isPlaying || !audioSources[i].activeSelf)
             {
-                audioSources[i].GetComponent<AudioSource>().Stop();
+                //audioSources[i].GetComponent<AudioSource>().Stop();
                 return audioSources[i].gameObject;
             }
         }

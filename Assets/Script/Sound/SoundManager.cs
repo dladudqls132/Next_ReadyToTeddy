@@ -52,6 +52,21 @@ public class SoundManager : MonoBehaviour
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
     }
 
+    public AudioSource AudioPlayOneShot3D_Get(SoundType soundName, Vector3 pos, bool loop)
+    {
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+
+        audioSource_SFX.transform.position = pos;
+
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+
+        audioSource_SFX.loop = loop;
+
+        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+
+        return audioSource_SFX;
+    }
+
     public void AudioPlayOneShot3D(SoundType soundName, Transform parent, bool loop)
     {
         audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
@@ -64,6 +79,22 @@ public class SoundManager : MonoBehaviour
         audioSource_SFX.loop = loop;
 
         audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+    }
+
+    public AudioSource AudioPlayOneShot3D_Get(SoundType soundName, Transform parent, bool loop)
+    {
+        audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+
+        audioSource_SFX.transform.position = parent.position;
+        audioSource_SFX.transform.SetParent(parent);
+
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+
+        audioSource_SFX.loop = loop;
+
+        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip, soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.effectVolume);
+
+        return audioSource_SFX;
     }
 
     public void AudioPlayBGM(SoundType soundName, bool loop)

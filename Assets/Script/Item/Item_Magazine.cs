@@ -29,7 +29,7 @@ public class Item_Magazine : Item
     private void Update()
     {
         UpdateMoveSpeed();
-        Debug.Log("asd");
+
         if (Vector3.Distance(this.transform.position, player.GetAimPos().position) < 0.2f)
         {
                 
