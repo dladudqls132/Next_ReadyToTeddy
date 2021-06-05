@@ -58,6 +58,7 @@ public class Enemy : MonoBehaviour
 
     protected bool isGod;
 
+    [SerializeField] protected GameObject energyShield_prefab;
     [SerializeField] protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 

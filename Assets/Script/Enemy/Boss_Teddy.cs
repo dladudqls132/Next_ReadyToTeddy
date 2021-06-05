@@ -104,7 +104,6 @@ public class Boss_Teddy : Enemy
             spawners[i].SetSpawnRate(spawnMobRate);
         }
 
-        energyShield.GetComponent<Boss_EnergyShield>().SetShieldHp(shieldHp);
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -171,9 +170,17 @@ public class Boss_Teddy : Enemy
             }
             else if(behavior == BossBehavior.Shield)
             {
-                IncreaseHp(3 * Time.deltaTime);
+                IncreaseHp(100 * Time.deltaTime);
 
-                if(energyShield.GetComponent<Boss_EnergyShield>().GetIsDestroy())
+                if (energyShield != null)
+                {
+                    if (energyShield.GetComponent<Boss_EnergyShield>().GetIsDestroy())
+                    {
+                        isGod = false;
+                        behavior = BossBehavior.Idle;
+                    }
+                }
+                else
                 {
                     isGod = false;
                     behavior = BossBehavior.Idle;
@@ -239,7 +246,8 @@ public class Boss_Teddy : Enemy
                 //    spawners[i].gameObject.SetActive(true);
                 //}
 
-                energyShield = Instantiate(energyShield, this.transform.position, Quaternion.identity, this.transform);
+                energyShield = Instantiate(energyShield_prefab, this.transform.position, Quaternion.identity, this.transform);
+                energyShield.GetComponent<Boss_EnergyShield>().SetShieldHp(shieldHp);
                 energyShield.SetActive(true);
 
                 return;
