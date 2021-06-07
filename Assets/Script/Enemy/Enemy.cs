@@ -125,7 +125,8 @@ public class Enemy : MonoBehaviour
             dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
         }
 
-        dropItem.SetActive(false);
+        if(dropItem != null)
+            dropItem.SetActive(false);
         //if (patrolNode.Length != 0)
         //{
         //    currentDestPatrolNode = patrolNode[0];
