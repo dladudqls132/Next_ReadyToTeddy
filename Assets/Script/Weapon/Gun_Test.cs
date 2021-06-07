@@ -122,6 +122,7 @@ public class Gun_Test : Gun
 
             bool isHit = false;
             bool headShot = false;
+            bool isDead = false;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -164,7 +165,7 @@ public class Gun_Test : Gun
 
                         if (enemy.GetIsDead())
                         {
-                            headShot = true;
+                            isDead = true;
                         }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))
@@ -198,6 +199,10 @@ public class Gun_Test : Gun
                 {
                     GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
+                }
+                else if(isDead)
+                {
+                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
                 }
                 else
                 {
