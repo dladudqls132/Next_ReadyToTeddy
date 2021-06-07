@@ -44,6 +44,7 @@ public class RobotMovementController : Enemy
         //line = this.GetComponent<LineRenderer>();
         
         explosion = Instantiate(explosion);
+        explosion.Play();
         explosion.gameObject.SetActive(false);
 
         SetDead(false);

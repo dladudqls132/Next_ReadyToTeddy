@@ -72,6 +72,9 @@ public class Enemy_ShooterTest : Enemy
 
         RigBuilder rigs = GetComponent<RigBuilder>();
         rigs.Build();
+
+        dropWeapon = Instantiate(gun);
+        dropWeapon.SetActive(false);
     }
 
     public override void SetDead(bool value)
@@ -87,12 +90,16 @@ public class Enemy_ShooterTest : Enemy
             agent.isStopped = true;
             currentHp = maxHp;
 
-            GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
+            //GameObject temp = Instantiate(gun, gun.transform.position, gun.transform.rotation, null);
+
             gun.SetActive(false);
 
-            temp.GetComponent<Rigidbody>().useGravity = true;
-            temp.GetComponent<Rigidbody>().isKinematic = false;
-            temp.GetComponent<Collider>().enabled = true;
+            //dropWeapon.transform.rotation = gun.transform.rotation;
+            //dropWeapon.transform.position = gun.transform.position;
+
+            dropWeapon.GetComponent<Rigidbody>().useGravity = true;
+            dropWeapon.GetComponent<Rigidbody>().isKinematic = false;
+            dropWeapon.GetComponent<Collider>().enabled = true;
 
             rigid.useGravity = false;
             rigid.velocity = Vector3.zero;
