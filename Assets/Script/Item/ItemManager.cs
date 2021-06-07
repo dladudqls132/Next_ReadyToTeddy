@@ -44,17 +44,42 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    public void SpawnMagazine(GunType magType, Vector3 pos, Quaternion rot)
+    public GameObject SetDropItem(ItemType type)
     {
+        float itemDropRate = Random.Range(0.0f, 100.0f);
+        float temp1 = 0;
+        float temp2 = 0;
+
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].GetComponent<Item_Magazine>() != null)
+            if (items[i].GetComponent<Item>().GetItemType() == type)
             {
-                if (items[i].GetComponent<Item_Magazine>().GetMagType() == magType)
+                temp2 += items[i].GetComponent<Item>().GetDropRate();
+
+                if (itemDropRate <= temp2 && itemDropRate > temp1)
                 {
-                    Instantiate(items[i], pos, rot, null);
+                    GameObject temp = Instantiate(items[i]);
+                    return temp;
                 }
+
+                temp1 += items[i].GetComponent<Item>().GetDropRate();
             }
         }
+
+        return null;
     }
+
+    //public void SpawnMagazine(GunType magType, Vector3 pos, Quaternion rot)
+    //{
+    //    for (int i = 0; i < items.Count; i++)
+    //    {
+    //        if (items[i].GetComponent<Item_Magazine>() != null)
+    //        {
+    //            if (items[i].GetComponent<Item_Magazine>().GetMagType() == magType)
+    //            {
+    //                Instantiate(items[i], pos, rot, null);
+    //            }
+    //        }
+    //    }
+    //}
 }

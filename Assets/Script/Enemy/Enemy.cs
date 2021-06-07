@@ -48,6 +48,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float magazineDropRate;
     [SerializeField] protected bool isRigidity;
     [SerializeField] protected float rigidityTime;
+
+    [SerializeField] protected GameObject dropItem;
+    [SerializeField] protected GameObject dropWeapon;
+
     protected float currentRigidityTime;
 
     //private GameObject whoAttackThis;
@@ -110,6 +114,18 @@ public class Enemy : MonoBehaviour
 
         anim = this.GetComponent<Animator>();
 
+        float itemDropRate = Random.Range(0.0f, 100.0f);
+
+        if (itemDropRate <= magazineDropRate)
+        {
+            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
+        }
+        else if (itemDropRate <= magazineDropRate + potionDropRate)
+        {
+            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
+        }
+
+        dropItem.SetActive(false);
         //if (patrolNode.Length != 0)
         //{
         //    currentDestPatrolNode = patrolNode[0];
@@ -184,8 +200,8 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                
-                    SetRagdoll(damagedTrs, damagedVelocity);
+
+                SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
 
@@ -207,16 +223,22 @@ public class Enemy : MonoBehaviour
                 //    }
                 //}
 
-                float itemDropRate = Random.Range(0.0f, 100.0f);
 
-                if (itemDropRate <= magazineDropRate)
+                if (dropItem != null)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
+                    dropItem.transform.position = this.transform.position + Vector3.up;
+                    dropItem.transform.rotation = this.transform.rotation;
+
+                    dropItem.SetActive(true);
                 }
-                else if (itemDropRate <= magazineDropRate + potionDropRate)
+                if(dropWeapon != null)
                 {
-                    GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
+                    dropWeapon.transform.position = this.transform.position + Vector3.up;
+                    dropWeapon.transform.rotation = this.transform.rotation;
+
+                    dropWeapon.SetActive(true);
                 }
+
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
             }

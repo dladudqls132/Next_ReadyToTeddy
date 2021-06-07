@@ -40,6 +40,11 @@ public class ThrowProjectile : MonoBehaviour
 
     public bool AimingProjectile()
     {
+        //if(projectile != GameManager.Instance.GetPlayer().GetWeaponGameObject())
+        //{
+        //    projectile = GameManager.Instance.GetPlayer().GetWeaponGameObject().GetComponent<Projectile>().projectile.GetComponent<Rigidbody>();
+        //}
+
         Ray camRay = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 

@@ -21,14 +21,14 @@ public class Spawner : MonoBehaviour
         prefab.SetActive(false);
     }
 
-    private void OnEnable()
-    {
-        currentSpawnRate = 0;
-        prefab = Instantiate(prefab);
-        prefab.transform.position = this.transform.position;
-        prefab.transform.rotation = this.transform.rotation;
-        prefab.SetActive(false);
-    }
+    //private void OnEnable()
+    //{
+    //    currentSpawnRate = 0;
+    //    prefab = Instantiate(prefab);
+    //    prefab.transform.position = this.transform.position;
+    //    prefab.transform.rotation = this.transform.rotation;
+    //    prefab.SetActive(false);
+    //}
 
     public void SpawnMob()
     {
