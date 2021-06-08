@@ -19,6 +19,11 @@ public class UI_Setting : MonoBehaviour
     private Settings settings;
     float value;
 
+    public void Init()
+    {
+
+    }
+
     private void OnEnable()
     {
         if (settings == null)
@@ -66,12 +71,17 @@ public class UI_Setting : MonoBehaviour
         if (settingType == SettingType.MouseSensitive)
         {
             value = float.Parse(text.text) * 500;
-            settings.SetData(settingType, value);
+            //settings.SetData(settingType, value);
         }
         else
         {
             value = float.Parse(text.text);
-            settings.SetData(settingType, value);
+            //settings.SetData(settingType, value);
         }
+    }
+
+    public void ApplyInfo()
+    {
+        settings.SetData(settingType, value);
     }
 }

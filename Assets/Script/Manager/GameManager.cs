@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private ItemManager itemManager;
     [SerializeField] private Settings settings;
+    [SerializeField] private UI_SettingController UI_settingController;
     [SerializeField] private SoundManager soundManager;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
     public ItemManager GetItemManager() { return itemManager; }
     public Settings GetSettings() { return settings; }
     public SoundManager GetSoundManager() { return soundManager; }
+    public UI_SettingController GetSettingController() { return UI_settingController; }
 
     // Start is called before the first frame update
     void Awake()
@@ -55,6 +57,11 @@ public class GameManager : MonoBehaviour
 
         if(player != null)
             player.Init();
+
+        UI_settingController = FindObjectOfType<UI_SettingController>();
+
+        if (UI_settingController != null)
+            UI_settingController.Init();
 
         UI_pause = FindObjectOfType<UI_Pause>();
 
@@ -100,6 +107,8 @@ public class GameManager : MonoBehaviour
 
         if (soundManager != null)
             soundManager.Init();
+
+
 
         if(isVisibleMousePoint)
         {

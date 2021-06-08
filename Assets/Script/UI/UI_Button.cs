@@ -66,7 +66,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     setting.SetActive(true);
                     break;
                 case ButtonType.Setting_Apply:
-                    GameManager.Instance.GetSettings().SaveData();
+                    //GameManager.Instance.GetSettings().SaveData();
+                    GameManager.Instance.GetSettingController().ApplyInfo();
                     SetActiveFalse();
                     setting.SetActive(false);
                     break;

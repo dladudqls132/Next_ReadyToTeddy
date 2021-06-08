@@ -73,15 +73,18 @@ public class Settings : MonoBehaviour
                 data.backgroundVolume = value;
                 break;
         }
+
+        SaveData();
+        GameManager.Instance.GetSoundManager().UpdateSetting();
     }
 
-    public void SetData()
+    private void SetData()
     {
         if(cam != null)
             cam.SetCameraMoveSpeed(data.mouseMoveSpeed);
     }
 
-    public void LoadData()
+    private void LoadData()
     {
         if (File.Exists(path))
         {
@@ -92,7 +95,7 @@ public class Settings : MonoBehaviour
         }
     }
 
-    public void SaveData()
+    private void SaveData()
     {
         File.WriteAllText(path, JsonUtility.ToJson(data));
     }
