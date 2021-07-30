@@ -107,7 +107,7 @@ public class Gun_AR : Gun
                 currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.02f, 0.015f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 15.0f, 3.0f);
             }
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
@@ -158,6 +158,7 @@ public class Gun_AR : Gun
                     {
                         GameManager.Instance.GetCrosshair().ResetAttack();
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                        owner.GetComponent<PlayerController>().IncreaseSpeed();
                     }
                     //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                     //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);

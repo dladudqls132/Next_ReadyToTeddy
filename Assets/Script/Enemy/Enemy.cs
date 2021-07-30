@@ -138,15 +138,16 @@ public class Enemy : MonoBehaviour
 
     public void SetRagdoll(Transform damagedTrs, Vector3 damagedVelocity)
     {
-        //GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
+        if (this.GetComponent<Enemy_RagdollController>() == null) return;
+            //GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
 
-        //temp.SetActive(true);
-        //temp.transform.position = this.transform.position;
-        //temp.transform.rotation = this.transform.rotation;
-        
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            //temp.SetActive(true);
+            //temp.transform.position = this.transform.position;
+            //temp.transform.rotation = this.transform.rotation;
+
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        if(this.GetComponent<Enemy_RagdollController>() != null)
+   
             this.GetComponent<Enemy_RagdollController>().AddForce(damagedTrs, damagedVelocity);
 
         anim.enabled = false;
@@ -201,7 +202,7 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-
+                
                 SetRagdoll(damagedTrs, damagedVelocity);
                 SetDead(true);
 
@@ -290,7 +291,7 @@ public class Enemy : MonoBehaviour
         //}
         if (!this.enabled) return;
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
+        if (isDead /*|| this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()*/ || isGod) return;
 
         currentHp -= damage;
 
@@ -310,6 +311,7 @@ public class Enemy : MonoBehaviour
         effect.SetActive(true);
 
        // whoAttackThis = attackObj;
+       if(anim != null)
         anim.SetTrigger("Damaged");
         CheckingHp(damagedTrs, damagedVelocity);
     }

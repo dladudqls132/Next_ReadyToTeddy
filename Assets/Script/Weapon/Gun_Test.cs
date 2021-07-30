@@ -203,6 +203,11 @@ public class Gun_Test : Gun
                 else if(isDead)
                 {
                     GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+
+                    if(headShot)
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
+                    else
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                 }
                 else
                 {

@@ -178,6 +178,8 @@ MonoBehaviour:
   downComboTime: 2
   decreaseHpValuePerSecond: 1
   walkSpeed: 7.3
+  walkSpeed_min: 0
+  walkSpeed_max: 0
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
@@ -207,6 +209,9 @@ MonoBehaviour:
   - {fileID: 6157928783681393615, guid: cc01f0fc3a28b2d43847fa91a04e8fed, type: 3}
   moveInput: {x: 0, y: 0}
   handOriginPos: {x: 0, y: 0, z: 0}
+  isFever: 0
+  feverTime: 0
+  currentFeverTime: 0
   dashRefillTime: 2
   dashCount: 3
   currentDashCount: 0
