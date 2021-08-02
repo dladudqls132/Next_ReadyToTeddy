@@ -842,32 +842,32 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (gun != null)
-        {
-            if (Input.GetMouseButtonDown(1) && !gun.GetIsReload() && gun.GetGunType() != GunType.Flamethrower && gun.GetGunType() != GunType.ChainLightning)
-            {
-                if (tempWeapon.GetComponent<Gun>())
-                {
-                    if (tempWeapon.GetComponent<Gun>().GetGunType() != GunType.ChainLightning)
-                    {
-                        isAiming = !isAiming;
-                        isMoveAim = true;
+        //if (gun != null)
+        //{
+        //    if (Input.GetMouseButtonDown(1) && !gun.GetIsReload() && gun.GetGunType() != GunType.Flamethrower && gun.GetGunType() != GunType.ChainLightning)
+        //    {
+        //        if (tempWeapon.GetComponent<Gun>())
+        //        {
+        //            if (tempWeapon.GetComponent<Gun>().GetGunType() != GunType.ChainLightning)
+        //            {
+        //                isAiming = !isAiming;
+        //                isMoveAim = true;
 
-                        if (isAiming)
-                        {
+        //                if (isAiming)
+        //                {
 
-                            //mainCam.FovMove(52, 0.07f, 1000);
-                            //mainCam.SetOriginFov(52);
-                            gun.SetIsReload(false);
-                        }
-                        else
-                        {
-                            mainCam.FovReset();
-                        }
-                    }
-                }
-            }
-        }
+        //                    //mainCam.FovMove(52, 0.07f, 1000);
+        //                    //mainCam.SetOriginFov(52);
+        //                    gun.SetIsReload(false);
+        //                }
+        //                else
+        //                {
+        //                    mainCam.FovReset();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
         if (moveDirection == Vector3.zero)
