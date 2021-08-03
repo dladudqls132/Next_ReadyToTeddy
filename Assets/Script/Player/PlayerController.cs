@@ -896,9 +896,15 @@ public class PlayerController : MonoBehaviour
             if (!isJump)
             {
                 if (isGrounded)
+                {
                     canJump = true;
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
+                }
                 else
+                {
                     canJump = false;
+  
+                }
             }
             else
                 canJump = false;
@@ -907,7 +913,7 @@ public class PlayerController : MonoBehaviour
             hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
             
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
+   
 
             if (isJumpByObject)
             {
