@@ -13,31 +13,40 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Question_On,
         Question_Off,
         LoadScene,
-        Exit
+        Exit,
+        Setting_Apply,
+        Setting_Cancel
     }
 
     [SerializeField] private ButtonType buttonType;
     [SerializeField] private GameObject image_on;
     [SerializeField] private GameObject image_off;
     [SerializeField] private GameObject question;
+    [SerializeField] private GameObject setting;
     [SerializeField] private string loadSceneName;
 
     public void SetActiveFalse()
     {
-        image_off.SetActive(true);
-        image_on.SetActive(false);
+        if(image_off != null)
+            image_off.SetActive(true);
+        if (image_on != null)
+            image_on.SetActive(false);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        image_on.SetActive(true);
-        image_off.SetActive(false);
+        if (image_on != null)
+            image_on.SetActive(true);
+        if (image_off != null)
+            image_off.SetActive(false);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        image_on.SetActive(false);
-        image_off.SetActive(true);
+        if (image_on != null)
+            image_on.SetActive(false);
+        if (image_off != null)
+            image_off.SetActive(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -54,6 +63,17 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
                     break;
                 case ButtonType.Settings:
+                    setting.SetActive(true);
+                    break;
+                case ButtonType.Setting_Apply:
+                    //GameManager.Instance.GetSettings().SaveData();
+                    GameManager.Instance.GetSettingController().ApplyInfo();
+                    SetActiveFalse();
+                    setting.SetActive(false);
+                    break;
+                case ButtonType.Setting_Cancel:
+                    SetActiveFalse();
+                    setting.SetActive(false);
                     break;
                 case ButtonType.Question_On:
                     question.SetActive(true);

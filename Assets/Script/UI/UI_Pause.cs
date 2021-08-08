@@ -18,6 +18,8 @@ public class UI_Pause : MonoBehaviour
         {
             child.SetActiveFalse();
         }
+
+        this.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void SetIsPause(bool value)

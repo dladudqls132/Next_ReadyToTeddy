@@ -31,6 +31,7 @@ public class RobotMovementController : Enemy
 	private Vector3 lastDestination;
 	[SerializeField] private SphereCollider sphereCollider;
     Vector3 move;
+
     //LineRenderer line;
     // Use this for initialization
     override protected void Start ()
@@ -43,7 +44,13 @@ public class RobotMovementController : Enemy
         //line = this.GetComponent<LineRenderer>();
         
         explosion = Instantiate(explosion);
+        explosion.Play();
         explosion.gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Warning_TypeC, this.transform, true);
     }
 
     public override void SetDead(bool value)
@@ -51,6 +58,7 @@ public class RobotMovementController : Enemy
         isDead = value;
         if (isDead)
         {
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, this.transform.position, false);
             behavior = Enemy_Behavior.Idle;
             state = Enemy_State.None;
 
@@ -115,6 +123,8 @@ public class RobotMovementController : Enemy
             if(anim != null)
             anim.enabled = true;
             this.gameObject.SetActive(true);
+
+                
         }
 
         //this.gameObject.SetActive(false);

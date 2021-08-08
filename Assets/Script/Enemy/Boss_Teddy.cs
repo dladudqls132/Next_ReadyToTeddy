@@ -38,7 +38,6 @@ public class Boss_Teddy : Enemy
     [SerializeField] private float meteorDropCoolTime;
     private float currentMeteorDropCoolTime;
     [SerializeField] private float bulletSpeed;
-    private bool isMeteor;
     [SerializeField] private List<GameObject> containers = new List<GameObject>();
     int dropNum;
     [SerializeField] private ParticleSystem fireStart;
@@ -46,6 +45,7 @@ public class Boss_Teddy : Enemy
     [SerializeField] private float turnDirTime;
     private float currentTurnDirTime;
     private Vector3 moveDir;
+    [SerializeField] private float laserDamage;
     [SerializeField] private float laserCoolTime;
     private float currentLaserCoolTime;
     [SerializeField] private List<Spawner> spawners = new List<Spawner>();
@@ -75,9 +75,10 @@ public class Boss_Teddy : Enemy
             {
                 spawners[i].gameObject.SetActive(false);
             }
-            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            rigid.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             rigid.useGravity = true;
 
+            rigid.AddForce(Vector3.up * 10, ForceMode.VelocityChange);
             anim.SetBool("isDead", true);
             Invoke("InvokeLoadScene", 8.0f);
         }
@@ -104,7 +105,6 @@ public class Boss_Teddy : Enemy
             spawners[i].SetSpawnRate(spawnMobRate);
         }
 
-        energyShield.GetComponent<Boss_EnergyShield>().SetShieldHp(shieldHp);
         //playerObject = GameManager.Instance.GetPlayer().gameObject;
     }
 
@@ -171,9 +171,17 @@ public class Boss_Teddy : Enemy
             }
             else if(behavior == BossBehavior.Shield)
             {
-                IncreaseHp(3 * Time.deltaTime);
+                IncreaseHp(50 * Time.deltaTime);
 
-                if(energyShield.GetComponent<Boss_EnergyShield>().GetIsDestroy())
+                if (energyShield != null)
+                {
+                    if (energyShield.GetComponent<Boss_EnergyShield>().GetIsDestroy())
+                    {
+                        isGod = false;
+                        behavior = BossBehavior.Idle;
+                    }
+                }
+                else
                 {
                     isGod = false;
                     behavior = BossBehavior.Idle;
@@ -239,20 +247,24 @@ public class Boss_Teddy : Enemy
                 //    spawners[i].gameObject.SetActive(true);
                 //}
 
-                energyShield = Instantiate(energyShield, this.transform.position, Quaternion.identity, this.transform);
+                energyShield = Instantiate(energyShield_prefab, this.transform.position, Quaternion.identity, this.transform);
+                energyShield.GetComponent<Boss_EnergyShield>().SetShieldHp(shieldHp);
                 energyShield.SetActive(true);
 
                 return;
             }
         }
 
-        if (currentMeteorCoolTime >= meteorCoolTime)
+        if (currentHp <= maxHp - maxHp / 3)
         {
-            ResetTrigger();
-            behavior = BossBehavior.Meteor;
-            anim.SetBool("isMeteor", true);
-            currentMeteorCoolTime = 0;
-            return;
+            if (currentMeteorCoolTime >= meteorCoolTime)
+            {
+                ResetTrigger();
+                behavior = BossBehavior.Meteor;
+                anim.SetBool("isMeteor", true);
+                currentMeteorCoolTime = 0;
+                return;
+            }
         }
 
         if (currentLaserCoolTime >= laserCoolTime)
@@ -262,6 +274,7 @@ public class Boss_Teddy : Enemy
             laser.transform.position = shotPos.position;
             behavior = BossBehavior.Laser;
             anim.SetTrigger("Laser");
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Laser, this.transform, false);
             currentLaserCoolTime = 0;
             return;
         }
@@ -277,6 +290,7 @@ public class Boss_Teddy : Enemy
 
             //    return;
             //}
+          
             behavior = BossBehavior.FireBullet;
             ResetTrigger();
             anim.SetTrigger("FireBullet");
@@ -325,6 +339,7 @@ public class Boss_Teddy : Enemy
         if (behavior == BossBehavior.Laser)
         {
             laser.SetActive(true);
+            laser.GetComponent<Boss_Laser>().SetDamage(laserDamage);
         }
         else
         {
@@ -397,7 +412,7 @@ public class Boss_Teddy : Enemy
     {
         //GameObject temp = Instantiate(bullet, shotPos.position, Quaternion.LookRotation((target.position - this.transform.position).normalized));
         //temp.GetComponent<Bullet_Boss>().Fire((target.position - shotPos.position).normalized, bulletSpeed);
-
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.EnergyBall, this.transform, false);
         GameObject temp = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy);
         temp.transform.position = shotPos.position;
         temp.transform.rotation = shotPos.rotation;

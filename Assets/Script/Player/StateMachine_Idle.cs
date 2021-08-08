@@ -8,6 +8,9 @@ public class StateMachine_Idle : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         GameManager.Instance.GetPlayer().SetIsSwap(false);
+        animator.ResetTrigger("Fire_AR");
+        animator.ResetTrigger("Fire_SG");
+        animator.ResetTrigger("Fire_CL");
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

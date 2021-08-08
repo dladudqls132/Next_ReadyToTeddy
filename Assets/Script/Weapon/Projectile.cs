@@ -112,6 +112,9 @@ public class Projectile : MonoBehaviour
         {
             mesh[i].enabled = false;
         }
+
+        particle = Instantiate(particle);
+        particle.gameObject.SetActive(false);
     }
 
     public void SetIsThrown(bool value)

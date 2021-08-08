@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Pool_BulletHit pool_bulletHit;
     [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private ItemManager itemManager;
+    [SerializeField] private Settings settings;
+    [SerializeField] private UI_SettingController UI_settingController;
+    [SerializeField] private SoundManager soundManager;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -41,6 +44,9 @@ public class GameManager : MonoBehaviour
     public Pool_BulletHit GetPoolBulletHit() { return pool_bulletHit; }
     public Pool_Ragdoll GetPoolRagdoll() { return pool_ragdoll; }
     public ItemManager GetItemManager() { return itemManager; }
+    public Settings GetSettings() { return settings; }
+    public SoundManager GetSoundManager() { return soundManager; }
+    public UI_SettingController GetSettingController() { return UI_settingController; }
 
     // Start is called before the first frame update
     void Awake()
@@ -51,6 +57,11 @@ public class GameManager : MonoBehaviour
 
         if(player != null)
             player.Init();
+
+        UI_settingController = FindObjectOfType<UI_SettingController>();
+
+        if (UI_settingController != null)
+            UI_settingController.Init();
 
         UI_pause = FindObjectOfType<UI_Pause>();
 
@@ -87,6 +98,18 @@ public class GameManager : MonoBehaviour
         if (itemManager != null)
             itemManager.Init();
 
+        settings = FindObjectOfType<Settings>();
+
+        if (settings != null)
+            settings.Init();
+
+        soundManager = FindObjectOfType<SoundManager>();
+
+        if (soundManager != null)
+            soundManager.Init();
+
+
+
         if(isVisibleMousePoint)
         {
             Cursor.lockState = CursorLockMode.None;
@@ -99,18 +122,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //private void Start()
+    //{
+    //    allAudioSources = FindObjectsOfType<AudioSource>();
+    //}
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             if (UI_pause != null)
             {
-                if(player.GetInventory().isOpen)
+                if (player.GetInventory().isOpen)
                 {
                     player.GetInventory().ToggleInventory();
                 }
                 else
+                {
                     SetIsPause(!isPause);
+                }
             }
         }
     }
@@ -131,6 +161,8 @@ public class GameManager : MonoBehaviour
         UI_pause.SetIsPause(value);
 
         isPause = value;
+
+        soundManager.SetPauseAll(value);
     }
 
     public bool GetIsPause()

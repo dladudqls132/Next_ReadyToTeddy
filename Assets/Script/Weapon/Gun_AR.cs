@@ -107,9 +107,10 @@ public class Gun_AR : Gun
                 currentSpreadAngle = spreadAngle_aiming;
                 mainCam.Shake(0.02f, 0.015f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil / 4, 15.0f, 3.0f);
+                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 15.0f, 3.0f);
             }
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
 
             isReload = false;
@@ -128,7 +129,7 @@ public class Gun_AR : Gun
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
-
+            Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
     
             RaycastHit hit2;
@@ -138,20 +139,29 @@ public class Gun_AR : Gun
                 {
                     Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
+                    //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
+                    GameManager.Instance.GetCrosshair().ResetAttack();
                     if (!hit2.transform.CompareTag("Head"))
                     {
+                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                         enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     }
                     else
                     {
+                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
                         enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 
-                    GameManager.Instance.GetCrosshair().ResetAttack();
                     if (enemy.GetIsDead())
+                    {
+                        GameManager.Instance.GetCrosshair().ResetAttack();
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                    else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                        owner.GetComponent<PlayerController>().IncreaseSpeed();
+                    }
+                    //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
+                    //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                 }
                 else if (hit2.transform.CompareTag("InteractiveObject"))
                 {

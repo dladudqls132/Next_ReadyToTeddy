@@ -113,24 +113,29 @@ public class Gun_Test : Gun
                 handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 20.0f);
             }
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.ShotGun_Fire);
 
             hand.GetComponent<Animator>().SetTrigger("Fire_SG");
 
             isReload = false;
             isRecoil = false;
 
+            bool isHit = false;
+            bool headShot = false;
+            bool isDead = false;
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            {
+                direction = (hit.point - Camera.main.transform.position).normalized;
+            }
+            else
+                direction = Camera.main.transform.forward;
+
             for (int i = 0; i < fireNum; i++)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
-                {
-                    direction = (hit.point - Camera.main.transform.position).normalized;
-                }
-                else
-                    direction = Camera.main.transform.forward;
-
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
@@ -144,20 +149,24 @@ public class Gun_Test : Gun
                     {
                         Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
+                        //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
+
                         if (!hit2.transform.CompareTag("Head"))
                         {
                             enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
                         }
                         else
                         {
+                            headShot = true;
                             enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
                         }
 
-                        GameManager.Instance.GetCrosshair().ResetAttack();
+                        isHit = true;
+
                         if (enemy.GetIsDead())
-                            GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-                            GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                        {
+                            isDead = true;
+                        }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))
                     {
@@ -165,7 +174,6 @@ public class Gun_Test : Gun
                     }
                     else
                     {
-
                         GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
                         tempObect.transform.SetParent(null);
                         tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
@@ -175,13 +183,38 @@ public class Gun_Test : Gun
                         tempObect.SetActive(true);
                     }
                 }
-
-                muzzleFlash.time = 0;
-                muzzleFlash.Play();
-                isShot = true;
             }
 
+            muzzleFlash.time = 0;
+            muzzleFlash.Play();
+            isShot = true;
+
             currentAmmo--;
+
+            if(isHit)
+            {
+                GameManager.Instance.GetCrosshair().ResetAttack();
+
+                if (headShot)
+                {
+                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
+                }
+                else if(isDead)
+                {
+                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+
+                    if(headShot)
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
+                    else
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                }
+                else
+                {
+                    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                }
+            }
 
             return true;
         }

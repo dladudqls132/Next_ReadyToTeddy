@@ -135,7 +135,7 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
-        this.GetComponent<MeshRenderer>().enabled = true;
+        //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }
 }

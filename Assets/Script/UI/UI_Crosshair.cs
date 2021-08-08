@@ -77,7 +77,7 @@ public class UI_Crosshair : MonoBehaviour
             }
         }
 
-        if(player.GetIsAiming())
+        if (player.GetIsAiming())
         {
             foreach (Image child in images)
             {

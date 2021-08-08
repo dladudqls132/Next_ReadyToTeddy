@@ -21,14 +21,14 @@ public class Spawner : MonoBehaviour
         prefab.SetActive(false);
     }
 
-    private void OnEnable()
-    {
-        currentSpawnRate = 0;
-        prefab = Instantiate(prefab);
-        prefab.transform.position = this.transform.position;
-        prefab.transform.rotation = this.transform.rotation;
-        prefab.SetActive(false);
-    }
+    //private void OnEnable()
+    //{
+    //    currentSpawnRate = 0;
+    //    prefab = Instantiate(prefab);
+    //    prefab.transform.position = this.transform.position;
+    //    prefab.transform.rotation = this.transform.rotation;
+    //    prefab.SetActive(false);
+    //}
 
     public void SpawnMob()
     {
@@ -52,10 +52,13 @@ public class Spawner : MonoBehaviour
 
         if (currentSpawnRate >= spawnRate)
         {
-            SpawnMob();
+            if (!isSpawn)
+            {
+                SpawnMob();
 
-            isSpawn = true;
-            currentSpawnRate = 0;
+                isSpawn = true;
+                currentSpawnRate = 0;
+            }
         }
     }
 }

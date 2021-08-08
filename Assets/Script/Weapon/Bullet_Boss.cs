@@ -51,6 +51,7 @@ public class Bullet_Boss : MonoBehaviour
                 }
             }
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.EnergyBall_Bomb, this.transform.position, false);
             bomb.transform.position = other.ClosestPoint(this.transform.position);
             bomb.gameObject.SetActive(true);
             bomb.Play();
