@@ -448,7 +448,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            if (!isGrounded && !isSlide && rigid.velocity.y < -3.0f)
+            if (!isGrounded && !isSlide && rigid.velocity.y < -1.0f)
             {
                 if(!isLanding)
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Land);
