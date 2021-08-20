@@ -166,6 +166,7 @@ public class Gun_Test : Gun
                         if (enemy.GetIsDead())
                         {
                             isDead = true;
+                            owner.GetComponent<PlayerController>().IncreaseSpeed();
                         }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))

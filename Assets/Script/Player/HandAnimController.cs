@@ -14,6 +14,7 @@ public class HandAnimController : MonoBehaviour
     Animator anim;
     private float horizontal;
 
+
     private void Start()
     {
         player = GameManager.Instance.GetPlayer();
@@ -97,6 +98,8 @@ public class HandAnimController : MonoBehaviour
         this.GetComponent<Animator>().SetBool("isSwap", false);
         player.SetIsSwap(false);
     }
+
+    Vector3 temp;
 
     private void Update()
     {
