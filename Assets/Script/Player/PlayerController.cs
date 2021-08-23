@@ -176,15 +176,7 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
-    public void IncreaseSpeed()
-    {
-        isFever = true;
-        currentFeverTime = feverTime;
-        if (walkSpeed <= walkSpeed_max)
-            walkSpeed += 0.5f;
-        else
-            walkSpeed = walkSpeed_max;
-    }
+
 
     // Start is called before the first frame update
     public void Init()
@@ -1545,6 +1537,16 @@ public class PlayerController : MonoBehaviour
         currentHP += value;
 
         CheckingHp();
+    }
+
+    public void IncreaseSpeed()
+    {
+        isFever = true;
+        currentFeverTime = feverTime;
+        if (walkSpeed <= walkSpeed_max)
+            walkSpeed += 0.5f;
+        else
+            walkSpeed = walkSpeed_max;
     }
 
     void CheckingCombo()

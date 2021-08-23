@@ -158,7 +158,6 @@ public class Gun_AR : Gun
                     {
                         GameManager.Instance.GetCrosshair().ResetAttack();
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        owner.GetComponent<PlayerController>().IncreaseSpeed();
                     }
                     //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                     //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
