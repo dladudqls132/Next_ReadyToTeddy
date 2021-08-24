@@ -135,6 +135,8 @@ MonoBehaviour:
   downComboTime: 2
   decreaseHpValuePerSecond: 1
   walkSpeed: 8.3
+  walkSpeed_min: 8.3
+  walkSpeed_max: 12
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
@@ -164,6 +166,9 @@ MonoBehaviour:
   - {fileID: 6157928783681393615, guid: cc01f0fc3a28b2d43847fa91a04e8fed, type: 3}
   moveInput: {x: 0, y: 0}
   handOriginPos: {x: 0, y: 0, z: 0}
+  isFever: 0
+  feverTime: 2
+  currentFeverTime: 0
   dashRefillTime: 2
   dashCount: 3
   currentDashCount: 0
@@ -302,7 +307,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2306817717154194263}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ce338783e104ed4eac392c16c60bc33, type: 3}
   m_Name: 
