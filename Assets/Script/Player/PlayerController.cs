@@ -1353,6 +1353,8 @@ public class PlayerController : MonoBehaviour
                         float temp = hand.localRotation.eulerAngles.z;
                         if (temp > 180)
                             temp -= 360;
+
+                    
                         lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(hand.localRotation.eulerAngles.x, 0, temp / 3) + handFireRot.eulerAngles * 3), Time.deltaTime * 20);
 
                         if (!isLanding)
@@ -1383,7 +1385,10 @@ public class PlayerController : MonoBehaviour
                                 lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0) + mainCam.shakeVec / 2, Time.deltaTime * 20);
                             else
                             {
-                                lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 20);
+                                if (isGrounded)
+                                    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 25);
+                                else
+                                    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
                             }
                         }
                         //if (moveInput == Vector2.zero)
