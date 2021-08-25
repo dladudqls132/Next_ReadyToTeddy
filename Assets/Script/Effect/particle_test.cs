@@ -38,11 +38,6 @@ public class particle_test : MonoBehaviour
 
                 if (Vector3.Distance(p[i].position, target.GetComponent<Collider>().bounds.center) < 0.5f)
                 {
-                    if (target.CompareTag("Player"))
-                    {
-                        target.GetComponent<PlayerController>().IncreaseCombo(1);
-
-                    }
                     p[i].remainingLifetime = 0;
                 }
 

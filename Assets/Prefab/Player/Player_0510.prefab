@@ -141,7 +141,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6958420859628283330}
   m_Material: {fileID: 13400000, guid: 11cb4477785566a48adead868499c95c, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   m_Radius: 0.25
   m_Height: 0.5
   m_Direction: 1
@@ -171,11 +171,6 @@ MonoBehaviour:
   checkingGroundRayPos: {fileID: 1456296399368467174}
   isDead: 0
   maxHP: 100
-  maxCombo: 30
-  currentCombo: 0
-  resetComboTime: 15
-  keepComboTime: 10
-  downComboTime: 2
   decreaseHpValuePerSecond: 1
   walkSpeed: 7.3
   walkSpeed_min: 0
@@ -183,7 +178,6 @@ MonoBehaviour:
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
-  WPressTime: 0.2
   canJump: 0
   isJumpByObject: 0
   isGrounded: 1
@@ -199,7 +193,6 @@ MonoBehaviour:
   dashTime: 0.3
   useGravity: 0
   landingReboundSpeed: 40
-  skill1_range: 10
   inventory: {fileID: 0}
   weapons:
   - {fileID: 5978284671447750407, guid: ea0bf6f262de08345ac0dc64d7d680a5, type: 3}

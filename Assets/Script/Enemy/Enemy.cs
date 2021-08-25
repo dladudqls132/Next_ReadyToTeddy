@@ -5,9 +5,6 @@ using UnityEngine.AI;
 
 public enum EnemyType
 {
-    Warrior_Easy,
-    Gunner_Easy,
-    Gunner_Normal,
     Air_Easy,
     Boss,
     A,

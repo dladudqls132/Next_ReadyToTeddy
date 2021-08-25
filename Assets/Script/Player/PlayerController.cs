@@ -24,12 +24,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isDead = false;
     [SerializeField] private float maxHP = 0;
     private float currentHP = 0;
-    [SerializeField] private int maxCombo = 0;
-    [SerializeField] private int currentCombo = 0;
-    [SerializeField] private float resetComboTime = 0;
-    [SerializeField] private float keepComboTime = 0;
-    [SerializeField] private float downComboTime = 0;
-    private float currentResetComboTime = 0;
 
     [SerializeField] private float decreaseHpValuePerSecond = 0;
     [SerializeField] private float walkSpeed = 0;
@@ -42,9 +36,7 @@ public class PlayerController : MonoBehaviour
     private float slideSpeed = 0;
     [SerializeField] private bool isSlope = false;
     private bool isRun = false;
-    [SerializeField] private float WPressTime = 0;
-    private float currentWPressTime = 0;
-    private bool isPressW = false;
+
     private bool isPressMouseButton = false;
     private bool isCrouch = false;
     [SerializeField] private bool canJump = false;
@@ -74,11 +66,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool useGravity = false;
     private bool isLanding = false;
     [SerializeField] private float landingReboundSpeed = 0;
-    [SerializeField] private float skill1_range;
+
     //[SerializeField] private float kickWallTime;
     //[SerializeField] private float currentKickWallTime;
     private bool isSwap;
-    private bool isAimingProjectile;
 
     [SerializeField] private Inventory inventory;
     [SerializeField] private GameObject[] weapons;
@@ -125,12 +116,6 @@ public class PlayerController : MonoBehaviour
     public void SetIsJumpByObject(bool value, float power) { isJumpByObject = value; currentJumpPower = power; }
     public float GetMaxHp() { return maxHP; }
     public float GetCurrentHp() { return currentHP; }
-    public float GetMaxCombo() { return maxCombo; }
-    public float GetCurrentCombo() { return currentCombo; }
-    public float GetResetComboTime() { return resetComboTime; }
-    public float GetKeepComboTime() { return keepComboTime; }
-    public float GetDownComboTime() { return downComboTime; }
-    public float GetCurrentResetComboTime() { return currentResetComboTime; }
     public Transform GetCamPos() { return camPos; }
     public bool GetIsCrouch() { return isCrouch; }
     public void SetCanJump(bool value) { canJump = value; }
@@ -193,7 +178,6 @@ public class PlayerController : MonoBehaviour
         handOriginPos = hand.localPosition;
         handOriginRot = hand.localRotation;
         currentCombatTime = combatTime;
-        currentWPressTime = WPressTime;
         currentDashPower = dashPower;
         currentClimbUpTime = climbUpTime;
         currentClimbuUpPower = climbUpPower;
@@ -446,6 +430,8 @@ public class PlayerController : MonoBehaviour
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Land);
 
                 isLanding = true;
+
+                mainCam.GetComponent<Animator>().SetTrigger("Jump");
                 hand.GetComponent<Animator>().SetTrigger("Landing");
                 headBobValue = Mathf.PI;
             }
@@ -467,17 +453,6 @@ public class PlayerController : MonoBehaviour
             //        isPressW = true;
             //    }
             //}
-
-            if (isPressW)
-            {
-                currentWPressTime -= Time.deltaTime;
-
-                if (currentWPressTime <= 0)
-                {
-                    currentWPressTime = WPressTime;
-                    isPressW = false;
-                }
-            }
 
             if (isCrouch)
             {
@@ -878,7 +853,9 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && !isDash && canJump)
         {
+            mainCam.GetComponent<Animator>().SetTrigger("Jump");
             isSlide = false;
+
             if (!isAiming)
             {
                 mainCam.SetOriginFov(mainCam.GetRealOriginFov());
@@ -1532,6 +1509,8 @@ public class PlayerController : MonoBehaviour
   
         Invoke("IsDamagedFalse", 0.8f);
 
+        mainCam.Shake(0.1f, 0.8f, true);
+
         currentHP -= value;
 
         CheckingHp();
@@ -1552,53 +1531,6 @@ public class PlayerController : MonoBehaviour
             walkSpeed += 0.5f;
         else
             walkSpeed = walkSpeed_max;
-    }
-
-    void CheckingCombo()
-    {
-        if (currentCombo < 0)
-        {
-            currentCombo = 0;
-        }
-        else if (currentCombo > maxCombo)
-            currentCombo = maxCombo;
-    }
-
-    public void IncreaseCombo(int value)
-    {
-        //currentResetComboTime = resetComboTime / (1 + ((float)currentCombo / maxCombo));
-        if (currentResetComboTime > keepComboTime || currentCombo == 0)
-            currentCombo += value;
-        currentResetComboTime = resetComboTime;
-
-        CheckingCombo();
-    }
-
-    public void DecreaseCombo(int value)
-    {
-        currentCombo -= value;
-
-        CheckingCombo();
-    }
-
-    public void UpdateComboDamage()
-    {
-        if (currentCombo > 0)
-        {
-            currentResetComboTime -= Time.deltaTime;
-            if (currentResetComboTime <= 0)
-            {
-                DecreaseCombo(1);
-                //currentResetComboTime = resetComboTime / 2;
-                if (currentCombo > 0)
-                    currentResetComboTime = downComboTime;
-                else
-                    currentResetComboTime = 0;
-            }
-        }
-
-        //콤보가 오르면 데미지 증가
-        //weapon.SetDamagePerBullet(weapon.GetDamagePerBullet_Origin() + (float)currentCombo * 2);
     }
 
     public void PickUpWeapon_Change()
