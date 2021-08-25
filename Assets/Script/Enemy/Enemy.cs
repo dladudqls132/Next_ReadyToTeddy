@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+public enum EnemyType
+{
+    Warrior_Easy,
+    Gunner_Easy,
+    Gunner_Normal,
+    Air_Easy,
+    Boss,
+    A,
+    B,
+    C,
+    D
+}
+
 public enum Enemy_State
 {
     None,
@@ -21,26 +34,24 @@ public class Enemy : MonoBehaviour
     //[SerializeField] protected CharacterMaterial material;
     [SerializeField] protected Transform eye;
     [SerializeField] protected Transform target;
-    [SerializeField] protected GameObject spreadBlood;
+    
     [SerializeField] protected bool canSee;
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
     protected float increaseHp;
     [SerializeField] protected float damage;
-    [SerializeField] protected float speed_min;
-    [SerializeField] protected float speed_max;
     [SerializeField] protected float speed;
-    protected float increaseCombo;
+    //protected float increaseCombo;
     protected Pool_DamagedEffect pool_damagedEffect;
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
-    [SerializeField] protected float combatTime;
-    protected float currentCombatTime;
-    protected float returnToPatorlTime;
-    protected float currentReturnToPatrolTime;
-    protected Transform[] patrolNode;
-    protected Transform currentDestPatrolNode;
+    //[SerializeField] protected float combatTime;
+    //protected float currentCombatTime;
+    //protected float returnToPatorlTime;
+    //protected float currentReturnToPatrolTime;
+    //protected Transform[] patrolNode;
+    //protected Transform currentDestPatrolNode;
     protected int currentDestPatrolNodeIndex;
     protected bool isRunAway;
     protected float increaseSuccessRate;
@@ -63,7 +74,7 @@ public class Enemy : MonoBehaviour
     protected bool isGod;
 
     [SerializeField] protected GameObject energyShield_prefab;
-    [SerializeField] protected GameObject energyShield;
+    protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
     ParticleSystem.Burst[] bursts;
@@ -75,14 +86,13 @@ public class Enemy : MonoBehaviour
     public bool GetIsDead() { return isDead; }
     public GameObject GetEnergyShield() { return energyShield; }
 
-    public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed_min, float speed_max, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
+    public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
         this.enemyType = enemyType;
         //this.material = material;
+        this.speed = speed;
         this.damage = damage;
         this.maxHp = hp;
-        this.speed_min = speed_min;
-        this.speed_max = speed_max;
         this.detectRange = detectRange;
         this.attackRange = attackRange;
         this.potionDropRate = potionDropRate;
@@ -96,23 +106,22 @@ public class Enemy : MonoBehaviour
         if(FindObjectOfType<Pool_DamagedEffect>() != null)
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
 
-        bursts = new[] { new ParticleSystem.Burst(0.0f, increaseCombo) };
         originAttackRange = attackRange;
 
-        currentCombatTime = combatTime;
-        currentReturnToPatrolTime = returnToPatorlTime;
-
-        if(target == null)
+        if(target == null && GameManager.Instance.GetPlayer().transform != null)
             target = GameManager.Instance.GetPlayer().transform;
 
-        speed = Random.Range(speed_min, speed_max);
-
         if (this.GetComponent<NavMeshAgent>() != null)
+        {
             agent = this.GetComponent<NavMeshAgent>();
+            agent.speed = speed;
+        }
 
-        rigid = this.GetComponent<Rigidbody>();
+        if(this.GetComponent<Rigidbody>() != null)
+            rigid = this.GetComponent<Rigidbody>();
 
-        anim = this.GetComponent<Animator>();
+        if(this.GetComponent<Animator>() != null)
+            anim = this.GetComponent<Animator>();
 
         float itemDropRate = Random.Range(0.0f, 100.0f);
 
@@ -136,65 +145,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void SetDead(bool value) {}
 
-    public void SetRagdoll(Transform damagedTrs, Vector3 damagedVelocity)
-    {
-        if (this.GetComponent<Enemy_RagdollController>() == null) return;
-            //GameObject temp = GameManager.Instance.GetPoolRagdoll().GetEnemyRagdoll(enemyType);
 
-            //temp.SetActive(true);
-            //temp.transform.position = this.transform.position;
-            //temp.transform.rotation = this.transform.rotation;
-
-            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        this.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-   
-            this.GetComponent<Enemy_RagdollController>().AddForce(damagedTrs, damagedVelocity);
-
-        anim.enabled = false;
-    }
-
-    protected void GoToPatrolNode()
-    {
-        if (patrolNode.Length != 0)
-        {
-            if (state == Enemy_State.Search)
-            {
-                currentDestPatrolNode = patrolNode[0];
-                currentDestPatrolNodeIndex = 0;
-
-                for (int i = 0; i < patrolNode.Length; i++)
-                {
-                    if (Vector3.Distance(this.transform.position, patrolNode[i].position) < Vector3.Distance(this.transform.position, currentDestPatrolNode.position))
-                    {
-                        currentDestPatrolNode = patrolNode[i];
-                        currentDestPatrolNodeIndex = i;
-                    }
-                }
-            }
-
-            if (state == Enemy_State.Patrol)
-            {
-                if (patrolNode.Length == 0)
-                {
-                    state = Enemy_State.None;
-                }
-                else
-                {
-                    if (Vector3.Distance(this.transform.position, currentDestPatrolNode.position) < 1.0f)
-                    {
-                        currentDestPatrolNodeIndex++;
-                        currentDestPatrolNodeIndex = currentDestPatrolNodeIndex % patrolNode.Length;
-
-                        currentDestPatrolNode = patrolNode[currentDestPatrolNodeIndex];
-                    }
-
-                    agent.SetDestination(currentDestPatrolNode.position);
-                }
-            }
-        }
-    }
-
-    protected void CheckingHp(Transform damagedTrs, Vector3 damagedVelocity)
+    protected void CheckingHp()
     {
         if (!isDead)
         {
@@ -202,8 +154,7 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                
-                SetRagdoll(damagedTrs, damagedVelocity);
+              
                 SetDead(true);
 
 
@@ -243,21 +194,6 @@ public class Enemy : MonoBehaviour
 
                 //agent.isStopped = true;
                 //this.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    protected void CheckingHp()
-    {
-        if (!isDead)
-        {
-            if (currentHp <= 0)
-            {
-                SetDead(true);
-            }
-            else if(currentHp > maxHp)
-            {
-                currentHp = maxHp;
             }
         }
     }
@@ -313,7 +249,7 @@ public class Enemy : MonoBehaviour
        // whoAttackThis = attackObj;
        if(anim != null)
         anim.SetTrigger("Damaged");
-        CheckingHp(damagedTrs, damagedVelocity);
+        CheckingHp();
     }
 
     public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType, float stunTime)
@@ -346,7 +282,7 @@ public class Enemy : MonoBehaviour
 
         // whoAttackThis = attackObj;
         anim.SetTrigger("Damaged");
-        CheckingHp(damagedTrs, damagedVelocity);
+        CheckingHp();
     }
 
     public void SetRigidity(bool value, float time)

@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Pool_Enemy pool_enemy;
     [SerializeField] private Pool_Bullet pool_bullet;
     [SerializeField] private Pool_BulletHit pool_bulletHit;
-    [SerializeField] private Pool_Ragdoll pool_ragdoll;
     [SerializeField] private ItemManager itemManager;
     [SerializeField] private Settings settings;
     [SerializeField] private UI_SettingController UI_settingController;
@@ -42,7 +41,6 @@ public class GameManager : MonoBehaviour
     public Pool_Enemy GetPoolEnemy() { return pool_enemy; }
     public Pool_Bullet GetPoolBullet() { return pool_bullet; }
     public Pool_BulletHit GetPoolBulletHit() { return pool_bulletHit; }
-    public Pool_Ragdoll GetPoolRagdoll() { return pool_ragdoll; }
     public ItemManager GetItemManager() { return itemManager; }
     public Settings GetSettings() { return settings; }
     public SoundManager GetSoundManager() { return soundManager; }
@@ -82,11 +80,6 @@ public class GameManager : MonoBehaviour
 
         if (pool_bullet != null)
             pool_bullet.Init();
-
-        pool_ragdoll = FindObjectOfType<Pool_Ragdoll>();
-
-        if (pool_ragdoll != null)
-            pool_ragdoll.Init();
 
         pool_bulletHit = FindObjectOfType<Pool_BulletHit>();
 

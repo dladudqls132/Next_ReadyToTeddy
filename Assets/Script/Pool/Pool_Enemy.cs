@@ -2,19 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType
-{
-    Warrior_Easy,
-    Warrior_Normal,
-    Warrior_Hard,
-    Gunner_Easy,
-    Gunner_Normal,
-    Gunner_Hard,
-    Air_Easy,
-    Air_Normal,
-    Air_Hard,
-    Boss
-}
 
 public class Pool_Enemy : MonoBehaviour
 {

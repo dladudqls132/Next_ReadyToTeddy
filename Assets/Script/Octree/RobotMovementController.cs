@@ -37,7 +37,7 @@ public class RobotMovementController : Enemy
     override protected void Start ()
 	{
 		base.Start();
-        acceleration = Random.Range(speed_min, speed_max);
+        acceleration = speed;
         target = GameManager.Instance.GetPlayer().GetCamPos();
 		//sphereCollider = GetComponent<SphereCollider>();
 		octree = GameObject.FindGameObjectWithTag("NodeManager").GetComponent<Octree>();
@@ -69,7 +69,8 @@ public class RobotMovementController : Enemy
             rigid.velocity = Vector3.zero;
             rigid.angularVelocity = Vector3.zero;
 
-            explosion.transform.position = this.GetComponent<Enemy_RagdollController>().spineRigid.position;
+            //explosion.transform.position = this.GetComponent<Enemy_RagdollController>().spineRigid.position;
+            explosion.transform.position = this.transform.position;
             explosion.gameObject.SetActive(true);
             explosion.Play();
 
@@ -106,7 +107,7 @@ public class RobotMovementController : Enemy
                             {
                                 Enemy temp = rb.transform.root.GetComponent<Enemy>();
 
-                                temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.GetComponent<Enemy_RagdollController>().spineRigid.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
+                                temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
 
                                 //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
                             }

@@ -20,7 +20,7 @@ public class HitEffect : MonoBehaviour
     {
         if(isSet)
         {
-            this.transform.position = this.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position;
+            //this.transform.position = this.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position;
 
             currentLifeTime += Time.deltaTime;
 

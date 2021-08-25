@@ -133,36 +133,38 @@ public class Gun_AR : Gun
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
     
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enemy"))))
             {
-                if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
+                Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+
+                //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
+                GameManager.Instance.GetCrosshair().ResetAttack();
+                if (!hit2.transform.CompareTag("Head"))
                 {
-                    Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
-
-                    //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
-                    GameManager.Instance.GetCrosshair().ResetAttack();
-                    if (!hit2.transform.CompareTag("Head"))
-                    {
-                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-                        enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
+                    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                    enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
-                    }
-                    else
-                    {
-                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
-                    }
-
-                    if (enemy.GetIsDead())
-                    {
-                        GameManager.Instance.GetCrosshair().ResetAttack();
-                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                    }
-                    //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-                    //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
                 }
-                else if (hit2.transform.CompareTag("InteractiveObject"))
+                else
+                {
+                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                    enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
+                }
+
+                if (enemy.GetIsDead())
+                {
+                    GameManager.Instance.GetCrosshair().ResetAttack();
+                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                }
+                //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
+                //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+
+            }
+            else if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment")), QueryTriggerInteraction.Ignore))
+            {
+   
+                if (hit2.transform.CompareTag("InteractiveObject"))
                 {
                     hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
                 }
@@ -178,7 +180,7 @@ public class Gun_AR : Gun
                 }
             }
 
-             muzzleFlash.Play();
+            muzzleFlash.Play();
             isShot = true;
 
             currentAmmo--;

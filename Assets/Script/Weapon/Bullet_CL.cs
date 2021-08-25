@@ -75,7 +75,7 @@ public class Bullet_CL : Bullet
                     temp.GetComponent<Chain>().SetLine(other.transform.root, coll[i].transform, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
-                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
+                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.position, other.transform.root, rigid.velocity, EffectType.Lightning, stunTime);
                     //coll[i].GetComponent<Enemy>().SetRigidity(true, stunTime);
                     //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
                     //tempHit.GetComponent<HitEffect>().SetHitEffect(coll[i].GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
@@ -89,7 +89,7 @@ public class Bullet_CL : Bullet
             //GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
             //hit.GetComponent<HitEffect>().SetHitEffect(other.GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-            other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.position, other.transform.root.GetComponent<Enemy_RagdollController>().spineRigid.transform, rigid.velocity, EffectType.Lightning, stunTime);
+            other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.position, other.transform.root, rigid.velocity, EffectType.Lightning, stunTime);
             //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, other.transform, false);

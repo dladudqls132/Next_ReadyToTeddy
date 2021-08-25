@@ -76,7 +76,7 @@ public class Projectile_Grenade : Projectile
                                     {
                                         Enemy temp = rb.transform.root.GetComponent<Enemy>();
 
-                                        temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.GetComponent<Enemy_RagdollController>().spineRigid.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
+                                        temp.DecreaseHp(/*this.gameObject, */10000, hit.ClosestPoint(explosionPos), temp.transform, Vector3.ClampMagnitude((hit.ClosestPoint(explosionPos) - explosionPos).normalized * 100, 100), EffectType.Normal);
 
                                         //rb.AddExplosionForce(explosionPower, explosionPos, explosionRadius, 1.0F, ForceMode.VelocityChange);
                                     }

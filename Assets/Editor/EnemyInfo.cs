@@ -11,11 +11,7 @@ public class EnemyInfo : ScriptableObject
         public EnemyType enemyType;
         //public CharacterMaterial material;
         public float hp;
-
-        [Range(0, 100)]
-        public float speed_min;
-        [Range(0, 100)]
-        public float speed_max;
+        public float speed;
 
         public float detectRange;
         public float attackRange;
@@ -33,7 +29,7 @@ public class EnemyInfo : ScriptableObject
         for(int i = 0; i < enemies.Length; i++)
         {
             Enemy temp = enemies[i].prefab.GetComponent<Enemy>();
-            temp.SetInfo(enemies[i].enemyType/*, enemies[i].material*/, enemies[i].damage, enemies[i].hp, enemies[i].speed_min, enemies[i].speed_max, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
+            temp.SetInfo(enemies[i].enemyType/*, enemies[i].material*/, enemies[i].damage, enemies[i].hp, enemies[i].speed, enemies[i].detectRange, enemies[i].attackRange, enemies[i].potionDropRate, enemies[i].magazineDropRate);
             EditorUtility.SetDirty(temp);
         }
     }
