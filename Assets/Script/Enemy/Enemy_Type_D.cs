@@ -61,6 +61,17 @@ public class Enemy_Type_D : Enemy
                 SetDead(true);
             }
         }
+        //Debug.Log(agent.velocity.magnitude);
+        //if(agent.velocity.magnitude > 4.0f)
+        //{
+        //    anim.SetBool("isRoll", true);
+        //}
+        //else
+        //{
+        //    anim.SetBool("isRoll", false);
+        //}
+
+        anim.SetFloat("rollSpeed", agent.velocity.magnitude / 5.5f);
     }
 
     public override void SetDead(bool value)
