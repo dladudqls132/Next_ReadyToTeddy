@@ -47,7 +47,9 @@ public class Enemy_Guardian_D : Enemy
                 effect.SetActive(true);
                 effect.transform.position = this.transform.position;
                 effect.GetComponent<ParticleSystem>().Play();
-                GameManager.Instance.GetPlayer().DecreaseHp(damage);
+
+                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                    GameManager.Instance.GetPlayer().DecreaseHp(damage);
             }
 
             this.gameObject.SetActive(false);
