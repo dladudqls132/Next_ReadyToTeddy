@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class Enemy_Type_D : Enemy
 {
+    [SerializeField] private float attackReadyRange;
     [SerializeField] private GameObject effect_prefab;
+    [SerializeField] private Color emissionColor_normal;
+    [SerializeField] private Color emissionColor_angry;
     private GameObject effect;
+    //private List<Renderer> renderers = new List<Renderer>();
+    private Renderer[] renderers;
+    private bool isAngry;
+    [SerializeField] private float attackTimer;
+    private float currentAttackTimer;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -21,6 +29,9 @@ public class Enemy_Type_D : Enemy
             effect.GetComponent<ParticleSystem>().Play();
             effect.SetActive(false);
         }
+
+
+        renderers = this.GetComponentsInChildren<Renderer>();
     }
 
     // Update is called once per frame
@@ -28,9 +39,27 @@ public class Enemy_Type_D : Enemy
     {
         agent.SetDestination(target.position);
 
-        if(Vector3.Distance(this.transform.position, target.position) <= attackRange)
+        if (Vector3.Distance(this.transform.position, target.position) <= attackReadyRange)
         {
-            SetDead(true);
+            if (!isAngry)
+            {
+                foreach (Renderer r in renderers)
+                {
+                    r.material.SetColor("_EmissionColor", emissionColor_angry * 35f);
+                }
+            }
+
+            isAngry = true;
+        }
+
+        if(isAngry)
+        {
+            currentAttackTimer += Time.deltaTime;
+
+            if(currentAttackTimer >= attackTimer)
+            {
+                SetDead(true);
+            }
         }
     }
 
@@ -40,8 +69,6 @@ public class Enemy_Type_D : Enemy
 
         if (isDead)
         {
-            isDead = false;
-
             if (effect != null)
             {
                 effect.SetActive(true);
@@ -51,6 +78,15 @@ public class Enemy_Type_D : Enemy
                 if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
                     GameManager.Instance.GetPlayer().DecreaseHp(damage);
             }
+
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", emissionColor_normal * 35f);
+            }
+
+            isDead = false;
+            isAngry = false;
+            currentAttackTimer = 0;
 
             this.gameObject.SetActive(false);
         }
