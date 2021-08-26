@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Guardian_D : Enemy
+public class Enemy_Type_D : Enemy
 {
     [SerializeField] private GameObject effect_prefab;
     private GameObject effect;
