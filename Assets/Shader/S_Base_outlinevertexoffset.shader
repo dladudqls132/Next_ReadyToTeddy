@@ -10,6 +10,8 @@ Shader "S_Base_outlinevertexoffset"
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
 		_Metallic("Metallic", 2D) = "white" {}
+		_MetallicIntensity("MetallicIntensity", Range(1, 10)) = 1
+		_Smoothness("Smoothness", Range(0, 1)) = 0.5
 		_AO("AO", 2D) = "white" {}
 		[Toggle]_Emissionswitch("Emissionswitch", Float) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
@@ -64,6 +66,8 @@ Shader "S_Base_outlinevertexoffset"
 		uniform sampler2D _Emission;
 		uniform float4 _Emission_ST;
 		uniform sampler2D _Metallic;
+		uniform float _MetallicIntensity;
+		uniform float _Smoothness;
 		uniform float4 _Metallic_ST;
 		uniform sampler2D _AO;
 		uniform float4 _AO_ST;
@@ -77,7 +81,8 @@ Shader "S_Base_outlinevertexoffset"
 			float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
 			o.Emission = (( _Emissionswitch )?( float4( 0,0,0,0 ) ):( tex2D( _Emission, uv_Emission ) )).rgb;
 			float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
-			o.Metallic = tex2D( _Metallic, uv_Metallic ).r;
+			o.Metallic = tex2D( _Metallic, uv_Metallic ).r * _MetallicIntensity;
+			o.Smoothness = _Smoothness;
 			float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
 			o.Occlusion = tex2D( _AO, uv_AO ).r;
 			o.Alpha = 1;
