@@ -9,10 +9,7 @@ Shader "S_Base_outlinevertexoffset"
 		_Albedo("Albedo", 2D) = "white" {}
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
-		[HDR]_EmissionColor("EmissionColor", Color) = (1, 1, 1, 1)
 		_Metallic("Metallic", 2D) = "white" {}
-		_MetallicIntensity("MetallicIntensity", Range(1, 10)) = 1
-		_Smoothness("Smoothness", Range(0, 1)) = 0.5
 		_AO("AO", 2D) = "white" {}
 		[Toggle]_Emissionswitch("Emissionswitch", Float) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
@@ -67,12 +64,9 @@ Shader "S_Base_outlinevertexoffset"
 		uniform sampler2D _Emission;
 		uniform float4 _Emission_ST;
 		uniform sampler2D _Metallic;
-		uniform float _MetallicIntensity;
-		uniform float _Smoothness;
 		uniform float4 _Metallic_ST;
 		uniform sampler2D _AO;
 		uniform float4 _AO_ST;
-		uniform fixed4 _EmissionColor;
 
 		void surf( Input i , inout SurfaceOutputStandard o )
 		{
@@ -81,10 +75,9 @@ Shader "S_Base_outlinevertexoffset"
 			float2 uv_Albedo = i.uv_texcoord * _Albedo_ST.xy + _Albedo_ST.zw;
 			o.Albedo = tex2D( _Albedo, uv_Albedo ).rgb;
 			float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
-			o.Emission = (( _Emissionswitch )?( float4( 0,0,0,0 ) ):( tex2D( _Emission, uv_Emission ) )).rgb * _EmissionColor;
+			o.Emission = (( _Emissionswitch )?( float4( 0,0,0,0 ) ):( tex2D( _Emission, uv_Emission ) )).rgb;
 			float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
-			o.Metallic = tex2D( _Metallic, uv_Metallic ).r * _MetallicIntensity;
-			o.Smoothness = _Smoothness;
+			o.Metallic = tex2D( _Metallic, uv_Metallic ).r;
 			float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
 			o.Occlusion = tex2D( _AO, uv_AO ).r;
 			o.Alpha = 1;
