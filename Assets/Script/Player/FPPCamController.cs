@@ -206,7 +206,7 @@ public class FPPCamController : MonoBehaviour
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
-        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen)
+        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause())
         {
             rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
             rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;

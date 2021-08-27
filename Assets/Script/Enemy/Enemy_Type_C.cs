@@ -8,6 +8,7 @@ public class Enemy_Type_C : Enemy
     private GameObject effect;
     [SerializeField] private float coolTime_dodge;
     private float currentCoolTime_dodge;
+    [SerializeField] private Transform mesh;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -22,6 +23,11 @@ public class Enemy_Type_C : Enemy
             effect = Instantiate(effect_prefab);
             effect.GetComponent<ParticleSystem>().Play();
             effect.SetActive(false);
+        }
+
+        foreach (Renderer r in renderers)
+        {
+            r.material.SetColor("_EmissionColor", emissionColor_angry * 35f);
         }
     }
 
@@ -46,7 +52,17 @@ public class Enemy_Type_C : Enemy
             currentCoolTime_dodge = 0;
         }
 
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target.position - this.transform.position), Time.deltaTime * 10);
+        temp = (target.position - mesh.position).normalized;
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target.position - new Vector3(this.transform.position.x, target.position.y, this.transform.position.z)), Time.deltaTime * 10);
+        //mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(temp).eulerAngles.x, 0, 0).eulerAngles);
+    }
+
+    Vector3 temp;
+
+
+    private void LateUpdate()
+    {
+        mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(temp).eulerAngles.x, 0, 0).eulerAngles);
     }
 
     public override void SetDead(bool value)

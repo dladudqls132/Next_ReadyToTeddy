@@ -29,7 +29,7 @@ public class UI_Pause : MonoBehaviour
             root.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Time.timeScale = 0;
+            Time.timeScale = 0.2f;
         }
         else
         {

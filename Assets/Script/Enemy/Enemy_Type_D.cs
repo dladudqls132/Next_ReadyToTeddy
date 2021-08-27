@@ -6,11 +6,8 @@ public class Enemy_Type_D : Enemy
 {
     [SerializeField] private float attackReadyRange;
     [SerializeField] private GameObject effect_prefab;
-    [SerializeField] private Color emissionColor_normal;
-    [SerializeField] private Color emissionColor_angry;
     private GameObject effect;
     //private List<Renderer> renderers = new List<Renderer>();
-    private Renderer[] renderers;
     private bool isAngry;
     [SerializeField] private float attackTimer;
     private float currentAttackTimer;
@@ -29,9 +26,6 @@ public class Enemy_Type_D : Enemy
             effect.GetComponent<ParticleSystem>().Play();
             effect.SetActive(false);
         }
-
-
-        renderers = this.GetComponentsInChildren<Renderer>();
     }
 
     // Update is called once per frame

@@ -74,6 +74,10 @@ public class Enemy : MonoBehaviour
     protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
+    protected Renderer[] renderers;
+    [SerializeField] protected Color emissionColor_normal;
+    [SerializeField] protected Color emissionColor_angry;
+
     ParticleSystem.Burst[] bursts;
 
     public float GetCurrentHp() { return currentHp; }
@@ -138,6 +142,8 @@ public class Enemy : MonoBehaviour
         //    currentDestPatrolNode = patrolNode[0];
         //    currentDestPatrolNodeIndex = 0;
         //}
+
+        renderers = this.GetComponentsInChildren<Renderer>();
     }
 
     public virtual void SetDead(bool value) {}
