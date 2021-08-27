@@ -77,6 +77,8 @@ public class Enemy : MonoBehaviour
     protected Renderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
+    [SerializeField] protected GameObject effect_prefab_explosion;
+    protected GameObject effect_explosion;
 
     ParticleSystem.Burst[] bursts;
 
@@ -110,7 +112,7 @@ public class Enemy : MonoBehaviour
         originAttackRange = attackRange;
 
         if(target == null && GameManager.Instance.GetPlayer().transform != null)
-            target = GameManager.Instance.GetPlayer().transform;
+            target = GameManager.Instance.GetPlayer().GetAimPos();
 
         if (this.GetComponent<NavMeshAgent>() != null)
         {
@@ -142,6 +144,13 @@ public class Enemy : MonoBehaviour
         //    currentDestPatrolNode = patrolNode[0];
         //    currentDestPatrolNodeIndex = 0;
         //}
+
+        if (effect_prefab_explosion != null)
+        {
+            effect_explosion = Instantiate(effect_prefab_explosion);
+            effect_explosion.GetComponent<ParticleSystem>().Play();
+            effect_explosion.SetActive(false);
+        }
 
         renderers = this.GetComponentsInChildren<Renderer>();
     }

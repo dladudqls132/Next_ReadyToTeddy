@@ -5,8 +5,7 @@ using UnityEngine;
 public class Enemy_Type_D : Enemy
 {
     [SerializeField] private float attackReadyRange;
-    [SerializeField] private GameObject effect_prefab;
-    private GameObject effect;
+
     //private List<Renderer> renderers = new List<Renderer>();
     private bool isAngry;
     [SerializeField] private float attackTimer;
@@ -19,13 +18,6 @@ public class Enemy_Type_D : Enemy
 
         if (FindObjectOfType<Pool_DamagedEffect>() != null)
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
-        if (effect_prefab != null)
-        {
-            effect = Instantiate(effect_prefab);
-            effect.GetComponent<ParticleSystem>().Play();
-            effect.SetActive(false);
-        }
     }
 
     // Update is called once per frame
@@ -74,11 +66,11 @@ public class Enemy_Type_D : Enemy
 
         if (isDead)
         {
-            if (effect != null)
+            if (effect_explosion != null)
             {
-                effect.SetActive(true);
-                effect.transform.position = this.transform.position;
-                effect.GetComponent<ParticleSystem>().Play();
+                effect_explosion.SetActive(true);
+                effect_explosion.transform.position = this.transform.position;
+                effect_explosion.GetComponent<ParticleSystem>().Play();
 
                 if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
                     GameManager.Instance.GetPlayer().DecreaseHp(damage);

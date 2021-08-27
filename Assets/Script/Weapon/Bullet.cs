@@ -14,6 +14,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected bool isDestroyed;
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;
+    [SerializeField] protected GameObject projectile;
     [SerializeField] protected Transform target;
     [SerializeField] protected float stunTime;
 
@@ -39,7 +40,7 @@ public class Bullet : MonoBehaviour
 
         if(isDestroyed)
         {
-            if(trail.positionCount <= 0)
+            if (trail.positionCount <= 0)
             {
                 ResetInfo();
             }
@@ -125,7 +126,9 @@ public class Bullet : MonoBehaviour
         isDestroyed = true;
         
         currentLifeTime = 0;
-        this.GetComponent<MeshRenderer>().enabled = false;
+        projectile.SetActive(false);
+        //this.GetComponent<MeshRenderer>().enabled = false;
+        
     }
 
     virtual protected void ResetInfo()
@@ -135,6 +138,7 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
+        projectile.SetActive(true);
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }

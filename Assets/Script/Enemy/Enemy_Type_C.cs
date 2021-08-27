@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class Enemy_Type_C : Enemy
 {
-    [SerializeField] private GameObject effect_prefab;
-    private GameObject effect;
+    [SerializeField] private Transform firePos;
     [SerializeField] private float coolTime_dodge;
     private float currentCoolTime_dodge;
     [SerializeField] private Transform mesh;
+    [SerializeField] private float fireRate;
+    [SerializeField] private float bulletSpeed;
+    [SerializeField] private float currentFireRate;
+    [SerializeField] private GameObject fireEffect;
+
+    private Vector3 dir;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -17,13 +22,6 @@ public class Enemy_Type_C : Enemy
 
         if (FindObjectOfType<Pool_DamagedEffect>() != null)
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
-        if (effect_prefab != null)
-        {
-            effect = Instantiate(effect_prefab);
-            effect.GetComponent<ParticleSystem>().Play();
-            effect.SetActive(false);
-        }
 
         foreach (Renderer r in renderers)
         {
@@ -34,7 +32,18 @@ public class Enemy_Type_C : Enemy
     // Update is called once per frame
     void Update()
     {
+        currentFireRate += Time.deltaTime;
         currentCoolTime_dodge += Time.deltaTime;
+
+        if(currentFireRate >= fireRate)
+        {
+            Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+            tempBullet1.gameObject.SetActive(true);
+            tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
+            fireEffect.SetActive(true);
+
+            currentFireRate = 0;
+        }
 
         if(currentCoolTime_dodge >= coolTime_dodge)
         {
@@ -52,17 +61,15 @@ public class Enemy_Type_C : Enemy
             currentCoolTime_dodge = 0;
         }
 
-        temp = (target.position - mesh.position).normalized;
+        dir = (target.position - mesh.position).normalized;
+
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(target.position - new Vector3(this.transform.position.x, target.position.y, this.transform.position.z)), Time.deltaTime * 10);
         //mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(temp).eulerAngles.x, 0, 0).eulerAngles);
     }
 
-    Vector3 temp;
-
-
     private void LateUpdate()
     {
-        mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(temp).eulerAngles.x, 0, 0).eulerAngles);
+        mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
     }
 
     public override void SetDead(bool value)
@@ -73,11 +80,11 @@ public class Enemy_Type_C : Enemy
         {
             isDead = false;
 
-            if (effect != null)
+            if (effect_explosion != null)
             {
-                effect.SetActive(true);
-                effect.transform.position = this.transform.position;
-                effect.GetComponent<ParticleSystem>().Play();
+                effect_explosion.SetActive(true);
+                effect_explosion.transform.position = this.transform.position;
+                effect_explosion.GetComponent<ParticleSystem>().Play();
 
                 if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
                     GameManager.Instance.GetPlayer().DecreaseHp(damage);
