@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5761431552912023208}
   - component: {fileID: 8620708551035450274}
   - component: {fileID: 6240428174422313485}
-  - component: {fileID: 3994158531496820116}
   m_Layer: 12
   m_Name: MonsterC_Gun
   m_TagString: Untagged
@@ -80,20 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3994158531496820116
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610799065885155110}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5803692500198709736, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &687319609293594017
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +90,6 @@ GameObject:
   - component: {fileID: 4737047800367695214}
   - component: {fileID: 1235137091050030549}
   - component: {fileID: 7925082026633896993}
-  - component: {fileID: 3994158531803835500}
   m_Layer: 12
   m_Name: MonsterC
   m_TagString: Untagged
@@ -176,20 +160,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3994158531803835500
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687319609293594017}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 55974941222865573, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &1589703090622805372
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,6 +203,12 @@ GameObject:
   - component: {fileID: 3994158530890620202}
   - component: {fileID: 3994158530890620203}
   - component: {fileID: 3994158530890620201}
+  - component: {fileID: 670428132}
+  - component: {fileID: 670428133}
+  - component: {fileID: 670428134}
+  - component: {fileID: 670428135}
+  - component: {fileID: 670428136}
+  - component: {fileID: 670428137}
   m_Layer: 12
   m_Name: Enemy_Type_C
   m_TagString: Untagged
@@ -247,7 +223,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3994158530890620200}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 98.31053, y: 2.219, z: -33.623703}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -267,7 +243,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 48016ffbe7789904190a95f8131519a1, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -308,6 +284,87 @@ MonoBehaviour:
   shieldHp: 0
   effect_prefab: {fileID: 0}
   coolTime_dodge: 3
+--- !u!135 &670428132
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.26517862
+  m_Center: {x: 0, y: -0.50482136, z: 0}
+--- !u!65 &670428133
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.2289124, y: 0.3302145, z: 1}
+  m_Center: {x: 0.0062026978, y: -0.03843379, z: 0}
+--- !u!65 &670428134
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.22990489, z: 1}
+  m_Center: {x: 0, y: 0.2543918, z: 0}
+--- !u!65 &670428135
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8415623, y: 0.22078729, z: 1}
+  m_Center: {x: 1, y: 0.23127377, z: 0}
+--- !u!65 &670428136
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8415623, y: 0.22078729, z: 1}
+  m_Center: {x: -1, y: 0.23127377, z: 0}
+--- !u!54 &670428137
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3994158530890620200}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 4
+  m_CollisionDetection: 1
 --- !u!1 &5008746883118135978
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +438,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2630805795294835156}
   - component: {fileID: 5990070886528218595}
-  - component: {fileID: 3994158530770007054}
   m_Layer: 12
   m_Name: Monster_Arms
   m_TagString: Untagged
@@ -458,20 +514,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000042676926, y: 0.1616784, z: 0.07346226}
     m_Extent: {x: 2.418926, y: 0.22368792, z: 0.3914125}
   m_DirtyAABB: 0
---- !u!64 &3994158530770007054
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6599878552424242370}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2882630747108208821, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &6969080622723224282
 GameObject:
   m_ObjectHideFlags: 0
