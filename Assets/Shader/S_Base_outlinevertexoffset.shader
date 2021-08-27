@@ -4,89 +4,96 @@ Shader "S_Base_outlinevertexoffset"
 {
 	Properties
 	{
-		_ASEOutlineColor( "Outline Color", Color ) = (0,0,0,0)
-		_ASEOutlineWidth( "Outline Width", Float ) = 0
+		_ASEOutlineColor("Outline Color", Color) = (0,0,0,0)
+		_ASEOutlineWidth("Outline Width", Float) = 0
 		_Albedo("Albedo", 2D) = "white" {}
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
+		[HDR]_EmissionColor("EmissionColor", Color) = (1, 1, 1, 1)
 		_Metallic("Metallic", 2D) = "white" {}
+		_MetallicIntensity("MetallicIntensity", Range(1, 10)) = 1
+		_Smoothness("Smoothness", Range(0, 1)) = 0.5
 		_AO("AO", 2D) = "white" {}
 		[Toggle]_Emissionswitch("Emissionswitch", Float) = 0
-		[HideInInspector] _texcoord( "", 2D ) = "white" {}
-		[HideInInspector] __dirty( "", Int ) = 1
+		[HideInInspector] _texcoord("", 2D) = "white" {}
+		[HideInInspector] __dirty("", Int) = 1
 	}
 
-	SubShader
-	{
-		Tags{ }
-		Cull Front
-		CGPROGRAM
-		#pragma target 3.0
-		#pragma surface outlineSurf Outline nofog  keepalpha noshadow noambient novertexlights nolightmap nodynlightmap nodirlightmap nometa noforwardadd vertex:outlineVertexDataFunc 
-		
-		
-		
-		
-		struct Input {
-			half filler;
-		};
-		float4 _ASEOutlineColor;
-		float _ASEOutlineWidth;
-		void outlineVertexDataFunc( inout appdata_full v, out Input o )
+		SubShader
 		{
-			UNITY_INITIALIZE_OUTPUT( Input, o );
-			v.vertex.xyz += ( v.normal * _ASEOutlineWidth );
+			Tags{ }
+			Cull Front
+			CGPROGRAM
+			#pragma target 3.0
+			#pragma surface outlineSurf Outline nofog  keepalpha noshadow noambient novertexlights nolightmap nodynlightmap nodirlightmap nometa noforwardadd vertex:outlineVertexDataFunc 
+
+
+
+
+			struct Input {
+				half filler;
+			};
+			float4 _ASEOutlineColor;
+			float _ASEOutlineWidth;
+			void outlineVertexDataFunc(inout appdata_full v, out Input o)
+			{
+				UNITY_INITIALIZE_OUTPUT(Input, o);
+				v.vertex.xyz += (v.normal * _ASEOutlineWidth);
+			}
+			inline half4 LightingOutline(SurfaceOutput s, half3 lightDir, half atten) { return half4 (0,0,0, s.Alpha); }
+			void outlineSurf(Input i, inout SurfaceOutput o)
+			{
+				o.Emission = _ASEOutlineColor.rgb;
+				o.Alpha = 1;
+			}
+			ENDCG
+
+
+			Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true"  }
+			Cull Off
+			CGPROGRAM
+			#pragma target 3.0
+			#pragma surface surf Standard keepalpha addshadow fullforwardshadows exclude_path:deferred 
+			struct Input
+			{
+				float2 uv_texcoord;
+			};
+
+			uniform sampler2D _Normal;
+			uniform float4 _Normal_ST;
+			uniform sampler2D _Albedo;
+			uniform float4 _Albedo_ST;
+			uniform float _Emissionswitch;
+			uniform sampler2D _Emission;
+			uniform float4 _Emission_ST;
+			uniform sampler2D _Metallic;
+			uniform float _MetallicIntensity;
+			uniform float _Smoothness;
+			uniform float4 _Metallic_ST;
+			uniform sampler2D _AO;
+			uniform float4 _AO_ST;
+			uniform fixed4 _EmissionColor;
+
+			void surf(Input i , inout SurfaceOutputStandard o)
+			{
+				float2 uv_Normal = i.uv_texcoord * _Normal_ST.xy + _Normal_ST.zw;
+				o.Normal = UnpackNormal(tex2D(_Normal, uv_Normal));
+				float2 uv_Albedo = i.uv_texcoord * _Albedo_ST.xy + _Albedo_ST.zw;
+				o.Albedo = tex2D(_Albedo, uv_Albedo).rgb;
+				float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
+				o.Emission = ((_Emissionswitch) ? (float4(0,0,0,0)) : (tex2D(_Emission, uv_Emission))).rgb * _EmissionColor;
+				float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
+				o.Metallic = tex2D(_Metallic, uv_Metallic).r * _MetallicIntensity;
+				o.Smoothness = _Smoothness;
+				float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
+				o.Occlusion = tex2D(_AO, uv_AO).r;
+				o.Alpha = 1;
+			}
+
+			ENDCG
 		}
-		inline half4 LightingOutline( SurfaceOutput s, half3 lightDir, half atten ) { return half4 ( 0,0,0, s.Alpha); }
-		void outlineSurf( Input i, inout SurfaceOutput o )
-		{
-			o.Emission = _ASEOutlineColor.rgb;
-			o.Alpha = 1;
-		}
-		ENDCG
-		
-
-		Tags{ "RenderType" = "Opaque"  "Queue" = "Geometry+0" "IsEmissive" = "true"  }
-		Cull Off
-		CGPROGRAM
-		#pragma target 3.0
-		#pragma surface surf Standard keepalpha addshadow fullforwardshadows exclude_path:deferred 
-		struct Input
-		{
-			float2 uv_texcoord;
-		};
-
-		uniform sampler2D _Normal;
-		uniform float4 _Normal_ST;
-		uniform sampler2D _Albedo;
-		uniform float4 _Albedo_ST;
-		uniform float _Emissionswitch;
-		uniform sampler2D _Emission;
-		uniform float4 _Emission_ST;
-		uniform sampler2D _Metallic;
-		uniform float4 _Metallic_ST;
-		uniform sampler2D _AO;
-		uniform float4 _AO_ST;
-
-		void surf( Input i , inout SurfaceOutputStandard o )
-		{
-			float2 uv_Normal = i.uv_texcoord * _Normal_ST.xy + _Normal_ST.zw;
-			o.Normal = UnpackNormal( tex2D( _Normal, uv_Normal ) );
-			float2 uv_Albedo = i.uv_texcoord * _Albedo_ST.xy + _Albedo_ST.zw;
-			o.Albedo = tex2D( _Albedo, uv_Albedo ).rgb;
-			float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
-			o.Emission = (( _Emissionswitch )?( float4( 0,0,0,0 ) ):( tex2D( _Emission, uv_Emission ) )).rgb;
-			float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
-			o.Metallic = tex2D( _Metallic, uv_Metallic ).r;
-			float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
-			o.Occlusion = tex2D( _AO, uv_AO ).r;
-			o.Alpha = 1;
-		}
-
-		ENDCG
-	}
-	Fallback "Diffuse"
-	CustomEditor "ASEMaterialInspector"
+			Fallback "Diffuse"
+				CustomEditor "ASEMaterialInspector"
 }
 /*ASEBEGIN
 Version=18900
