@@ -12,6 +12,7 @@ public class Enemy_Type_C : Enemy
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float currentFireRate;
     [SerializeField] private GameObject fireEffect;
+    [SerializeField] private Transform wings;
 
     private Vector3 dir;
 
@@ -41,6 +42,7 @@ public class Enemy_Type_C : Enemy
             tempBullet1.gameObject.SetActive(true);
             tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
             fireEffect.SetActive(true);
+            anim.SetTrigger("Fire");
 
             currentFireRate = 0;
         }
@@ -70,6 +72,9 @@ public class Enemy_Type_C : Enemy
     private void LateUpdate()
     {
         mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
+
+        if(anim.GetBool("isIdle"))
+            wings.rotation = Quaternion.LookRotation(this.transform.forward);
     }
 
     public override void SetDead(bool value)
