@@ -55,7 +55,7 @@ public class Gun_Test : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
+            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap() && hand.GetComponent<Animator>().GetBool("isIdle"))
             {
                 SetIsReload(true);
             }

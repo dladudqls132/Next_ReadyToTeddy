@@ -244,7 +244,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589703090622805372}
-  m_LocalRotation: {x: 0.00000002185742, y: -6.9224776e-10, z: -0.0043998254, w: 0.99999034}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: -0.029039813, z: 3.1520184e-17}
   m_LocalScale: {x: 0.58592, y: 0.999986, z: 1}
   m_Children:
@@ -346,9 +346,10 @@ MonoBehaviour:
   coolTime_dodge: 3
   mesh: {fileID: 5677196813164716048}
   fireRate: 2
-  bulletSpeed: 20
+  bulletSpeed: 25
   currentFireRate: 0
   fireEffect: {fileID: 5394737456030416029}
+  wings: {fileID: 287273082206719007}
 --- !u!195 &3463875565815185032
 NavMeshAgent:
   m_ObjectHideFlags: 0

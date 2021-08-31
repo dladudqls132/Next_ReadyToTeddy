@@ -10,6 +10,7 @@ public class Enemy_Type_D : Enemy
     private bool isAngry;
     [SerializeField] private float attackTimer;
     private float currentAttackTimer;
+    private Vector3 targetOffset;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -18,12 +19,14 @@ public class Enemy_Type_D : Enemy
 
         if (FindObjectOfType<Pool_DamagedEffect>() != null)
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
+
+        targetOffset = new Vector3(Random.Range(0.0f, 0.5f), 0, Random.Range(0.0f, 0.5f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        agent.SetDestination(target.position);
+        agent.SetDestination(target.position + targetOffset);
 
         if (Vector3.Distance(this.transform.position, target.position) <= attackReadyRange)
         {
@@ -36,6 +39,20 @@ public class Enemy_Type_D : Enemy
             }
 
             isAngry = true;
+        }
+        else
+        {
+            currentAttackTimer = 0;
+
+            if(isAngry)
+            {
+                foreach (Renderer r in renderers)
+                {
+                    r.material.SetColor("_EmissionColor", emissionColor_normal * 35f);
+                }
+            }
+
+            isAngry = false;
         }
 
         if(isAngry)

@@ -20,7 +20,6 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Vector3 recoil;
     protected float recoilMagnitude;
 
-    [SerializeField] protected GameObject item;
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
     [SerializeField] protected Transform shotPos;
@@ -59,8 +58,6 @@ public class Gun : MonoBehaviour
     [SerializeField] MeshRenderer[] mesh;
     public AnimationClip weaponAnimation;
 
-    protected Rigidbody rigid;
-
     public Vector3 GetOriginPos() { return originPos; }
     public Vector3 GetOriginRot() { return originRot; }
     public Sprite GetSprite() { return sprite; }
@@ -97,7 +94,7 @@ public class Gun : MonoBehaviour
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
-        rigid = this.GetComponent<Rigidbody>();
+
         recoilMagnitude = recoil.magnitude;
         haveAmmo = maxAmmo_aMag;
 
@@ -143,9 +140,6 @@ public class Gun : MonoBehaviour
             {
                 temp.enabled = false;
             }
-            rigid.velocity = Vector3.zero;
-            rigid.angularVelocity = Vector3.zero;
-            rigid.useGravity = false;
 
            // this.gameObject.SetActive(false);
             this.transform.SetParent(parent);
@@ -157,8 +151,6 @@ public class Gun : MonoBehaviour
             {
                 mesh[i].enabled = true;
             }
-
-            item.SetActive(false);
         }
         else
         {
@@ -170,8 +162,6 @@ public class Gun : MonoBehaviour
             {
                 temp.enabled = true;
             }
-            rigid.useGravity = true;
-            rigid.AddForce(mainCam.transform.forward * 5, ForceMode.Impulse);
 
             //this.transform.position = dropPos;
             //this.transform.rotation = dropRot;
@@ -180,8 +170,6 @@ public class Gun : MonoBehaviour
             {
                 mesh[i].enabled = false;
             }
-
-            item.SetActive(true);
         }
     }
 
