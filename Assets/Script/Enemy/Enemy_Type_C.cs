@@ -12,6 +12,7 @@ public class Enemy_Type_C : Enemy
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float currentFireRate;
     [SerializeField] private GameObject fireEffect;
+    [SerializeField] private Transform wings;
 
     private Vector3 dir;
 
@@ -35,30 +36,34 @@ public class Enemy_Type_C : Enemy
         currentFireRate += Time.deltaTime;
         currentCoolTime_dodge += Time.deltaTime;
 
-        if(currentFireRate >= fireRate)
+        if (anim.GetBool("isIdle"))
         {
-            Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
-            tempBullet1.gameObject.SetActive(true);
-            tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
-            fireEffect.SetActive(true);
-
-            currentFireRate = 0;
-        }
-
-        if(currentCoolTime_dodge >= coolTime_dodge)
-        {
-            int rndNum = Random.Range(0, 2);
-
-            if(rndNum == 0)
+            if (currentFireRate >= fireRate)
             {
-                anim.SetTrigger("Dodge_Left");
-            }
-            else
-            {
-                anim.SetTrigger("Dodge_Right");
+                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                tempBullet1.gameObject.SetActive(true);
+                tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
+                fireEffect.SetActive(true);
+                anim.SetTrigger("Fire");
+
+                currentFireRate = 0;
             }
 
-            currentCoolTime_dodge = 0;
+            if (currentCoolTime_dodge >= coolTime_dodge)
+            {
+                int rndNum = Random.Range(0, 2);
+
+                if (rndNum == 0)
+                {
+                    anim.SetTrigger("Dodge_Left");
+                }
+                else
+                {
+                    anim.SetTrigger("Dodge_Right");
+                }
+
+                currentCoolTime_dodge = 0;
+            }
         }
 
         dir = (target.position - mesh.position).normalized;
@@ -70,6 +75,9 @@ public class Enemy_Type_C : Enemy
     private void LateUpdate()
     {
         mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
+
+        if(anim.GetBool("isIdle"))
+            wings.rotation = Quaternion.LookRotation(this.transform.forward);
     }
 
     public override void SetDead(bool value)
