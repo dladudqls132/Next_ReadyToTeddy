@@ -86,8 +86,6 @@ public class Enemy_Type_C : Enemy
 
         if (isDead)
         {
-            isDead = false;
-
             if (effect_explosion != null)
             {
                 effect_explosion.SetActive(true);

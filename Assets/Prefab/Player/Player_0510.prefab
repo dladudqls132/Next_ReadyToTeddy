@@ -191,6 +191,9 @@ MonoBehaviour:
   combatTime: 0
   dashPower: 30
   dashTime: 0.3
+  dashRefillTime: 2
+  dashCount: 3
+  currentDashCount: 0
   useGravity: 0
   landingReboundSpeed: 40
   inventory: {fileID: 0}
@@ -205,9 +208,6 @@ MonoBehaviour:
   isFever: 0
   feverTime: 0
   currentFeverTime: 0
-  dashRefillTime: 2
-  dashCount: 3
-  currentDashCount: 0
 --- !u!114 &1456296399904524739
 MonoBehaviour:
   m_ObjectHideFlags: 0

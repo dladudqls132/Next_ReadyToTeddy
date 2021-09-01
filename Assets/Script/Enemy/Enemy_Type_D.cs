@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy_Type_D : Enemy
 {
@@ -21,12 +22,29 @@ public class Enemy_Type_D : Enemy
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
 
         targetOffset = new Vector3(Random.Range(0.0f, 0.5f), 0, Random.Range(0.0f, 0.5f));
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        agent.SetDestination(target.position + targetOffset);
+        NavMeshPath path = new NavMeshPath();
+        if (NavMesh.CalculatePath(transform.position, target.position + targetOffset, NavMesh.AllAreas, path))
+        {
+            bool isvalid = true;
+            if (path.status != NavMeshPathStatus.PathComplete) isvalid = false;
+            if (isvalid)
+            {
+                agent.SetDestination(target.position + targetOffset);
+            }
+
+        }
+        else
+        {
+            agent.SetDestination(target.position);
+        }
+
+        //agent.SetDestination(target.position + targetOffset);
 
         if (Vector3.Distance(this.transform.position, target.position) <= attackReadyRange)
         {
@@ -98,7 +116,6 @@ public class Enemy_Type_D : Enemy
                 r.material.SetColor("_EmissionColor", emissionColor_normal * 35f);
             }
 
-            isDead = false;
             isAngry = false;
             currentAttackTimer = 0;
 

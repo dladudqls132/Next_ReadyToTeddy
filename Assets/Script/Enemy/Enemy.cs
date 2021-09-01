@@ -166,7 +166,7 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-              
+                
                 SetDead(true);
 
 
@@ -237,6 +237,7 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
+
         if (!this.enabled) return;
 
         if (isDead /*|| this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()*/ || isGod) return;

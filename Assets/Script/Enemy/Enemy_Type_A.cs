@@ -35,8 +35,6 @@ public class Enemy_Type_A : Enemy
 
         if (isDead)
         {
-            isDead = false;
-
             if (effect != null)
             {
                 effect.SetActive(true);

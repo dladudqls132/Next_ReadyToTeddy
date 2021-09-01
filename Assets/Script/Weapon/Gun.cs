@@ -37,7 +37,7 @@ public class Gun : MonoBehaviour
     protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int maxAmmo_aMag;
-    [SerializeField] protected int haveAmmo;
+    protected int haveAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
     
@@ -91,12 +91,13 @@ public class Gun : MonoBehaviour
     protected virtual void Awake()
     {
         currentAmmo = maxAmmo_aMag;
+        haveAmmo = maxAmmo;
+
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
 
         recoilMagnitude = recoil.magnitude;
-        haveAmmo = maxAmmo_aMag;
 
         for (int i = 0; i < mesh.Length; i++)
         {
@@ -201,15 +202,22 @@ public class Gun : MonoBehaviour
 
         isAiminged = false;
 
-        if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
+        if (gunType == GunType.AR)
         {
-            haveAmmo -= maxAmmo_aMag - currentAmmo;
             currentAmmo = maxAmmo_aMag;
         }
         else
         {
-            currentAmmo += haveAmmo;
-            haveAmmo = 0;
+            if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
+            {
+                haveAmmo -= maxAmmo_aMag - currentAmmo;
+                currentAmmo = maxAmmo_aMag;
+            }
+            else
+            {
+                currentAmmo += haveAmmo;
+                haveAmmo = 0;
+            }
         }
     }
 

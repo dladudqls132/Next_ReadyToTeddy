@@ -39,14 +39,16 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource audios in allAudioSources)
             {
-                audios.Pause();
+                audios.pitch = 0.1f;
+                //audios.Pause();
             }
         }
         else
         {
             foreach (AudioSource audios in allAudioSources)
             {
-                audios.UnPause();
+                audios.pitch = 1f;
+                //audios.UnPause();
             }
         }
     }
