@@ -69,6 +69,7 @@ public class Gun : MonoBehaviour
     protected Vector3 direction;
     [SerializeField] protected bool isAiming;
     protected bool isAiminged;
+    [SerializeField] public Transform mag;
 
     public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay, float stunTime, float refillTime)
     {

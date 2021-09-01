@@ -94,12 +94,30 @@ public class HandAnimController : MonoBehaviour
 
     public void SetIsSwapFinish()
     {
-
         this.GetComponent<Animator>().SetBool("isSwap", false);
         player.SetIsSwap(false);
     }
 
-    Vector3 temp;
+    Transform parent_mag;
+    Vector3 originalPos_mag;
+    Quaternion originalRot_mag;
+
+    public void Reload_AR_1()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_1);
+        originalPos_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.localPosition;
+        originalRot_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.localRotation;
+        parent_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.parent;
+        player.GetWeaponGameObject().GetComponent<Gun>().mag.parent = weaponLeftGrip;
+    }
+
+    public void Reload_AR_2()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_2);
+        player.GetWeaponGameObject().GetComponent<Gun>().mag.parent = parent_mag;
+        player.GetWeaponGameObject().GetComponent<Gun>().mag.localPosition = originalPos_mag;
+        player.GetWeaponGameObject().GetComponent<Gun>().mag.localRotation = originalRot_mag;
+    }
 
     private void Update()
     {
