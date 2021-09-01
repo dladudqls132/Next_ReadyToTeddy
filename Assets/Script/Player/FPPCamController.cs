@@ -130,6 +130,80 @@ public class FPPCamController : MonoBehaviour
             }
         }
 
+        ////////////////////////////////////////////////////
+        isAiming = GameManager.Instance.GetPlayer().GetIsAiming();
+        mouseX = Input.GetAxis("Mouse X");
+        mouseY = Input.GetAxis("Mouse Y");
+
+        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause())
+        {
+            rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
+            rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
+        }
+        rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
+
+
+        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
+
+        currentReturnSpeed += Time.deltaTime;
+        Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);
+        if (isShake)
+
+        {
+            shakeVec = Random.insideUnitSphere * shakeAmount;
+            transform.position = shakeVec + cameraFollow.position + temp;
+
+            currentShakeTime -= Time.deltaTime;
+
+            if (currentShakeTime <= 0)
+            {
+                isShake = false;
+            }
+
+        }
+
+        else
+
+        {
+            shakeVec = Vector3.Lerp(shakeVec, Vector3.zero, Time.deltaTime * 15);
+            if (!isAiming)
+            {
+                this.transform.position = cameraFollow.position + temp;
+                currentAimingMoveRndTime = 0;
+                tempDir = Vector2.zero;
+                currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 15f);
+            }
+            else
+            {
+                if (!Input.GetMouseButton(0) && GameManager.Instance.GetPlayer().GetIsGrounded())
+                {
+                    this.transform.position = cameraFollow.position + temp;
+
+                    //currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
+                    currentTempDir = Vector2.SmoothDamp(currentTempDir, tempDir, ref smoothTemp, 1);
+                    currentAimingMoveRndTime += Time.deltaTime;
+                    if (currentAimingMoveRndTime > aimingMoveRndTime)
+                    {
+                        currentAimingMoveRndTime = 0;
+                        tempDir = Random.insideUnitCircle * 0.1f;
+
+                    }
+                }
+                else
+                {
+                    currentAimingMoveRndTime = 0;
+                    tempDir = currentTempDir;
+
+                    this.transform.position = cameraFollow.position + temp;
+                }
+            }
+
+            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
+
+        }
+
+
         //if (Input.GetKeyDown(KeyCode.PageUp))
         //{
         //    cameraMoveSpeed += 5;
@@ -202,77 +276,77 @@ public class FPPCamController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        isAiming = GameManager.Instance.GetPlayer().GetIsAiming();
-        mouseX = Input.GetAxis("Mouse X");
-        mouseY = Input.GetAxis("Mouse Y");
+        //isAiming = GameManager.Instance.GetPlayer().GetIsAiming();
+        //mouseX = Input.GetAxis("Mouse X");
+        //mouseY = Input.GetAxis("Mouse Y");
 
-        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause())
-        {
-            rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
-            rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
-        }
-        rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
+        //if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause())
+        //{
+        //    rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
+        //    rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
+        //}
+        //rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
 
-        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
-        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
+        //currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+        //rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
 
-        currentReturnSpeed += Time.deltaTime;
-        Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);
-        if (isShake)
+        //currentReturnSpeed += Time.deltaTime;
+        //Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);
+        //if (isShake)
 
-        {
-            shakeVec = Random.insideUnitSphere * shakeAmount;
-            transform.position = shakeVec + cameraFollow.position + temp;
+        //{
+        //    shakeVec = Random.insideUnitSphere * shakeAmount;
+        //    transform.position = shakeVec + cameraFollow.position + temp;
 
-            currentShakeTime -= Time.deltaTime;
+        //    currentShakeTime -= Time.deltaTime;
 
-            if (currentShakeTime <= 0)
-            {
-                isShake = false;
-            }
+        //    if (currentShakeTime <= 0)
+        //    {
+        //        isShake = false;
+        //    }
 
-        }
+        //}
 
-        else
+        //else
 
-        {
-            shakeVec = Vector3.Lerp(shakeVec, Vector3.zero, Time.deltaTime * 15);
-            if (!isAiming)
-            {
-                this.transform.position = cameraFollow.position + temp;
-                currentAimingMoveRndTime = 0;
-                tempDir = Vector2.zero;
-                currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 15f);
-            }
-            else
-            {
-                if (!Input.GetMouseButton(0) && GameManager.Instance.GetPlayer().GetIsGrounded())
-                {
-                    this.transform.position = cameraFollow.position + temp;
+        //{
+        //    shakeVec = Vector3.Lerp(shakeVec, Vector3.zero, Time.deltaTime * 15);
+        //    if (!isAiming)
+        //    {
+        //        this.transform.position = cameraFollow.position + temp;
+        //        currentAimingMoveRndTime = 0;
+        //        tempDir = Vector2.zero;
+        //        currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 15f);
+        //    }
+        //    else
+        //    {
+        //        if (!Input.GetMouseButton(0) && GameManager.Instance.GetPlayer().GetIsGrounded())
+        //        {
+        //            this.transform.position = cameraFollow.position + temp;
 
-                    //currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
-                    currentTempDir = Vector2.SmoothDamp(currentTempDir, tempDir, ref smoothTemp, 1);
-               currentAimingMoveRndTime += Time.deltaTime;
-                    if (currentAimingMoveRndTime > aimingMoveRndTime)
-                    {
-                        currentAimingMoveRndTime = 0;
-                        tempDir = Random.insideUnitCircle * 0.1f;
+        //            //currentTempDir = Vector2.Lerp(currentTempDir, tempDir, Time.deltaTime * 0.5f);
+        //            currentTempDir = Vector2.SmoothDamp(currentTempDir, tempDir, ref smoothTemp, 1);
+        //       currentAimingMoveRndTime += Time.deltaTime;
+        //            if (currentAimingMoveRndTime > aimingMoveRndTime)
+        //            {
+        //                currentAimingMoveRndTime = 0;
+        //                tempDir = Random.insideUnitCircle * 0.1f;
 
-                    }
-                }
-                else
-                {
-                    currentAimingMoveRndTime = 0;
-                    tempDir = currentTempDir;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            currentAimingMoveRndTime = 0;
+        //            tempDir = currentTempDir;
                     
-                    this.transform.position = cameraFollow.position + temp;
-                }
-            }
+        //            this.transform.position = cameraFollow.position + temp;
+        //        }
+        //    }
 
-            //canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        //    //canvas.renderMode = RenderMode.ScreenSpaceCamera;
 
-        }
+        //}
 
 
     }
