@@ -23,7 +23,8 @@ public enum SoundType
     EnergyBall_Bomb,
     Container_Drop,
     AutoRifle_Reload_1,
-    AutoRifle_Reload_2
+    AutoRifle_Reload_2,
+    Parkour
 }
 
 [System.Serializable]

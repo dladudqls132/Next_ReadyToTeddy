@@ -259,9 +259,11 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
-       // whoAttackThis = attackObj;
-       if(anim != null)
-        anim.SetTrigger("Damaged");
+        // whoAttackThis = attackObj;
+        if (anim != null)
+        {
+            anim.SetTrigger("Damaged");
+        }
         CheckingHp();
     }
 

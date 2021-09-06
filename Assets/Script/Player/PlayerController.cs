@@ -618,6 +618,7 @@ public class PlayerController : MonoBehaviour
                         }
 
                         mainCam.GetComponent<Animator>().SetTrigger("Parkour");
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
                         isClimbUp = true;
                         rigid.velocity = Vector3.zero;
                         climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;

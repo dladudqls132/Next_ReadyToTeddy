@@ -13,6 +13,7 @@ public class Enemy_target : Enemy
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
 
         currentHp = maxHp;
+        anim = this.GetComponent<Animator>();
     }
 
     // Update is called once per frame
