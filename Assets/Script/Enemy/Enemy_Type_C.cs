@@ -9,9 +9,8 @@ public class Enemy_Type_C : Enemy
     private float currentCoolTime_dodge;
     [SerializeField] private Transform mesh;
     [SerializeField] private float fireRate;
+    private float currentFireRate;
     [SerializeField] private float bulletSpeed;
-    [SerializeField] private float currentFireRate;
-    [SerializeField] private GameObject fireEffect;
     [SerializeField] private Transform wings;
 
     private Vector3 dir;
@@ -20,9 +19,6 @@ public class Enemy_Type_C : Enemy
     protected override void Start()
     {
         base.Start();
-
-        if (FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
 
         foreach (Renderer r in renderers)
         {
@@ -42,8 +38,13 @@ public class Enemy_Type_C : Enemy
             {
                 Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
                 tempBullet1.gameObject.SetActive(true);
-                tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
-                fireEffect.SetActive(true);
+                tempBullet1.SetFire(firePos.position, (target.position - firePos.position).normalized, bulletSpeed, damage);
+                GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
+               // temp.transform.SetParent(firePos);
+                temp.transform.position = firePos.position;
+                temp.transform.rotation = Quaternion.Euler(firePos.eulerAngles.x + 90, firePos.eulerAngles.y, firePos.eulerAngles.z);
+                //temp.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                temp.SetActive(true);
                 anim.SetTrigger("Fire");
 
                 currentFireRate = 0;
@@ -86,15 +87,19 @@ public class Enemy_Type_C : Enemy
 
         if (isDead)
         {
-            if (effect_explosion != null)
-            {
-                effect_explosion.SetActive(true);
-                effect_explosion.transform.position = this.transform.position;
-                effect_explosion.GetComponent<ParticleSystem>().Play();
+            //if (effect_explosion != null)
+            //{
+            //    effect_explosion.SetActive(true);
+            //    effect_explosion.transform.position = this.transform.position;
+            //    effect_explosion.GetComponent<ParticleSystem>().Play();
 
-                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-                    GameManager.Instance.GetPlayer().DecreaseHp(damage);
-            }
+            //    //if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+            //    //    GameManager.Instance.GetPlayer().DecreaseHp(damage);
+            //}
+
+            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
+            temp.transform.position = this.transform.position;
+            temp.SetActive(true);
 
             this.gameObject.SetActive(false);
         }

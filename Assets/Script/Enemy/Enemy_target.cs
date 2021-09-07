@@ -9,9 +9,6 @@ public class Enemy_target : Enemy
     // Start is called before the first frame update
     protected override void Start()
     {
-        if (FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
         currentHp = maxHp;
         anim = this.GetComponent<Animator>();
     }

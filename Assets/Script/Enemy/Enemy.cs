@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float damage;
     [SerializeField] protected float speed;
     //protected float increaseCombo;
-    protected Pool_DamagedEffect pool_damagedEffect;
+   
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
     //[SerializeField] protected float combatTime;
@@ -106,9 +106,6 @@ public class Enemy : MonoBehaviour
     {
         currentHp = maxHp;
 
-        if(FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
         originAttackRange = attackRange;
 
         if(target == null && GameManager.Instance.GetPlayer().transform != null)
@@ -145,12 +142,12 @@ public class Enemy : MonoBehaviour
         //    currentDestPatrolNodeIndex = 0;
         //}
 
-        if (effect_prefab_explosion != null)
-        {
-            effect_explosion = Instantiate(effect_prefab_explosion);
-            effect_explosion.GetComponent<ParticleSystem>().Play();
-            effect_explosion.SetActive(false);
-        }
+        //if (effect_prefab_explosion != null)
+        //{
+        //    effect_explosion = Instantiate(effect_prefab_explosion);
+        //    effect_explosion.GetComponent<ParticleSystem>().Play();
+        //    effect_explosion.SetActive(false);
+        //}
 
         renderers = this.GetComponentsInChildren<Renderer>();
     }
@@ -243,13 +240,13 @@ public class Enemy : MonoBehaviour
         if (isDead /*|| this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()*/ || isGod) return;
 
         currentHp -= damage;
-
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
+     
+        GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
             return;
 
-        if (effectType != EffectType.Lightning)
+        if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
         else
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
@@ -279,12 +276,12 @@ public class Enemy : MonoBehaviour
 
         currentHp -= damage;
 
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
+        GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
             return;
 
-        if (effectType != EffectType.Lightning)
+        if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
         else
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);

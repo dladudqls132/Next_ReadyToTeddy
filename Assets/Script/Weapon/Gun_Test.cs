@@ -153,12 +153,12 @@ public class Gun_Test : Gun
 
                         if (!hit2.transform.CompareTag("Head"))
                         {
-                            enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+                            enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
                         else
                         {
                             headShot = true;
-                            enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+                            enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
 
                         isHit = true;

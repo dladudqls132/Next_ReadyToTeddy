@@ -18,9 +18,6 @@ public class Enemy_Type_D : Enemy
     {
         base.Start();
 
-        if (FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
         targetOffset = new Vector3(Random.Range(0.0f, 0.5f), 0, Random.Range(0.0f, 0.5f));
 
     }
@@ -101,15 +98,22 @@ public class Enemy_Type_D : Enemy
 
         if (isDead)
         {
-            if (effect_explosion != null)
-            {
-                effect_explosion.SetActive(true);
-                effect_explosion.transform.position = this.transform.position;
-                effect_explosion.GetComponent<ParticleSystem>().Play();
+            //if (effect_explosion != null)
+            //{
+            //    effect_explosion.SetActive(true);
+            //    effect_explosion.transform.position = this.transform.position;
+            //    effect_explosion.GetComponent<ParticleSystem>().Play();
 
-                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-                    GameManager.Instance.GetPlayer().DecreaseHp(damage);
-            }
+            //    if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+            //        GameManager.Instance.GetPlayer().DecreaseHp(damage);
+            //}
+
+            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_bomb);
+            temp.transform.position = this.transform.position;
+            temp.SetActive(true);
+
+            if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
+                GameManager.Instance.GetPlayer().DecreaseHp(damage);
 
             foreach (Renderer r in renderers)
             {

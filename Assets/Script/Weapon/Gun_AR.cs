@@ -142,13 +142,13 @@ public class Gun_AR : Gun
                 if (!hit2.transform.CompareTag("Head"))
                 {
                     GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-                    enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Normal);
+                    enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                 }
                 else
                 {
                     GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                    enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Normal);
+                    enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                 }
 
