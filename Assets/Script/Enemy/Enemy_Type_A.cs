@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Enemy_Type_A : Enemy
 {
-    [SerializeField] private GameObject effect_prefab;
-    private GameObject effect;
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -14,13 +11,6 @@ public class Enemy_Type_A : Enemy
 
         if (FindObjectOfType<Pool_DamagedEffect>() != null)
             pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
-        if (effect_prefab != null)
-        {
-            effect = Instantiate(effect_prefab);
-            effect.GetComponent<ParticleSystem>().Play();
-            effect.SetActive(false);
-        }
     }
 
     // Update is called once per frame
@@ -35,11 +25,11 @@ public class Enemy_Type_A : Enemy
 
         if (isDead)
         {
-            if (effect != null)
+            if (effect_explosion != null)
             {
-                effect.SetActive(true);
-                effect.transform.position = this.transform.position;
-                effect.GetComponent<ParticleSystem>().Play();
+                effect_explosion.SetActive(true);
+                effect_explosion.transform.position = this.transform.position;
+                effect_explosion.GetComponent<ParticleSystem>().Play();
 
                 if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
                     GameManager.Instance.GetPlayer().DecreaseHp(damage);
