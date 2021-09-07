@@ -8,11 +8,8 @@ public class Bullet_CL : Bullet
     public GameObject hitEffect;
 
     // Update is called once per frame
-    override protected void FixedUpdate()
+    override protected void Update()
     {
-
-
-
         if (isDestroyed)
         {
             if (trail.positionCount <= 0)

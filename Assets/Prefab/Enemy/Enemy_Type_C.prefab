@@ -328,7 +328,7 @@ MonoBehaviour:
   currentHp: 0
   damage: 10
   speed: 2
-  detectRange: 10
+  detectRange: 30
   attackRange: 20
   potionDropRate: 50
   magazineDropRate: 50
@@ -340,15 +340,13 @@ MonoBehaviour:
   shieldHp: 0
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
-  effect_prefab_explosion: {fileID: 5726090371489987405, guid: 2531b6b0a0182224c8e3c1cc9afdbd6e,
-    type: 3}
   firePos: {fileID: 1709692613}
   coolTime_dodge: 3
   mesh: {fileID: 5677196813164716048}
-  fireRate: 2
-  bulletSpeed: 25
-  currentFireRate: 0
-  fireEffect: {fileID: 5394737456030416029}
+  attackTime: 0.7
+  coolTime_attack: 3
+  fireRate: 0.15
+  bulletSpeed: 18
   wings: {fileID: 287273082206719007}
 --- !u!195 &3463875565815185032
 NavMeshAgent:
@@ -672,12 +670,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 339cc13b55d005a44a3a808e6d5ee55c, type: 3}
---- !u!1 &5394737456030416029 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9057846229181177281, guid: 339cc13b55d005a44a3a808e6d5ee55c,
-    type: 3}
-  m_PrefabInstance: {fileID: 3994158530773606748}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5394737456030416738 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9057846229181177406, guid: 339cc13b55d005a44a3a808e6d5ee55c,

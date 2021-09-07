@@ -25,6 +25,10 @@ public class Enemy_Type_D : Enemy
     // Update is called once per frame
     void Update()
     {
+        CheckingPlayer();
+
+        if (!canSee) return;
+
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, target.position + targetOffset, NavMesh.AllAreas, path))
         {

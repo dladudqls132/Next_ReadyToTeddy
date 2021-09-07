@@ -8,10 +8,15 @@ public class Enemy_Type_C : Enemy
     [SerializeField] private float coolTime_dodge;
     private float currentCoolTime_dodge;
     [SerializeField] private Transform mesh;
+    [SerializeField] private float attackTime;
+    private float currentAttackTime;
+    [SerializeField] private float coolTime_attack;
+    private float currentCoolTime_attack;
     [SerializeField] private float fireRate;
     private float currentFireRate;
     [SerializeField] private float bulletSpeed;
     [SerializeField] private Transform wings;
+    private bool isAttack;
 
     private Vector3 dir;
 
@@ -19,26 +24,61 @@ public class Enemy_Type_C : Enemy
     protected override void Start()
     {
         base.Start();
-
-        foreach (Renderer r in renderers)
-        {
-            r.material.SetColor("_EmissionColor", emissionColor_angry * 35f);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentFireRate += Time.deltaTime;
+        CheckingPlayer();
+
+        if (!canSee) return;
+
+        if (currentCoolTime_attack <= coolTime_attack / 2)
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 4));
+            }
+        }
+        else
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentCoolTime_attack / coolTime_attack), Time.deltaTime * 4));
+            }
+        }
+
+        if (isAttack)
+        {
+            currentFireRate += Time.deltaTime;
+            currentAttackTime += Time.deltaTime;
+
+            if(currentAttackTime >= attackTime)
+            {
+                currentAttackTime = 0;
+                isAttack = false;
+            }
+        }
+        else
+        {
+            currentCoolTime_attack += Time.deltaTime;
+
+            if (currentCoolTime_attack >= coolTime_attack)
+            {
+                currentCoolTime_attack = 0;
+                isAttack = true;
+            }
+        }
+
         currentCoolTime_dodge += Time.deltaTime;
 
         if (anim.GetBool("isIdle"))
         {
             if (currentFireRate >= fireRate)
             {
-                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
                 tempBullet1.gameObject.SetActive(true);
-                tempBullet1.SetFire(firePos.position, (target.position - firePos.position).normalized, bulletSpeed, damage);
+                tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
                // temp.transform.SetParent(firePos);
                 temp.transform.position = firePos.position;
@@ -50,7 +90,7 @@ public class Enemy_Type_C : Enemy
                 currentFireRate = 0;
             }
 
-            if (currentCoolTime_dodge >= coolTime_dodge)
+            if (currentCoolTime_dodge >= coolTime_dodge && !isAttack)
             {
                 int rndNum = Random.Range(0, 2);
 
@@ -75,7 +115,8 @@ public class Enemy_Type_C : Enemy
 
     private void LateUpdate()
     {
-        mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
+        if(dir != Vector3.zero)
+            mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
 
         if(anim.GetBool("isIdle"))
             wings.rotation = Quaternion.LookRotation(this.transform.forward);

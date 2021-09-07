@@ -639,8 +639,8 @@ MonoBehaviour:
   currentHp: 0
   damage: 10
   speed: 1
-  detectRange: 10
-  attackRange: 30
+  detectRange: 30
+  attackRange: 25
   potionDropRate: 50
   magazineDropRate: 50
   isRigidity: 0
@@ -649,15 +649,13 @@ MonoBehaviour:
   dropWeapon: {fileID: 0}
   energyShield_prefab: {fileID: 0}
   shieldHp: 0
-  emissionColor_normal: {r: 0, g: 0, b: 0, a: 0}
-  emissionColor_angry: {r: 0, g: 0, b: 0, a: 0}
-  effect_prefab_explosion: {fileID: 5726090371489987405, guid: 2531b6b0a0182224c8e3c1cc9afdbd6e,
-    type: 3}
+  emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
+  emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
   firePos:
   - {fileID: 1979181100}
   - {fileID: 1114606082}
-  fireRate: 2
-  bulletSpeed: 15
+  fireRate: 3
+  bulletSpeed: 25
   fireEffect: {fileID: 0}
   arms: {fileID: 9094786043214546286}
 --- !u!1 &7527311633912371621

@@ -10,7 +10,6 @@ public class Enemy_Type_A : Enemy
     [SerializeField] private float bulletSpeed;
     [SerializeField] private GameObject fireEffect;
     [SerializeField] private Transform arms;
-    [SerializeField] private Vector3 temp;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -21,6 +20,9 @@ public class Enemy_Type_A : Enemy
     // Update is called once per frame
     void Update()
     {
+        CheckingPlayer();
+
+        if (!canSee) return;
         //if(Vector3.Distance(this.transform.position, target.position) > attackRange)
         //{
         //    agent.isStopped = false;
@@ -36,12 +38,40 @@ public class Enemy_Type_A : Enemy
 
         if(currentFireRate >= fireRate)
         {
+            agent.isStopped = true;
             currentFireRate = 0;
 
             anim.SetTrigger("Attack");
         }
+        else
+        {
+            if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
+            }
+            else
+                agent.isStopped = true;
+        }
 
-      
+        anim.SetBool("isMove", !agent.isStopped);
+
+        if (currentFireRate < fireRate / 2)
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 4));
+            }
+        }
+        else
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 4));
+            }
+        }
+
+
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime *10);
         
     }
@@ -95,5 +125,6 @@ public class Enemy_Type_A : Enemy
         temp.transform.position = firePos[1].position;
         temp.transform.rotation = Quaternion.Euler(firePos[1].eulerAngles.x + 90, firePos[1].eulerAngles.y, firePos[1].eulerAngles.z);
         temp.SetActive(true);
+        agent.isStopped = false;
     }
 }

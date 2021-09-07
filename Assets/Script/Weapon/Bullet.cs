@@ -29,16 +29,14 @@ public class Bullet : MonoBehaviour
          trail = this.GetComponent<TrailRenderer>();
     }
 
-    // Update is called once per frame
-    virtual protected void FixedUpdate()
+    virtual protected void Update()
     {
-
-        if(isFire)
+        if (isFire)
         {
             rigid.velocity = dir * speed;
         }
 
-        if(isDestroyed)
+        if (isDestroyed)
         {
             if (trail.positionCount <= 0)
             {
@@ -107,14 +105,25 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().DecreaseHp(damage);
+            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
+            temp.transform.position = this.transform.position;
+            temp.SetActive(true);
             ActiveFalse();
         }
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Default") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
-            
+
             if (!other.isTrigger)
+            {
+                GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
+                if (temp != null)
+                {
+                    temp.transform.position = this.transform.position;
+                    temp.SetActive(true);
+                }
                 ActiveFalse();
+            }
         }
     }
 

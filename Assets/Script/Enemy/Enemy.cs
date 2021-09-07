@@ -77,10 +77,6 @@ public class Enemy : MonoBehaviour
     protected Renderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
-    [SerializeField] protected GameObject effect_prefab_explosion;
-    protected GameObject effect_explosion;
-
-    ParticleSystem.Burst[] bursts;
 
     public float GetCurrentHp() { return currentHp; }
     public void SetCurrentHp(float value) { currentHp = value; }
@@ -154,6 +150,22 @@ public class Enemy : MonoBehaviour
 
     public virtual void SetDead(bool value) {}
 
+    protected void CheckingPlayer()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        {
+            if(hit.transform.CompareTag("Player"))
+            {
+                canSee = true;
+            }
+        }
+        if(Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        {
+            canSee = true;
+        }
+
+    }
 
     protected void CheckingHp()
     {
@@ -223,6 +235,7 @@ public class Enemy : MonoBehaviour
         if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
         currentHp -= value;
 
+        canSee = true;
        // whoAttackThis = null;
 
         CheckingHp();
@@ -256,6 +269,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
+        canSee = true;
         // whoAttackThis = attackObj;
         if (anim != null)
         {
@@ -292,6 +306,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.identity;
         effect.SetActive(true);
 
+        canSee = true;
         // whoAttackThis = attackObj;
         anim.SetTrigger("Damaged");
         CheckingHp();
