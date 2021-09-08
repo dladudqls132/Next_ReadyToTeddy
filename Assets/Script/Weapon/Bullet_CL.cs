@@ -63,7 +63,6 @@ public class Bullet_CL : Bullet
             int num = 0;
             for (int i = 0; i < coll.Length; i++)
             {
-
                 if(coll[i].CompareTag("Enemy") && other.transform.root != coll[i].transform && !coll[i].GetComponent<Enemy>().GetIsDead())
                 {
                     num++;
@@ -72,10 +71,7 @@ public class Bullet_CL : Bullet
                     temp.GetComponent<Chain>().SetLine(other.transform.root, coll[i].transform, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
-                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.position, other.transform.root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
-                    //coll[i].GetComponent<Enemy>().SetRigidity(true, stunTime);
-                    //GameObject tempHit = Instantiate(hitEffect, coll[i].transform);
-                    //tempHit.GetComponent<HitEffect>().SetHitEffect(coll[i].GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
+                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, coll[i].transform.root.position, other.transform.root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, coll[i].transform, false);
 

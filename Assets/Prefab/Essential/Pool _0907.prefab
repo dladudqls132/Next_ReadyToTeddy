@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7419428657027906320}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5065173756938649203
 MonoBehaviour:
@@ -49,57 +49,6 @@ MonoBehaviour:
       type: 3}
     bulletType: 0
   currentNum: 0
---- !u!1 &5206552142826047230
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5206552142826047231}
-  - component: {fileID: 5206552142826047228}
-  m_Layer: 0
-  m_Name: Pool_Enemy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &5206552142826047231
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206552142826047230}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 7419428657027906320}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5206552142826047228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5206552142826047230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a72e80f30e6390499113dfb8306aea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyNum: 20
-  enemyInfos:
-  - prefab: {fileID: 2180690179141445227, guid: a467df22ab236a74db16fdb2ffcdc350,
-      type: 3}
-    enemyType: 0
-  - prefab: {fileID: 5027605912874013498, guid: d6882fcf37b2f7542bf52d26baa00246,
-      type: 3}
-    enemyType: 3
 --- !u!1 &5206552143345618980
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +78,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7419428657027906320}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5206552143345618986
 MonoBehaviour:
@@ -210,7 +159,7 @@ MonoBehaviour:
   - prefab: {fileID: 9057846229181177281, guid: 339cc13b55d005a44a3a808e6d5ee55c,
       type: 3}
     effectType: 3
-  - prefab: {fileID: 5726090371489987405, guid: 2531b6b0a0182224c8e3c1cc9afdbd6e,
+  - prefab: {fileID: 6541908237197418025, guid: 5332f6d9fb0967a4da7b57838fd6ebda,
       type: 3}
     effectType: 4
   - prefab: {fileID: 5726090371489987405, guid: 7376f5af1bc70284aac6622889d7834c,
@@ -218,6 +167,9 @@ MonoBehaviour:
     effectType: 5
   - prefab: {fileID: 497375852730275140, guid: 054eddf232872394dbbe989272230780, type: 3}
     effectType: 6
+  - prefab: {fileID: 6656132091932346833, guid: 2b640d6f034a2d24f9a1db5e528f0ee7,
+      type: 3}
+    effectType: 7
 --- !u!1 &7419428657027906351
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7419428657027906320}
   m_Layer: 0
-  m_Name: Pool 1
+  m_Name: Pool _0907
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -246,7 +198,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7419428655994260222}
-  - {fileID: 5206552142826047231}
   - {fileID: 5206552143345618981}
   - {fileID: 5065173756938649202}
   m_Father: {fileID: 0}

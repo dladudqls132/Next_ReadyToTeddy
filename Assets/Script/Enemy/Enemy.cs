@@ -232,7 +232,7 @@ public class Enemy : MonoBehaviour
         //    return;
         if (!this.enabled) return;
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
+        if (isDead || isGod) return;
         currentHp -= value;
 
         canSee = true;
@@ -250,7 +250,7 @@ public class Enemy : MonoBehaviour
 
         if (!this.enabled) return;
 
-        if (isDead /*|| this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()*/ || isGod) return;
+        if (isDead || isGod) return;
 
         currentHp -= damage;
      
@@ -286,7 +286,7 @@ public class Enemy : MonoBehaviour
         //}
         if (!this.enabled) return;
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
+        if (isDead || isGod) return;
 
         currentHp -= damage;
 
@@ -298,7 +298,9 @@ public class Enemy : MonoBehaviour
         if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
         else
+        {
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);
+        }
 
         SetRigidity(true, stunTime);
 

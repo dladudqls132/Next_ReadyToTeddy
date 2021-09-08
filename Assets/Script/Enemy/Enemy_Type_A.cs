@@ -8,7 +8,6 @@ public class Enemy_Type_A : Enemy
     [SerializeField] private float fireRate;
     private float currentFireRate;
     [SerializeField] private float bulletSpeed;
-    [SerializeField] private GameObject fireEffect;
     [SerializeField] private Transform arms;
 
     // Start is called before the first frame update
@@ -22,17 +21,19 @@ public class Enemy_Type_A : Enemy
     {
         CheckingPlayer();
 
-        if (!canSee) return;
-        //if(Vector3.Distance(this.transform.position, target.position) > attackRange)
-        //{
-        //    agent.isStopped = false;
-        //    agent.SetDestination(target.position);
-        //}
-        //else
-        //{
-        //    if(Vector3.Distance(this.transform.position, target.position) <= attackRange - 5)
-        //        agent.isStopped = true;
-        //}
+        if (isRigidity)
+        {
+            agent.isStopped = true;
+            currentRigidityTime += Time.deltaTime;
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+                agent.isStopped = false;
+            }
+        }
+
+        if (!canSee || isDead || isRigidity) return;
 
         currentFireRate += Time.deltaTime;
 
@@ -60,7 +61,7 @@ public class Enemy_Type_A : Enemy
         {
             foreach (Renderer r in renderers)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 4));
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
             }
         }
         else
@@ -89,15 +90,6 @@ public class Enemy_Type_A : Enemy
 
         if (isDead)
         {
-            //if (effect_explosion != null)
-            //{
-            //    effect_explosion.SetActive(true);
-            //    effect_explosion.transform.position = this.transform.position;
-            //    effect_explosion.GetComponent<ParticleSystem>().Play();
-
-            //    if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-            //        GameManager.Instance.GetPlayer().DecreaseHp(damage);
-            //}
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);

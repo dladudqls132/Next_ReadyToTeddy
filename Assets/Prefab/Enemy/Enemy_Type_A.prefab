@@ -554,9 +554,10 @@ GameObject:
   - component: {fileID: 7072252377646592068}
   - component: {fileID: 7072252377646592067}
   - component: {fileID: 1832149234}
-  m_Layer: 12
+  - component: {fileID: 2835669647589244872}
+  m_Layer: 17
   m_Name: Enemy_Type_A
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -656,8 +657,20 @@ MonoBehaviour:
   - {fileID: 1114606082}
   fireRate: 3
   bulletSpeed: 25
-  fireEffect: {fileID: 0}
   arms: {fileID: 9094786043214546286}
+--- !u!65 &2835669647589244872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072252377646592066}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7527311633912371621
 GameObject:
   m_ObjectHideFlags: 0

@@ -101,9 +101,9 @@ public class Bullet : MonoBehaviour
 
     virtual protected void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
+        
             other.GetComponent<PlayerController>().DecreaseHp(damage);
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
             temp.transform.position = this.transform.position;
@@ -135,7 +135,7 @@ public class Bullet : MonoBehaviour
         isDestroyed = true;
         
         currentLifeTime = 0;
-        projectile.SetActive(false);
+      
         //this.GetComponent<MeshRenderer>().enabled = false;
         
     }
@@ -147,7 +147,7 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
-        projectile.SetActive(true);
+      
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }

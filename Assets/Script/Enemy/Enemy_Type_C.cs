@@ -31,13 +31,25 @@ public class Enemy_Type_C : Enemy
     {
         CheckingPlayer();
 
-        if (!canSee) return;
+        if (isRigidity)
+        {
+            agent.isStopped = true;
+            currentRigidityTime += Time.deltaTime;
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+                agent.isStopped = false;
+            }
+        }
+
+        if (!canSee || isDead || isRigidity) return;
 
         if (currentCoolTime_attack <= coolTime_attack / 2)
         {
             foreach (Renderer r in renderers)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 4));
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
             }
         }
         else
@@ -128,16 +140,6 @@ public class Enemy_Type_C : Enemy
 
         if (isDead)
         {
-            //if (effect_explosion != null)
-            //{
-            //    effect_explosion.SetActive(true);
-            //    effect_explosion.transform.position = this.transform.position;
-            //    effect_explosion.GetComponent<ParticleSystem>().Play();
-
-            //    //if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-            //    //    GameManager.Instance.GetPlayer().DecreaseHp(damage);
-            //}
-
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);

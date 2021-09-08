@@ -9,8 +9,9 @@ public enum EffectType
     Damaged_lightning,
     AttackSpark_normal,
     Explosion_destroy,
-    Explosion_bomb,
+    Explosion_bomb_small,
     BulletHit_normal,
+    Explosion_bomb_large,
 }
 
 public class Pool_Effect : MonoBehaviour
