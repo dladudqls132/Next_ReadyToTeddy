@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2306817716691562095}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.29, z: 0}
+  m_LocalPosition: {x: 0, y: 1.634, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2306817717154194258}
@@ -99,9 +99,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.26
-  m_Height: 1.5314683
+  m_Height: 1.7759969
   m_Direction: 1
-  m_Center: {x: 0, y: 0.76, z: 0}
+  m_Center: {x: 0, y: 0.88226426, z: 0}
 --- !u!114 &2306817717154194262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,11 +128,6 @@ MonoBehaviour:
   checkingGroundRayPos: {fileID: 6100122699186304115}
   isDead: 0
   maxHP: 100
-  maxCombo: 30
-  currentCombo: 0
-  resetComboTime: 15
-  keepComboTime: 10
-  downComboTime: 2
   decreaseHpValuePerSecond: 1
   walkSpeed: 8.3
   walkSpeed_min: 8.3
@@ -140,7 +135,6 @@ MonoBehaviour:
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
-  WPressTime: 0.2
   canJump: 0
   isJumpByObject: 0
   isGrounded: 1
@@ -156,7 +150,6 @@ MonoBehaviour:
   dashTime: 0.3
   useGravity: 0
   landingReboundSpeed: 40
-  skill1_range: 10
   inventory: {fileID: 0}
   weapons:
   - {fileID: 5978284671447750407, guid: ea0bf6f262de08345ac0dc64d7d680a5, type: 3}
@@ -412,7 +405,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6100122698547951186}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.83, z: 0}
+  m_LocalPosition: {x: 0, y: 1.23, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2306817717154194258}

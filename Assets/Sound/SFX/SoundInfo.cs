@@ -21,7 +21,10 @@ public enum SoundType
     Warning_TypeC,
     Electric,
     EnergyBall_Bomb,
-    Container_Drop
+    Container_Drop,
+    AutoRifle_Reload_1,
+    AutoRifle_Reload_2,
+    Parkour
 }
 
 [System.Serializable]

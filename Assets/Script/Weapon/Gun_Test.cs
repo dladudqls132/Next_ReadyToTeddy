@@ -55,7 +55,7 @@ public class Gun_Test : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
+            if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap() && hand.GetComponent<Animator>().GetBool("isIdle"))
             {
                 SetIsReload(true);
             }
@@ -153,12 +153,12 @@ public class Gun_Test : Gun
 
                         if (!hit2.transform.CompareTag("Head"))
                         {
-                            enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+                            enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
                         else
                         {
                             headShot = true;
-                            enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Normal);
+                            enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
 
                         isHit = true;
@@ -167,6 +167,7 @@ public class Gun_Test : Gun
                         {
                             isDead = true;
                             owner.GetComponent<PlayerController>().IncreaseSpeed();
+                            owner.GetComponent<PlayerController>().IncreaseHp(10);
                         }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))

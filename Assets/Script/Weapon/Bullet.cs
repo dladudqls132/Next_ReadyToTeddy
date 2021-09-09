@@ -14,6 +14,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected bool isDestroyed;
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;
+    [SerializeField] protected GameObject projectile;
     [SerializeField] protected Transform target;
     [SerializeField] protected float stunTime;
 
@@ -28,18 +29,16 @@ public class Bullet : MonoBehaviour
          trail = this.GetComponent<TrailRenderer>();
     }
 
-    // Update is called once per frame
-    virtual protected void FixedUpdate()
+    virtual protected void Update()
     {
-
-        if(isFire)
+        if (isFire)
         {
             rigid.velocity = dir * speed;
         }
 
-        if(isDestroyed)
+        if (isDestroyed)
         {
-            if(trail.positionCount <= 0)
+            if (trail.positionCount <= 0)
             {
                 ResetInfo();
             }
@@ -102,18 +101,29 @@ public class Bullet : MonoBehaviour
 
     virtual protected void OnTriggerEnter(Collider other)
     {
-
         if (other.CompareTag("Player"))
         {
+        
             other.GetComponent<PlayerController>().DecreaseHp(damage);
+            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
+            temp.transform.position = this.transform.position;
+            temp.SetActive(true);
             ActiveFalse();
         }
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Default") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
-            
+
             if (!other.isTrigger)
+            {
+                GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
+                if (temp != null)
+                {
+                    temp.transform.position = this.transform.position;
+                    temp.SetActive(true);
+                }
                 ActiveFalse();
+            }
         }
     }
 
@@ -125,7 +135,9 @@ public class Bullet : MonoBehaviour
         isDestroyed = true;
         
         currentLifeTime = 0;
-        this.GetComponent<MeshRenderer>().enabled = false;
+      
+        //this.GetComponent<MeshRenderer>().enabled = false;
+        
     }
 
     virtual protected void ResetInfo()
@@ -135,6 +147,7 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
+      
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }

@@ -47,7 +47,7 @@ Shader "Projector/Alpha" {
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 texS = tex2Dproj (_ShadowTex, UNITY_PROJ_COORD(i.uvShadow));
-				texS.rgb *= _Color.rgb;
+				texS.rgba *= _Color.rgba;
 				UNITY_APPLY_FOG_COLOR(i.fogCoord, texS, fixed4(0,0,0,0));
 				return texS;
 			}

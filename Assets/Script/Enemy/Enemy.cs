@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float damage;
     [SerializeField] protected float speed;
     //protected float increaseCombo;
-    protected Pool_DamagedEffect pool_damagedEffect;
+   
     [SerializeField] protected float detectRange;
     [SerializeField] protected float attackRange;
     //[SerializeField] protected float combatTime;
@@ -74,7 +74,9 @@ public class Enemy : MonoBehaviour
     protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
-    ParticleSystem.Burst[] bursts;
+    protected Renderer[] renderers;
+    [SerializeField] protected Color emissionColor_normal;
+    [SerializeField] protected Color emissionColor_angry;
 
     public float GetCurrentHp() { return currentHp; }
     public void SetCurrentHp(float value) { currentHp = value; }
@@ -100,13 +102,10 @@ public class Enemy : MonoBehaviour
     {
         currentHp = maxHp;
 
-        if(FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
         originAttackRange = attackRange;
 
         if(target == null && GameManager.Instance.GetPlayer().transform != null)
-            target = GameManager.Instance.GetPlayer().transform;
+            target = GameManager.Instance.GetPlayer().GetAimPos();
 
         if (this.GetComponent<NavMeshAgent>() != null)
         {
@@ -138,10 +137,35 @@ public class Enemy : MonoBehaviour
         //    currentDestPatrolNode = patrolNode[0];
         //    currentDestPatrolNodeIndex = 0;
         //}
+
+        //if (effect_prefab_explosion != null)
+        //{
+        //    effect_explosion = Instantiate(effect_prefab_explosion);
+        //    effect_explosion.GetComponent<ParticleSystem>().Play();
+        //    effect_explosion.SetActive(false);
+        //}
+
+        renderers = this.GetComponentsInChildren<Renderer>();
     }
 
     public virtual void SetDead(bool value) {}
 
+    protected void CheckingPlayer()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        {
+            if(hit.transform.CompareTag("Player"))
+            {
+                canSee = true;
+            }
+        }
+        if(Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        {
+            canSee = true;
+        }
+
+    }
 
     protected void CheckingHp()
     {
@@ -151,7 +175,7 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-              
+                
                 SetDead(true);
 
 
@@ -208,9 +232,10 @@ public class Enemy : MonoBehaviour
         //    return;
         if (!this.enabled) return;
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
+        if (isDead || isGod) return;
         currentHp -= value;
 
+        canSee = true;
        // whoAttackThis = null;
 
         CheckingHp();
@@ -222,18 +247,19 @@ public class Enemy : MonoBehaviour
         //{
         //    return;
         //}
+
         if (!this.enabled) return;
 
-        if (isDead /*|| this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom()*/ || isGod) return;
+        if (isDead || isGod) return;
 
         currentHp -= damage;
-
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
+     
+        GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
             return;
 
-        if (effectType != EffectType.Lightning)
+        if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
         else
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
@@ -243,9 +269,12 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
-       // whoAttackThis = attackObj;
-       if(anim != null)
-        anim.SetTrigger("Damaged");
+        canSee = true;
+        // whoAttackThis = attackObj;
+        if (anim != null)
+        {
+            anim.SetTrigger("Damaged");
+        }
         CheckingHp();
     }
 
@@ -257,19 +286,21 @@ public class Enemy : MonoBehaviour
         //}
         if (!this.enabled) return;
 
-        if (isDead || this.GetComponent<RoomInfo>().GetRoom() != target.root.GetComponent<RoomInfo>().GetRoom() || isGod) return;
+        if (isDead || isGod) return;
 
         currentHp -= damage;
 
-        GameObject effect = pool_damagedEffect.GetDamagedEffect(effectType);
+        GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
             return;
 
-        if (effectType != EffectType.Lightning)
+        if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
         else
+        {
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);
+        }
 
         SetRigidity(true, stunTime);
 
@@ -277,6 +308,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.identity;
         effect.SetActive(true);
 
+        canSee = true;
         // whoAttackThis = attackObj;
         anim.SetTrigger("Damaged");
         CheckingHp();

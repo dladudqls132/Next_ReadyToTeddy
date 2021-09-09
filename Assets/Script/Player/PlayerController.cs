@@ -63,6 +63,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashPower = 0;
     [SerializeField] private float dashTime = 0;
     private float currentDashPower = 0;
+    [SerializeField] private float dashRefillTime;
+    private float currentDashRefillTime;
+    [SerializeField] private int dashCount;
+    [SerializeField] private int currentDashCount;
     [SerializeField] private bool useGravity = false;
     private bool isLanding = false;
     [SerializeField] private float landingReboundSpeed = 0;
@@ -103,11 +107,6 @@ public class PlayerController : MonoBehaviour
 
     private List<GameObject> collisionWeapon = new List<GameObject>();
 
-    [SerializeField] private float dashRefillTime;
-    private float currentDashRefillTime;
-    [SerializeField] private int dashCount;
-    [SerializeField] private int currentDashCount;
-
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
     public GameObject GetTempWeaponGameObject() { return tempWeapon; }
@@ -120,6 +119,8 @@ public class PlayerController : MonoBehaviour
     public bool GetIsCrouch() { return isCrouch; }
     public void SetCanJump(bool value) { canJump = value; }
     public float GetWalkSpeed() { return walkSpeed; }
+    public float GetWalkSpeed_Min() { return walkSpeed_min; }
+    public float GetWalkSpeed_Max() { return walkSpeed_max; }
     public bool GetIsDead() { return isDead; }
     public bool GetIsRun() { return isRun; }
     public bool GetIsGrounded() { return isGrounded; }
@@ -616,6 +617,8 @@ public class PlayerController : MonoBehaviour
                             break;
                         }
 
+                        mainCam.GetComponent<Animator>().SetTrigger("Parkour");
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
                         isClimbUp = true;
                         rigid.velocity = Vector3.zero;
                         climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
@@ -1528,39 +1531,41 @@ public class PlayerController : MonoBehaviour
         isFever = true;
         currentFeverTime = feverTime;
         if (walkSpeed <= walkSpeed_max)
+        {            
             walkSpeed += 0.5f;
+        }
         else
             walkSpeed = walkSpeed_max;
     }
 
-    public void PickUpWeapon_Change()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
-        {
-            inventory.ChangeWeapon(hit.transform.gameObject);
-        }
-    }
+    //public void PickUpWeapon_Change()
+    //{
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
+    //    {
+    //        inventory.ChangeWeapon(hit.transform.gameObject);
+    //    }
+    //}
 
-    public void PickUpWeapon()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
-        {
-            inventory.AddWeapon(hit.transform.gameObject);
-        }
-    }
+    //public void PickUpWeapon()
+    //{
+    //    RaycastHit hit;
+    //    if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, 3, 1 << LayerMask.NameToLayer("Weapon")))
+    //    {
+    //        inventory.AddWeapon(hit.transform.gameObject);
+    //    }
+    //}
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (LayerMask.LayerToName(other.gameObject.layer).Equals("Weapon") && !collisionWeapon.Contains(other.gameObject))
-            collisionWeapon.Add(other.gameObject);
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (LayerMask.LayerToName(other.gameObject.layer).Equals("Weapon") && !collisionWeapon.Contains(other.gameObject))
+    //        collisionWeapon.Add(other.gameObject);
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (LayerMask.LayerToName(other.gameObject.layer).Equals("Weapon") && collisionWeapon.Contains(other.gameObject))
-            collisionWeapon.Remove(other.gameObject);
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (LayerMask.LayerToName(other.gameObject.layer).Equals("Weapon") && collisionWeapon.Contains(other.gameObject))
+    //        collisionWeapon.Remove(other.gameObject);
+    //}
 
 }

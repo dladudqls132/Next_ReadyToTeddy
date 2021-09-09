@@ -4,29 +4,84 @@ using UnityEngine;
 
 public class Enemy_Type_A : Enemy
 {
-    [SerializeField] private GameObject effect_prefab;
-    private GameObject effect;
+    [SerializeField] private Transform[] firePos;
+    [SerializeField] private float fireRate;
+    private float currentFireRate;
+    [SerializeField] private float bulletSpeed;
+    [SerializeField] private Transform arms;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-
-        if (FindObjectOfType<Pool_DamagedEffect>() != null)
-            pool_damagedEffect = FindObjectOfType<Pool_DamagedEffect>();
-
-        if (effect_prefab != null)
-        {
-            effect = Instantiate(effect_prefab);
-            effect.GetComponent<ParticleSystem>().Play();
-            effect.SetActive(false);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckingPlayer();
+
+        if (isRigidity)
+        {
+            agent.isStopped = true;
+            currentRigidityTime += Time.deltaTime;
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                currentRigidityTime = 0;
+                agent.isStopped = false;
+            }
+        }
+
+        if (!canSee || isDead || isRigidity) return;
+
+        currentFireRate += Time.deltaTime;
+
+        if(currentFireRate >= fireRate)
+        {
+            agent.isStopped = true;
+            currentFireRate = 0;
+
+            anim.SetTrigger("Attack");
+        }
+        else
+        {
+            if (Vector3.Distance(this.transform.position, target.position) > attackRange)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(target.position);
+            }
+            else
+                agent.isStopped = true;
+        }
+
+        anim.SetBool("isMove", !agent.isStopped);
+
+        if (currentFireRate < fireRate / 2)
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+            }
+        }
+        else
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 4));
+            }
+        }
+
+
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime *10);
+        
+    }
+
+    private void LateUpdate()
+    {
+        Vector3 dir = (target.position - this.transform.position).normalized;
+        arms.rotation = Quaternion.Euler(arms.rotation.eulerAngles.x, arms.rotation.eulerAngles.y, -Quaternion.LookRotation(dir).eulerAngles.x - 90);
+     
     }
 
     public override void SetDead(bool value)
@@ -35,19 +90,33 @@ public class Enemy_Type_A : Enemy
 
         if (isDead)
         {
-            isDead = false;
-
-            if (effect != null)
-            {
-                effect.SetActive(true);
-                effect.transform.position = this.transform.position;
-                effect.GetComponent<ParticleSystem>().Play();
-
-                if (Vector3.Distance(this.transform.position, target.position) <= attackRange)
-                    GameManager.Instance.GetPlayer().DecreaseHp(damage);
-            }
-
+            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
+            temp.transform.position = this.transform.position;
+            temp.SetActive(true);
             this.gameObject.SetActive(false);
         }
+    }
+
+    void Attack1()
+    {
+        Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+        tempBullet.gameObject.SetActive(true);
+        tempBullet.SetFire(firePos[0].position, (target.position - firePos[0].position).normalized, bulletSpeed, damage);
+        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
+        temp.transform.position = firePos[0].position;
+        temp.transform.rotation = Quaternion.Euler(firePos[0].eulerAngles.x + 90, firePos[0].eulerAngles.y, firePos[0].eulerAngles.z);
+        temp.SetActive(true);
+    }
+
+    void Attack2()
+    {
+        Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
+        tempBullet.gameObject.SetActive(true);
+        tempBullet.SetFire(firePos[1].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
+        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
+        temp.transform.position = firePos[1].position;
+        temp.transform.rotation = Quaternion.Euler(firePos[1].eulerAngles.x + 90, firePos[1].eulerAngles.y, firePos[1].eulerAngles.z);
+        temp.SetActive(true);
+        agent.isStopped = false;
     }
 }

@@ -20,7 +20,6 @@ public class Gun : MonoBehaviour
     [SerializeField] protected Vector3 recoil;
     protected float recoilMagnitude;
 
-    [SerializeField] protected GameObject item;
     [SerializeField] protected GameObject owner;
     [SerializeField] protected Transform hand;
     [SerializeField] protected Transform shotPos;
@@ -38,7 +37,7 @@ public class Gun : MonoBehaviour
     protected float currentReloadTime;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected int maxAmmo_aMag;
-    [SerializeField] protected int haveAmmo;
+    protected int haveAmmo;
     [SerializeField] protected int currentAmmo;
     [SerializeField] protected float damagePerBullet;
     
@@ -59,8 +58,6 @@ public class Gun : MonoBehaviour
     [SerializeField] MeshRenderer[] mesh;
     public AnimationClip weaponAnimation;
 
-    protected Rigidbody rigid;
-
     public Vector3 GetOriginPos() { return originPos; }
     public Vector3 GetOriginRot() { return originRot; }
     public Sprite GetSprite() { return sprite; }
@@ -72,6 +69,7 @@ public class Gun : MonoBehaviour
     protected Vector3 direction;
     [SerializeField] protected bool isAiming;
     protected bool isAiminged;
+    [SerializeField] public Transform mag;
 
     public void SetInfo(GunType gunType, Sprite sprite, float damagePerBullet, int maxAmmo, int maxAmmo_aMag, int fireNum, float spreadAngle_normal, float spreadAngle_aiming, float shotDelay, float stunTime, float refillTime)
     {
@@ -94,12 +92,13 @@ public class Gun : MonoBehaviour
     protected virtual void Awake()
     {
         currentAmmo = maxAmmo_aMag;
+        haveAmmo = maxAmmo;
+
         currentReloadTime = reloadTime;
         currentShotDelay = shotDelay;
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
-        rigid = this.GetComponent<Rigidbody>();
+
         recoilMagnitude = recoil.magnitude;
-        haveAmmo = maxAmmo_aMag;
 
         for (int i = 0; i < mesh.Length; i++)
         {
@@ -143,9 +142,6 @@ public class Gun : MonoBehaviour
             {
                 temp.enabled = false;
             }
-            rigid.velocity = Vector3.zero;
-            rigid.angularVelocity = Vector3.zero;
-            rigid.useGravity = false;
 
            // this.gameObject.SetActive(false);
             this.transform.SetParent(parent);
@@ -157,8 +153,6 @@ public class Gun : MonoBehaviour
             {
                 mesh[i].enabled = true;
             }
-
-            item.SetActive(false);
         }
         else
         {
@@ -170,8 +164,6 @@ public class Gun : MonoBehaviour
             {
                 temp.enabled = true;
             }
-            rigid.useGravity = true;
-            rigid.AddForce(mainCam.transform.forward * 5, ForceMode.Impulse);
 
             //this.transform.position = dropPos;
             //this.transform.rotation = dropRot;
@@ -180,8 +172,6 @@ public class Gun : MonoBehaviour
             {
                 mesh[i].enabled = false;
             }
-
-            item.SetActive(true);
         }
     }
 
@@ -213,15 +203,22 @@ public class Gun : MonoBehaviour
 
         isAiminged = false;
 
-        if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
+        if (gunType == GunType.AR)
         {
-            haveAmmo -= maxAmmo_aMag - currentAmmo;
             currentAmmo = maxAmmo_aMag;
         }
         else
         {
-            currentAmmo += haveAmmo;
-            haveAmmo = 0;
+            if (haveAmmo >= (maxAmmo_aMag - currentAmmo))
+            {
+                haveAmmo -= maxAmmo_aMag - currentAmmo;
+                currentAmmo = maxAmmo_aMag;
+            }
+            else
+            {
+                currentAmmo += haveAmmo;
+                haveAmmo = 0;
+            }
         }
     }
 

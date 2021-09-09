@@ -19,7 +19,7 @@ public class Fire : MonoBehaviour
             if (tempNum % 10 == 0)
             {
                 //GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
-                other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.Normal);
+                other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.Damaged_normal);
             }
             else
                 other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.None);
