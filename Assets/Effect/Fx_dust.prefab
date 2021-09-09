@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5032227769432643236
+--- !u!1001 &2380646810129795533
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -70,7 +70,7 @@ PrefabInstance:
     - target: {fileID: 3356514112422070926, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: m_Name
-      value: Fx_dust Variant
+      value: Fx_dust
       objectReference: {fileID: 0}
     - target: {fileID: 4693254287933648336, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
@@ -215,7 +215,7 @@ PrefabInstance:
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: EmissionModule.rateOverDistance.scalar
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
@@ -240,42 +240,42 @@ PrefabInstance:
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 0.1
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[1].time
-      value: 0.075247474
+      value: 0.07716245
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[1].outSlope
-      value: 1.180885
+      value: 0.5292676
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[2].inSlope
-      value: 1.180885
+      value: 0.5292676
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[0].outSlope
-      value: 5.6955004
+      value: 4.099511
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[1].value
-      value: 0.428572
+      value: 0.74490196
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[1].inSlope
-      value: 5.6955004
+      value: 4.099511
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
@@ -315,17 +315,17 @@ PrefabInstance:
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
-      value: 0.6792453
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.g
-      value: 0.599444
+      value: 0.88007677
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.44535422
+      value: 0.6462264
       objectReference: {fileID: 0}
     - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
         type: 3}
@@ -351,6 +351,36 @@ PrefabInstance:
         type: 3}
       propertyPath: CustomDataModule.enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: VelocityModule.x.minScalar
+      value: -0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: VelocityModule.y.scalar
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: VelocityModule.z.scalar
+      value: 0.005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: VelocityModule.z.minScalar
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056308856791374189, guid: 68cae49e3e97deb4c96de5ef18a6281b,
+        type: 3}
+      propertyPath: CustomDataModule.vector0_0.maxCurve.m_Curve.Array.data[0].value
+      value: 0.4285736
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68cae49e3e97deb4c96de5ef18a6281b, type: 3}
