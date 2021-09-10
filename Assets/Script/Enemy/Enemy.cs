@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
     protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
-    protected MeshRenderer[] renderers;
+    [SerializeField] protected Renderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
 
@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
         if (dropItem != null)
             dropItem.SetActive(false);
 
-        renderers = this.GetComponentsInChildren<MeshRenderer>();
+        renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
 
     public virtual void SetDead(bool value) {}

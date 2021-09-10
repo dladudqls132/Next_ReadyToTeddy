@@ -149,7 +149,12 @@ public class Enemy_Type_C : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
 
-            this.gameObject.SetActive(false);
+            Invoke("Destroy", 0.1f);
         }
+    }
+
+    void Destroy()
+    {
+        this.gameObject.SetActive(false);
     }
 }

@@ -12,6 +12,7 @@ public class Enemy_Type_B : Enemy
     private float currentBombTime;
     private bool isAttack;
     [SerializeField] private float bombSize;
+    private FPPCamController mainCam;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -21,6 +22,7 @@ public class Enemy_Type_B : Enemy
         projector = Instantiate(projector);
 
         currentFireRate = Random.Range(0, fireRate);
+        mainCam = Camera.main.transform.GetComponent<FPPCamController>();
     }
 
     // Update is called once per frame
@@ -55,6 +57,8 @@ public class Enemy_Type_B : Enemy
                 if (Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     temp.transform.position = hit.point;
+                    mainCam.Shake(0.2f, 0.4f, false);
+
 
                     Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
                     if (c.Length != 0)
@@ -142,8 +146,13 @@ public class Enemy_Type_B : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
             projector.gameObject.SetActive(false);
-            this.gameObject.SetActive(false);
+            Invoke("Destroy", 0.1f);
         }
+    }
+
+    void Destroy()
+    {
+        this.gameObject.SetActive(false);
     }
 
     void Attack()

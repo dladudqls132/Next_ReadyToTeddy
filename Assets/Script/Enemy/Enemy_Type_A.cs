@@ -121,16 +121,29 @@ public class Enemy_Type_A : Enemy
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
-            this.gameObject.SetActive(false);
+            Invoke("Destroy", 0.1f);
         }
+    }
+
+    void Destroy()
+    {
+        this.gameObject.SetActive(false);
     }
 
     void Attack1()
     {
         Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
         tempBullet.gameObject.SetActive(true);
-        if(isShield)
-            tempBullet.SetFire(firePos[0].position, firePos[0].forward, bulletSpeed, damage);
+        if (isShield)
+        {
+            if(Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) > 0.7f)
+            {
+                tempBullet.SetFire(firePos[0].position, (target.position - firePos[0].position).normalized, bulletSpeed, damage);
+            }
+            else
+                tempBullet.SetFire(firePos[0].position, firePos[0].forward, bulletSpeed, damage);
+            
+        }
         else
             tempBullet.SetFire(firePos[0].position, (target.position - firePos[0].position).normalized, bulletSpeed, damage);
         GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
@@ -144,7 +157,14 @@ public class Enemy_Type_A : Enemy
         Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
         tempBullet.gameObject.SetActive(true);
         if (isShield)
-            tempBullet.SetFire(firePos[1].position, firePos[1].forward, bulletSpeed, damage);
+        {
+            if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) > 0.7f)
+            {
+                tempBullet.SetFire(firePos[1].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
+            }
+            else
+                tempBullet.SetFire(firePos[1].position, firePos[1].forward, bulletSpeed, damage);
+        }
         else
             tempBullet.SetFire(firePos[1].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
         GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
