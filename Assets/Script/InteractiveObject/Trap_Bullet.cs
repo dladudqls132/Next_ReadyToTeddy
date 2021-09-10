@@ -18,6 +18,8 @@ public class Trap_Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Vector3.Distance(this.transform.position, GameManager.Instance.GetPlayer().transform.position) > 30.0f) return;
+
         currentFireRate += Time.deltaTime;
 
         if(currentFireRate >= fireRate)

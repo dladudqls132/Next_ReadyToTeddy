@@ -29,7 +29,6 @@ public class Enemy_Type_D : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
@@ -39,7 +38,12 @@ public class Enemy_Type_D : Enemy
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
+        if (!isDetect || isDead || isRigidity)
+        {
+
+            agent.SetDestination(this.transform.position);
+            return;
+        }
 
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, target.position + targetOffset, NavMesh.AllAreas, path))
@@ -77,16 +81,22 @@ public class Enemy_Type_D : Enemy
                 SetDead(true);
             }
 
-            foreach (Renderer r in renderers)
+            if (!isDead)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentAttackTimer / attackTimer), Time.deltaTime * 4));
+                foreach (Renderer r in renderers)
+                {
+                    r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentAttackTimer / attackTimer), Time.deltaTime * 4));
+                }
             }
         }
         else
         {
-            foreach (Renderer r in renderers)
+            if (!isDead)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+                foreach (Renderer r in renderers)
+                {
+                        r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+                }
             }
         }
 

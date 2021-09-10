@@ -143,7 +143,7 @@ public class Gun_Test : Gun
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
                 {
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
@@ -167,7 +167,7 @@ public class Gun_Test : Gun
                         {
                             isDead = true;
                             owner.GetComponent<PlayerController>().IncreaseSpeed();
-                            owner.GetComponent<PlayerController>().IncreaseHp(10);
+                            //owner.GetComponent<PlayerController>().IncreaseHp(10);
                         }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))
