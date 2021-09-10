@@ -261,7 +261,7 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
         currentHp -= value;
 
-        canSee = true;
+        isDetect = true;
        // whoAttackThis = null;
 
         CheckingHp();
@@ -295,7 +295,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
-        canSee = true;
+        isDetect = true;
         // whoAttackThis = attackObj;
         if (anim != null)
         {
@@ -334,7 +334,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.identity;
         effect.SetActive(true);
 
-        canSee = true;
+        isDetect = true;
         // whoAttackThis = attackObj;
         anim.SetTrigger("Damaged");
         CheckingHp();
