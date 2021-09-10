@@ -119,18 +119,20 @@ public class Enemy : MonoBehaviour
         if(this.GetComponent<Animator>() != null)
             anim = this.GetComponent<Animator>();
 
-        float itemDropRate = Random.Range(0.0f, 100.0f);
+        //float itemDropRate = Random.Range(0.0f, 100.0f);
 
-        if (itemDropRate <= magazineDropRate)
-        {
-            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-        }
-        else if (itemDropRate <= magazineDropRate + potionDropRate)
-        {
-            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
-        }
+        //if (itemDropRate <= magazineDropRate)
+        //{
+        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
+        //}
+        //else if (itemDropRate <= magazineDropRate + potionDropRate)
+        //{
+        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
+        //}
 
-        if(dropItem != null)
+        dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
+
+        if (dropItem != null)
             dropItem.SetActive(false);
 
         renderers = this.GetComponentsInChildren<MeshRenderer>();

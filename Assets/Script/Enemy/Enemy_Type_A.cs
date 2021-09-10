@@ -9,6 +9,8 @@ public class Enemy_Type_A : Enemy
     private float currentFireRate;
     [SerializeField] private float bulletSpeed;
     [SerializeField] private Transform arms;
+    private bool move_left;
+    private bool isAttack;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -35,27 +37,45 @@ public class Enemy_Type_A : Enemy
 
         if (!canSee || isDead || isRigidity) return;
 
-        currentFireRate += Time.deltaTime;
+        if(!isAttack)
+            currentFireRate += Time.deltaTime;
 
         if(currentFireRate >= fireRate)
         {
             agent.isStopped = true;
+            isAttack = true;
             currentFireRate = 0;
-
             anim.SetTrigger("Attack");
         }
-        else
+
+        if (!isAttack)
         {
             if (Vector3.Distance(this.transform.position, target.position) > attackRange)
             {
                 agent.isStopped = false;
                 agent.SetDestination(target.position);
+                anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 0, Time.deltaTime * 4));
+                anim.SetFloat("vertical", Mathf.Lerp(anim.GetFloat("vertical"), 1, Time.deltaTime * 4));
             }
             else
+            {
                 agent.isStopped = true;
+                anim.SetFloat("vertical", Mathf.Lerp(anim.GetFloat("vertical"), 0, Time.deltaTime * 4));
+
+                if (move_left)
+                {
+                    anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), -1, Time.deltaTime * 4));
+                    this.transform.position = this.transform.position + -this.transform.right * Time.deltaTime;
+                }
+                else
+                {
+                    anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 1, Time.deltaTime * 4));
+                    this.transform.position = this.transform.position + this.transform.right * Time.deltaTime;
+                }
+            }
         }
 
-        anim.SetBool("isMove", !agent.isStopped);
+        //anim.SetBool("isMove", !agent.isStopped);
 
         if (currentFireRate < fireRate / 2)
         {
@@ -118,5 +138,18 @@ public class Enemy_Type_A : Enemy
         temp.transform.rotation = Quaternion.Euler(firePos[1].eulerAngles.x + 90, firePos[1].eulerAngles.y, firePos[1].eulerAngles.z);
         temp.SetActive(true);
         agent.isStopped = false;
+        isAttack = false;
+
+        int rndNum = Random.Range(0, 2);
+
+        switch(rndNum)
+        {
+            case 0:
+                move_left = true;
+                break;
+            case 1:
+                move_left = false;
+                break;
+        }
     }
 }

@@ -1530,12 +1530,13 @@ public class PlayerController : MonoBehaviour
     {
         isFever = true;
         currentFeverTime = feverTime;
-        if (walkSpeed <= walkSpeed_max)
-        {            
-            walkSpeed += 0.5f;
-        }
-        else
-            walkSpeed = walkSpeed_max;
+        walkSpeed = walkSpeed_max;
+        //if (walkSpeed <= walkSpeed_max)
+        //{            
+        //    walkSpeed += 0.5f;
+        //}
+        //else
+        //    walkSpeed = walkSpeed_max;
     }
 
     //public void PickUpWeapon_Change()

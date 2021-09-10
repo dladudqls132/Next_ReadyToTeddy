@@ -131,7 +131,7 @@ MonoBehaviour:
   decreaseHpValuePerSecond: 1
   walkSpeed: 8.3
   walkSpeed_min: 8.3
-  walkSpeed_max: 12
+  walkSpeed_max: 11
   runSpeed: 11
   slidingCoolTime: 1.5
   isSlope: 0
@@ -148,6 +148,9 @@ MonoBehaviour:
   combatTime: 0
   dashPower: 30
   dashTime: 0.3
+  dashRefillTime: 2
+  dashCount: 3
+  currentDashCount: 0
   useGravity: 0
   landingReboundSpeed: 40
   inventory: {fileID: 0}
@@ -160,11 +163,8 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0}
   handOriginPos: {x: 0, y: 0, z: 0}
   isFever: 0
-  feverTime: 2
+  feverTime: 1
   currentFeverTime: 0
-  dashRefillTime: 2
-  dashCount: 3
-  currentDashCount: 0
 --- !u!114 &6100122698673753942
 MonoBehaviour:
   m_ObjectHideFlags: 0
