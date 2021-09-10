@@ -94,7 +94,8 @@ public class Bullet_CL : Bullet
         {
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
             {
-                other.GetComponent<Boss_EnergyShield>().DecreaseHp();
+                if(other.GetComponent<Boss_EnergyShield>() != null)
+                    other.GetComponent<Boss_EnergyShield>().DecreaseHp();
                 ActiveFalse();
             }
             else

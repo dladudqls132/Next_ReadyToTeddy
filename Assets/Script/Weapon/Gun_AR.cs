@@ -133,7 +133,7 @@ public class Gun_AR : Gun
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
     
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")),QueryTriggerInteraction.Ignore))
             {
                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
