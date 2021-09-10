@@ -99,8 +99,10 @@ public class Enemy_Type_A : Enemy
         }
 
 
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime * (currentFireRate / fireRate) * 8);
-        
+        if(isShield)
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime * (currentFireRate / fireRate) * 8);
+        else
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime * 10);
     }
 
     private void LateUpdate()
@@ -142,9 +144,9 @@ public class Enemy_Type_A : Enemy
         Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
         tempBullet.gameObject.SetActive(true);
         if (isShield)
-            tempBullet.SetFire(firePos[0].position, firePos[1].forward, bulletSpeed, damage);
+            tempBullet.SetFire(firePos[1].position, firePos[1].forward, bulletSpeed, damage);
         else
-            tempBullet.SetFire(firePos[0].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
+            tempBullet.SetFire(firePos[1].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
         GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
         temp.transform.position = firePos[1].position;
         temp.transform.rotation = Quaternion.Euler(firePos[1].eulerAngles.x + 90, firePos[1].eulerAngles.y, firePos[1].eulerAngles.z);
