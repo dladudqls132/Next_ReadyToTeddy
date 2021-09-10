@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
     protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
-    protected Renderer[] renderers;
+    protected MeshRenderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
 
@@ -132,20 +132,8 @@ public class Enemy : MonoBehaviour
 
         if(dropItem != null)
             dropItem.SetActive(false);
-        //if (patrolNode.Length != 0)
-        //{
-        //    currentDestPatrolNode = patrolNode[0];
-        //    currentDestPatrolNodeIndex = 0;
-        //}
 
-        //if (effect_prefab_explosion != null)
-        //{
-        //    effect_explosion = Instantiate(effect_prefab_explosion);
-        //    effect_explosion.GetComponent<ParticleSystem>().Play();
-        //    effect_explosion.SetActive(false);
-        //}
-
-        renderers = this.GetComponentsInChildren<Renderer>();
+        renderers = this.GetComponentsInChildren<MeshRenderer>();
     }
 
     public virtual void SetDead(bool value) {}

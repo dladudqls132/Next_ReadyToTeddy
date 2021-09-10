@@ -108,6 +108,7 @@ public class Enemy_Type_B : Enemy
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
+            projector.gameObject.SetActive(false);
             this.gameObject.SetActive(false);
         }
     }

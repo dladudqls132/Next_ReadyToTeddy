@@ -77,16 +77,22 @@ public class Enemy_Type_D : Enemy
                 SetDead(true);
             }
 
-            foreach (Renderer r in renderers)
+            if (!isDead)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentAttackTimer / attackTimer), Time.deltaTime * 4));
+                foreach (Renderer r in renderers)
+                {
+                    r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentAttackTimer / attackTimer), Time.deltaTime * 4));
+                }
             }
         }
         else
         {
-            foreach (Renderer r in renderers)
+            if (!isDead)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+                foreach (Renderer r in renderers)
+                {
+                        r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+                }
             }
         }
 
