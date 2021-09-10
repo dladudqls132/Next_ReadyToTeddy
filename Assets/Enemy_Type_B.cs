@@ -19,6 +19,8 @@ public class Enemy_Type_B : Enemy
         base.Start();
 
         projector = Instantiate(projector);
+
+        currentFireRate = Random.Range(0, fireRate);
     }
 
     // Update is called once per frame
@@ -28,29 +30,15 @@ public class Enemy_Type_B : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
                 isRigidity = false;
                 currentRigidityTime = 0;
-                agent.isStopped = false;
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
-
-        currentFireRate += Time.deltaTime;
-
-        if (currentFireRate >= fireRate)
-        {
-            currentFireRate = 0;
-
-            Attack();
-            //anim.SetTrigger("Attack");
-        }
-
-        if(isAttack)
+        if (isAttack)
         {
             currentBombTime += Time.deltaTime;
 
@@ -64,7 +52,7 @@ public class Enemy_Type_B : Enemy
                 projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_bomb_large);
                 RaycastHit hit;
-                if(Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     temp.transform.position = hit.point;
 
@@ -80,6 +68,51 @@ public class Enemy_Type_B : Enemy
                 isAttack = false;
             }
         }
+
+        if (!isDetect || isDead || isRigidity)
+        {
+            return;
+        }
+
+        currentFireRate += Time.deltaTime;
+
+        if (currentFireRate >= fireRate)
+        {
+            currentFireRate = 0;
+
+            Attack();
+        }
+
+        //if(isAttack)
+        //{
+        //    currentBombTime += Time.deltaTime;
+
+        //    projector.GetComponent<Projector>().orthographicSize = Mathf.Lerp(projector.GetComponent<Projector>().orthographicSize, bombSize, Time.deltaTime * 10);
+        //    projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
+
+        //    if (currentBombTime >= bombTime)
+        //    {
+        //        currentBombTime = 0;
+        //        projector.GetComponent<Projector>().orthographicSize = 1;
+        //        projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
+        //        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_bomb_large);
+        //        RaycastHit hit;
+        //        if(Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
+        //        {
+        //            temp.transform.position = hit.point;
+
+        //            Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
+        //            if (c.Length != 0)
+        //            {
+        //                c[0].GetComponent<PlayerController>().DecreaseHp(damage);
+        //            }
+        //            temp.SetActive(true);
+
+        //        }
+        //        projector.gameObject.SetActive(false);
+        //        isAttack = false;
+        //    }
+        //}
 
         if (currentFireRate < fireRate / 2)
         {

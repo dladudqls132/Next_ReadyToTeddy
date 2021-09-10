@@ -16,6 +16,8 @@ public class Enemy_Type_A : Enemy
     protected override void Start()
     {
         base.Start();
+
+        currentFireRate = Random.Range(0, fireRate);
     }
 
     // Update is called once per frame
@@ -25,7 +27,6 @@ public class Enemy_Type_A : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
@@ -35,7 +36,11 @@ public class Enemy_Type_A : Enemy
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
+        if (!isDetect || isDead || isRigidity)
+        {
+            agent.SetDestination(this.transform.position);
+            return;
+        }
 
         if(!isAttack)
             currentFireRate += Time.deltaTime;

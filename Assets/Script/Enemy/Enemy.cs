@@ -42,6 +42,9 @@ public class Enemy : MonoBehaviour
     //protected float increaseCombo;
    
     [SerializeField] protected float detectRange;
+    private float detectTime = 4.0f;
+    private float currentDetectTime;
+    [SerializeField] protected bool isDetect;
     [SerializeField] protected float attackRange;
     //[SerializeField] protected float combatTime;
     //protected float currentCombatTime;
@@ -59,6 +62,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] protected GameObject dropItem;
     [SerializeField] protected GameObject dropWeapon;
+
 
     protected float currentRigidityTime;
 
@@ -143,18 +147,50 @@ public class Enemy : MonoBehaviour
     protected void CheckingPlayer()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Root"))))
         {
             if(hit.transform.CompareTag("Player"))
             {
                 canSee = true;
             }
+            else
+            {
+
+                if (Vector3.Distance(this.transform.position, target.position) > detectRange)
+                {
+                    canSee = false;
+                }
+            }
         }
-        if(Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        else
         {
-            canSee = true;
+            //canSee = false;
+            if (Vector3.Distance(this.transform.position, target.position) > detectRange)
+            {
+                canSee = false;
+            }
         }
 
+        //if (Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        //{
+        //    canSee = true;
+        //}
+
+        if (canSee)
+        {
+            currentDetectTime = detectTime;
+
+            isDetect = true;
+        }
+        else
+        {
+            currentDetectTime -= Time.deltaTime;
+
+            if(currentDetectTime <= 0)
+            {
+                isDetect = false;
+            }
+        }
     }
 
     protected void CheckingHp()

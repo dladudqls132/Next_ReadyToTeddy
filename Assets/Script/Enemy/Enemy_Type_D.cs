@@ -29,7 +29,6 @@ public class Enemy_Type_D : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
@@ -39,7 +38,12 @@ public class Enemy_Type_D : Enemy
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
+        if (!isDetect || isDead || isRigidity)
+        {
+
+            agent.SetDestination(this.transform.position);
+            return;
+        }
 
         NavMeshPath path = new NavMeshPath();
         if (NavMesh.CalculatePath(transform.position, target.position + targetOffset, NavMesh.AllAreas, path))
