@@ -232,7 +232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2169626346494499353}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5509936553969464272}
@@ -311,6 +311,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fx_dust
       objectReference: {fileID: 0}
+    - target: {fileID: 1125190052498162499, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2380646811266639285, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2762331001275346388, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4276846014739769058, guid: 2f8a5753ff37af645b770a5defd338ad,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -364,6 +379,61 @@ PrefabInstance:
     - target: {fileID: 4276846014739769058, guid: 2f8a5753ff37af645b770a5defd338ad,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.9245283
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.8731146
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.7718939
+      objectReference: {fileID: 0}
+    - target: {fileID: 6676508680150716576, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.6117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480612291783862329, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_MotionVectors
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480612291783862329, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_SortMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480612291783862329, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_SortingFudge
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7480612291783862329, guid: 2f8a5753ff37af645b770a5defd338ad,
+        type: 3}
+      propertyPath: m_ApplyActiveColorSpace
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
