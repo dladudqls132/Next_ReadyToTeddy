@@ -137,6 +137,7 @@ public class Gun_Test : Gun
             for (int i = 0; i < fireNum; i++)
             {
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
+                bool checkingDead = false;
 
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
@@ -145,9 +146,9 @@ public class Gun_Test : Gun
                 RaycastHit hit2;
                 if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
                 {
+                        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
-                        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
 
                         //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
@@ -165,9 +166,13 @@ public class Gun_Test : Gun
 
                         if (enemy.GetIsDead())
                         {
-                            isDead = true;
-                            owner.GetComponent<PlayerController>().IncreaseSpeed();
-                            owner.GetComponent<PlayerController>().IncreaseHp(4);
+                            if (!checkingDead)
+                            {
+                                owner.GetComponent<PlayerController>().IncreaseSpeed();
+                                owner.GetComponent<PlayerController>().IncreaseHp(4);
+                            }
+
+                            checkingDead = true;
                         }
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))
