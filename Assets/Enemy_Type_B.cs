@@ -87,7 +87,7 @@ public class Enemy_Type_B : Enemy
             Attack();
         }
 
-        if (currentFireRate < fireRate / 2)
+        if (currentFireRate < fireRate / 1.5f)
         {
             foreach (Renderer r in renderers)
             {
@@ -98,7 +98,7 @@ public class Enemy_Type_B : Enemy
         {
             foreach (Renderer r in renderers)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 4));
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 3));
             }
         }
 

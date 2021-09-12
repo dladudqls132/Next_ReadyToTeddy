@@ -50,7 +50,7 @@ public class Enemy_Type_C : Enemy
             return;
         }
 
-        if (currentCoolTime_attack <= coolTime_attack / 2)
+        if (currentCoolTime_attack <= coolTime_attack / 1.75f)
         {
             foreach (Renderer r in renderers)
             {
