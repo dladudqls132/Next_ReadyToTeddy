@@ -5,14 +5,14 @@ Shader "S_Base_outlinevertexoffset"
 	Properties
 	{
 		_ASEOutlineColor("Outline Color", Color) = (0,0,0,0)
-		_ASEOutlineWidth("Outline Width", Float) = 0
+		_ASEOutlineWidth("Outline Width", Float) = 0.05
 		_Albedo("Albedo", 2D) = "white" {}
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
 		[HDR]_EmissionColor("EmissionColor", Color) = (1, 1, 1, 1)
 		_Metallic("Metallic", 2D) = "white" {}
 		_MetallicIntensity("MetallicIntensity", Range(1, 10)) = 1
-		_Smoothness("Smoothness", Range(0, 1)) = 0.5
+		_Smoothness("Smoothness", Range(0, 1)) = 0
 		_AO("AO", 2D) = "white" {}
 		[Toggle]_Emissionswitch("Emissionswitch", Float) = 0
 		[HideInInspector] _texcoord("", 2D) = "white" {}
