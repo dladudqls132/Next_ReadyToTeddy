@@ -134,10 +134,10 @@ public class Gun_Test : Gun
             else
                 direction = Camera.main.transform.forward;
 
+                bool checkingDead = false;
             for (int i = 0; i < fireNum; i++)
             {
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
-                bool checkingDead = false;
 
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
@@ -169,7 +169,7 @@ public class Gun_Test : Gun
                             if (!checkingDead)
                             {
                                 owner.GetComponent<PlayerController>().IncreaseSpeed();
-                                owner.GetComponent<PlayerController>().IncreaseHp(4);
+                                owner.GetComponent<PlayerController>().IncreaseHp(10);
                             }
 
                             checkingDead = true;

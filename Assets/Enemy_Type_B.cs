@@ -117,14 +117,14 @@ public class Enemy_Type_B : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
             projector.gameObject.SetActive(false);
-            Invoke("Destroy", 0.1f);
+            this.gameObject.SetActive(false);
         }
     }
 
-    void Destroy()
-    {
-        this.gameObject.SetActive(false);
-    }
+    //void Destroy()
+    //{
+    //    this.gameObject.SetActive(false);
+    //}
 
     void Attack()
     {

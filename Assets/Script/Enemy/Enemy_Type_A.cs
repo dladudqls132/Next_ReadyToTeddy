@@ -121,14 +121,14 @@ public class Enemy_Type_A : Enemy
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
-            Invoke("Destroy", 0.1f);
+            this.gameObject.SetActive(false);
         }
     }
 
-    void Destroy()
-    {
-        this.gameObject.SetActive(false);
-    }
+    //void Destroy()
+    //{
+    //    this.gameObject.SetActive(false);
+    //}
 
     void Attack1()
     {
