@@ -147,7 +147,7 @@ public class Enemy : MonoBehaviour
     protected void CheckingPlayer()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Root") | 1 << LayerMask.NameToLayer("Shield")), QueryTriggerInteraction.Ignore))
+        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
             if(hit.transform.CompareTag("Player"))
             {

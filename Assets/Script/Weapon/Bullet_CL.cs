@@ -89,7 +89,7 @@ public class Bullet_CL : Bullet
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
             ActiveFalse();
         }
-        else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
+        else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Wall") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
