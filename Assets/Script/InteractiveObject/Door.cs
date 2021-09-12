@@ -4,47 +4,50 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] private Transform player;
-    [SerializeField] private bool isEnterPlayer;
+    [SerializeField] private List<Transform> enemies = new List<Transform>();
     [SerializeField] private bool isOpened;
+    private Collider[] coll;
     private Animator anim;
 
     private void Start()
     {
-        player = GameManager.Instance.GetPlayer().transform;
-        anim = this.transform.parent.GetComponent<Animator>();
+        coll = this.GetComponents<Collider>();
+        anim = this.transform.GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.Instance.GetIsCombat())
-        {
-            isOpened = false;
-        }
+        bool isAllDead = true;
 
-        anim.SetBool("isOpened", isOpened);
+        for(int i = 0; i < enemies.Count; i++)
+        {
+            if(enemies[i].gameObject.activeSelf)
+            {
+                isAllDead = false;
+            }
+        }
+        
+        if(isAllDead)
+        {
+            for(int i = 0; i < coll.Length; i++)
+            {
+                coll[i].enabled = false;
+            }
+
+            isOpened = true;
+            anim.SetBool("isOpened", true);
+            this.enabled = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Enemy"))
         {
-            if (!GameManager.Instance.GetIsCombat())
+           if(!enemies.Contains(other.transform))
             {
-                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.GateOpen, this.transform, false);
-                isOpened = true;
-            }
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (!GameManager.Instance.GetIsCombat())
-            {
-                isOpened = false;
+                enemies.Add(other.transform);
             }
         }
     }

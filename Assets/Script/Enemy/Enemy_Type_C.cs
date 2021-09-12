@@ -24,6 +24,8 @@ public class Enemy_Type_C : Enemy
     protected override void Start()
     {
         base.Start();
+
+        currentCoolTime_attack = Random.Range(0, coolTime_attack);
     }
 
     // Update is called once per frame
@@ -33,7 +35,6 @@ public class Enemy_Type_C : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
@@ -43,9 +44,13 @@ public class Enemy_Type_C : Enemy
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
+        if (!isDetect || isDead || isRigidity)
+        {
+            agent.SetDestination(this.transform.position);
+            return;
+        }
 
-        if (currentCoolTime_attack <= coolTime_attack / 2)
+        if (currentCoolTime_attack <= coolTime_attack / 1.75f)
         {
             foreach (Renderer r in renderers)
             {
@@ -144,7 +149,12 @@ public class Enemy_Type_C : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
 
-            this.gameObject.SetActive(false);
+            Invoke("Destroy", 0.1f);
         }
+    }
+
+    void Destroy()
+    {
+        this.gameObject.SetActive(false);
     }
 }

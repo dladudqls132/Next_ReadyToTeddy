@@ -12,6 +12,7 @@ public class Enemy_Type_B : Enemy
     private float currentBombTime;
     private bool isAttack;
     [SerializeField] private float bombSize;
+    private FPPCamController mainCam;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -19,6 +20,9 @@ public class Enemy_Type_B : Enemy
         base.Start();
 
         projector = Instantiate(projector);
+
+        currentFireRate = Random.Range(0, fireRate);
+        mainCam = Camera.main.transform.GetComponent<FPPCamController>();
     }
 
     // Update is called once per frame
@@ -28,29 +32,15 @@ public class Enemy_Type_B : Enemy
 
         if (isRigidity)
         {
-            agent.isStopped = true;
             currentRigidityTime += Time.deltaTime;
             if (currentRigidityTime >= rigidityTime)
             {
                 isRigidity = false;
                 currentRigidityTime = 0;
-                agent.isStopped = false;
             }
         }
 
-        if (!canSee || isDead || isRigidity) return;
-
-        currentFireRate += Time.deltaTime;
-
-        if (currentFireRate >= fireRate)
-        {
-            currentFireRate = 0;
-
-            Attack();
-            //anim.SetTrigger("Attack");
-        }
-
-        if(isAttack)
+        if (isAttack)
         {
             currentBombTime += Time.deltaTime;
 
@@ -64,9 +54,11 @@ public class Enemy_Type_B : Enemy
                 projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_bomb_large);
                 RaycastHit hit;
-                if(Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
+                if (Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     temp.transform.position = hit.point;
+                    mainCam.Shake(0.2f, 0.4f, false);
+
 
                     Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
                     if (c.Length != 0)
@@ -81,7 +73,21 @@ public class Enemy_Type_B : Enemy
             }
         }
 
-        if (currentFireRate < fireRate / 2)
+        if (!isDetect || isDead || isRigidity)
+        {
+            return;
+        }
+
+        currentFireRate += Time.deltaTime;
+
+        if (currentFireRate >= fireRate)
+        {
+            currentFireRate = 0;
+
+            Attack();
+        }
+
+        if (currentFireRate < fireRate / 1.5f)
         {
             foreach (Renderer r in renderers)
             {
@@ -92,9 +98,11 @@ public class Enemy_Type_B : Enemy
         {
             foreach (Renderer r in renderers)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 4));
+                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f) * (currentFireRate / fireRate), Time.deltaTime * 3));
             }
         }
+
+        anim.SetFloat("FireRate", currentFireRate / fireRate);
 
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, Quaternion.LookRotation(new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position), Time.deltaTime * 10);
     }
@@ -108,8 +116,14 @@ public class Enemy_Type_B : Enemy
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
-            this.gameObject.SetActive(false);
+            projector.gameObject.SetActive(false);
+            Invoke("Destroy", 0.1f);
         }
+    }
+
+    void Destroy()
+    {
+        this.gameObject.SetActive(false);
     }
 
     void Attack()
@@ -119,5 +133,7 @@ public class Enemy_Type_B : Enemy
         projector.position = target.position + new Vector3(target.parent.GetComponent<Rigidbody>().velocity.x, 0, target.parent.GetComponent<Rigidbody>().velocity.z) / 2 + Vector3.up * 3;
 
         projector.gameObject.SetActive(true);
+
+        anim.SetTrigger("Attack");
     }
 }

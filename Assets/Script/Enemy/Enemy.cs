@@ -42,6 +42,9 @@ public class Enemy : MonoBehaviour
     //protected float increaseCombo;
    
     [SerializeField] protected float detectRange;
+    private float detectTime = 4.0f;
+    private float currentDetectTime;
+    [SerializeField] protected bool isDetect;
     [SerializeField] protected float attackRange;
     //[SerializeField] protected float combatTime;
     //protected float currentCombatTime;
@@ -60,6 +63,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected GameObject dropItem;
     [SerializeField] protected GameObject dropWeapon;
 
+
     protected float currentRigidityTime;
 
     //private GameObject whoAttackThis;
@@ -74,7 +78,7 @@ public class Enemy : MonoBehaviour
     protected GameObject energyShield;
     [SerializeField] protected int shieldHp;
 
-    protected Renderer[] renderers;
+    [SerializeField] protected Renderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
 
@@ -119,33 +123,23 @@ public class Enemy : MonoBehaviour
         if(this.GetComponent<Animator>() != null)
             anim = this.GetComponent<Animator>();
 
-        float itemDropRate = Random.Range(0.0f, 100.0f);
+        //float itemDropRate = Random.Range(0.0f, 100.0f);
 
-        if (itemDropRate <= magazineDropRate)
-        {
-            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-        }
-        else if (itemDropRate <= magazineDropRate + potionDropRate)
-        {
-            dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
-        }
+        //if (itemDropRate <= magazineDropRate)
+        //{
+        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
+        //}
+        //else if (itemDropRate <= magazineDropRate + potionDropRate)
+        //{
+        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
+        //}
 
-        if(dropItem != null)
+        dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
+
+        if (dropItem != null)
             dropItem.SetActive(false);
-        //if (patrolNode.Length != 0)
-        //{
-        //    currentDestPatrolNode = patrolNode[0];
-        //    currentDestPatrolNodeIndex = 0;
-        //}
 
-        //if (effect_prefab_explosion != null)
-        //{
-        //    effect_explosion = Instantiate(effect_prefab_explosion);
-        //    effect_explosion.GetComponent<ParticleSystem>().Play();
-        //    effect_explosion.SetActive(false);
-        //}
-
-        renderers = this.GetComponentsInChildren<Renderer>();
+        renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
 
     public virtual void SetDead(bool value) {}
@@ -153,18 +147,50 @@ public class Enemy : MonoBehaviour
     protected void CheckingPlayer()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity))
+        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Enemy") | 1 << LayerMask.NameToLayer("Root") | 1 << LayerMask.NameToLayer("Shield")), QueryTriggerInteraction.Ignore))
         {
             if(hit.transform.CompareTag("Player"))
             {
                 canSee = true;
             }
+            else
+            {
+
+                if (Vector3.Distance(this.transform.position, target.position) > detectRange)
+                {
+                    canSee = false;
+                }
+            }
         }
-        if(Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        else
         {
-            canSee = true;
+            //canSee = false;
+            if (Vector3.Distance(this.transform.position, target.position) > detectRange)
+            {
+                canSee = false;
+            }
         }
 
+        //if (Vector3.Distance(this.transform.position, target.position) <= detectRange)
+        //{
+        //    canSee = true;
+        //}
+
+        if (canSee)
+        {
+            currentDetectTime = detectTime;
+
+            isDetect = true;
+        }
+        else
+        {
+            currentDetectTime -= Time.deltaTime;
+
+            if(currentDetectTime <= 0)
+            {
+                isDetect = false;
+            }
+        }
     }
 
     protected void CheckingHp()
@@ -235,7 +261,7 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
         currentHp -= value;
 
-        canSee = true;
+        isDetect = true;
        // whoAttackThis = null;
 
         CheckingHp();
@@ -269,7 +295,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
         effect.SetActive(true);
 
-        canSee = true;
+        isDetect = true;
         // whoAttackThis = attackObj;
         if (anim != null)
         {
@@ -308,7 +334,7 @@ public class Enemy : MonoBehaviour
         effect.transform.rotation = Quaternion.identity;
         effect.SetActive(true);
 
-        canSee = true;
+        isDetect = true;
         // whoAttackThis = attackObj;
         anim.SetTrigger("Damaged");
         CheckingHp();

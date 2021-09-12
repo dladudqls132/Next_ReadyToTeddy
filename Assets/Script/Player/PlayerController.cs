@@ -569,68 +569,68 @@ public class PlayerController : MonoBehaviour
 
             if (!isClimbUp)
             {
-                for (int i = 0; i < 12; i++)
-                {
-                    //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward * 0.35f);
-                    if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, forward, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                
+                    for (int i = 12; i >= 0; i--)
                     {
-                        //if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
-                        //{
-                        //    if (Input.GetKey(KeyCode.Space))
-                        //    {
-                        //        //if (!isClimbing)
-                        //        //{
-                        //        //    currentKickWallTime = 0;
-                        //        //}
-                        //        isJump = false;
-                        //        isJumpByObject = false;
-                        //        isClimbing = true;
-                        //        isSlide = false;
-                        //        isDash = false;
-                        //        isJump = false;
-                        //        isJumpByObject = false;
-                        //        //canJump = false;
+                        //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, forward * 0.35f);
+                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, moveDirection, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        {
+                            //if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
+                            //{
+                            //    if (Input.GetKey(KeyCode.Space))
+                            //    {
+                            //        //if (!isClimbing)
+                            //        //{
+                            //        //    currentKickWallTime = 0;
+                            //        //}
+                            //        isJump = false;
+                            //        isJumpByObject = false;
+                            //        isClimbing = true;
+                            //        isSlide = false;
+                            //        isDash = false;
+                            //        isJump = false;
+                            //        isJumpByObject = false;
+                            //        //canJump = false;
 
-                        //        rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
-                        //        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                        //        mainCam.FovReset();
-                        //    }
-                        //}
+                            //        rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
+                            //        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                            //        mainCam.FovReset();
+                            //    }
+                            //}
+                        }
+                        else if (moveDirection != Vector3.zero)
+                        {
+                            if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1) + Vector3.up * 0.45f), moveDirection, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+                            {
+     
+                                isClimbing = false;
+                            continue;
+                            }
+
+
+
+                            if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                            {
+                                isClimbing = false;
+                                break;
+                            }
+
+                            mainCam.GetComponent<Animator>().SetTrigger("Parkour");
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
+                            isClimbUp = true;
+                            rigid.velocity = Vector3.zero;
+                            climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f + forward * 0.38f;
+
+                            if (isClimbing)
+                            {
+                                canClimb = false;
+                            }
+
+                            isClimbing = false;
+                        break;
+                        }
                     }
-                    else if (moveDirection != Vector3.zero)
-                    {
-                        if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
-                        {
-                            isClimbing = false;
-                            break;
-                        }
-
-                        if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1)) + Vector3.up * 0.35f, forward, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
-                        {
-                            isClimbing = false;
-                            break;
-                        }
-
-                        if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
-                        {
-                            isClimbing = false;
-                            break;
-                        }
-
-                        mainCam.GetComponent<Animator>().SetTrigger("Parkour");
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
-                        isClimbUp = true;
-                        rigid.velocity = Vector3.zero;
-                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.35f + forward * 0.38f;
-
-                        if (isClimbing)
-                        {
-                            canClimb = false;
-                        }
-
-                        isClimbing = false;
-                    }
-                }
+                
             }
 
             if (!isJump && !isJumpByObject && !isClimbing)
@@ -1530,12 +1530,13 @@ public class PlayerController : MonoBehaviour
     {
         isFever = true;
         currentFeverTime = feverTime;
-        if (walkSpeed <= walkSpeed_max)
-        {            
-            walkSpeed += 0.5f;
-        }
-        else
-            walkSpeed = walkSpeed_max;
+        walkSpeed = walkSpeed_max;
+        //if (walkSpeed <= walkSpeed_max)
+        //{            
+        //    walkSpeed += 0.5f;
+        //}
+        //else
+        //    walkSpeed = walkSpeed_max;
     }
 
     //public void PickUpWeapon_Change()
