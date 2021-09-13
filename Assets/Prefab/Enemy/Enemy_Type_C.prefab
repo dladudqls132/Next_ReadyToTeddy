@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 5761431552912023208}
   - component: {fileID: 8620708551035450274}
   - component: {fileID: 6240428174422313485}
-  - component: {fileID: 263280588}
   m_Layer: 12
   m_Name: MonsterC_Gun
   m_TagString: Untagged
@@ -111,20 +110,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &263280588
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 610799065885155110}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5803692500198709736, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &687319609293594017
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,7 +121,6 @@ GameObject:
   - component: {fileID: 4737047800367695214}
   - component: {fileID: 1235137091050030549}
   - component: {fileID: 7925082026633896993}
-  - component: {fileID: 670606498}
   m_Layer: 12
   m_Name: MonsterC
   m_TagString: Untagged
@@ -207,20 +191,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &670606498
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 687319609293594017}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 55974941222865573, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &1589703090622805372
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,6 +200,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 287273082206719007}
+  - component: {fileID: 1879457624922477879}
+  - component: {fileID: 500970685113387970}
+  - component: {fileID: 8260831872955991626}
+  - component: {fileID: 1326420850612955213}
   m_Layer: 12
   m_Name: Bone001
   m_TagString: Untagged
@@ -253,6 +227,59 @@ Transform:
   m_Father: {fileID: 5677196813164716048}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1879457624922477879
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589703090622805372}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.35
+  m_Center: {x: 0, y: 0.06, z: 0}
+--- !u!65 &500970685113387970
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589703090622805372}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.03, y: 0.22, z: 0.22}
+  m_Center: {x: 0, y: 0.02406044, z: 0}
+--- !u!136 &8260831872955991626
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589703090622805372}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.18
+  m_Height: 0.74
+  m_Direction: 2
+  m_Center: {x: 0, y: -0.45, z: 0.13}
+--- !u!114 &1326420850612955213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589703090622805372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5777c5dc1b35be54191f766b49510e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
 --- !u!1 &3994158530890620200
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +357,7 @@ MonoBehaviour:
   damage: 10
   speed: 2
   detectRange: 30
+  isDetect: 0
   attackRange: 20
   potionDropRate: 50
   magazineDropRate: 50
@@ -339,6 +367,7 @@ MonoBehaviour:
   dropWeapon: {fileID: 0}
   energyShield_prefab: {fileID: 0}
   shieldHp: 0
+  renderers: []
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
   firePos: {fileID: 1709692613}
@@ -426,6 +455,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4525250125784910309}
+  - component: {fileID: 3153423255993526900}
+  - component: {fileID: 327450551322050617}
   m_Layer: 12
   m_Name: Bone002
   m_TagString: Untagged
@@ -448,6 +479,32 @@ Transform:
   m_Father: {fileID: 287273082206719007}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3153423255993526900
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6215190496264438712}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4310531, y: 1.12, z: 0.6552391}
+  m_Center: {x: -0.46501824, y: 0.0038421128, z: 0.0023976713}
+--- !u!114 &327450551322050617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6215190496264438712}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5777c5dc1b35be54191f766b49510e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
 --- !u!1 &6599878552424242370
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,7 +515,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2630805795294835156}
   - component: {fileID: 5990070886528218595}
-  - component: {fileID: 159131939}
   m_Layer: 12
   m_Name: Monster_Arms
   m_TagString: Untagged
@@ -535,20 +591,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000042676926, y: 0.1616784, z: 0.07346226}
     m_Extent: {x: 2.418926, y: 0.22368792, z: 0.3914125}
   m_DirtyAABB: 0
---- !u!64 &159131939
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6599878552424242370}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2882630747108208821, guid: 133125b6fb61aa544ba951565ab6b485, type: 3}
 --- !u!1 &6969080622723224282
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,6 +600,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7114348298140772321}
+  - component: {fileID: 4026542948738451941}
+  - component: {fileID: 8728896197004544957}
   m_Layer: 12
   m_Name: Bone004
   m_TagString: Untagged
@@ -579,6 +623,32 @@ Transform:
   m_Father: {fileID: 4653296805595116417}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4026542948738451941
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6969080622723224282}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4310531, y: 1.12, z: 0.6552391}
+  m_Center: {x: -0.46501824, y: 0.0038421128, z: 0.0023976713}
+--- !u!114 &8728896197004544957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6969080622723224282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5777c5dc1b35be54191f766b49510e0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  root: {fileID: 0}
 --- !u!1 &9116788785752319745
 GameObject:
   m_ObjectHideFlags: 0

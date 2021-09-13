@@ -10,8 +10,10 @@ public class Fire : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
+
         if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enemy"))
         {
+            Transform other_root = other.GetComponent<Enemy_Bone>().root;
             tempNum++;
 
 
@@ -19,10 +21,10 @@ public class Fire : MonoBehaviour
             if (tempNum % 10 == 0)
             {
                 //GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
-                other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.Damaged_normal);
+                other_root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.Damaged_normal);
             }
             else
-                other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.None);
+                other_root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.None);
         }
     }
 }

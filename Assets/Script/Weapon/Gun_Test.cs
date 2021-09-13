@@ -127,7 +127,7 @@ public class Gun_Test : Gun
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
             {
                 direction = (hit.point - Camera.main.transform.position).normalized;
             }
@@ -144,11 +144,11 @@ public class Gun_Test : Gun
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
-                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
+                if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")), QueryTriggerInteraction.Ignore))
                 {
-                        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
+                        Enemy enemy = hit2.transform.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>();
 
                         //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
 

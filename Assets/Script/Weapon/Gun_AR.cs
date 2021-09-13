@@ -119,7 +119,7 @@ public class Gun_AR : Gun
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
             {
                 direction = (hit.point - Camera.main.transform.position).normalized;
             }
@@ -129,15 +129,15 @@ public class Gun_AR : Gun
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
-            Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
+            //Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
     
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player")),QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")),QueryTriggerInteraction.Ignore))
             {
                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
-                    Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
+                    Enemy enemy = hit2.transform.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>();
 
                     //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
                     GameManager.Instance.GetCrosshair().ResetAttack();

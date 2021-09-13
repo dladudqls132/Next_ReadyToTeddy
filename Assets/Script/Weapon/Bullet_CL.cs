@@ -59,19 +59,22 @@ public class Bullet_CL : Bullet
         if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enemy"))
         {
             Collider[] coll = Physics.OverlapSphere(this.transform.position, 10, 1 << LayerMask.NameToLayer("Root"));
+            Transform other_root = other.GetComponent<Enemy_Bone>().root;
+       
 
             int num = 0;
             for (int i = 0; i < coll.Length; i++)
             {
-                if(coll[i].CompareTag("Enemy") && other.transform.root != coll[i].transform && !coll[i].GetComponent<Enemy>().GetIsDead())
+                if(coll[i].CompareTag("Enemy") && other_root != coll[i].transform && !coll[i].GetComponent<Enemy>().GetIsDead())
                 {
                     num++;
 
                     GameObject temp = Instantiate(chain);
-                    temp.GetComponent<Chain>().SetLine(other.transform.root, coll[i].transform, stunTime);
+                    temp.GetComponent<Chain>().SetLine(other_root, coll[i].transform, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
-                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, coll[i].transform.root.position, other.transform.root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
+                  
+                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, coll[i].transform.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, coll[i].transform, false);
 
@@ -82,7 +85,7 @@ public class Bullet_CL : Bullet
             //GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
             //hit.GetComponent<HitEffect>().SetHitEffect(other.GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-            other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other.transform.root.position, other.transform.root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
+            other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other_root.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
             //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, other.transform, false);
