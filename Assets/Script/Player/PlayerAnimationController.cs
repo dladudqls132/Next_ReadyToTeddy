@@ -60,5 +60,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             anim.SetBool("isReload", false);
         }
+
+
     }
 }

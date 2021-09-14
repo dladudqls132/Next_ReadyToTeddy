@@ -435,7 +435,7 @@ public class PlayerController : MonoBehaviour
 
             if (!isGrounded && !isSlide && rigid.velocity.y < -1.0f)
             {
-                if(!isLanding)
+                if (!isLanding)
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Land);
 
                 isLanding = true;
@@ -578,47 +578,49 @@ public class PlayerController : MonoBehaviour
 
             if (!isClimbUp)
             {
-                
-                    for (int i = 12; i >= 0; i--)
+
+                for (int i = 12; i >= 0; i--)
+                {
+                    //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, forward * 0.35f);
+                    if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, moveDirection, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
-                        //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, forward * 0.35f);
-                        if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, moveDirection, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
+
+                    }
+                    else if (moveDirection != Vector3.zero && Vector3.Dot(moveDirection, new Vector3(mainCam.transform.forward.x, moveDirection.y, mainCam.transform.forward.z)) >= 0.5f)
+                    {
+                        if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1) + Vector3.up * 0.45f), moveDirection, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
-
-                        }
-                        else if (moveDirection != Vector3.zero)
-                        {
-                            if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1) + Vector3.up * 0.45f), moveDirection, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
-                            {
-     
-                                isClimbing = false;
-                            continue;
-                            }
-
-
-
-                            if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
-                            {
-                                isClimbing = false;
-                                break;
-                            }
-
-                            mainCam.GetComponent<Animator>().SetTrigger("Parkour");
-                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
-                            isClimbUp = true;
-                            rigid.velocity = Vector3.zero;
-                            climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f + forward * 0.38f;
-
-                            if (isClimbing)
-                            {
-                                canClimb = false;
-                            }
 
                             isClimbing = false;
-                        break;
+                            continue;
                         }
+
+
+
+                        if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
+                        {
+                            isClimbing = false;
+                            break;
+                        }
+
+                        if (!gun.GetIsReload())
+                            mainCam.GetComponent<Animator>().SetTrigger("Parkour");
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
+
+                        isClimbUp = true;
+                        rigid.velocity = Vector3.zero;
+                        climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f + moveDirection * 0.38f;
+
+                        if (isClimbing)
+                        {
+                            canClimb = false;
+                        }
+
+                        isClimbing = false;
+                        break;
                     }
-                
+                }
+
             }
 
             if (!isJump && !isJumpByObject && !isClimbing)
@@ -649,11 +651,11 @@ public class PlayerController : MonoBehaviour
             isDash = true;
             currentDashCount--;
 
-            if(moveInput.x > 0)
+            if (moveInput.x > 0)
             {
                 mainCam.GetComponent<Animator>().SetTrigger("Dash_Right");
             }
-            else if(moveInput.x < 0)
+            else if (moveInput.x < 0)
             {
                 mainCam.GetComponent<Animator>().SetTrigger("Dash_Left");
             }
@@ -666,7 +668,7 @@ public class PlayerController : MonoBehaviour
             {
                 mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
             }
-            
+
 
             if (isJump)
             {
@@ -862,24 +864,24 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    if(currentCanJumpTime > 0)
+                    if (currentCanJumpTime > 0)
                     {
                         canJump = true;
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
                     }
                     else
                         canJump = false;
-  
+
                 }
             }
             else
                 canJump = false;
 
-                isJump = true;
+            isJump = true;
             hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
-            
-   
+
+
 
             if (isJumpByObject)
             {
@@ -892,47 +894,9 @@ public class PlayerController : MonoBehaviour
                 if (!isSlope)
                     rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
 
-                currentJumpPower =  jumpPower;
+                currentJumpPower = jumpPower;
             }
         }
-
-        //if (Input.GetKeyUp(KeyCode.Space))
-        //{
-        //    if (isClimbing)
-        //    {
-        //        if (canClimb)
-        //        {
-        //            if (currentKickWallTime < kickWallTime)
-        //            {
-        //                if (rigid.velocity.magnitude >= walkSpeed)
-        //                    rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * rigid.velocity.magnitude, ForceMode.Impulse);
-        //                else
-        //                    rigid.AddForce((wallHit.normal + Vector3.up * 0.2f).normalized * 8, ForceMode.Impulse);
-        //            }
-        //        }
-        //        canClimb = false;
-        //    }
-
-        //    isClimbing = false;
-        //}
-
-        //스킬
-        //if(Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    if (currentCombo == maxCombo)
-        //    {
-        //        currentCombo = 0;
-        //        currentResetComboTime = 0;
-
-        //        Collider[] target = Physics.OverlapSphere(this.transform.position, skill1_range, 1 << LayerMask.NameToLayer("Enemy"));
-
-        //        for (int i = 0; i < target.Length; i++)
-        //        {
-        //            if(Physics.Raycast(camPos.position, (target[i].transform.position - camPos.position).normalized, skill1_range, 1 << LayerMask.NameToLayer("Enemy")))
-        //                target[i].GetComponent<Enemy>().DecreaseHp(200, false);
-        //        }
-        //    }
-        //}
 
         if (isCombat)
         {
@@ -971,6 +935,7 @@ public class PlayerController : MonoBehaviour
             {
                 currentClimbuUpPower = climbUpPower;
                 currentClimbUpTime = climbUpTime;
+
                 isClimbUp = false;
                 rigid.velocity = Vector3.zero;
             }
@@ -1194,15 +1159,15 @@ public class PlayerController : MonoBehaviour
                         }
                         else
                         {
-                            if(isCrouch || isAiming)
+                            if (isCrouch || isAiming)
                                 headBobValue += Time.deltaTime * walkSpeed * 0.85f;
                             else
                                 headBobValue += Time.deltaTime * walkSpeed * 1.0f;
                         }
 
-                       
 
-                        
+
+
 
                         if (isCrouch)
                             camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2 + Mathf.Abs(Mathf.Sin(headBobValue)) / 6, 0), Time.deltaTime * 8);
@@ -1288,7 +1253,7 @@ public class PlayerController : MonoBehaviour
         //    if (moveInput == Vector2.zero)
         //    {
         //        currentFootstepTime = 0;
-              
+
         //        firstStep = false;
         //    }
         //}
@@ -1316,7 +1281,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (isAiming)
                     {
-                        
+
                         gun.SetIsAiming(true);
                         if (!isDash)
                         {
@@ -1328,7 +1293,7 @@ public class PlayerController : MonoBehaviour
                         if (temp > 180)
                             temp -= 360;
 
-                    
+
                         lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(new Vector3(hand.localRotation.eulerAngles.x, 0, temp / 3) + handFireRot.eulerAngles * 3), Time.deltaTime * 20);
 
                         if (!isLanding)
@@ -1352,12 +1317,12 @@ public class PlayerController : MonoBehaviour
                     {
                         gun.SetIsAiming(false);
 
-                        
-                            lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + -handFireRot.eulerAngles), Time.deltaTime * 30);
+
+                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + -handFireRot.eulerAngles), Time.deltaTime * 30);
 
                         if (!isLanding)
                         {
-                            if(gun.GetGunType() == GunType.ChainLightning)
+                            if (gun.GetGunType() == GunType.ChainLightning)
                                 lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0) + mainCam.shakeVec / 2, Time.deltaTime * 20);
                             else
                             {
@@ -1403,7 +1368,7 @@ public class PlayerController : MonoBehaviour
 
     private void LateUpdate()
     {
-       
+
         //HandAnimation();
     }
 
@@ -1505,7 +1470,7 @@ public class PlayerController : MonoBehaviour
     public void DecreaseHp(float value)
     {
         isDamaged = true;
-  
+
         Invoke("IsDamagedFalse", 0.8f);
 
         mainCam.Shake(0.1f, 0.8f, true);

@@ -252,10 +252,12 @@ public class FPPCamController : MonoBehaviour
                         this.GetComponent<Animator>().SetBool("isReload", true);
                 }
 
-                if(transform.localRotation.eulerAngles.y >= 200 || transform.localRotation.eulerAngles.y <= 168)
-                    transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
-                else
-                    transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                //if(transform.localRotation.eulerAngles.y >= 200 || transform.localRotation.eulerAngles.y <= 168)
+                //    transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                //else
+                //    transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+
+                transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + transform.localRotation.eulerAngles);
             }
             else
             {
@@ -264,7 +266,7 @@ public class FPPCamController : MonoBehaviour
                 if (this.GetComponent<Animator>().GetBool("isReload_CL"))
                     this.GetComponent<Animator>().SetBool("isReload_CL", false);
 
-                transform.localRotation = Quaternion.Euler( new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + transform.localRotation.eulerAngles);
             }
         }
         else
@@ -360,7 +362,7 @@ public class FPPCamController : MonoBehaviour
         Vector3 rnd = new Vector3(-rot.x, Random.Range(-rot.y, rot.y), Random.Range(-rot.z, rot.z));
 
         rotX += rot.x;
-        rotY += rot.y;
+        rotY += Random.Range(-rot.y, rot.y);
 
         currentRotation += rnd;
         return rnd;

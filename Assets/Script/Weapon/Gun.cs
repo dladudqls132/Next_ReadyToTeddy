@@ -187,6 +187,9 @@ public class Gun : MonoBehaviour
             if (isAiming)
                 isAiminged = true;
         }
+        else
+            hand.GetComponent<HandAnimController>().ResetMag();
+
         isReload = value;
         //hand.GetComponent<Animator>().SetFloat("Reload_Time", 1 / reloadTime);
     }

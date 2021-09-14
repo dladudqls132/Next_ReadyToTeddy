@@ -98,7 +98,7 @@ public class Gun_AR : Gun
             if (!owner.GetComponent<PlayerController>().GetIsAiming())
             {
                 currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.02f, 0.03f, false);
+                mainCam.Shake(0.02f, 0.02f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
             }

@@ -89,6 +89,7 @@ public class HandAnimController : MonoBehaviour
             //handIK.weight = 0;
             // anim.SetLayerWeight(1, 0.0f);
         }
+
         this.GetComponent<Animator>().SetBool("isSwap", false);
     }
 
@@ -102,26 +103,46 @@ public class HandAnimController : MonoBehaviour
     Vector3 originalPos_mag;
     Quaternion originalRot_mag;
 
+    public void ResetMag()
+    {
+        player.GetGun().mag.GetComponent<Weapon_Magazine>().ResetInfo();
+    }
+
     public void Reload_AR_1()
     {
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_1);
-        originalPos_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.localPosition;
-        originalRot_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.localRotation;
-        parent_mag = player.GetWeaponGameObject().GetComponent<Gun>().mag.parent;
-        player.GetWeaponGameObject().GetComponent<Gun>().mag.parent = weaponLeftGrip;
+        originalPos_mag = player.GetGun().mag.localPosition;
+        originalRot_mag = player.GetGun().mag.localRotation;
+        parent_mag = player.GetGun().mag.parent;
+        player.GetGun().mag.parent = weaponLeftGrip;
     }
 
     public void Reload_AR_2()
     {
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_2);
-        player.GetWeaponGameObject().GetComponent<Gun>().mag.parent = parent_mag;
-        player.GetWeaponGameObject().GetComponent<Gun>().mag.localPosition = originalPos_mag;
-        player.GetWeaponGameObject().GetComponent<Gun>().mag.localRotation = originalRot_mag;
+        ResetMag();
     }
 
+    public void Pakour_End()
+    {
+        anim.SetBool("isPakour", false);
+        //Debug.Log("asd");
+    }
+
+    bool temp;
     private void Update()
     {
-        
+        if (player.GetIsClimbUp() && !player.GetGun().GetIsReload() && !player.GetIsSwap())
+        {
+            if(!temp)
+            anim.SetBool("isPakour", true);
+            temp = true;
+        }
+        else
+        {
+            temp = false;
+        }
+
         horizontal = Mathf.Lerp(horizontal, GameManager.Instance.GetPlayer().moveInput.x, Time.deltaTime * 20);
         anim.SetFloat("horizontal", horizontal);
     }
