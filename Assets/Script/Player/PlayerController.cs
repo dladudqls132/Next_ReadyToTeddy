@@ -104,6 +104,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float currentFeverTime;
 
     private bool isInit = false;
+    [SerializeField] private float canJumpTime = 0.1f;
+    [SerializeField] private float currentCanJumpTime = 0.0f;
 
     private List<GameObject> collisionWeapon = new List<GameObject>();
 
@@ -188,6 +190,7 @@ public class PlayerController : MonoBehaviour
         originAimPos = aimPos.localPosition;
         projectileController = this.GetComponent<ThrowProjectile>();
         currentDashCount = dashCount;
+        currentCanJumpTime = canJumpTime;
         //currentWeaponNum = 1;
         //for (int i = 0; i < hand.childCount - 1; i++)
         //{
@@ -385,7 +388,12 @@ public class PlayerController : MonoBehaviour
 
             Vector3 slopeResult = Vector3.Cross(hit.normal, Vector3.Cross(rigid.velocity.normalized, hit.normal));
             Vector3 temp = Vector3.Cross(Vector3.Cross(hit.normal, moveDirection), hit.normal);
-            result = temp;
+
+            RaycastHit hit2;
+            if (Physics.Raycast(checkingGroundRayPos.position, Vector3.down, out hit2, 0.5f, 1 << LayerMask.NameToLayer("Enviroment")))
+                result = temp;
+            else
+                result = moveDirection;
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -438,6 +446,7 @@ public class PlayerController : MonoBehaviour
             }
 
             isGrounded = true;
+            currentCanJumpTime = canJumpTime;
 
             //달리기
             //if (Input.GetKeyDown(KeyCode.W))
@@ -542,7 +551,7 @@ public class PlayerController : MonoBehaviour
             //{
             //    rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
             //}
-
+            currentCanJumpTime -= Time.deltaTime;
             isGrounded = false;
             isLanding = false;
 
@@ -575,28 +584,7 @@ public class PlayerController : MonoBehaviour
                         //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, forward * 0.35f);
                         if (Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, moveDirection, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                         {
-                            //if (Mathf.Abs(wallHit.normal.y) <= 0.3f && Vector3.Dot(moveDirection, forward) > 0.7f)
-                            //{
-                            //    if (Input.GetKey(KeyCode.Space))
-                            //    {
-                            //        //if (!isClimbing)
-                            //        //{
-                            //        //    currentKickWallTime = 0;
-                            //        //}
-                            //        isJump = false;
-                            //        isJumpByObject = false;
-                            //        isClimbing = true;
-                            //        isSlide = false;
-                            //        isDash = false;
-                            //        isJump = false;
-                            //        isJumpByObject = false;
-                            //        //canJump = false;
 
-                            //        rigid.velocity = new Vector3(rigid.velocity.x, currentClimbPower, rigid.velocity.z);
-                            //        mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-                            //        mainCam.FovReset();
-                            //    }
-                            //}
                         }
                         else if (moveDirection != Vector3.zero)
                         {
@@ -729,7 +717,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (gun.GetGunType() == GunType.ChainLightning)
                 {
-                    handFireRot = gun.GetHandFireRot();
+                    //handFireRot = gun.GetHandFireRot();
                     gun.GetComponent<Gun_ChainLightning>().Charging();
                 }
                 else
@@ -874,7 +862,13 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    canJump = false;
+                    if(currentCanJumpTime > 0)
+                    {
+                        canJump = true;
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
+                    }
+                    else
+                        canJump = false;
   
                 }
             }
@@ -1357,7 +1351,9 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         gun.SetIsAiming(false);
-                        lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + handFireRot.eulerAngles), Time.deltaTime * 30);
+
+                        
+                            lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + -handFireRot.eulerAngles), Time.deltaTime * 30);
 
                         if (!isLanding)
                         {

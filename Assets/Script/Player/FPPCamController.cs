@@ -253,9 +253,9 @@ public class FPPCamController : MonoBehaviour
                 }
 
                 if(transform.localRotation.eulerAngles.y >= 200 || transform.localRotation.eulerAngles.y <= 168)
-                    transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + rot + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                    transform.localRotation = Quaternion.Euler(transform.localRotation.eulerAngles + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
                 else
-                    transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                    transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
             }
             else
             {
@@ -264,12 +264,12 @@ public class FPPCamController : MonoBehaviour
                 if (this.GetComponent<Animator>().GetBool("isReload_CL"))
                     this.GetComponent<Animator>().SetBool("isReload_CL", false);
 
-                transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
+                transform.localRotation = Quaternion.Euler( new Vector3(rotX, rotY) + new Vector3(transform.localRotation.eulerAngles.x, 0, transform.localRotation.eulerAngles.z));
             }
         }
         else
         {
-            transform.localRotation = Quaternion.Euler(rot + new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
+            transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + new Vector3(0, 0, transform.localRotation.eulerAngles.z));
         }
     }
 
@@ -358,6 +358,9 @@ public class FPPCamController : MonoBehaviour
         this.rotationSpeed = rotSpeed;
 
         Vector3 rnd = new Vector3(-rot.x, Random.Range(-rot.y, rot.y), Random.Range(-rot.z, rot.z));
+
+        rotX += rot.x;
+        rotY += rot.y;
 
         currentRotation += rnd;
         return rnd;
