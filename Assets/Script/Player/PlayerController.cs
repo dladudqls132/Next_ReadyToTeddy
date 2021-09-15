@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform camPos = null;
     [SerializeField] private Transform aimPos;
     [SerializeField] private CapsuleCollider bodyCollider = null;
-    [SerializeField] private CapsuleCollider groundCollider = null;
+
     [SerializeField] private Transform hand = null;
 
     private Quaternion lastAngle_hand;
@@ -381,7 +381,6 @@ public class PlayerController : MonoBehaviour
             if (!isJump && isClimbing && !isClimbUp)
                 this.transform.position = new Vector3(this.transform.position.x, hit.point.y + 0.04f, this.transform.position.z);
 
-            groundCollider.enabled = true;
             isClimbing = false;
             canClimb = true;
             useGravity = false;
@@ -546,7 +545,7 @@ public class PlayerController : MonoBehaviour
 
             if (!isDash)
                 useGravity = true;
-            groundCollider.enabled = false;
+          
             //if (isGrounded && !isJump && !isJumpByObject)
             //{
             //    rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
@@ -829,6 +828,17 @@ public class PlayerController : MonoBehaviour
         //    }
         //}
 
+
+        if (moveDirection != Vector3.zero)
+        {
+            hand.GetComponent<Animator>().SetBool("isMove", true);
+        }
+        else
+            hand.GetComponent<Animator>().SetBool("isMove", false);
+
+        hand.GetComponent<Animator>().SetFloat("walkSpeed", walkSpeed / walkSpeed_min);
+
+        hand.GetComponent<Animator>().SetBool("isGrounded", isGrounded);
 
         if (moveDirection == Vector3.zero)
         {
@@ -1216,7 +1226,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!footstep)
                     {
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Walk);
+                        //GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Walk);
                         footstep = true;
                     }
                 }
@@ -1327,7 +1337,7 @@ public class PlayerController : MonoBehaviour
                             else
                             {
                                 if (isGrounded)
-                                    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0), Time.deltaTime * 25);
+                                    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition /*+ new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0)*/, Time.deltaTime * 25);
                                 else
                                     lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
                             }
@@ -1446,13 +1456,6 @@ public class PlayerController : MonoBehaviour
         {
             currentHP = maxHP;
         }
-    }
-
-    private void DecreaseHpPerSecond()
-    {
-        currentHP -= decreaseHpValuePerSecond * Time.deltaTime;
-
-        CheckingHp();
     }
 
     private bool isDamaged;

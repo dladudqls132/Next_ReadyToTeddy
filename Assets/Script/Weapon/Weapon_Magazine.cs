@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Weapon_Magazine : MonoBehaviour
 {
-    [SerializeField]
     private Vector3 originPos;
-    [SerializeField]
     private Quaternion originRot;
-    [SerializeField]
     private Transform originParent;
 
     // Start is called before the first frame update

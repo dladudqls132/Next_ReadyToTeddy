@@ -15,6 +15,7 @@ public class WeaponSway : MonoBehaviour
     void Start()
     {
         originPos = this.transform.localPosition;
+        currentPos = originPos;
     }
 
     // Update is called once per frame
@@ -44,10 +45,10 @@ public class WeaponSway : MonoBehaviour
         moveY = Mathf.Clamp(moveY, -1, 1);
 
         if (!GameManager.Instance.GetPlayer().GetIsSwap())
-            currentPos = Vector3.Lerp(currentPos, transform.localPosition + new Vector3(limitPos.x * -moveX, limitPos.y * moveY, 0), Time.deltaTime * 10);
+            currentPos = Vector3.Lerp(currentPos, transform.localPosition + new Vector3(limitPos.x * -moveX, limitPos.y * moveY, 0), Time.deltaTime * 7);
         else
             currentPos = Vector3.Lerp(currentPos, transform.localPosition, Time.deltaTime * 20);
-        //currentPos.Set(currentPos.x, currentPos.y, transform.localPosition.z);
+        currentPos.Set(currentPos.x, currentPos.y, transform.localPosition.z);
 
         transform.localPosition = currentPos;
     }
@@ -55,10 +56,10 @@ public class WeaponSway : MonoBehaviour
     private void BackToOriginPos()
     {
         if (!GameManager.Instance.GetPlayer().GetIsSwap())
-            currentPos = Vector3.Lerp(currentPos, transform.localPosition, Time.deltaTime * 10);
+            currentPos = Vector3.Lerp(currentPos, transform.localPosition, Time.deltaTime * 7);
         else
             currentPos = Vector3.Lerp(currentPos, transform.localPosition, Time.deltaTime * 20);
-        //currentPos.Set(currentPos.x, currentPos.y, transform.localPosition.z);
+        currentPos.Set(currentPos.x, currentPos.y, transform.localPosition.z);
         transform.localPosition = currentPos;
     }
 }

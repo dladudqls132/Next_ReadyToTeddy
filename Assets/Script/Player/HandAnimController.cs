@@ -129,6 +129,11 @@ public class HandAnimController : MonoBehaviour
         //Debug.Log("asd");
     }
 
+    void FootStep()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Walk);
+    }
+
     bool temp;
     private void Update()
     {
