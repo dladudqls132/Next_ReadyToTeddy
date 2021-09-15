@@ -200,7 +200,6 @@ public class Gun : MonoBehaviour
 
         if (isAiminged)
         {
-            GameManager.Instance.GetPlayer().SetIsAiming(true);
             SetIsAiming(true);
         }
 

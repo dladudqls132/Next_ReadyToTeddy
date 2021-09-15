@@ -77,26 +77,16 @@ public class UI_Crosshair : MonoBehaviour
             }
         }
 
-        if (player.GetIsAiming())
-        {
-            foreach (Image child in images)
-            {
-                if (!child.enabled || child == image_attack_kill || child == image_attack_normal)
-                    break;
-                child.enabled = false;
-            }
-        }
-        else
-        {
+        
             foreach (Image child in images)
             {
                 if (child.enabled || child == image_attack_kill || child == image_attack_normal)
                     break;
                 child.enabled = true;
             }
-        }
+        
 
-        if (!player.GetIsGrounded() || player.GetIsRun() || player.GetIsSlide() || player.GetIsDash() || player.GetIsClimbing() || player.GetIsClimbUp())
+        if (!player.GetIsGrounded() || player.GetIsDash() || player.GetIsClimbUp())
         {
             for(int i = 0; i < aimInfos.Length; i++)
             {

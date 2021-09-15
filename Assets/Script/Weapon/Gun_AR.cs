@@ -95,20 +95,12 @@ public class Gun_AR : Gun
 
         if (canShot)
         {
-            if (!owner.GetComponent<PlayerController>().GetIsAiming())
-            {
+       
                 currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.02f, 0.02f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
                 handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
-            }
-            else
-            {
-                currentSpreadAngle = spreadAngle_aiming;
-                mainCam.Shake(0.02f, 0.015f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(1.0f, 1.0f, 0), 10.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil / 2, 30.0f, 3.0f);
-            }
+       
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");

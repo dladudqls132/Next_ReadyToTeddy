@@ -131,7 +131,7 @@ public class FPPCamController : MonoBehaviour
         }
 
         ////////////////////////////////////////////////////
-        isAiming = GameManager.Instance.GetPlayer().GetIsAiming();
+
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
