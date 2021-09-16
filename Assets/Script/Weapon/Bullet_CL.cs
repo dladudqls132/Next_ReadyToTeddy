@@ -74,7 +74,7 @@ public class Bullet_CL : Bullet
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                   
-                    coll[i].GetComponent<Enemy>().DecreaseHp(damage, coll[i].transform.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
+                    coll[i].GetComponent<Enemy>().DecreaseHp(damage / 2, coll[i].transform.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
 
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, coll[i].transform, false);
 
