@@ -50,26 +50,43 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    SwapWeapon(0);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    SwapWeapon(1);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    SwapWeapon(2);
+        //}
+        //else if (Input.GetKeyDown(KeyCode.Alpha4))
+        //{
+        //    SwapWeapon(3);
+        //}
+        //else if(Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    SwapWeapon(4);
+        //}
+
+        if(Input.GetKey(KeyCode.Q))
         {
-            SwapWeapon(0);
+            isOpen = true;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        else if(Input.GetKeyUp(KeyCode.Q))
         {
-            SwapWeapon(1);
+            isOpen = false;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SwapWeapon(2);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SwapWeapon(3);
-        }
-        else if(Input.GetKeyDown(KeyCode.Q))
-        {
-            SwapWeapon(4);
-        }
+
+
 
         for (int i = 0; i < slots.Count; i++)
         {
@@ -90,25 +107,25 @@ public class Inventory : MonoBehaviour
         //}
     }
 
-    public void ToggleInventory()
-    {
-        if (UI_Inventory != null)
-        {
-            UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
-            this.isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
+    //public void ToggleInventory()
+    //{
+    //    if (UI_Inventory != null)
+    //    {
+    //        UI_Inventory.transform.GetChild(0).gameObject.SetActive(!UI_Inventory.transform.GetChild(0).gameObject.activeSelf);
+    //        this.isOpen = UI_Inventory.transform.GetChild(0).gameObject.activeSelf;
 
-            if (this.isOpen)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-    }
+    //        if (this.isOpen)
+    //        {
+    //            Cursor.lockState = CursorLockMode.None;
+    //            Cursor.visible = true;
+    //        }
+    //        else
+    //        {
+    //            Cursor.lockState = CursorLockMode.Locked;
+    //            Cursor.visible = false;
+    //        }
+    //    }
+    //}
 
     public Gun GetWeapon(GunType type)
     {
@@ -130,110 +147,130 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
-    public void DropWeapon()
+    public int GetWeaponNum(GunType type)
     {
-        if (slots[currentSlotNum].slotType == SlotType.Gun)
+        for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[currentSlotNum].weapon != null)
+            if (slots[i].weapon != null)
             {
-                slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
-                slots[currentSlotNum].weapon = null;
-                slots[currentSlotNum].isEmpty = true;
-                //UI_Inventory.UpdateSlot(currentSlotNum);
-                SetAnyWeapon();
-            }
-        }
-    }
-
-    public void DropWeapon(int slotNum)
-    {
-        if (slots[slotNum].slotType == SlotType.Gun)
-        {
-            if (slots[slotNum].weapon != null)
-            {
-                slots[slotNum].weapon.SetActive(true);
-                slots[slotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
-                slots[slotNum].weapon = null;
-                slots[slotNum].isEmpty = true;
-                //UI_Inventory.UpdateSlot(slotNum);
-                SetAnyWeapon();
-            }
-        }
-        else if(slots[slotNum].slotType == SlotType.Projectile)
-        {
-            if (slots[slotNum].weapon != null)
-            {
-                slots[slotNum].weapon.SetActive(true);
-                slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
-                slots[slotNum].weapon = null;
-                slots[slotNum].isEmpty = true;
-                //UI_Inventory.UpdateSlot(slotNum);
-                SetAnyWeapon();
-            }
-        }
-    }
-
-    public void ChangeWeapon(GameObject weapon)
-    {
-        if (weapon.GetComponent<Gun>() != null)
-        {
-            if (slots[currentSlotNum].slotType == SlotType.Gun)
-            {
-                slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
-
-                slots[currentSlotNum].weapon = weapon;
-                weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[currentSlotNum].transform);
-                weapon.gameObject.SetActive(false);
-                //UI_Inventory.UpdateSlot(currentSlotNum);
-                SwapWeapon(currentSlotNum);
-            }
-        }
-    }
-
-    public bool ChangeWeapon(int changeSlotNum, int changedSlotNum)
-    {
-        if (slots[changeSlotNum].weapon != null)
-        {
-            if (slots[changeSlotNum].weapon.GetComponent<Gun>() != null)
-            {
-                if (slots[changedSlotNum].slotType == SlotType.Gun)
+                if (slots[i].weapon.GetComponent<Gun>() != null)
                 {
-                    if (slots[changedSlotNum].weapon != null)
+
+                    if (slots[i].weapon.GetComponent<Gun>().GetGunType() == type)
                     {
-                        GameObject temp = slots[changedSlotNum].weapon;
-
-                        slots[changedSlotNum].weapon = slots[changeSlotNum].weapon;
-                        slots[changeSlotNum].weapon = temp;
-
-                        slots[changedSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changedSlotNum].transform);
-                        slots[changeSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changeSlotNum].transform);
-
-                        //UI_Inventory.UpdateSlot(changedSlotNum);
-                        //UI_Inventory.UpdateSlot(changeSlotNum);
-                        SwapWeapon(currentSlotNum);
-
-                        return true;
-                    }
-                    else
-                    {
-                        slots[changedSlotNum].weapon = slots[changeSlotNum].weapon;
-                        slots[changedSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changedSlotNum].transform);
-
-                        slots[changeSlotNum].weapon = null;
-                        slots[changeSlotNum].isEmpty = true;
-
-                        //UI_Inventory.UpdateSlot(changedSlotNum);
-                        //UI_Inventory.UpdateSlot(changeSlotNum);
-                        SwapWeapon(2);
-
-                        return true;
+                        return i;
                     }
                 }
             }
         }
 
-        return false;
+        return currentSlotNum;
     }
+
+    //public void DropWeapon()
+    //{
+    //    if (slots[currentSlotNum].slotType == SlotType.Gun)
+    //    {
+    //        if (slots[currentSlotNum].weapon != null)
+    //        {
+    //            slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
+    //            slots[currentSlotNum].weapon = null;
+    //            slots[currentSlotNum].isEmpty = true;
+    //            //UI_Inventory.UpdateSlot(currentSlotNum);
+    //            SetAnyWeapon();
+    //        }
+    //    }
+    //}
+
+    //public void DropWeapon(int slotNum)
+    //{
+    //    if (slots[slotNum].slotType == SlotType.Gun)
+    //    {
+    //        if (slots[slotNum].weapon != null)
+    //        {
+    //            slots[slotNum].weapon.SetActive(true);
+    //            slots[slotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
+    //            slots[slotNum].weapon = null;
+    //            slots[slotNum].isEmpty = true;
+    //            //UI_Inventory.UpdateSlot(slotNum);
+    //            SetAnyWeapon();
+    //        }
+    //    }
+    //    else if(slots[slotNum].slotType == SlotType.Projectile)
+    //    {
+    //        if (slots[slotNum].weapon != null)
+    //        {
+    //            slots[slotNum].weapon.SetActive(true);
+    //            slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
+    //            slots[slotNum].weapon = null;
+    //            slots[slotNum].isEmpty = true;
+    //            //UI_Inventory.UpdateSlot(slotNum);
+    //            SetAnyWeapon();
+    //        }
+    //    }
+    //}
+
+    //public void ChangeWeapon(GameObject weapon)
+    //{
+    //    if (weapon.GetComponent<Gun>() != null)
+    //    {
+    //        if (slots[currentSlotNum].slotType == SlotType.Gun)
+    //        {
+    //            slots[currentSlotNum].weapon.GetComponent<Gun>().SetOwner(null, null, null);
+
+    //            slots[currentSlotNum].weapon = weapon;
+    //            weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[currentSlotNum].transform);
+    //            weapon.gameObject.SetActive(false);
+    //            //UI_Inventory.UpdateSlot(currentSlotNum);
+    //            SwapWeapon(currentSlotNum);
+    //        }
+    //    }
+    //}
+
+    //public bool ChangeWeapon(int changeSlotNum, int changedSlotNum)
+    //{
+    //    if (slots[changeSlotNum].weapon != null)
+    //    {
+    //        if (slots[changeSlotNum].weapon.GetComponent<Gun>() != null)
+    //        {
+    //            if (slots[changedSlotNum].slotType == SlotType.Gun)
+    //            {
+    //                if (slots[changedSlotNum].weapon != null)
+    //                {
+    //                    GameObject temp = slots[changedSlotNum].weapon;
+
+    //                    slots[changedSlotNum].weapon = slots[changeSlotNum].weapon;
+    //                    slots[changeSlotNum].weapon = temp;
+
+    //                    slots[changedSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changedSlotNum].transform);
+    //                    slots[changeSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changeSlotNum].transform);
+
+    //                    //UI_Inventory.UpdateSlot(changedSlotNum);
+    //                    //UI_Inventory.UpdateSlot(changeSlotNum);
+    //                    SwapWeapon(currentSlotNum);
+
+    //                    return true;
+    //                }
+    //                else
+    //                {
+    //                    slots[changedSlotNum].weapon = slots[changeSlotNum].weapon;
+    //                    slots[changedSlotNum].weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[changedSlotNum].transform);
+
+    //                    slots[changeSlotNum].weapon = null;
+    //                    slots[changeSlotNum].isEmpty = true;
+
+    //                    //UI_Inventory.UpdateSlot(changedSlotNum);
+    //                    //UI_Inventory.UpdateSlot(changeSlotNum);
+    //                    SwapWeapon(2);
+
+    //                    return true;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //    return false;
+    //}
 
     public void AddWeapon(GameObject weapon)
     {
@@ -255,51 +292,51 @@ public class Inventory : MonoBehaviour
                         return;
                     }
                 }
-                else if (weapon.GetComponent<Projectile>() != null)
-                {
-                    if (slots[i].slotType == SlotType.Projectile)
-                    {
-                        slots[i].weapon = weapon;
-                        slots[i].isEmpty = false;
-                        weapon.gameObject.SetActive(false);
-                        weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
-                        //UI_Inventory.UpdateSlot(i);
+                //else if (weapon.GetComponent<Projectile>() != null)
+                //{
+                //    if (slots[i].slotType == SlotType.Projectile)
+                //    {
+                //        slots[i].weapon = weapon;
+                //        slots[i].isEmpty = false;
+                //        weapon.gameObject.SetActive(false);
+                //        weapon.GetComponent<Projectile>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
+                //        //UI_Inventory.UpdateSlot(i);
 
-                        return;
-                    }
-                }
+                //        return;
+                //    }
+                //}
             }
-            else
-            {
-                if (weapon.GetComponent<Projectile>() != null)
-                {
-                    if (slots[i].slotType == SlotType.Projectile)
-                    {
-                        weapon.gameObject.SetActive(false);
-                        slots[i].weapon.GetComponent<Projectile>().IncreaseHaveNum();
-                        return;
-                    }
-                }
-            }
+            //else
+            //{
+            //    if (weapon.GetComponent<Projectile>() != null)
+            //    {
+            //        if (slots[i].slotType == SlotType.Projectile)
+            //        {
+            //            weapon.gameObject.SetActive(false);
+            //            slots[i].weapon.GetComponent<Projectile>().IncreaseHaveNum();
+            //            return;
+            //        }
+            //    }
+            //}
         }
     }
 
-    public void DestroyWeapon(int slotNum)
-    {
-        if (slots[slotNum].slotType == SlotType.Projectile)
-        {
-            if (slots[slotNum].weapon != null)
-            {
-                //Destroy(slots[slotNum].weapon);
-                slots[slotNum].weapon.SetActive(false);
-                slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
-                slots[slotNum].weapon = null;
-                slots[slotNum].isEmpty = true;
-                //UI_Inventory.UpdateSlot(slotNum);
-                SetAnyWeapon();
-            }
-        }
-    }
+    //public void DestroyWeapon(int slotNum)
+    //{
+    //    if (slots[slotNum].slotType == SlotType.Projectile)
+    //    {
+    //        if (slots[slotNum].weapon != null)
+    //        {
+    //            //Destroy(slots[slotNum].weapon);
+    //            slots[slotNum].weapon.SetActive(false);
+    //            slots[slotNum].weapon.GetComponent<Projectile>().SetOwner(null, null, null);
+    //            slots[slotNum].weapon = null;
+    //            slots[slotNum].isEmpty = true;
+    //            //UI_Inventory.UpdateSlot(slotNum);
+    //            SetAnyWeapon();
+    //        }
+    //    }
+    //}
 
     public void SetAnyWeapon()
     {

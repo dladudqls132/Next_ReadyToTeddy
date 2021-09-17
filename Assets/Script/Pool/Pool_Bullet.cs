@@ -22,7 +22,8 @@ public class Pool_Bullet : MonoBehaviour
         {
             this.prefab = Instantiate(info.prefab, parent);
             this.bulletType = info.bulletType;
-            this.prefab.SetActive(false);
+            this.prefab.transform.position = Vector3.up * 1000;
+            //this.prefab.SetActive(false);
         }
     }
 
@@ -39,6 +40,17 @@ public class Pool_Bullet : MonoBehaviour
                 BulletInfo temp = new BulletInfo(bulletInfos[i], this.transform);
                 bullets.Add(temp);
             }
+        }
+
+        Invoke("SetActiveFalseAll", 1f);
+    }
+
+    void SetActiveFalseAll()
+    {
+        for (int i = 0; i < bullets.Count; i++)
+        {
+
+            bullets[i].prefab.SetActive(false);
         }
     }
 

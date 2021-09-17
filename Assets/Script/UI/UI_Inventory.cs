@@ -16,34 +16,80 @@ using UnityEngine.UI;
 
 public class UI_Inventory : MonoBehaviour
 {
+    [SerializeField] Camera cam;
     [SerializeField] private Inventory inventory;
-    private List<Slot> slots;
-    [SerializeField] private List<UI_Slot> ui_slots;
+    [SerializeField] private Image[] image_backgrounds;
+    [SerializeField] private UI_Slot[] slots;
+    Transform temp = null;
+    private bool isSwap;
 
     // Start is called before the first frame update
     void Start()
     {
         inventory = GameManager.Instance.GetPlayer().GetInventory();
-        slots = inventory.GetSlots();
     }
 
-    public void UpdateSlot(int slotNum)
+    private void Update()
     {
-        if (slots[slotNum].weapon != null)
+        if(!inventory.isOpen)
         {
-            if (slots[slotNum].weapon.GetComponent<Gun>() != null)
+            for(int i = 0; i < image_backgrounds.Length; i++)
             {
-                //ui_slots[slotNum].SetSlot(slots[slotNum].weapon.GetComponent<Gun>().GetSprite(), slots[slotNum].weapon.GetComponent<Gun>().GetDamagePerBullet(), slots[slotNum].weapon.GetComponent<Gun>().GetShotDelay(), slots[slotNum].weapon.GetComponent<Gun>().GetMaxAmmoCount());
-                ui_slots[slotNum].SetSlot(slots[slotNum].weapon.GetComponent<Gun>().GetSprite(), slots[slotNum].weapon.GetComponent<Gun>().GetDamagePerBullet(), slots[slotNum].weapon.GetComponent<Gun>().GetRecoil(), slots[slotNum].weapon.GetComponent<Gun>().GetReloadTime(), slots[slotNum].weapon.GetComponent<Gun>().GetShotDelay(), slots[slotNum].weapon.GetComponent<Gun>().GetMaxAmmoCount(), slots[slotNum].weapon.GetComponent<Gun>().GetText());
+                image_backgrounds[i].enabled = false;
             }
-            else if(slots[slotNum].weapon.GetComponent<Projectile>() != null)
+
+            for(int i = 0; i < slots.Length; i++)
             {
-                ui_slots[slotNum].SetSlot(slots[slotNum].weapon.GetComponent<Projectile>().GetSprite(), slots[slotNum].weapon.GetComponent<Projectile>().GetDamage(), 0, 0, 0, slots[slotNum].weapon.GetComponent<Projectile>().GetMaxHaveNum(), slots[slotNum].weapon.GetComponent<Projectile>().GetText());
+                slots[i].ResetImage();
+            }
+
+            if(temp != null && !isSwap)
+            {
+                isSwap = true;
+                inventory.SwapWeapon(inventory.GetWeaponNum(temp.GetComponent<UI_Slot>().gunType));
             }
         }
         else
         {
-            ui_slots[slotNum].ResetSlot();
+            isSwap = false;
+
+            for (int i = 0; i < image_backgrounds.Length; i++)
+            {
+                image_backgrounds[i].enabled = true;
+            }
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                //slots[i].gameObject.SetActive(true);
+                slots[i].UpdateSlot();
+            }
+
+
+            RaycastHit2D hit = Physics2D.Raycast(cam.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+            if (hit.collider != null)
+            {
+                if (temp != null)
+                {
+                    if (temp != hit.transform)
+                    {
+                        temp.GetComponent<UI_Slot>().PointerExit();
+                    }
+                }
+
+                temp = hit.transform;
+                hit.transform.GetComponent<UI_Slot>().PointerOver();
+            }
+            else
+            {
+                if (temp != null)
+                {
+                    temp.GetComponent<UI_Slot>().PointerExit();
+                }
+
+                temp = null;
+            }
         }
+
     }
 }

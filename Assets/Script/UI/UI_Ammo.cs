@@ -10,6 +10,7 @@ public class UI_Ammo : MonoBehaviour
     [SerializeField] private Text text_ammoCount_current = null;
     [SerializeField] private Text text_ammoCount_current_background = null;
     [SerializeField] private Text text_ammoCount_max = null;
+    [SerializeField] private Text text_ammoCount_max_background = null;
     [SerializeField] private Text text_projectileCount = null;
     [SerializeField] private Text text_projectileCount_background = null;
     [SerializeField] private Image image_lowAmmoCount = null;
@@ -39,11 +40,13 @@ public class UI_Ammo : MonoBehaviour
 
         if (gun != null)
         {
-            image_gun.sprite = gun.GetSprite();
+            if(image_gun.sprite != gun.GetSprite())
+                image_gun.sprite = gun.GetSprite();
 
             text_ammoCount_current.text = gun.GetCurrentAmmoCount().ToString();
             text_ammoCount_current_background.text = gun.GetCurrentAmmoCount().ToString();
             text_ammoCount_max.text = gun.GetHaveAmmoCount().ToString();
+            text_ammoCount_max_background.text = gun.GetHaveAmmoCount().ToString();
 
             if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
             {

@@ -4,114 +4,87 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_Slot : MonoBehaviour, IDragHandler, IDropHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+
+public class UI_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public GameObject tempSlot;
-    public UI_ItemInfo itemInfo;
-    public int slotNum;
-    public Image slot;
-    public Sprite sprite;
-    public float damage;
-    public float recoil;
-    public float reloadTime;
-    public float shotDelay;
-    public int maxAmmo;
-    public string text;
+    public GunType gunType;
+    [SerializeField] private Image image_notHave;
+    [SerializeField] private Image image_have_off;
+    [SerializeField] private Image image_have_on;
 
-    private Canvas canvas;
+    [SerializeField] private bool isHave;
+    [SerializeField] private bool isMouseOver;
 
-    // Start is called before the first frame update
-    void Init()
+    private Inventory inventory;
+
+    void Start()
     {
-        if (slot == null || canvas == null)
+        inventory = GameManager.Instance.GetPlayer().GetInventory();
+        ResetImage();
+    }
+
+    public void ResetImage()
+    {
+        isMouseOver = false;
+
+        image_notHave.enabled = false;
+        image_have_off.enabled = false;
+        image_have_on.enabled = false;
+    }
+
+    public void UpdateSlot()
+    {
+        if(inventory.GetWeapon(gunType))
         {
-            slot = this.transform.GetChild(0).GetComponent<Image>();
-            canvas = this.transform.root.GetComponent<Canvas>();
+            isHave = true;
+        }
+        else
+        {
+            isHave = false;
+        }
+
+        if(isMouseOver)
+        {
+            ResetImage();
+
+            image_have_on.enabled = true;
+        }
+        else
+        {
+            ResetImage();
+
+            if (isHave)
+                image_have_off.enabled = true;
+            else
+                image_notHave.enabled = true;
         }
     }
 
-    public void ResetSlot()
+    public void PointerOver()
     {
-        slot.sprite = null;
-        this.sprite = null;
-        this.damage = 0;
-        this.shotDelay = 0;
-        this.maxAmmo = 0;
-
-        slot.enabled = false;
+        if(isHave)
+            isMouseOver = true;
     }
 
-    public void SetSlot(Sprite sprite, float damage, float recoil, float reloadTime, float shotDelay, int maxAmmo, string text)
+    public void PointerExit()
     {
-        Init();
-
-        slot.enabled = true;
-        slot.sprite = sprite;
-        this.sprite = sprite;
-        this.damage = damage;
-        this.recoil = recoil;
-        this.reloadTime = reloadTime;
-        this.shotDelay = shotDelay;
-        this.maxAmmo = maxAmmo;
-        this.text = text;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (this.sprite == null)
-        {
-            return;
-        }
-
-        tempSlot.SetActive(true);
-        tempSlot.GetComponent<UI_DragDrop>().SetDragInfo(slotNum, sprite);
-        tempSlot.GetComponent<RectTransform>().anchoredPosition = eventData.position - canvas.GetComponent<CanvasScaler>().referenceResolution / 2;
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        if(tempSlot.activeSelf)
-        {
-            GameManager.Instance.GetPlayer().GetInventory().ChangeWeapon(tempSlot.GetComponent<UI_DragDrop>().slotNum, slotNum);
-            tempSlot.SetActive(false);
-        }
-
-        if (this.sprite == null)
-            return;
-
-        itemInfo.gameObject.SetActive(true);
-        itemInfo.GetComponent<RectTransform>().anchoredPosition = eventData.position - canvas.GetComponent<CanvasScaler>().referenceResolution / 2;
-        itemInfo.SetItemInfo(sprite, damage, recoil, reloadTime, shotDelay, maxAmmo, text);
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        tempSlot.SetActive(false);
-  
-        if (eventData.pointerCurrentRaycast.gameObject == null)
-        {
-            GameManager.Instance.GetPlayer().GetInventory().DropWeapon(tempSlot.GetComponent<UI_DragDrop>().slotNum);
-            tempSlot.SetActive(false);
-        }
+        if (isHave)
+            isMouseOver = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (this.sprite == null || tempSlot.activeSelf)
-            return;
-
-        itemInfo.gameObject.SetActive(true);
-        itemInfo.GetComponent<RectTransform>().anchoredPosition = eventData.position - canvas.GetComponent<CanvasScaler>().referenceResolution / 2;
-        itemInfo.SetItemInfo(sprite, damage, recoil, reloadTime, shotDelay, maxAmmo, text);
+        if (isHave)
+        {
+            //isMouseOver = true;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        itemInfo.gameObject.SetActive(false);
-    }
-
-    void OnDisable()
-    {
-        itemInfo.gameObject.SetActive(false);
+        //if (isHave)
+        //{
+        //    isMouseOver = false;
+        //}
     }
 }

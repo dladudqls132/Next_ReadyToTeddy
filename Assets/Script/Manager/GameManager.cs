@@ -129,18 +129,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (UI_pause != null)
             {
-                if (player.GetInventory().isOpen)
-                {
-                    player.GetInventory().ToggleInventory();
-                }
-                else
-                {
-                    SetIsPause(!isPause);
-                }
+                SetIsPause(!isPause);
             }
         }
     }
