@@ -62,6 +62,8 @@ public class Bullet : MonoBehaviour
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation(direction);
+
+        this.gameObject.SetActive(true);
     }
 
     public void SetFire(Vector3 pos, Transform target, float speed, float damage)

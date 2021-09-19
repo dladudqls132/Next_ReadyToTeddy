@@ -133,7 +133,7 @@ public class Enemy_Type_A : Enemy
     void Attack1()
     {
         Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
-        tempBullet.gameObject.SetActive(true);
+
         if (isShield)
         {
             if(Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) > 0.7f)
@@ -146,6 +146,7 @@ public class Enemy_Type_A : Enemy
         }
         else
             tempBullet.SetFire(firePos[0].position, (target.position - firePos[0].position).normalized, bulletSpeed, damage);
+
         GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
         temp.transform.position = firePos[0].position;
         temp.transform.rotation = Quaternion.Euler(firePos[0].eulerAngles.x + 90, firePos[0].eulerAngles.y, firePos[0].eulerAngles.z);
@@ -155,7 +156,7 @@ public class Enemy_Type_A : Enemy
     void Attack2()
     {
         Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
-        tempBullet.gameObject.SetActive(true);
+
         if (isShield)
         {
             if (Vector3.Dot(this.transform.forward, (target.position - this.transform.position).normalized) > 0.7f)
@@ -167,6 +168,7 @@ public class Enemy_Type_A : Enemy
         }
         else
             tempBullet.SetFire(firePos[1].position, (target.position - firePos[1].position).normalized, bulletSpeed, damage);
+
         GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
         temp.transform.position = firePos[1].position;
         temp.transform.rotation = Quaternion.Euler(firePos[1].eulerAngles.x + 90, firePos[1].eulerAngles.y, firePos[1].eulerAngles.z);

@@ -16,6 +16,8 @@ public class UI_Ammo : MonoBehaviour
     [SerializeField] private Image image_lowAmmoCount = null;
     [SerializeField] private Image image_reload = null;
     [SerializeField] private Image image_gun = null;
+    [SerializeField] private Image image_panel = null;
+    [SerializeField] private Image image_q_on = null;
 
     // Update is called once per frame
     void Update()
@@ -44,9 +46,9 @@ public class UI_Ammo : MonoBehaviour
                 image_gun.sprite = gun.GetSprite();
 
             text_ammoCount_current.text = gun.GetCurrentAmmoCount().ToString();
-            text_ammoCount_current_background.text = gun.GetCurrentAmmoCount().ToString();
+            text_ammoCount_current_background.text = text_ammoCount_current.text;
             text_ammoCount_max.text = gun.GetHaveAmmoCount().ToString();
-            text_ammoCount_max_background.text = gun.GetHaveAmmoCount().ToString();
+            text_ammoCount_max_background.text = text_ammoCount_max.text;
 
             if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
             {
@@ -68,10 +70,21 @@ public class UI_Ammo : MonoBehaviour
         if(projectile != null)
         {
             text_projectileCount.text = projectile.GetHaveNum().ToString();
-            text_projectileCount_background.text = projectile.GetHaveNum().ToString();
+            text_projectileCount_background.text = text_projectileCount.text;
 
             image_lowAmmoCount.enabled = false;
             image_reload.enabled = false;
+        }
+
+        if (GameManager.Instance.GetPlayer().GetInventory().isOpen)
+        {
+            image_panel.enabled = true;
+            image_q_on.enabled = true;
+        }
+        else
+        {
+            image_panel.enabled = false;
+            image_q_on.enabled = false;
         }
     }
 }

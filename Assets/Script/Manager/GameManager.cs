@@ -131,10 +131,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (UI_pause != null)
-            {
-                SetIsPause(!isPause);
-            }
+            SetIsPause(!isPause);
         }
     }
 
@@ -151,9 +148,39 @@ public class GameManager : MonoBehaviour
 
     public void SetIsPause(bool value)
     {
-        UI_pause.SetIsPause(value);
+        if (UI_pause != null)
+        {
+            if(value)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Time.timeScale = 0.05f;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                Time.timeScale = 1;
+            }
 
-        isPause = value;
+            isPause = value;
+            UI_pause.SetIsPause(value);
+            soundManager.SetPauseAll(value);
+        }
+    }
+
+    public void SetSlowMode(bool value)
+    {
+        if (isPause) return;
+
+        if(value)
+        {
+            Time.timeScale = 0.05f;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
 
         soundManager.SetPauseAll(value);
     }

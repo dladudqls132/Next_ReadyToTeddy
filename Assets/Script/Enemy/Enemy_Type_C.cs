@@ -94,7 +94,7 @@ public class Enemy_Type_C : Enemy
             if (currentFireRate >= fireRate)
             {
                 Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
-                tempBullet1.gameObject.SetActive(true);
+               
                 tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
                // temp.transform.SetParent(firePos);

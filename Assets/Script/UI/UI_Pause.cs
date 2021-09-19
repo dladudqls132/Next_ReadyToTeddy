@@ -27,9 +27,6 @@ public class UI_Pause : MonoBehaviour
         if(value)
         {
             root.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            Time.timeScale = 0.05f;
         }
         else
         {
@@ -39,9 +36,6 @@ public class UI_Pause : MonoBehaviour
             }
 
             root.SetActive(false);
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            Time.timeScale = 1;
         }
     }
 }
