@@ -57,7 +57,7 @@ public class Boss_Teddy : Enemy
 
     void InvokeLoadScene()
     {
-        GameManager.Instance.LoadScene("Credit", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        //GameManager.LoadScene("Credit");
     }
 
     public override void SetDead(bool value)

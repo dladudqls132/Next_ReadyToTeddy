@@ -10,8 +10,7 @@ public class Bullet_Boss : MonoBehaviour
 
     private void Start()
     {
-        bomb = Instantiate(bomb);
-        bomb.gameObject.SetActive(false);
+      
     }
 
     public void Fire(Vector3 dir, float speed)

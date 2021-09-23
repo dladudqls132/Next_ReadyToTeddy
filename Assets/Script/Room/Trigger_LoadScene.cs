@@ -10,7 +10,7 @@ public class Trigger_LoadScene : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            //GameManager.LoadScene(loadSceneName);
         }
     }
 }

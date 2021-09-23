@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
-                Time.timeScale = 0.05f;
+                Time.timeScale = 0.0f;
             }
             else
             {
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        soundManager.SetPauseAll(value);
+        soundManager.SetSlowAll(value);
     }
 
     public bool GetIsPause()
@@ -195,13 +195,5 @@ public class GameManager : MonoBehaviour
         return SceneManager.GetActiveScene().buildIndex;
     }
 
-    public void LoadScene(string name, LoadSceneMode mode)
-    {
-        SceneManager.LoadScene(name, mode);
-    }
-
-    public void LoadScene(int index, LoadSceneMode mode)
-    {
-        SceneManager.LoadScene(index, mode);
-    }
+    
 }

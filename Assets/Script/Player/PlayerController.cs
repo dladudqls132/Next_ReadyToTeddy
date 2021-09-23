@@ -161,6 +161,7 @@ public class PlayerController : MonoBehaviour
         inventory.Init();
 
         isInit = true;
+        //this.transform.position = new Vector3(0, 0, -30);
     }
 
     void Start()

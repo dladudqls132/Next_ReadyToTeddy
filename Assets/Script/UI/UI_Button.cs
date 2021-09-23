@@ -60,7 +60,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     break;
                 case ButtonType.Restart:
                     GameManager.Instance.SetIsPause(false);
-                    GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
+                    //GameManager.LoadScene(GameManager.Instance.GetCurrentSceneIndex());
+                    
                     break;
                 case ButtonType.Settings:
                     setting.SetActive(true);
@@ -72,6 +73,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     setting.SetActive(false);
                     break;
                 case ButtonType.Setting_Cancel:
+                    GameManager.Instance.GetSettingController().CancelInfo();
                     SetActiveFalse();
                     setting.SetActive(false);
                     break;
@@ -83,7 +85,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     question.SetActive(false);
                     break;
                 case ButtonType.LoadScene:
-                    GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
+                    LoadingSceneController.LoadScene(loadSceneName);
                     break;
                 case ButtonType.Exit:
                     Application.Quit();

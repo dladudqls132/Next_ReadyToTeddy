@@ -25,7 +25,8 @@ public class UI_GameOver : MonoBehaviour
             {
                 Time.timeScale = 1;
                 //GameManager.Instance.LoadScene(GameManager.Instance.GetCurrentSceneIndex(), UnityEngine.SceneManagement.LoadSceneMode.Single);
-                GameManager.Instance.LoadScene(loadSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
+                //GameManager.LoadScene(loadSceneName);
+                LoadingSceneController.LoadScene(loadSceneName);
             }
         }
     }

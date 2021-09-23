@@ -27,6 +27,7 @@ public class Pool_Effect : MonoBehaviour
             this.prefab = Instantiate(info.prefab);
             //this.prefab.SetActive(false);
             this.prefab.transform.position = Vector3.up * 1000;
+            //this.prefab.transform.position = Vector3.zero;
             this.effectType = info.effectType;
         }
     }

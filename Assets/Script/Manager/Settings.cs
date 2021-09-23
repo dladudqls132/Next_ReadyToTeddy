@@ -97,6 +97,7 @@ public class Settings : MonoBehaviour
 
     private void SaveData()
     {
-        File.WriteAllText(path, JsonUtility.ToJson(data));
+
+            File.WriteAllText(path, JsonUtility.ToJson(data));
     }
 }

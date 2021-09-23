@@ -290,6 +290,14 @@ public class Enemy : MonoBehaviour
         else
             effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
 
+        foreach (Renderer r in renderers)
+        {
+            r.material.SetColor("_Color", Color.white * 35);
+        }
+
+        //Invoke("ResetColor", 0.02f);
+        StartCoroutine(ResetColor());
+
         effect.transform.position = damagedPos;
         effect.transform.rotation = Quaternion.LookRotation(damagedVelocity.normalized);
         effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
@@ -339,6 +347,24 @@ public class Enemy : MonoBehaviour
         anim.SetTrigger("Damaged");
         CheckingHp();
     }
+
+    IEnumerator ResetColor()
+    {
+        yield return new WaitForSeconds(0.02f);
+
+        foreach (Renderer r in renderers)
+        {
+            r.material.SetColor("_Color", Color.white);
+        }
+    }
+
+    //void ResetColor()
+    //{
+    //    foreach (Renderer r in renderers)
+    //    {
+    //        r.material.SetColor("_Color", Color.white);
+    //    }
+    //}
 
     public void SetRigidity(bool value, float time)
     {

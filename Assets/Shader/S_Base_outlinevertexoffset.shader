@@ -7,6 +7,7 @@ Shader "S_Base_outlinevertexoffset"
 		_ASEOutlineColor("Outline Color", Color) = (0,0,0,0)
 		_ASEOutlineWidth("Outline Width", Float) = 0.05
 		_Albedo("Albedo", 2D) = "white" {}
+		[HDR]_Color("Color", Color) = (1, 1, 1, 0)
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
 		[HDR]_EmissionColor("EmissionColor", Color) = (1, 1, 1, 1)
@@ -62,6 +63,7 @@ Shader "S_Base_outlinevertexoffset"
 			uniform sampler2D _Normal;
 			uniform float4 _Normal_ST;
 			uniform sampler2D _Albedo;
+			uniform fixed4 _Color;
 			uniform float4 _Albedo_ST;
 			uniform float _Emissionswitch;
 			uniform sampler2D _Emission;
@@ -79,7 +81,7 @@ Shader "S_Base_outlinevertexoffset"
 				float2 uv_Normal = i.uv_texcoord * _Normal_ST.xy + _Normal_ST.zw;
 				o.Normal = UnpackNormal(tex2D(_Normal, uv_Normal));
 				float2 uv_Albedo = i.uv_texcoord * _Albedo_ST.xy + _Albedo_ST.zw;
-				o.Albedo = tex2D(_Albedo, uv_Albedo).rgb;
+				o.Albedo = tex2D(_Albedo, uv_Albedo).rgb * _Color;
 				float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
 				o.Emission = ((_Emissionswitch) ? (float4(0,0,0,0)) : (tex2D(_Emission, uv_Emission))).rgb * _EmissionColor;
 				float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;

@@ -23,6 +23,7 @@ public class Pool_Bullet : MonoBehaviour
             this.prefab = Instantiate(info.prefab, parent);
             this.bulletType = info.bulletType;
             this.prefab.transform.position = Vector3.up * 1000;
+            //this.prefab.transform.position = Vector3.zero;
             //this.prefab.SetActive(false);
         }
     }

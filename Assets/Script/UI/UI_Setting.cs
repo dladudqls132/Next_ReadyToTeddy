@@ -18,6 +18,7 @@ public class UI_Setting : MonoBehaviour
     [SerializeField] SettingType settingType;
     private Settings settings;
     float value;
+    float originValue;
 
     public void Init()
     {
@@ -38,6 +39,7 @@ public class UI_Setting : MonoBehaviour
         {
             case SettingType.MouseSensitive:
                 value = settings.data.mouseMoveSpeed;
+            
                 break;
             case SettingType.Volume_Main:
                 value = settings.data.mainVolume;
@@ -60,6 +62,8 @@ public class UI_Setting : MonoBehaviour
             slider.value = value;
             text.text = (slider.value).ToString("N2");
         }
+
+        originValue = value;
     }
 
     public void SetInfo()
@@ -71,17 +75,25 @@ public class UI_Setting : MonoBehaviour
         if (settingType == SettingType.MouseSensitive)
         {
             value = float.Parse(text.text) * 500;
-            //settings.SetData(settingType, value);
+            if (originValue != value)
+                settings.SetData(settingType, value);
         }
         else
         {
             value = float.Parse(text.text);
-            //settings.SetData(settingType, value);
+
+            if(originValue != value)
+            settings.SetData(settingType, value);
         }
     }
 
     public void ApplyInfo()
     {
         settings.SetData(settingType, value);
+    }
+
+    public void CancelInfo()
+    {
+        settings.SetData(settingType, originValue);
     }
 }

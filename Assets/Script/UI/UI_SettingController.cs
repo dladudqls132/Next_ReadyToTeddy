@@ -21,4 +21,12 @@ public class UI_SettingController : MonoBehaviour
             ui_settings[i].ApplyInfo();
         }
     }
+
+    public void CancelInfo()
+    {
+        for (int i = 0; i < ui_settings.Length; i++)
+        {
+            ui_settings[i].CancelInfo();
+        }
+    }
 }

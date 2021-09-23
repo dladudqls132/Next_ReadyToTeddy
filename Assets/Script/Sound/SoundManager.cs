@@ -39,7 +39,8 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource audios in allAudioSources)
             {
-                audios.pitch = 0.1f;
+                if(audioSource_BGM != audios)
+                    audios.pitch = 0.0f;
                 //audios.Pause();
             }
         }
@@ -47,7 +48,32 @@ public class SoundManager : MonoBehaviour
         {
             foreach (AudioSource audios in allAudioSources)
             {
-                audios.pitch = 1f;
+                if (audioSource_BGM != audios)
+                    audios.pitch = 1f;
+                //audios.UnPause();
+            }
+        }
+    }
+
+    public void SetSlowAll(bool value)
+    {
+        if (value)
+        {
+            foreach (AudioSource audios in allAudioSources)
+            {
+                if (audioSource_BGM != audios)
+                    audios.pitch = 0.1f;
+                else
+                    audios.pitch = 0.5f;
+                //audios.Pause();
+            }
+        }
+        else
+        {
+            foreach (AudioSource audios in allAudioSources)
+            {
+         
+                    audios.pitch = 1f;
                 //audios.UnPause();
             }
         }
@@ -168,15 +194,19 @@ public class SoundManager : MonoBehaviour
 
     public void UpdateSetting()
     {
-        foreach (AudioSource audios in allAudioSources)
+        if (allAudioSources.Length > 0)
         {
+            foreach (AudioSource audios in allAudioSources)
+            {
 
-            if (audios.GetComponent<Sound>() != null)
+                if (audios.GetComponent<Sound>() != null)
                     audios.volume = audios.GetComponent<Sound>().volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
 
+            }
         }
 
         //audioSource_SFX.volume = soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
+        if(audioSource_BGM != null)
         audioSource_BGM.volume = bgmSoundInfo.GetInfo(bgm).volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.backgroundVolume;
     }
 }
