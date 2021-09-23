@@ -61,7 +61,8 @@ public class Settings : MonoBehaviour
         {
             case SettingType.MouseSensitive:
                 data.mouseMoveSpeed = value;
-                cam.SetCameraMoveSpeed(value);
+                if(cam != null)
+                    cam.SetCameraMoveSpeed(value);
                 break;
             case SettingType.Volume_Main:
                 data.mainVolume = value;
@@ -75,7 +76,8 @@ public class Settings : MonoBehaviour
         }
 
         SaveData();
-        GameManager.Instance.GetSoundManager().UpdateSetting();
+        if(GameManager.Instance.GetSoundManager() != null)
+            GameManager.Instance.GetSoundManager().UpdateSetting();
     }
 
     private void SetData()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -24,6 +25,40 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private GameObject question;
     [SerializeField] private GameObject setting;
     [SerializeField] private string loadSceneName;
+    
+    [SerializeField] private bool isAnim;
+    private bool isOn;
+    private Vector3 originPos_image_On;
+    private Vector3 originPos_image_Off;
+
+    void Start()
+    {
+        if (isAnim)
+        {
+            if (image_on != null && image_off != null)
+            {
+                originPos_image_On = image_on.transform.position;
+                originPos_image_Off = image_off.transform.position;
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (isAnim)
+        {
+            if (isOn)
+            {
+                image_on.transform.position = Vector3.Lerp(image_on.transform.position, originPos_image_On + Vector3.right * 50, Time.deltaTime * 10);
+                image_off.transform.position = Vector3.Lerp(image_off.transform.position, originPos_image_Off + Vector3.right * 50, Time.deltaTime * 10);
+            }
+            else
+            {
+                image_on.transform.position = Vector3.Lerp(image_on.transform.position, originPos_image_On, Time.deltaTime * 10);
+                image_off.transform.position = Vector3.Lerp(image_off.transform.position, originPos_image_Off, Time.deltaTime * 10);
+            }
+        }
+    }
 
     public void SetActiveFalse()
     {
@@ -39,6 +74,18 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             image_on.SetActive(true);
         if (image_off != null)
             image_off.SetActive(false);
+
+        if(isAnim)
+            isOn = true;
+
+        if (Input.GetMouseButton(0))
+        {
+            image_on.GetComponent<Image>().color = Color.gray;
+        }
+        else
+        {
+            image_on.GetComponent<Image>().color = Color.white;
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -47,10 +94,16 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             image_on.SetActive(false);
         if (image_off != null)
             image_off.SetActive(true);
+
+        if (isAnim)
+            isOn = false;
+
+        image_on.GetComponent<Image>().color = Color.white;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if(eventData.pointerEnter != null)
         if (eventData.pointerEnter.GetComponent<UI_Button>() != null)
         {
             switch (eventData.pointerEnter.GetComponent<UI_Button>().buttonType)
@@ -64,23 +117,28 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     
                     break;
                 case ButtonType.Settings:
-                    setting.SetActive(true);
+                    eventData.pointerEnter.GetComponent<UI_Button>().setting.SetActive(true);
                     break;
                 case ButtonType.Setting_Apply:
                     //GameManager.Instance.GetSettings().SaveData();
                     GameManager.Instance.GetSettingController().ApplyInfo();
+                    eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
                     SetActiveFalse();
                     setting.SetActive(false);
                     break;
                 case ButtonType.Setting_Cancel:
                     GameManager.Instance.GetSettingController().CancelInfo();
+                    eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
                     SetActiveFalse();
                     setting.SetActive(false);
                     break;
                 case ButtonType.Question_On:
+                    eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
+                    SetActiveFalse();
                     question.SetActive(true);
                     break;
                 case ButtonType.Question_Off:
+                    eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
                     SetActiveFalse();
                     question.SetActive(false);
                     break;
@@ -91,11 +149,14 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     Application.Quit();
                     break;
             }
+
+            image_on.GetComponent<Image>().color = Color.white;
         }
 
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        image_on.GetComponent<Image>().color = Color.gray;
     }
 }
