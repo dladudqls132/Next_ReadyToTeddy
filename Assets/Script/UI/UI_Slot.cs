@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
-public class UI_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UI_Slot : MonoBehaviour
 {
     public GunType gunType;
     [SerializeField] private Image image_notHave;
@@ -62,29 +62,17 @@ public class UI_Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void PointerOver()
     {
-        if(isHave)
+        if (GameManager.Instance.GetIsPause()) return;
+
+        if (isHave)
             isMouseOver = true;
     }
 
     public void PointerExit()
     {
+        if (GameManager.Instance.GetIsPause()) return;
+
         if (isHave)
             isMouseOver = false;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (isHave)
-        {
-            //isMouseOver = true;
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        //if (isHave)
-        //{
-        //    isMouseOver = false;
-        //}
     }
 }

@@ -50,26 +50,28 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    SwapWeapon(0);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    SwapWeapon(1);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha3))
-        //{
-        //    SwapWeapon(2);
-        //}
-        //else if (Input.GetKeyDown(KeyCode.Alpha4))
-        //{
-        //    SwapWeapon(3);
-        //}
-        //else if(Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    SwapWeapon(4);
-        //}
+        if (GameManager.Instance.GetIsPause()) return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            SwapWeapon(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SwapWeapon(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            SwapWeapon(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SwapWeapon(3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SwapWeapon(4);
+        }
 
         if (Input.GetKey(KeyCode.Q))
         {
@@ -80,14 +82,17 @@ public class Inventory : MonoBehaviour
 
             GameManager.Instance.SetSlowMode(true);
         }
-        else if (Input.GetKeyUp(KeyCode.Q))
+        else
         {
-            isOpen = false;
+            if (isOpen)
+            {
+                isOpen = false;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
 
-            GameManager.Instance.SetSlowMode(false);
+                GameManager.Instance.SetSlowMode(false);
+            }
         }
 
 
