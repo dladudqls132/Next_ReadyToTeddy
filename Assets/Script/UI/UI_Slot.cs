@@ -14,6 +14,9 @@ public class UI_Slot : MonoBehaviour
 
     [SerializeField] private bool isHave;
     [SerializeField] private bool isMouseOver;
+    [SerializeField] private Text text;
+    [SerializeField] private Text text_background;
+    private Color gray = new Color(171 / 255f, 171 / 255f, 171 / 255f);
 
     private Inventory inventory;
 
@@ -21,6 +24,38 @@ public class UI_Slot : MonoBehaviour
     {
         inventory = GameManager.Instance.GetPlayer().GetInventory();
         ResetImage();
+    }
+
+    private void Update()
+    {
+        if (inventory.isOpen)
+        {
+            if (!text.enabled)
+            {
+                text.enabled = true;
+                text_background.enabled = true;
+            }
+
+            if (inventory.GetWeapon(gunType) != null)
+            {
+                text.text = inventory.GetWeapon(gunType).GetCurrentAmmoCount().ToString() + " / " + inventory.GetWeapon(gunType).GetHaveAmmoCount();
+                text_background.text = text.text;
+            }
+            else
+            {
+                text.text = null;
+                text_background.text = null;
+            }
+        }
+        else
+        {
+            if (text.enabled)
+            {
+                text.enabled = false;
+                text_background.enabled = false;
+                text.color = gray;
+            }
+        }
     }
 
     public void ResetImage()
@@ -66,6 +101,8 @@ public class UI_Slot : MonoBehaviour
 
         if (isHave)
             isMouseOver = true;
+
+        text.color = Color.white;
     }
 
     public void PointerExit()
@@ -74,5 +111,7 @@ public class UI_Slot : MonoBehaviour
 
         if (isHave)
             isMouseOver = false;
+
+        text.color = gray;
     }
 }
