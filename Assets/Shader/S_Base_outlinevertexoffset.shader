@@ -11,7 +11,7 @@ Shader "S_Base_outlinevertexoffset"
 		_Normal("Normal", 2D) = "bump" {}
 		_Emission("Emission", 2D) = "white" {}
 		[HDR]_EmissionColor("EmissionColor", Color) = (1, 1, 1, 1)
-		_Metallic("Metallic", 2D) = "white" {}
+		_Metallic("Metallic", 2D) = "black" {}
 		_MetallicIntensity("MetallicIntensity", Range(1, 10)) = 1
 		_Smoothness("Smoothness", Range(0, 1)) = 0
 		_AO("AO", 2D) = "white" {}
@@ -85,6 +85,7 @@ Shader "S_Base_outlinevertexoffset"
 				float2 uv_Emission = i.uv_texcoord * _Emission_ST.xy + _Emission_ST.zw;
 				o.Emission = ((_Emissionswitch) ? (float4(0,0,0,0)) : (tex2D(_Emission, uv_Emission))).rgb * _EmissionColor;
 				float2 uv_Metallic = i.uv_texcoord * _Metallic_ST.xy + _Metallic_ST.zw;
+				
 				o.Metallic = tex2D(_Metallic, uv_Metallic).r * _MetallicIntensity;
 				o.Smoothness = _Smoothness;
 				float2 uv_AO = i.uv_texcoord * _AO_ST.xy + _AO_ST.zw;
