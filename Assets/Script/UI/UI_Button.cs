@@ -27,7 +27,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private string loadSceneName;
     
     [SerializeField] private bool isAnim;
-    private bool isOn;
+    [SerializeField] private bool isOn;
+    private bool canMove;
     private Vector3 originPos_image_On;
     private Vector3 originPos_image_Off;
 
@@ -37,25 +38,54 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             if (image_on != null && image_off != null)
             {
-                originPos_image_On = image_on.transform.position;
-                originPos_image_Off = image_off.transform.position;
+                originPos_image_On = image_on.transform.localPosition;
+                originPos_image_Off = image_off.transform.localPosition;
             }
         }
     }
 
+    IEnumerator SetCanMove()
+    {
+        
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        canMove = true;
+    }
+
+   void OnEnable()
+    {
+        StartCoroutine(SetCanMove());
+    }
+
+    void OnDisable()
+    {
+        if (canMove)
+        {
+            isOn = false;
+            canMove = false;
+
+            if (image_off != null && image_on != null)
+            {
+                image_off.transform.localPosition = originPos_image_Off;
+                image_on.transform.localPosition = originPos_image_On;
+            }
+        }
+    }
+
+
     void Update()
     {
-        if (isAnim)
+        if (isAnim && canMove)
         {
             if (isOn)
             {
-                image_on.transform.position = Vector3.Lerp(image_on.transform.position, originPos_image_On + Vector3.right * 50, Time.deltaTime * 10);
-                image_off.transform.position = Vector3.Lerp(image_off.transform.position, originPos_image_Off + Vector3.right * 50, Time.deltaTime * 10);
+                image_on.transform.localPosition = Vector3.Lerp(image_on.transform.localPosition, originPos_image_On + Vector3.right * 50, Time.unscaledDeltaTime * 10);
+                image_off.transform.localPosition = Vector3.Lerp(image_off.transform.localPosition, originPos_image_Off + Vector3.right * 50, Time.unscaledDeltaTime * 10);
             }
             else
             {
-                image_on.transform.position = Vector3.Lerp(image_on.transform.position, originPos_image_On, Time.deltaTime * 10);
-                image_off.transform.position = Vector3.Lerp(image_off.transform.position, originPos_image_Off, Time.deltaTime * 10);
+                image_on.transform.localPosition = Vector3.Lerp(image_on.transform.localPosition, originPos_image_On, Time.unscaledDeltaTime * 10);
+                image_off.transform.localPosition = Vector3.Lerp(image_off.transform.localPosition, originPos_image_Off, Time.unscaledDeltaTime * 10);
             }
         }
     }
