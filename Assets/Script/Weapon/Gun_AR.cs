@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun_AR : Gun
 {
-
+    [SerializeField] private Trail_Bullet trail;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -95,12 +95,11 @@ public class Gun_AR : Gun
 
         if (canShot)
         {
-       
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.02f, 0.02f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
-       
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.Shake(0.02f, 0.02f, false);
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+            handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
+
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
@@ -117,6 +116,12 @@ public class Gun_AR : Gun
             }
             else
                 direction = Camera.main.transform.forward;
+
+            //Trail_Bullet tempTrail = Instantiate(trail, shotPos.position, Quaternion.identity);
+            //tempTrail.SetFire(direction);
+
+            GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+            tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, direction);
 
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
