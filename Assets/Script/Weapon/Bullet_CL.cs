@@ -58,7 +58,7 @@ public class Bullet_CL : Bullet
 
         if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enemy"))
         {
-            Collider[] coll = Physics.OverlapSphere(this.transform.position, 10, 1 << LayerMask.NameToLayer("Root"));
+            Collider[] coll = Physics.OverlapSphere(this.transform.position, 15, 1 << LayerMask.NameToLayer("Root"));
             Transform other_root = other.GetComponent<Enemy_Bone>().root;
        
 

@@ -65,7 +65,7 @@ public class Gun_ChainLightning : Gun
 
             if(isCharge)
             {
-                intensify = Mathf.Lerp(intensify, 3, Time.deltaTime * 4);
+                intensify = Mathf.Lerp(intensify, 2, Time.deltaTime / 1.5f);
                 mr.material.SetFloat("_Intensity", intensify);
             }
             else
@@ -148,13 +148,13 @@ public class Gun_ChainLightning : Gun
 
         if (canShot)
         {
-        
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.FovMove(78, 0.05f, 0.23f, 0.4f);
-                mainCam.Shake(0.6f, 0.07f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
-        
+
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.FovMove(78, 0.05f, 0.23f, 0.4f);
+            mainCam.Shake(0.6f, 0.07f, false);
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+            handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
+
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
 
@@ -168,64 +168,14 @@ public class Gun_ChainLightning : Gun
             isRecoil = false;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            //RaycastHit hit;
-
-            //if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
-            //{
-            //    direction = (hit.point - Camera.main.transform.position).normalized;
-            //}
-            //else
-            //    direction = Camera.main.transform.forward;
 
             Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
-            tempBullet.gameObject.SetActive(true);
-            tempBullet.SetFire(temp, ray.direction, 60, damagePerBullet, stunTime);
 
-            //float temp = Random.Range(-Mathf.PI, Mathf.PI);
-
-            //Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
-
-            ////Debug.DrawRay(shotPos.position, shotDir * 1000);
-
-            //RaycastHit hit2;
-            //if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy")), QueryTriggerInteraction.Ignore))
-            //{
-            //    if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
-            //    {
-            //        Enemy enemy = hit2.transform.root.GetComponent<Enemy>();
-
-            //        if (!hit2.transform.CompareTag("Head"))
-            //        {
-            //            enemy.DecreaseHp(owner, damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20));
-            //        }
-            //        else
-            //        {
-            //            enemy.DecreaseHp(owner, damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5));
-            //        }
-
-            //        GameManager.Instance.GetCrosshair().ResetAttack();
-            //        if (enemy.GetIsDead())
-            //            GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-            //        else if (!GameManager.Instance.GetCrosshair().GetIsKill())
-            //            GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-            //    }
-            //    else if (hit.transform.CompareTag("InteractiveObject"))
-            //    {
-            //        hit.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
-            //    }
-            //    else
-            //    {
-            //        GameObject tempObect = GameManager.Instance.GetPoolBulletHit().GetBulletHit(BulletHitType.Normal);
-            //        tempObect.transform.SetParent(null);
-            //        tempObect.transform.localScale = new Vector3(0.1f, 0.1f, 0.0018857f);
-            //        tempObect.transform.position = hit2.point;
-            //        tempObect.transform.rotation = Quaternion.LookRotation(hit2.normal);
-            //        tempObect.transform.SetParent(hit2.transform, true);
-            //        tempObect.SetActive(true);
-            //    }
-            //}
-
-            //muzzleFlash.Play();
+            float tempIntensify = (intensify / 1.5f);
+            tempIntensify = Mathf.Clamp(tempIntensify, 0, 1.0f);
+            tempBullet.SetFire(temp, ray.direction, 70, damagePerBullet, 0.5f + stunTime * tempIntensify);
+            //tempBullet.gameObject.SetActive(true);
+ 
             isShot = true;
 
             currentAmmo--;

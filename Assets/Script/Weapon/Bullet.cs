@@ -75,6 +75,8 @@ public class Bullet : MonoBehaviour
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
+
+        this.gameObject.SetActive(true);
     }
 
     public void SetFire(Vector3 pos, Vector3 direction, float speed, float damage, float stunTime)
@@ -87,6 +89,8 @@ public class Bullet : MonoBehaviour
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation(direction);
+
+        this.gameObject.SetActive(true);
     }
 
     public void SetFire(Vector3 pos, Transform target, float speed, float damage, float stunTime)
@@ -99,6 +103,8 @@ public class Bullet : MonoBehaviour
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
+
+        this.gameObject.SetActive(true);
     }
 
     virtual protected void OnTriggerEnter(Collider other)

@@ -66,7 +66,6 @@ public class Trap_Bullet : MonoBehaviour
         if(currentFireRate >= fireRate)
         {
             Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
-            tempBullet1.gameObject.SetActive(true);
             tempBullet1.SetFire(firePos.position, firePos.forward, bulletSpeed, damage);
 
             currentFireRate = 0;
