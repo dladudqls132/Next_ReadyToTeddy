@@ -8,7 +8,7 @@ public class Trail_Bullet : MonoBehaviour
 
     private void Update()
     {
-        this.transform.position = this.transform.position + dir * 400 * Time.deltaTime;
+        this.transform.position = this.transform.position + dir * 450 * Time.deltaTime;
     }
     public void SetFire(Vector3 startPos, Vector3 dir)
     {
