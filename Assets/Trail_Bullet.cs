@@ -8,13 +8,14 @@ public class Trail_Bullet : MonoBehaviour
 
     private void Update()
     {
-        this.transform.position = this.transform.position + dir * 250 * Time.deltaTime;
+        this.transform.position = this.transform.position + dir * 400 * Time.deltaTime;
     }
     public void SetFire(Vector3 startPos, Vector3 dir)
     {
         this.transform.position = startPos;
         this.dir = dir;
 
+        this.GetComponent<TrailRenderer>().Clear();
         this.gameObject.SetActive(true);
 
         StartCoroutine(ActiveFalse());
@@ -23,7 +24,7 @@ public class Trail_Bullet : MonoBehaviour
     IEnumerator ActiveFalse()
     {
         yield return new WaitForSeconds(1f);
-
+        
         this.gameObject.SetActive(false);
     }
 }
