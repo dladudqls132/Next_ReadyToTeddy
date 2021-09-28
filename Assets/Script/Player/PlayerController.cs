@@ -665,12 +665,18 @@ public class PlayerController : MonoBehaviour
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
                     }
                     else
+                    {
                         canJump = false;
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
+                    }
 
                 }
             }
             else
+            {
                 canJump = false;
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
+            }
 
             isJump = true;
             hand.GetComponent<Animator>().SetTrigger("Jump");

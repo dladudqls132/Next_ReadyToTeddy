@@ -117,18 +117,18 @@ public class Gun_AR : Gun
             else
                 direction = Camera.main.transform.forward;
 
-            //Trail_Bullet tempTrail = Instantiate(trail, shotPos.position, Quaternion.identity);
-            //tempTrail.SetFire(direction);
-
-            GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
-            tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, direction);
+            //GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+            //tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, direction);
 
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
             //Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
-    
+
+            GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+            tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
+
             RaycastHit hit2;
             if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")),QueryTriggerInteraction.Ignore))
             {

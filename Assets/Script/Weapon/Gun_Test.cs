@@ -134,6 +134,9 @@ public class Gun_Test : Gun
 
                 Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
 
+                GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+                tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
+
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;

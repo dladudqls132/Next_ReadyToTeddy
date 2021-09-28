@@ -119,6 +119,11 @@ public class Enemy_Type_D : Enemy
             isAngry = false;
             currentAttackTimer = 0;
 
+            if(currentHp > 0)
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, this.transform.position, false);
+            else
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_1, this.transform.position, false);
+
             this.gameObject.SetActive(false);
         }
     }

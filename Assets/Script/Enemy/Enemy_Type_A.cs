@@ -121,6 +121,9 @@ public class Enemy_Type_A : Enemy
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_destroy);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
+
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_1, this.transform.position, false);
+
             this.gameObject.SetActive(false);
         }
     }

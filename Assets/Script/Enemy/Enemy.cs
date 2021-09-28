@@ -205,6 +205,7 @@ public class Enemy : MonoBehaviour
                 
                 SetDead(true);
 
+            
 
                 //if (enemyType == EnemyType.Air_Easy)
                 //{
@@ -293,7 +294,7 @@ public class Enemy : MonoBehaviour
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_Color", Color.white * 35);
+            r.material.SetColor("_Color", Color.red * 35);
         }
 
         //Invoke("ResetColor", 0.02f);

@@ -50,7 +50,7 @@ public class Pool_Effect : MonoBehaviour
             }
         }
 
-        Invoke("SetActiveFalseAll", 1f);
+        Invoke("SetActiveFalseAll", 0.2f);
     }
 
     void SetActiveFalseAll()

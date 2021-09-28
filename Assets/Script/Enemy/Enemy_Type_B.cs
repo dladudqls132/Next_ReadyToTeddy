@@ -66,7 +66,7 @@ public class Enemy_Type_B : Enemy
                         c[0].GetComponent<PlayerController>().DecreaseHp(damage);
                     }
                     temp.SetActive(true);
-
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, hit.point, false);
                 }
                 projector.gameObject.SetActive(false);
                 isAttack = false;
@@ -117,6 +117,9 @@ public class Enemy_Type_B : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
             projector.gameObject.SetActive(false);
+
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_1, this.transform.position, false);
+
             this.gameObject.SetActive(false);
         }
     }

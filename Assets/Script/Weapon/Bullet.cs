@@ -38,9 +38,12 @@ public class Bullet : MonoBehaviour
 
         if (isDestroyed)
         {
-            if (trail.positionCount <= 0)
+            if (trail != null)
             {
-                ResetInfo();
+                if (trail.positionCount <= 0)
+                {
+                    ResetInfo();
+                }
             }
         }
         else
@@ -116,6 +119,7 @@ public class Bullet : MonoBehaviour
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_2, this.transform.position, false);
             ActiveFalse();
         }
         else if (/*LayerMask.LayerToName(other.gameObject.layer).Equals("Default") ||*/ LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Wall"))
@@ -130,6 +134,8 @@ public class Bullet : MonoBehaviour
                     temp.transform.position = this.transform.position;
                     temp.SetActive(true);
                 }
+
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_2, this.transform.position, false);
                 ActiveFalse();
             }
         }

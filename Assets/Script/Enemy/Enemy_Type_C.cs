@@ -149,6 +149,8 @@ public class Enemy_Type_C : Enemy
             temp.transform.position = this.transform.position;
             temp.SetActive(true);
 
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_1, this.transform.position, false);
+
             this.gameObject.SetActive(false);
         }
     }
