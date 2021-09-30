@@ -33,6 +33,9 @@ public class Bullet : MonoBehaviour
     {
         if (isFire)
         {
+            if (target)
+                dir = Vector3.MoveTowards(dir, (target.position - this.transform.position).normalized, Time.deltaTime / 1.2f);
+
             rigid.velocity = dir * speed;
         }
 
@@ -69,12 +72,13 @@ public class Bullet : MonoBehaviour
         this.gameObject.SetActive(true);
     }
 
-    public void SetFire(Vector3 pos, Transform target, float speed, float damage)
+    public void SetFire(Vector3 pos, Vector3 direction, Transform target, float speed, float damage)
     {
         isFire = true;
         this.target = target;
         this.speed = speed;
         this.damage = damage;
+        this.dir = direction;
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
@@ -103,6 +107,7 @@ public class Bullet : MonoBehaviour
         this.speed = speed;
         this.damage = damage;
         this.stunTime = stunTime;
+        this.dir = (target.position - this.transform.position).normalized;
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);

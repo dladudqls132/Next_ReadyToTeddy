@@ -46,7 +46,7 @@ public class Item_Magazine : Item
                     
                     Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
-                    temp.AddAmmo(temp.GetMaxAmmo_aMagCount());
+                    temp.AddAmmo(2);
                     Destroy(this.gameObject);
                 }
             }

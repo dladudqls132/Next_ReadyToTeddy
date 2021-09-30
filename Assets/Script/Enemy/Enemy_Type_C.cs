@@ -94,13 +94,24 @@ public class Enemy_Type_C : Enemy
             if (currentFireRate >= fireRate)
             {
                 Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
-               
-                tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
+
+                //tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
+                float rndX = Random.Range(-15.0f, 15.0f);
+                float rndY = Random.Range(-20.0f, 20.0f);
+                if (Mathf.Abs(rndX) < 10)
+                {
+                    rndX = rndX < 0 ? Random.Range(-15, -10) : Random.Range(10, 15);
+                }
+                if (Mathf.Abs(rndY) < 15)
+                {
+                    rndY = rndY < 0 ? Random.Range(-20, -15) : Random.Range(15, 20);
+                }
+                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX, rndY, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
-               // temp.transform.SetParent(firePos);
+ 
                 temp.transform.position = firePos.position;
                 temp.transform.rotation = Quaternion.Euler(firePos.eulerAngles.x + 90, firePos.eulerAngles.y, firePos.eulerAngles.z);
-                //temp.transform.localRotation = Quaternion.Euler(90, 0, 0);
+    
                 temp.SetActive(true);
                 anim.SetTrigger("Fire");
 

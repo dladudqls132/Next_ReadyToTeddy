@@ -60,9 +60,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected bool isRigidity;
     [SerializeField] protected float rigidityTime;
 
-    [SerializeField] protected GameObject dropItem;
-    [SerializeField] protected GameObject dropWeapon;
-
+    [SerializeField] protected GameObject[] dropItem_prefab;
+    protected List<GameObject> dropItem = new List<GameObject>();
 
     protected float currentRigidityTime;
 
@@ -124,21 +123,11 @@ public class Enemy : MonoBehaviour
         if(this.GetComponent<Animator>() != null)
             anim = this.GetComponent<Animator>();
 
-        //float itemDropRate = Random.Range(0.0f, 100.0f);
-
-        //if (itemDropRate <= magazineDropRate)
-        //{
-        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-        //}
-        //else if (itemDropRate <= magazineDropRate + potionDropRate)
-        //{
-        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
-        //}
-
-        dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-
-        if (dropItem != null)
-            dropItem.SetActive(false);
+        for(int i = 0; i < dropItem_prefab.Length; i++)
+        {
+            dropItem.Add(Instantiate(dropItem_prefab[i], this.transform.position + Vector3.up, Quaternion.identity, this.transform));
+            dropItem[i].SetActive(false);
+        }
 
         renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
@@ -202,47 +191,16 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                
+                if (dropItem.Count != 0)
+                {
+                    for (int i = 0; i < dropItem.Count; i++)
+                    {
+                        dropItem[i].transform.SetParent(null);
+                        dropItem[i].SetActive(true);
+                    }
+                }
+
                 SetDead(true);
-
-            
-
-                //if (enemyType == EnemyType.Air_Easy)
-                //{
-                //    GameManager.Instance.GetItemManager().SpawnMagazine(GunType.ChainLightning, this.transform.position + Vector3.up, this.transform.rotation);
-                //}
-                //else
-                //{
-                //    float itemDropRate = Random.Range(0.0f, 100.0f);
-
-                //    if (itemDropRate <= magazineDropRate)
-                //    {
-                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
-                //    }
-                //    else if (itemDropRate <= magazineDropRate + potionDropRate)
-                //    {
-                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
-                //    }
-                //}
-
-
-                if (dropItem != null)
-                {
-                    dropItem.transform.position = this.transform.position + Vector3.up;
-                    dropItem.transform.rotation = this.transform.rotation;
-
-                    dropItem.SetActive(true);
-                }
-                if(dropWeapon != null)
-                {
-                    dropWeapon.transform.position = this.transform.position + Vector3.up;
-                    dropWeapon.transform.rotation = this.transform.rotation;
-
-                    dropWeapon.SetActive(true);
-                }
-
-                //agent.isStopped = true;
-                //this.gameObject.SetActive(false);
             }
         }
     }

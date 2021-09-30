@@ -89,7 +89,8 @@ public class SoundManager : MonoBehaviour
         audioSource_SFX.loop = false;
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
         audioSource_SFX.volume = soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
-        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip);
+        audioSource_SFX.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_SFX.Play();
 
         audioSource_SFX.GetComponent<Sound>().SetInfo(soundInfo.GetInfo(soundName).volume, audioSource_SFX.pitch);
     }
@@ -124,7 +125,9 @@ public class SoundManager : MonoBehaviour
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
         audioSource_SFX.loop = loop;
         audioSource_SFX.volume = soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
-        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip);
+        //audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip);
+        audioSource_SFX.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_SFX.Play();
 
         audioSource_SFX.GetComponent<Sound>().SetInfo(soundInfo.GetInfo(soundName).volume, audioSource_SFX.pitch);
     }
@@ -163,7 +166,8 @@ public class SoundManager : MonoBehaviour
         audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
         audioSource_SFX.loop = loop;
         audioSource_SFX.volume = soundInfo.GetInfo(soundName).volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
-        audioSource_SFX.PlayOneShot(soundInfo.GetInfo(soundName).clip);
+        audioSource_SFX.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_SFX.Play();
 
         audioSource_SFX.GetComponent<Sound>().SetInfo(soundInfo.GetInfo(soundName).volume, audioSource_SFX.pitch);
     }

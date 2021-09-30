@@ -149,7 +149,17 @@ public class GameManager : MonoBehaviour
     {
         if (UI_pause != null)
         {
-            if(value)
+            if (!value)
+            {
+                if (UI_settingController.gameObject.activeSelf)
+                {
+                    UI_settingController.CancelInfo();
+                    UI_settingController.gameObject.SetActive(false);
+                    return;
+                }
+            }
+
+            if (value)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
