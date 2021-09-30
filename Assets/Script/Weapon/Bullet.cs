@@ -5,6 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     [SerializeField] protected Vector3 dir;
+    private Vector3 tempDir;
     [SerializeField] protected float speed;
     protected float damage;
     [SerializeField] protected bool isFire;
@@ -17,6 +18,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected GameObject projectile;
     [SerializeField] protected Transform target;
     [SerializeField] protected float stunTime;
+    private float turnSpeed;
 
     public float GetDamage() { return damage; }
 
@@ -33,8 +35,14 @@ public class Bullet : MonoBehaviour
     {
         if (isFire)
         {
+
             if (target)
-                dir = Vector3.MoveTowards(dir, (target.position - this.transform.position).normalized, Time.deltaTime / 1.2f);
+            {
+                turnSpeed += Time.deltaTime * 4;
+                
+                if(Vector3.Dot(tempDir, dir) > 0.3f)
+                    dir = Vector3.MoveTowards(dir, (target.position - this.transform.position).normalized, turnSpeed * Time.deltaTime);
+            }
 
             rigid.velocity = dir * speed;
         }
@@ -79,6 +87,7 @@ public class Bullet : MonoBehaviour
         this.speed = speed;
         this.damage = damage;
         this.dir = direction;
+        tempDir = direction;
 
         this.transform.position = pos;
         this.transform.rotation = Quaternion.LookRotation((target.position - pos).normalized);
@@ -154,7 +163,7 @@ public class Bullet : MonoBehaviour
         isDestroyed = true;
         
         currentLifeTime = 0;
-      
+        turnSpeed = 0;
         //this.GetComponent<MeshRenderer>().enabled = false;
         
     }
