@@ -19,6 +19,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected Transform target;
     [SerializeField] protected float stunTime;
     private float turnSpeed;
+    private float rndlimitTurnSpeed;
 
     public float GetDamage() { return damage; }
 
@@ -29,6 +30,8 @@ public class Bullet : MonoBehaviour
 
         if (trail == null)
             trail = this.GetComponent<TrailRenderer>();
+
+        rndlimitTurnSpeed = Random.Range(1.5f, 3.0f);
     }
 
     virtual protected void Update()
@@ -39,7 +42,7 @@ public class Bullet : MonoBehaviour
             if (target)
             {
                 turnSpeed += Time.deltaTime * 4;
-                turnSpeed = Mathf.Clamp(turnSpeed, 0, 3.0f);
+                turnSpeed = Mathf.Clamp(turnSpeed, 0, rndlimitTurnSpeed);
 
                 if (Vector3.Dot(tempDir, dir) > 0.3f)
                     dir = Vector3.MoveTowards(dir, (target.position - this.transform.position).normalized, turnSpeed * Time.deltaTime);

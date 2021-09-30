@@ -15,19 +15,26 @@ public class Item_Magazine : Item
     {
         if (player.GetInventory().GetWeapon(gunType) != null)
         {
-            if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+            if (Vector3.Distance(this.transform.position, player.transform.position) <= 7.0f)
             {
-                UpdateMoveSpeed();
-                this.GetComponent<Collider>().isTrigger = true;
-                //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
-                rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                {
+                    UpdateMoveSpeed();
+                    this.GetComponent<Collider>().isTrigger = true;
+                    //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
+                    rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+                }
+                else
+                {
+                    moveSpeed = 0;
+                    rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 15);
+                }
             }
             else
             {
                 moveSpeed = 0;
-                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 10);
+                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 15);
             }
-
         }
 
     }
@@ -40,10 +47,12 @@ public class Item_Magazine : Item
             {
                 if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
                 {
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.GetMag);
+                    
                     Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
                     temp.AddAmmo(2);
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                 }
             }
         }

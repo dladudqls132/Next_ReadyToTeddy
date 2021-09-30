@@ -46,7 +46,6 @@ public class Enemy_Type_C : Enemy
 
         if (!isDetect || isDead || isRigidity)
         {
-            agent.SetDestination(this.transform.position);
             return;
         }
 
