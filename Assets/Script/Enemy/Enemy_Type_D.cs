@@ -95,7 +95,7 @@ public class Enemy_Type_D : Enemy
             {
                 foreach (Renderer r in renderers)
                 {
-                        r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
+                    r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_normal * 35f), Time.deltaTime * 6));
                 }
             }
         }
@@ -119,7 +119,7 @@ public class Enemy_Type_D : Enemy
             isAngry = false;
             currentAttackTimer = 0;
 
-            if(currentHp > 0)
+            if (currentHp > 0)
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, this.transform.position, false);
             else
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_1, this.transform.position, false);

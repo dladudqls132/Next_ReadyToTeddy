@@ -70,7 +70,7 @@ public class Enemy_Type_C : Enemy
             currentFireRate += Time.deltaTime;
             currentAttackTime += Time.deltaTime;
 
-            if(currentAttackTime >= attackTime)
+            if (currentAttackTime >= attackTime)
             {
                 currentAttackTime = 0;
                 isAttack = false;
@@ -107,11 +107,12 @@ public class Enemy_Type_C : Enemy
                     rndY = rndY < 0 ? Random.Range(-20, -15) : Random.Range(15, 20);
                 }
                 tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX, rndY, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
+
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.FutureGun_Fire, firePos.position, false);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
- 
                 temp.transform.position = firePos.position;
                 temp.transform.rotation = Quaternion.Euler(firePos.eulerAngles.x + 90, firePos.eulerAngles.y, firePos.eulerAngles.z);
-    
+
                 temp.SetActive(true);
                 anim.SetTrigger("Fire");
 
@@ -143,10 +144,10 @@ public class Enemy_Type_C : Enemy
 
     private void LateUpdate()
     {
-        if(dir != Vector3.zero)
+        if (dir != Vector3.zero)
             mesh.localRotation = Quaternion.Euler(mesh.localRotation.eulerAngles + Quaternion.Euler(Quaternion.LookRotation(dir).eulerAngles.x, 0, 0).eulerAngles);
 
-        if(anim.GetBool("isIdle"))
+        if (anim.GetBool("isIdle"))
             wings.rotation = Quaternion.LookRotation(this.transform.forward);
     }
 

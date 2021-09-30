@@ -39,7 +39,7 @@ public class UI_Setting : MonoBehaviour
         {
             case SettingType.MouseSensitive:
                 value = settings.data.mouseMoveSpeed;
-            
+
                 break;
             case SettingType.Volume_Main:
                 value = settings.data.mainVolume;
@@ -82,8 +82,8 @@ public class UI_Setting : MonoBehaviour
         {
             value = float.Parse(text.text);
 
-            if(originValue != value)
-            settings.SetData(settingType, value);
+            if (originValue != value)
+                settings.SetData(settingType, value);
         }
     }
 

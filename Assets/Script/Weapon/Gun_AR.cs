@@ -130,7 +130,7 @@ public class Gun_AR : Gun
             tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
 
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")),QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")), QueryTriggerInteraction.Ignore))
             {
                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
@@ -141,7 +141,7 @@ public class Gun_AR : Gun
                     if (!hit2.transform.CompareTag("Head"))
                     {
                         GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-                        if(enemy.GetEnemyType() != EnemyType.D)
+                        if (enemy.GetEnemyType() != EnemyType.D)
                             enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
                         else
                             enemy.DecreaseHp(1, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
@@ -178,7 +178,7 @@ public class Gun_AR : Gun
                 }
 
             }
-            
+
 
             muzzleFlash.Play();
             isShot = true;

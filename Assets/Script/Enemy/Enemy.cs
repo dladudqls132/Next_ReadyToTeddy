@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     //[SerializeField] protected CharacterMaterial material;
     [SerializeField] protected Transform eye;
     [SerializeField] protected Transform target;
-    
+
     [SerializeField] protected bool canSee;
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float damage;
     [SerializeField] protected float speed;
     //protected float increaseCombo;
-   
+
     [SerializeField] protected float detectRange;
     private float detectTime = 4.0f;
     private float currentDetectTime;
@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
 
         originAttackRange = attackRange;
 
-        if(target == null && GameManager.Instance.GetPlayer().transform != null)
+        if (target == null && GameManager.Instance.GetPlayer().transform != null)
             target = GameManager.Instance.GetPlayer().GetAimPos();
 
         if (this.GetComponent<NavMeshAgent>() != null)
@@ -117,13 +117,13 @@ public class Enemy : MonoBehaviour
             agent.speed = speed;
         }
 
-        if(this.GetComponent<Rigidbody>() != null)
+        if (this.GetComponent<Rigidbody>() != null)
             rigid = this.GetComponent<Rigidbody>();
 
-        if(this.GetComponent<Animator>() != null)
+        if (this.GetComponent<Animator>() != null)
             anim = this.GetComponent<Animator>();
 
-        for(int i = 0; i < dropItem_prefab.Length; i++)
+        for (int i = 0; i < dropItem_prefab.Length; i++)
         {
             dropItem.Add(Instantiate(dropItem_prefab[i], this.transform.position + Vector3.up, Quaternion.identity, this.transform));
             dropItem[i].SetActive(false);
@@ -132,14 +132,14 @@ public class Enemy : MonoBehaviour
         renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
 
-    public virtual void SetDead(bool value) {}
+    public virtual void SetDead(bool value) { }
 
     protected void CheckingPlayer()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
-            if(hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player"))
             {
                 canSee = true;
             }
@@ -176,7 +176,7 @@ public class Enemy : MonoBehaviour
         {
             currentDetectTime -= Time.deltaTime;
 
-            if(currentDetectTime <= 0)
+            if (currentDetectTime <= 0)
             {
                 isDetect = false;
             }
@@ -222,7 +222,7 @@ public class Enemy : MonoBehaviour
         currentHp -= value;
 
         isDetect = true;
-       // whoAttackThis = null;
+        // whoAttackThis = null;
 
         CheckingHp();
     }
@@ -239,7 +239,7 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
 
         currentHp -= damage;
-     
+
         GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)

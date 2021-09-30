@@ -7,7 +7,7 @@ public class UI_Pause : MonoBehaviour
     //[SerializeField] private bool isPause = false;
     [SerializeField] private GameObject root;
     [SerializeField] private UI_Button[] buttons;
-    
+
     public GameObject GetRoot() { return root; }
 
     public void Init()
@@ -24,7 +24,7 @@ public class UI_Pause : MonoBehaviour
 
     public void SetIsPause(bool value)
     {
-        if(value)
+        if (value)
         {
             root.SetActive(true);
         }

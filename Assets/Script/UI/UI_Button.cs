@@ -25,7 +25,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     [SerializeField] private GameObject question;
     [SerializeField] private GameObject setting;
     [SerializeField] private string loadSceneName;
-    
+
     [SerializeField] private bool isAnim;
     [SerializeField] private bool isOn;
     private bool canMove;
@@ -46,13 +46,13 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     IEnumerator SetCanMove()
     {
-        
+
         yield return new WaitForSecondsRealtime(0.2f);
 
         canMove = true;
     }
 
-   void OnEnable()
+    void OnEnable()
     {
         StartCoroutine(SetCanMove());
     }
@@ -92,7 +92,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SetActiveFalse()
     {
-        if(image_off != null)
+        if (image_off != null)
             image_off.SetActive(true);
         if (image_on != null)
             image_on.SetActive(false);
@@ -105,7 +105,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (image_off != null)
             image_off.SetActive(false);
 
-        if(isAnim)
+        if (isAnim)
             isOn = true;
 
         if (Input.GetMouseButton(0))
@@ -133,55 +133,55 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if(eventData.pointerEnter != null)
-        if (eventData.pointerEnter.GetComponent<UI_Button>() != null)
-        {
-            switch (eventData.pointerEnter.GetComponent<UI_Button>().buttonType)
+        if (eventData.pointerEnter != null)
+            if (eventData.pointerEnter.GetComponent<UI_Button>() != null)
             {
-                case ButtonType.Continue:
-                    GameManager.Instance.SetIsPause(false);
-                    break;
-                case ButtonType.Restart:
-                    GameManager.Instance.SetIsPause(false);
-                    //GameManager.LoadScene(GameManager.Instance.GetCurrentSceneIndex());
-                    
-                    break;
-                case ButtonType.Settings:
-                    eventData.pointerEnter.GetComponent<UI_Button>().setting.SetActive(true);
-                    break;
-                case ButtonType.Setting_Apply:
-                    //GameManager.Instance.GetSettings().SaveData();
-                    GameManager.Instance.GetSettingController().ApplyInfo();
-                    eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
-                    SetActiveFalse();
-                    setting.SetActive(false);
-                    break;
-                case ButtonType.Setting_Cancel:
-                    GameManager.Instance.GetSettingController().CancelInfo();
-                    eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
-                    SetActiveFalse();
-                    setting.SetActive(false);
-                    break;
-                case ButtonType.Question_On:
-                    eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
-                    SetActiveFalse();
-                    question.SetActive(true);
-                    break;
-                case ButtonType.Question_Off:
-                    eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
-                    SetActiveFalse();
-                    question.SetActive(false);
-                    break;
-                case ButtonType.LoadScene:
-                    LoadingSceneController.LoadScene(loadSceneName);
-                    break;
-                case ButtonType.Exit:
-                    Application.Quit();
-                    break;
-            }
+                switch (eventData.pointerEnter.GetComponent<UI_Button>().buttonType)
+                {
+                    case ButtonType.Continue:
+                        GameManager.Instance.SetIsPause(false);
+                        break;
+                    case ButtonType.Restart:
+                        GameManager.Instance.SetIsPause(false);
+                        //GameManager.LoadScene(GameManager.Instance.GetCurrentSceneIndex());
 
-            image_on.GetComponent<Image>().color = Color.white;
-        }
+                        break;
+                    case ButtonType.Settings:
+                        eventData.pointerEnter.GetComponent<UI_Button>().setting.SetActive(true);
+                        break;
+                    case ButtonType.Setting_Apply:
+                        //GameManager.Instance.GetSettings().SaveData();
+                        GameManager.Instance.GetSettingController().ApplyInfo();
+                        eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
+                        SetActiveFalse();
+                        setting.SetActive(false);
+                        break;
+                    case ButtonType.Setting_Cancel:
+                        GameManager.Instance.GetSettingController().CancelInfo();
+                        eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
+                        SetActiveFalse();
+                        setting.SetActive(false);
+                        break;
+                    case ButtonType.Question_On:
+                        eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
+                        SetActiveFalse();
+                        question.SetActive(true);
+                        break;
+                    case ButtonType.Question_Off:
+                        eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
+                        SetActiveFalse();
+                        question.SetActive(false);
+                        break;
+                    case ButtonType.LoadScene:
+                        LoadingSceneController.LoadScene(loadSceneName);
+                        break;
+                    case ButtonType.Exit:
+                        Application.Quit();
+                        break;
+                }
+
+                image_on.GetComponent<Image>().color = Color.white;
+            }
 
     }
 

@@ -27,8 +27,8 @@ public class Bullet : MonoBehaviour
         rigid = this.GetComponent<Rigidbody>();
         coll = this.GetComponent<SphereCollider>();
 
-        if(trail == null)
-         trail = this.GetComponent<TrailRenderer>();
+        if (trail == null)
+            trail = this.GetComponent<TrailRenderer>();
     }
 
     virtual protected void Update()
@@ -39,8 +39,9 @@ public class Bullet : MonoBehaviour
             if (target)
             {
                 turnSpeed += Time.deltaTime * 4;
-                
-                if(Vector3.Dot(tempDir, dir) > 0.3f)
+                turnSpeed = Mathf.Clamp(turnSpeed, 0, 3.0f);
+
+                if (Vector3.Dot(tempDir, dir) > 0.3f)
                     dir = Vector3.MoveTowards(dir, (target.position - this.transform.position).normalized, turnSpeed * Time.deltaTime);
             }
 
@@ -128,7 +129,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-        
+
             other.GetComponent<PlayerController>().DecreaseHp(damage);
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
             temp.transform.position = this.transform.position;
@@ -161,11 +162,11 @@ public class Bullet : MonoBehaviour
         rigid.velocity = Vector3.zero;
         coll.enabled = false;
         isDestroyed = true;
-        
+
         currentLifeTime = 0;
         turnSpeed = 0;
         //this.GetComponent<MeshRenderer>().enabled = false;
-        
+
     }
 
     virtual protected void ResetInfo()
@@ -175,7 +176,7 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
-      
+
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }

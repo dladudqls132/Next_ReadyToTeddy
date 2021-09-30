@@ -29,7 +29,8 @@ public enum SoundType
     Gun_load,
     Explosion_1,
     DoubleJump,
-    Explosion_2
+    Explosion_2,
+    FutureGun_Fire
 }
 
 [System.Serializable]
