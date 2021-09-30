@@ -31,6 +31,7 @@ public class UI_Setting : MonoBehaviour
             settings = GameManager.Instance.GetSettings();
 
         UpdateInfo();
+        settings.SetData(settingType, value);
     }
 
     public void UpdateInfo()

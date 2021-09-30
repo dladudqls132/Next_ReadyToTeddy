@@ -11,6 +11,7 @@ public class UI_SettingController : MonoBehaviour
     {
         ui_settings = this.GetComponentsInChildren<UI_Setting>();
 
+
         this.gameObject.SetActive(false);
     }
 
