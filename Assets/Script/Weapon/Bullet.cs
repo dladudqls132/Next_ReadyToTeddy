@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour
         if (trail == null)
             trail = this.GetComponent<TrailRenderer>();
 
-        rndlimitTurnSpeed = Random.Range(1.5f, 3.0f);
+        rndlimitTurnSpeed = Random.Range(1.0f, 2.5f);
     }
 
     virtual protected void Update()
