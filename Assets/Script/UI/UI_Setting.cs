@@ -22,7 +22,12 @@ public class UI_Setting : MonoBehaviour
 
     public void Init()
     {
+        
+    }
 
+    private void Start()
+    {
+        settings.SetData(settingType, value);
     }
 
     private void OnEnable()
@@ -31,7 +36,6 @@ public class UI_Setting : MonoBehaviour
             settings = GameManager.Instance.GetSettings();
 
         UpdateInfo();
-        settings.SetData(settingType, value);
     }
 
     public void UpdateInfo()
