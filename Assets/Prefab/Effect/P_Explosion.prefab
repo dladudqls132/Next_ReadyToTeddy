@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1722843692163829720}
   - component: {fileID: 1722843692163829719}
   - component: {fileID: 1722843692163829718}
+  - component: {fileID: 5272400746421573799}
+  - component: {fileID: 980782273639563940}
   m_Layer: 0
   m_Name: P_Explosion
   m_TagString: Untagged
@@ -4761,6 +4763,31 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!135 &5272400746421573799
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722843692163829717}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &980782273639563940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722843692163829717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f29ef31031f5e848a91769346ca744b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2948311651444539514
 GameObject:
   m_ObjectHideFlags: 0

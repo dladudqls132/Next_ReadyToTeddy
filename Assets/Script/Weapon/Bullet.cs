@@ -132,7 +132,6 @@ public class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-
             other.GetComponent<PlayerController>().DecreaseHp(damage);
             GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_normal);
             temp.transform.position = this.transform.position;
@@ -150,6 +149,7 @@ public class Bullet : MonoBehaviour
                 if (temp != null)
                 {
                     temp.transform.position = this.transform.position;
+                    temp.GetComponent<Explosion>().SetDamage(damage);
                     temp.SetActive(true);
                 }
 

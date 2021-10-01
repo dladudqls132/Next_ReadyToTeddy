@@ -83,6 +83,9 @@ public class SoundManager : MonoBehaviour
     {
         if (audioSourceController_SFX.GetAudioSource() == null) return;
 
+        if (!audioSourceController_SFX.GetAudioSource().gameObject.activeSelf)
+            audioSourceController_SFX.GetAudioSource().gameObject.SetActive(true);
+
         audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
         audioSource_SFX.Stop();
 
@@ -98,6 +101,9 @@ public class SoundManager : MonoBehaviour
     public AudioSource AudioPlayOneShot(SoundType soundName, bool loop)
     {
         if (audioSourceController_SFX.GetAudioSource() == null) return null;
+
+        if (!audioSourceController_SFX.GetAudioSource().gameObject.activeSelf)
+            audioSourceController_SFX.GetAudioSource().gameObject.SetActive(true);
 
         audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
         audioSource_SFX.Stop();
@@ -118,7 +124,11 @@ public class SoundManager : MonoBehaviour
     {
         if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
 
+        if (!audioSourceController_SFX_3D.GetAudioSource().gameObject.activeSelf)
+            audioSourceController_SFX_3D.GetAudioSource().gameObject.SetActive(true);
+
         audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+        audioSource_SFX.transform.SetParent(null);
         audioSource_SFX.Stop();
 
         audioSource_SFX.transform.position = pos;
@@ -158,7 +168,11 @@ public class SoundManager : MonoBehaviour
     {
         if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
 
+        if (!audioSourceController_SFX_3D.GetAudioSource().gameObject.activeSelf)
+            audioSourceController_SFX_3D.GetAudioSource().gameObject.SetActive(true);
+
         audioSource_SFX = audioSourceController_SFX_3D.GetAudioSource().GetComponent<AudioSource>();
+        audioSource_SFX.transform.SetParent(null);
         audioSource_SFX.Stop();
 
         audioSource_SFX.transform.position = parent.position;

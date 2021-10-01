@@ -118,8 +118,6 @@ MonoBehaviour:
   camPos: {fileID: 2306817716756791404}
   aimPos: {fileID: 6100122698547951187}
   bodyCollider: {fileID: 2306817717154194257}
-  groundCollider: {fileID: 6958420859628283333, guid: 0b4c12cc056eb824fa0473083a99bd23,
-    type: 3}
   hand: {fileID: 0}
   weapon_gameObject: {fileID: 0}
   tempWeapon: {fileID: 0}
@@ -128,24 +126,18 @@ MonoBehaviour:
   checkingGroundRayPos: {fileID: 6100122699186304115}
   isDead: 0
   maxHP: 100
-  decreaseHpValuePerSecond: 1
   walkSpeed: 8.3
   walkSpeed_min: 8.3
-  walkSpeed_max: 11
-  runSpeed: 11
-  slidingCoolTime: 1.5
+  walkSpeed_max: 12
   isSlope: 0
   canJump: 0
   isJumpByObject: 0
   isGrounded: 1
   jumpPower: 6.5
   currentJumpPower: 0
-  isClimbing: 0
-  climbPower: 4
   isClimbUp: 0
   climbUpTime: 0.5
   climbUpPower: 10
-  combatTime: 0
   dashPower: 30
   dashTime: 0.3
   dashRefillTime: 2
@@ -163,8 +155,10 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0}
   handOriginPos: {x: 0, y: 0, z: 0}
   isFever: 0
-  feverTime: 1
+  feverTime: 1.1
   currentFeverTime: 0
+  canJumpTime: 0.1
+  currentCanJumpTime: 0
 --- !u!114 &6100122698673753942
 MonoBehaviour:
   m_ObjectHideFlags: 0

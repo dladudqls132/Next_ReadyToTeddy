@@ -105,6 +105,7 @@ public class HandAnimController : MonoBehaviour
 
     public void ResetMag()
     {
+        if(player.GetGun().mag != null)
         player.GetGun().mag.GetComponent<Weapon_Magazine>().ResetInfo();
     }
 

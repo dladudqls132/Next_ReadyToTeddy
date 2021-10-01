@@ -60,11 +60,12 @@ public class Enemy_Type_B : Enemy
                     mainCam.Shake(0.2f, 0.4f, false);
 
 
-                    Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
-                    if (c.Length != 0)
-                    {
-                        c[0].GetComponent<PlayerController>().DecreaseHp(damage);
-                    }
+                    //Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
+                    //if (c.Length != 0)
+                    //{
+                    //    c[0].GetComponent<PlayerController>().DecreaseHp(damage);
+                    //}
+                    temp.GetComponent<Explosion>().SetDamage(damage);
                     temp.SetActive(true);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, hit.point, false);
                 }

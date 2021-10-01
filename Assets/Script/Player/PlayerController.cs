@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            walkSpeed = Mathf.Lerp(walkSpeed, walkSpeed_min, Time.deltaTime);
+            walkSpeed = Mathf.Lerp(walkSpeed, walkSpeed_min, Time.deltaTime * 2);
         }
 
         if (currentDashCount < dashCount)
