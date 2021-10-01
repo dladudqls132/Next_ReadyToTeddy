@@ -31,7 +31,9 @@ public enum SoundType
     DoubleJump,
     Explosion_2,
     FutureGun_Fire,
-    GetMag
+    GetMag,
+    Timer,
+    Enemy_roll
 }
 
 [System.Serializable]

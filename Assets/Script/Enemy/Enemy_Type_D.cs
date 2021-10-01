@@ -8,7 +8,7 @@ public class Enemy_Type_D : Enemy
     [SerializeField] private float attackReadyRange;
 
     //private List<Renderer> renderers = new List<Renderer>();
-    private bool isAngry;
+    [SerializeField] private bool isAngry;
     [SerializeField] private float attackTimer;
     private float currentAttackTimer;
     private Vector3 targetOffset;
@@ -20,6 +20,9 @@ public class Enemy_Type_D : Enemy
 
         targetOffset = new Vector3(Random.Range(0.0f, 0.5f), 0, Random.Range(0.0f, 0.5f));
 
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Enemy_roll, this.transform, true);
+
+        StartCoroutine(PlayTimer());
     }
 
     // Update is called once per frame
@@ -101,6 +104,23 @@ public class Enemy_Type_D : Enemy
         }
 
         anim.SetFloat("rollSpeed", agent.velocity.magnitude / 5.5f);
+    }
+
+    IEnumerator PlayTimer()
+    {
+        while (true)
+        {
+            float temp = 0.43f - currentAttackTimer / 2 / attackTimer;
+
+            temp = Mathf.Clamp(temp, 0.1f, 0.43f);
+
+            yield return new WaitForSeconds(temp);
+
+            if(isAngry)
+            {
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Timer, this.transform.position, false);
+            }
+        }
     }
 
     public override void SetDead(bool value)
