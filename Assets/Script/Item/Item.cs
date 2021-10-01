@@ -12,7 +12,7 @@ public class Item : MonoBehaviour
 {
     [SerializeField] protected float dropRate;
     [SerializeField] protected ItemType itemType;
-    [SerializeField] protected float moveSpeed;
+    protected float moveSpeed = 15.0f;
 
     protected PlayerController player;
     protected Rigidbody rigid;
@@ -34,6 +34,7 @@ public class Item : MonoBehaviour
 
     protected void UpdateMoveSpeed()
     {
-        moveSpeed += Time.deltaTime * 10;
+        //moveSpeed += Time.deltaTime * 10;
+        //moveSpeed = Mathf.Clamp(moveSpeed, 5.0f, 15.0f);
     }
 }

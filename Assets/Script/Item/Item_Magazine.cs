@@ -26,14 +26,14 @@ public class Item_Magazine : Item
                 }
                 else
                 {
-                    moveSpeed = 0;
+                   //moveSpeed = 0;
                     rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 15);
                 }
             }
             else
             {
-                moveSpeed = 0;
-                rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 15);
+                //moveSpeed = 0;
+                //rigid.velocity = Vector3.Lerp(rigid.velocity, Vector3.zero, Time.deltaTime * 15);
             }
         }
 
