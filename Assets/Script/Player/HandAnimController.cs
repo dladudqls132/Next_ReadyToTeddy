@@ -108,7 +108,7 @@ public class HandAnimController : MonoBehaviour
         player.GetGun().mag.GetComponent<Weapon_Magazine>().ResetInfo();
     }
 
-    public void Reload_AR_1()
+    void Reload_AR_1()
     {
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_1);
         originalPos_mag = player.GetGun().mag.localPosition;
@@ -117,10 +117,15 @@ public class HandAnimController : MonoBehaviour
         player.GetGun().mag.parent = weaponLeftGrip;
     }
 
-    public void Reload_AR_2()
+    void Reload_AR_2()
     {
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_2);
         ResetMag();
+    }
+
+    void LoadMag()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Gun_load);
     }
 
     public void Pakour_End()

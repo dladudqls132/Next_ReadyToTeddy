@@ -82,7 +82,7 @@ MonoBehaviour:
   originRot: {x: 0, y: 0, z: -3.642}
   aimingPos: {x: 0, y: 0, z: 0}
   aimingRot: {x: 0, y: 0, z: 0}
-  recoil: {x: -0.2, y: 0, z: 0}
+  recoil: {x: -0.1, y: 0, z: 0}
   owner: {fileID: 0}
   hand: {fileID: 0}
   shotPos: {fileID: 1707675672334022879}
@@ -313,6 +313,31 @@ PrefabInstance:
       propertyPath: CollisionModule.collidesWith.m_Bits
       value: 4353
       objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563430169804, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
         type: 3}
       propertyPath: playOnAwake
@@ -352,6 +377,46 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: EmissionModule.rateOverDistance.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.minScalar
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: SizeModule.curve.maxCurve.m_Curve.Array.data[0].value
+      value: 0.2394161
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665013563606079314, guid: f0ee598199de6794f8a71f5d3b1c30f0,
+        type: 3}
+      propertyPath: ShapeModule.angle
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2665013563891144904, guid: f0ee598199de6794f8a71f5d3b1c30f0,
         type: 3}

@@ -27,7 +27,15 @@ public class Chain : MonoBehaviour
 
             currentLinkTime += Time.deltaTime;
 
-            if(currentLinkTime >= linkTime)
+            if (!start.gameObject.activeSelf)
+                line.SetPosition(0, end.position);
+            if (!end.gameObject.activeSelf)
+                line.SetPosition(1, start.position);
+
+            if (!start.gameObject.activeSelf && !end.gameObject.activeSelf)
+                Destroy(this.gameObject);
+
+            if (currentLinkTime >= linkTime)
             {
                 currentLinkTime = 0;
                 link = false;
