@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gun_AR : Gun
 {
-
+    [SerializeField] private Trail_Bullet trail;
     // Start is called before the first frame update
     protected override void Awake()
     {
@@ -95,12 +95,11 @@ public class Gun_AR : Gun
 
         if (canShot)
         {
-       
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.02f, 0.02f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
-       
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.Shake(0.02f, 0.02f, false);
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+            handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
+
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
@@ -118,14 +117,20 @@ public class Gun_AR : Gun
             else
                 direction = Camera.main.transform.forward;
 
+            //GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+            //tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, direction);
+
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
             //Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
             //Debug.DrawRay(shotPos.position, shotDir * 1000);
-    
+
+            GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
+            tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
+
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")),QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")), QueryTriggerInteraction.Ignore))
             {
                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {
@@ -136,13 +141,16 @@ public class Gun_AR : Gun
                     if (!hit2.transform.CompareTag("Head"))
                     {
                         GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
-                        enemy.DecreaseHp(/*owner, */damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+                        if (enemy.GetEnemyType() != EnemyType.D)
+                            enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+                        else
+                            enemy.DecreaseHp(1, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     }
                     else
                     {
                         GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
-                        enemy.DecreaseHp(/*owner, */damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
+                        enemy.DecreaseHp(damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 
@@ -170,7 +178,7 @@ public class Gun_AR : Gun
                 }
 
             }
-            
+
 
             muzzleFlash.Play();
             isShot = true;

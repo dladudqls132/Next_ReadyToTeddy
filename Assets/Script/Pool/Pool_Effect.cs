@@ -12,6 +12,7 @@ public enum EffectType
     Explosion_bomb_small,
     BulletHit_normal,
     Explosion_bomb_large,
+    Trail_Bullet
 }
 
 public class Pool_Effect : MonoBehaviour
@@ -49,7 +50,7 @@ public class Pool_Effect : MonoBehaviour
             }
         }
 
-        Invoke("SetActiveFalseAll", 1f);
+        Invoke("SetActiveFalseAll", 0.2f);
     }
 
     void SetActiveFalseAll()

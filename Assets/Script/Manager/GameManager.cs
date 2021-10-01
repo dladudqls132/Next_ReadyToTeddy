@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
 
         player = FindObjectOfType<PlayerController>();
 
-        if(player != null)
+        if (player != null)
             player.Init();
 
         UI_settingController = FindObjectOfType<UI_SettingController>();
@@ -64,17 +64,17 @@ public class GameManager : MonoBehaviour
 
         UI_pause = FindObjectOfType<UI_Pause>();
 
-        if(UI_pause != null)
+        if (UI_pause != null)
             UI_pause.Init();
 
         UI_crosshair = FindObjectOfType<UI_Crosshair>();
 
-        if(UI_crosshair != null)
+        if (UI_crosshair != null)
             UI_crosshair.Init();
 
         pool_enemy = FindObjectOfType<Pool_Enemy>();
 
-        if(pool_enemy != null)
+        if (pool_enemy != null)
             pool_enemy.Init();
 
         pool_bullet = FindObjectOfType<Pool_Bullet>();
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
 
 
 
-        if(isVisibleMousePoint)
+        if (isVisibleMousePoint)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -149,7 +149,17 @@ public class GameManager : MonoBehaviour
     {
         if (UI_pause != null)
         {
-            if(value)
+            if (!value)
+            {
+                if (UI_settingController.gameObject.activeSelf)
+                {
+                    UI_settingController.CancelInfo();
+                    UI_settingController.gameObject.SetActive(false);
+                    return;
+                }
+            }
+
+            if (value)
             {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
@@ -172,7 +182,7 @@ public class GameManager : MonoBehaviour
     {
         if (isPause) return;
 
-        if(value)
+        if (value)
         {
             Time.timeScale = 0.05f;
         }

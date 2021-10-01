@@ -24,7 +24,14 @@ public enum SoundType
     Container_Drop,
     AutoRifle_Reload_1,
     AutoRifle_Reload_2,
-    Parkour
+    Parkour,
+    HeartBeat,
+    Gun_load,
+    Explosion_1,
+    DoubleJump,
+    Explosion_2,
+    FutureGun_Fire,
+    GetMag
 }
 
 [System.Serializable]

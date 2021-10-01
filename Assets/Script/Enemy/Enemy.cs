@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     //[SerializeField] protected CharacterMaterial material;
     [SerializeField] protected Transform eye;
     [SerializeField] protected Transform target;
-    
+
     [SerializeField] protected bool canSee;
     [SerializeField] protected bool isDead;
     [SerializeField] protected float maxHp;
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float damage;
     [SerializeField] protected float speed;
     //protected float increaseCombo;
-   
+
     [SerializeField] protected float detectRange;
     private float detectTime = 4.0f;
     private float currentDetectTime;
@@ -60,9 +60,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected bool isRigidity;
     [SerializeField] protected float rigidityTime;
 
-    [SerializeField] protected GameObject dropItem;
-    [SerializeField] protected GameObject dropWeapon;
-
+    [SerializeField] protected GameObject[] dropItem_prefab;
+    protected List<GameObject> dropItem = new List<GameObject>();
 
     protected float currentRigidityTime;
 
@@ -88,6 +87,7 @@ public class Enemy : MonoBehaviour
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
     public GameObject GetEnergyShield() { return energyShield; }
+    public EnemyType GetEnemyType() { return enemyType; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
@@ -108,7 +108,7 @@ public class Enemy : MonoBehaviour
 
         originAttackRange = attackRange;
 
-        if(target == null && GameManager.Instance.GetPlayer().transform != null)
+        if (target == null && GameManager.Instance.GetPlayer().transform != null)
             target = GameManager.Instance.GetPlayer().GetAimPos();
 
         if (this.GetComponent<NavMeshAgent>() != null)
@@ -117,39 +117,29 @@ public class Enemy : MonoBehaviour
             agent.speed = speed;
         }
 
-        if(this.GetComponent<Rigidbody>() != null)
+        if (this.GetComponent<Rigidbody>() != null)
             rigid = this.GetComponent<Rigidbody>();
 
-        if(this.GetComponent<Animator>() != null)
+        if (this.GetComponent<Animator>() != null)
             anim = this.GetComponent<Animator>();
 
-        //float itemDropRate = Random.Range(0.0f, 100.0f);
-
-        //if (itemDropRate <= magazineDropRate)
-        //{
-        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-        //}
-        //else if (itemDropRate <= magazineDropRate + potionDropRate)
-        //{
-        //    dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Potion);
-        //}
-
-        dropItem = GameManager.Instance.GetItemManager().SetDropItem(ItemType.Magazine);
-
-        if (dropItem != null)
-            dropItem.SetActive(false);
+        for (int i = 0; i < dropItem_prefab.Length; i++)
+        {
+            dropItem.Add(Instantiate(dropItem_prefab[i], this.transform.position + Vector3.up, Quaternion.identity, this.transform));
+            dropItem[i].SetActive(false);
+        }
 
         renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
 
-    public virtual void SetDead(bool value) {}
+    public virtual void SetDead(bool value) { }
 
     protected void CheckingPlayer()
     {
         RaycastHit hit;
-        if(Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
-            if(hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player"))
             {
                 canSee = true;
             }
@@ -186,7 +176,7 @@ public class Enemy : MonoBehaviour
         {
             currentDetectTime -= Time.deltaTime;
 
-            if(currentDetectTime <= 0)
+            if (currentDetectTime <= 0)
             {
                 isDetect = false;
             }
@@ -201,46 +191,16 @@ public class Enemy : MonoBehaviour
 
             if (currentHp <= 0)
             {
-                
+                if (dropItem.Count != 0)
+                {
+                    for (int i = 0; i < dropItem.Count; i++)
+                    {
+                        dropItem[i].transform.SetParent(null);
+                        dropItem[i].SetActive(true);
+                    }
+                }
+
                 SetDead(true);
-
-
-                //if (enemyType == EnemyType.Air_Easy)
-                //{
-                //    GameManager.Instance.GetItemManager().SpawnMagazine(GunType.ChainLightning, this.transform.position + Vector3.up, this.transform.rotation);
-                //}
-                //else
-                //{
-                //    float itemDropRate = Random.Range(0.0f, 100.0f);
-
-                //    if (itemDropRate <= magazineDropRate)
-                //    {
-                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Magazine, this.transform.position + Vector3.up, this.transform.rotation);
-                //    }
-                //    else if (itemDropRate <= magazineDropRate + potionDropRate)
-                //    {
-                //        GameManager.Instance.GetItemManager().SpawnItem(ItemType.Potion, this.transform.position + Vector3.up, this.transform.rotation);
-                //    }
-                //}
-
-
-                if (dropItem != null)
-                {
-                    dropItem.transform.position = this.transform.position + Vector3.up;
-                    dropItem.transform.rotation = this.transform.rotation;
-
-                    dropItem.SetActive(true);
-                }
-                if(dropWeapon != null)
-                {
-                    dropWeapon.transform.position = this.transform.position + Vector3.up;
-                    dropWeapon.transform.rotation = this.transform.rotation;
-
-                    dropWeapon.SetActive(true);
-                }
-
-                //agent.isStopped = true;
-                //this.gameObject.SetActive(false);
             }
         }
     }
@@ -262,7 +222,7 @@ public class Enemy : MonoBehaviour
         currentHp -= value;
 
         isDetect = true;
-       // whoAttackThis = null;
+        // whoAttackThis = null;
 
         CheckingHp();
     }
@@ -279,7 +239,7 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
 
         currentHp -= damage;
-     
+
         GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
@@ -292,7 +252,7 @@ public class Enemy : MonoBehaviour
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_Color", Color.white * 35);
+            r.material.SetColor("_Color", Color.red * 35);
         }
 
         //Invoke("ResetColor", 0.02f);

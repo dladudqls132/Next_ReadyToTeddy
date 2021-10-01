@@ -58,7 +58,7 @@ public class Bullet_CL : Bullet
 
         if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enemy"))
         {
-            Collider[] coll = Physics.OverlapSphere(this.transform.position, 10, 1 << LayerMask.NameToLayer("Root"));
+            Collider[] coll = Physics.OverlapSphere(this.transform.position, 15, 1 << LayerMask.NameToLayer("Root"));
             Transform other_root = other.GetComponent<Enemy_Bone>().root;
        
 
@@ -85,7 +85,7 @@ public class Bullet_CL : Bullet
             //GameObject hit = Instantiate(hitEffect, other.GetComponent<Collider>().bounds.center, Quaternion.identity, other.transform);
             //hit.GetComponent<HitEffect>().SetHitEffect(other.GetComponent<Enemy_RagdollController>().spineRigid.position, 3.0f);
 
-            other.transform.root.GetComponent<Enemy>().DecreaseHp(damage, other_root.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
+            other.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>().DecreaseHp(damage, other_root.position, other_root, rigid.velocity, EffectType.Damaged_lightning, stunTime);
             //other.GetComponent<Enemy>().SetRigidity(true, stunTime);
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, other.transform, false);

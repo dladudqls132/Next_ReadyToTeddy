@@ -1274,12 +1274,13 @@ MonoBehaviour:
   detectRange: 30
   isDetect: 0
   attackRange: 25
-  potionDropRate: 50
-  magazineDropRate: 50
+  potionDropRate: 0
+  magazineDropRate: 100
   isRigidity: 0
   rigidityTime: 0
-  dropItem: {fileID: 0}
-  dropWeapon: {fileID: 0}
+  dropItem_prefab:
+  - {fileID: 3224820522476375890, guid: 1f9538cd10ecb854a93f18f4b0eae2c7, type: 3}
+  - {fileID: 5950519113769503174, guid: 554591caf2dd98c4bb2ceafbd3347541, type: 3}
   energyShield_prefab: {fileID: 0}
   shieldHp: 0
   renderers: []
