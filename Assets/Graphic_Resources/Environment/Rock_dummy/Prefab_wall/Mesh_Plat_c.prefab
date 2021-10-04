@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1229005699221235996}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh_Plat_c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1229005699221235996
 Transform:
@@ -31,6 +31,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &686274653227876057
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8977887505883274664}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8939266724133516769, guid: cdc99980383c29a418ff79358128594d, type: 3}
 --- !u!1001 &8094856182496895225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -118,8 +132,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mesh_Plat_c
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cdc99980383c29a418ff79358128594d,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cdc99980383c29a418ff79358128594d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdc99980383c29a418ff79358128594d, type: 3}
+--- !u!1 &8977887505883274664 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cdc99980383c29a418ff79358128594d,
+    type: 3}
+  m_PrefabInstance: {fileID: 8094856182496895225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8636793244604647186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cdc99980383c29a418ff79358128594d,
