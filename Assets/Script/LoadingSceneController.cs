@@ -20,6 +20,13 @@ public class LoadingSceneController : MonoBehaviour
         SceneManager.LoadScene("LoadingScene");
     }
 
+    public static void ReloadScene()
+    {
+        nextScene = SceneManager.GetActiveScene().name;
+
+        SceneManager.LoadScene("LoadingScene");
+    }
+
     IEnumerator LoadSceneProcess()
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
