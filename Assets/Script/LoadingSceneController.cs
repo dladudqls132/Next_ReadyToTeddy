@@ -60,7 +60,7 @@ public class LoadingSceneController : MonoBehaviour
 
             if(progressbar.fillAmount < 0.9f)
             {
-                progressbar.fillAmount = Mathf.Lerp(progressbar.fillAmount, 1.0f, Time.unscaledDeltaTime / 8);
+                progressbar.fillAmount = Mathf.Lerp(progressbar.fillAmount, 1.0f, Time.unscaledDeltaTime / 3);
 
                 text_background.text = (progressbar.fillAmount * 100).ToString("N1") + " %";
                 text.text = (progressbar.fillAmount * 100).ToString("N1") + " %";

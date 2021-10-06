@@ -33,7 +33,8 @@ public enum SoundType
     FutureGun_Fire,
     GetMag,
     Timer,
-    Enemy_roll
+    Enemy_roll,
+    EnergyGun_Charge
 }
 
 [System.Serializable]

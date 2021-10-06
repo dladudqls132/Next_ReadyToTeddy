@@ -67,11 +67,16 @@ public class Gun_ChainLightning : Gun
             {
                 intensify = Mathf.Lerp(intensify, 2, Time.deltaTime / 1.5f);
                 mr.material.SetFloat("_Intensity", intensify);
+
+                if (!this.GetComponent<AudioSource>().isPlaying)
+                    this.GetComponent<AudioSource>().Play();
             }
             else
             {
                 intensify = Mathf.Lerp(intensify, 0, Time.deltaTime * 4);
                 mr.material.SetFloat("_Intensity", intensify);
+                if (this.GetComponent<AudioSource>().isPlaying)
+                    this.GetComponent<AudioSource>().Stop();
             }
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
@@ -116,7 +121,7 @@ public class Gun_ChainLightning : Gun
 
         if (canShot)
         {
-            
+           
                 currentSpreadAngle = spreadAngle_normal;
                 mainCam.Shake(0.01f, 0.03f, false);
                 handFireRot = Vector3.zero;
