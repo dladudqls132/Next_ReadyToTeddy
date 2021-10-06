@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 1359355341957258375}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 100.939575, y: 0.169, z: -31.772335}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_Children:
   - {fileID: 1537943015246676131}
   - {fileID: 4276846014039967631}
@@ -163,14 +163,14 @@ MonoBehaviour:
   magazineDropRate: 0
   isRigidity: 0
   rigidityTime: 0
-  dropItem: {fileID: 0}
-  dropWeapon: {fileID: 0}
+  dropItem_prefab: []
   energyShield_prefab: {fileID: 0}
   shieldHp: 0
   renderers: []
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
   attackReadyRange: 4
+  isAngry: 0
   attackTimer: 2
 --- !u!135 &5230538072169118948
 SphereCollider:
@@ -300,7 +300,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.31
+  m_Radius: 0.27
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9204103220086552057
 MonoBehaviour:

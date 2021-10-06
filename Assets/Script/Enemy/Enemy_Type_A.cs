@@ -12,6 +12,7 @@ public class Enemy_Type_A : Enemy
     private bool move_left;
     private bool isAttack;
     [SerializeField] private bool isShield;
+    [SerializeField] protected float speed_sideStep;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -71,12 +72,12 @@ public class Enemy_Type_A : Enemy
                 if (move_left)
                 {
                     anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), -1, Time.deltaTime * 4));
-                    this.transform.position = this.transform.position + -this.transform.right * Time.deltaTime;
+                    this.transform.position = this.transform.position + -this.transform.right * Time.deltaTime * speed_sideStep;
                 }
                 else
                 {
                     anim.SetFloat("horizontal", Mathf.Lerp(anim.GetFloat("horizontal"), 1, Time.deltaTime * 4));
-                    this.transform.position = this.transform.position + this.transform.right * Time.deltaTime;
+                    this.transform.position = this.transform.position + this.transform.right * Time.deltaTime * speed_sideStep;
                 }
             }
         }
