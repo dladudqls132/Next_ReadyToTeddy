@@ -48,10 +48,10 @@ public class Settings : MonoBehaviour
         else
         {
             data = new Data();
-            data.mouseMoveSpeed = 250;
-            data.mainVolume = 0.5f;
-            data.effectVolume = 0.5f;
-            data.backgroundVolume = 0.5f;
+            data.mouseMoveSpeed = 300;
+            data.mainVolume = 0.8f;
+            data.effectVolume = 1.0f;
+            data.backgroundVolume = 0.3f;
         }
     }
 

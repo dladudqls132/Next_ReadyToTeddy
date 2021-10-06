@@ -135,16 +135,17 @@ public class FPPCamController : MonoBehaviour
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
 
-        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause())
+        if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause() && !GameManager.Instance.GetVideoController().gameObject.activeSelf)
         {
-            rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
-            rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
+            rotY += mouseX * cameraMoveSpeed * Time.deltaTime;
+            rotX += mouseY * cameraMoveSpeed * Time.deltaTime;
         }
+
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
 
         currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
-        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.fixedDeltaTime);
+        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.deltaTime);
 
         currentReturnSpeed += Time.deltaTime;
         Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);

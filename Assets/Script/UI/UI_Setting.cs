@@ -59,7 +59,7 @@ public class UI_Setting : MonoBehaviour
 
         if (settingType == SettingType.MouseSensitive)
         {
-            slider.value = value / 500;
+            slider.value = value / 300;
             text.text = (slider.value).ToString("N2");
         }
         else
@@ -79,7 +79,7 @@ public class UI_Setting : MonoBehaviour
 
         if (settingType == SettingType.MouseSensitive)
         {
-            value = float.Parse(text.text) * 500;
+            value = float.Parse(text.text) * 300;
             if (originValue != value)
                 settings.SetData(settingType, value);
         }

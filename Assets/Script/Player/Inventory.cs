@@ -294,6 +294,7 @@ public class Inventory : MonoBehaviour
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
                         weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
+                        GameManager.Instance.GetVideoController().PlayVideo(weapon.GetComponent<Gun>().GetGunType());
                         //UI_Inventory.UpdateSlot(i);
 
                         SwapWeapon(i);

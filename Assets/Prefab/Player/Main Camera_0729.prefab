@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &803647857
 Transform:
   m_ObjectHideFlags: 0
@@ -40,11 +40,11 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 803647856}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: af151d504f3ba0448bdfd13e009d6f38, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: b986c07cd03059243b6c82eab4e05161, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: d6ff1016c72d3634ab230f72f206884d, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 80ee66ecdee03404986e3063799397f4, type: 2}
   m_TimeReference: 0
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
@@ -61,9 +61,9 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 0
+  m_PlayOnAwake: 1
   m_SkipOnDrop: 1
-  m_Looping: 0
+  m_Looping: 1
   m_WaitForFirstFrame: 0
   m_FrameReadyEventEnabled: 0
 --- !u!82 &803647859
@@ -1311,7 +1311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a83ed4d617dd1546bde0d1986ea88c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraMoveSpeed: 500
+  cameraMoveSpeed: 300
   cameraFollow: {fileID: 0}
   rotY: 0
   rotX: 0
