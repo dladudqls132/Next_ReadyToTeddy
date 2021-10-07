@@ -199,25 +199,27 @@ public class Gun_Test : Gun
 
             if(isHit)
             {
-                GameManager.Instance.GetCrosshair().ResetAttack();
+                GameManager.Instance.GetCrosshairController().ResetAttack();
 
                 if (headShot)
                 {
-                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                    GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                 }
-                else if(isDead)
+                else if(checkingDead)
                 {
-                    GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                    GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
 
                     if(headShot)
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     else
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+
+                    return true;
                 }
                 else
                 {
-                    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                    GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                 }
             }

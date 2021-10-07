@@ -27,26 +27,26 @@ public class UI_Crosshair : MonoBehaviour
 
     public bool GetIsKill() { return isKill; }
 
-    public void ResetAttack()
-    {
-        SetAttack_Kill(false);
-        SetAttack_Normal(false);
-    }
+    //public void ResetAttack()
+    //{
+    //    SetAttack_Kill(false);
+    //    SetAttack_Normal(false);
+    //}
 
-    public void SetAttack_Kill(bool value)
-    {
-        currentAttackImageTime = attackImageTime;
-        image_attack_kill.enabled = value;
-        isAttack = value;
-        isKill = value;
-    }
+    //public void SetAttack_Kill(bool value)
+    //{
+    //    currentAttackImageTime = attackImageTime;
+    //    image_attack_kill.enabled = value;
+    //    isAttack = value;
+    //    isKill = value;
+    //}
 
-    public void SetAttack_Normal(bool value)
-    {
-        currentAttackImageTime = attackImageTime;
-        image_attack_normal.enabled = value;
-        isAttack = value;
-    }
+    //public void SetAttack_Normal(bool value)
+    //{
+    //    currentAttackImageTime = attackImageTime;
+    //    image_attack_normal.enabled = value;
+    //    isAttack = value;
+    //}
 
     public void Init()
     {
@@ -65,17 +65,17 @@ public class UI_Crosshair : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isAttack)
-        {
-            currentAttackImageTime -= Time.deltaTime;
+        //if(isAttack)
+        //{
+        //    currentAttackImageTime -= Time.deltaTime;
 
-            if(currentAttackImageTime <= 0)
-            {
-                isAttack = false;
-                SetAttack_Kill(false);
-                SetAttack_Normal(false);
-            }
-        }
+        //    if(currentAttackImageTime <= 0)
+        //    {
+        //        isAttack = false;
+        //        SetAttack_Kill(false);
+        //        SetAttack_Normal(false);
+        //    }
+        //}
 
         
             foreach (Image child in images)

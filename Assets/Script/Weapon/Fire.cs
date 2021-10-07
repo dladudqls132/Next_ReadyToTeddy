@@ -18,10 +18,14 @@ public class Fire : MonoBehaviour
 
 
 
-            if (tempNum % 10 == 0)
+            if (tempNum % 30 == 0)
             {
-                //GameManager.Instance.GetSoundManager().AudioPlayOneShot(AudioSourceType.SFX, SoundType.Hit);
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                 other_root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.Damaged_normal);
+                if (!other_root.GetComponent<Enemy>().GetIsDead())
+                    GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
+                else
+                    GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
             }
             else
                 other_root.GetComponent<Enemy>().DecreaseHp(damage, other.GetComponent<Collider>().bounds.center, other.transform, this.transform.forward, EffectType.None);

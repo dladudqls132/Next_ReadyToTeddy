@@ -555,7 +555,7 @@ public class PlayerController : MonoBehaviour
             currentDashPower = dashPower;
         }
 
-        if (Input.GetMouseButton(0) && !isClimbUp && !isSwap && !inventory.isOpen)
+        if (Input.GetMouseButton(0) && !isSwap && !inventory.isOpen)
         {
             isPressMouseButton = true;
             if (gun != null)
@@ -779,6 +779,9 @@ public class PlayerController : MonoBehaviour
                 gun.SetIsReload(false);
             if (gun.GetIsAiming())
                 gun.SetIsAiming(false);
+
+            if(gun.GetComponent<Gun_ChainLightning>() != null)
+                gun.GetComponent<Gun_ChainLightning>().ResetValue();
         }
 
         tempWeapon = weapon;
@@ -824,6 +827,7 @@ public class PlayerController : MonoBehaviour
                 this.gun = tempWeapon.GetComponent<Gun>();
                 projectileController.SetProjectile(null);
                 this.projectile = null;
+                GameManager.Instance.GetCrosshairController().SetCrosshair(this.gun.GetGunType());
             }
             else if (tempWeapon.GetComponent<Projectile>() != null)
             {

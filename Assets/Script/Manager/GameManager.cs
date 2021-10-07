@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private PlayerController player;
     [SerializeField] private UI_Pause UI_pause;
-    [SerializeField] private UI_Crosshair UI_crosshair;
+    [SerializeField] private UI_CrosshairController UI_crosshairController;
     [SerializeField] private Pool_Enemy pool_enemy;
     [SerializeField] private Pool_Bullet pool_bullet;
     [SerializeField] private Pool_BulletHit pool_bulletHit;
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
     private static GameManager instance;
 
     public PlayerController GetPlayer() { return player; }
-    public UI_Crosshair GetCrosshair() { return UI_crosshair; }
+    public UI_CrosshairController GetCrosshairController() { return UI_crosshairController; }
     public Pool_Enemy GetPoolEnemy() { return pool_enemy; }
     public Pool_Bullet GetPoolBullet() { return pool_bullet; }
     public Pool_BulletHit GetPoolBulletHit() { return pool_bulletHit; }
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     public SoundManager GetSoundManager() { return soundManager; }
     public UI_SettingController GetSettingController() { return UI_settingController; }
     public VideoController GetVideoController() { return videoController; }
-
+  
     // Start is called before the first frame update
     void Awake()
     {
@@ -69,10 +69,10 @@ public class GameManager : MonoBehaviour
         if (UI_pause != null)
             UI_pause.Init();
 
-        UI_crosshair = FindObjectOfType<UI_Crosshair>();
+        UI_crosshairController = FindObjectOfType<UI_CrosshairController>();
 
-        if (UI_crosshair != null)
-            UI_crosshair.Init();
+        if (UI_crosshairController != null)
+            UI_crosshairController.Init();
 
         pool_enemy = FindObjectOfType<Pool_Enemy>();
 

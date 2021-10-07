@@ -14,7 +14,6 @@ public class Gun_ChainLightning : Gun
     protected override void Awake()
     {
         base.Awake();
-
         //audioSource.volume = GameManager.Instance.GetSettings().data.mainVolume;
     }
 
@@ -63,7 +62,7 @@ public class Gun_ChainLightning : Gun
             //    currentReloadTime = reloadTime;
             //}
 
-            if(isCharge)
+            if (isCharge)
             {
                 intensify = Mathf.Lerp(intensify, 2, Time.deltaTime / 1.5f);
                 mr.material.SetFloat("_Intensity", intensify);
@@ -78,6 +77,9 @@ public class Gun_ChainLightning : Gun
                 if (this.GetComponent<AudioSource>().isPlaying)
                     this.GetComponent<AudioSource>().Stop();
             }
+
+
+            GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_CL>().SetCharging(Mathf.Clamp((int)(intensify / 0.3f), 0, 4));
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
             {
@@ -121,15 +123,15 @@ public class Gun_ChainLightning : Gun
 
         if (canShot)
         {
-           
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.01f, 0.03f, false);
-                handFireRot = Vector3.zero;
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                //handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
-           
 
-            if(spark.isStopped)
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.Shake(0.01f, 0.03f, false);
+            handFireRot = Vector3.zero;
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+            //handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
+
+
+            if (spark.isStopped)
                 spark.Play();
 
             isCharge = true;
@@ -141,6 +143,14 @@ public class Gun_ChainLightning : Gun
 
         return false;
     }
+
+    public void ResetValue()
+    {
+        spark.Stop();
+        intensify = 0;
+        isCharge = false;
+    }
+
     private void LateUpdate()
     {
         temp = shotPos.position;
@@ -153,7 +163,6 @@ public class Gun_ChainLightning : Gun
 
         if (canShot)
         {
-
             currentSpreadAngle = spreadAngle_normal;
             mainCam.FovMove(78, 0.05f, 0.23f, 0.4f);
             mainCam.Shake(0.6f, 0.07f, false);
@@ -176,11 +185,11 @@ public class Gun_ChainLightning : Gun
 
             Bullet tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.CL).GetComponent<Bullet>();
 
-            float tempIntensify = (intensify / 1.5f);
+            float tempIntensify = (intensify / 1.3f);
             tempIntensify = Mathf.Clamp(tempIntensify, 0, 1.0f);
-            tempBullet.SetFire(temp, ray.direction, 70, damagePerBullet, 0.5f + stunTime * tempIntensify);
+            tempBullet.SetFire(temp, ray.direction, 70, damagePerBullet, 0.5f + stunTime * (Mathf.Clamp(intensify / 0.3f, 0, 4) / 4));
             //tempBullet.gameObject.SetActive(true);
- 
+
             isShot = true;
 
             currentAmmo--;
@@ -196,5 +205,6 @@ public class Gun_ChainLightning : Gun
         base.ResetInfo();
 
         isCharge = false;
+
     }
 }

@@ -137,10 +137,10 @@ public class Gun_AR : Gun
                     Enemy enemy = hit2.transform.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>();
 
                     //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
-                    GameManager.Instance.GetCrosshair().ResetAttack();
+                    GameManager.Instance.GetCrosshairController().ResetAttack();
                     if (!hit2.transform.CompareTag("Head"))
                     {
-                        GameManager.Instance.GetCrosshair().SetAttack_Normal(true);
+                        GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
                         if (enemy.GetEnemyType() != EnemyType.D)
                             enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
                         else
@@ -149,15 +149,15 @@ public class Gun_AR : Gun
                     }
                     else
                     {
-                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                        GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
                         enemy.DecreaseHp(damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 
                     if (enemy.GetIsDead())
                     {
-                        GameManager.Instance.GetCrosshair().ResetAttack();
-                        GameManager.Instance.GetCrosshair().SetAttack_Kill(true);
+                        GameManager.Instance.GetCrosshairController().ResetAttack();
+                        GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
                     }
                     //else if (!GameManager.Instance.GetCrosshair().GetIsKill())
                     //    GameManager.Instance.GetCrosshair().SetAttack_Normal(true);

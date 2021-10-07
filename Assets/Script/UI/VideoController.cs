@@ -10,7 +10,10 @@ public class VideoController : MonoBehaviour
 
     [SerializeField] private Video videoInfo;
 
-    [SerializeField] private Text text_title;
+    [SerializeField] private GameObject name_SG;
+    [SerializeField] private GameObject name_CL;
+    [SerializeField] private GameObject name_FT;
+
     [SerializeField] private Text text_ex;
 
 
@@ -19,17 +22,27 @@ public class VideoController : MonoBehaviour
         this.gameObject.SetActive(false);
     }
 
+    void ResetName()
+    {
+        name_SG.SetActive(false);
+        name_CL.SetActive(false);
+        name_FT.SetActive(false);
+    }
+
     public void PlayVideo(GunType gun)
     {
-        switch(gun)
+        ResetName();
+
+        switch (gun)
         {
             case GunType.ShotGun:
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0;
+                GameManager.Instance.GetSoundManager().SetPauseAll(true);
                 this.gameObject.SetActive(true);
                 video.clip = videoInfo.GetVideo(GunType.ShotGun).clip;
-                text_title.text = videoInfo.GetVideo(GunType.ShotGun).text_name;
+                name_SG.SetActive(true);
                 text_ex.text = videoInfo.GetVideo(GunType.ShotGun).text_ex;
                 video.Play();
                 break;
@@ -37,9 +50,10 @@ public class VideoController : MonoBehaviour
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0;
+                GameManager.Instance.GetSoundManager().SetPauseAll(true);
                 this.gameObject.SetActive(true);
                 video.clip = videoInfo.GetVideo(GunType.ChainLightning).clip;
-                text_title.text = videoInfo.GetVideo(GunType.ChainLightning).text_name;
+                name_CL.SetActive(true);
                 text_ex.text = videoInfo.GetVideo(GunType.ChainLightning).text_ex;
                 video.Play();
                 break;
@@ -47,9 +61,10 @@ public class VideoController : MonoBehaviour
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
                 Time.timeScale = 0;
+                GameManager.Instance.GetSoundManager().SetPauseAll(true);
                 this.gameObject.SetActive(true);
                 video.clip = videoInfo.GetVideo(GunType.Flamethrower).clip;
-                text_title.text = videoInfo.GetVideo(GunType.Flamethrower).text_name;
+                name_FT.SetActive(true);
                 text_ex.text = videoInfo.GetVideo(GunType.Flamethrower).text_ex;
                 video.Play();
                 break;
@@ -62,6 +77,7 @@ public class VideoController : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        GameManager.Instance.GetSoundManager().SetPauseAll(false);
 
         video.Stop();
         video.clip = null;

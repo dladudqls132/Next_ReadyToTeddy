@@ -42,6 +42,9 @@ public class Gun_FlameThrower : Gun
                 if (currentShotDelay <= 0)
                 {
                     currentAmmo--;
+
+   
+                    GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_FT>().SetGauge((float)currentAmmo / (float)maxAmmo_aMag);
                     currentShotDelay = shotDelay;
                 }
             }
@@ -131,6 +134,8 @@ public class Gun_FlameThrower : Gun
 
                 if (currentAmmo < maxAmmo_aMag)
                     currentAmmo++;
+
+                GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_FT>().SetGauge((float)currentAmmo / (float)maxAmmo_aMag);
             }
         }
     }
