@@ -11,6 +11,7 @@ public struct VideoInfo
     public VideoClip clip;
     public RenderTexture renderTexture;
     public string text_name;
+    [TextArea]
     public string text_ex;
 }
 

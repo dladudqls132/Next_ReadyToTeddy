@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(this.transform.position, (target.position - this.transform.position).normalized, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Player")), QueryTriggerInteraction.Ignore))
         {
-            if (hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player") && Vector3.Distance(this.transform.position, target.position) < detectRange * 2)
             {
                 canSee = true;
             }
