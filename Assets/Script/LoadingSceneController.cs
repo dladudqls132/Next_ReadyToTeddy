@@ -20,6 +20,14 @@ public class LoadingSceneController : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
+        if (sceneName.Equals("CutScene_Start"))
+        {
+            if (CutSceneController.isDisplay)
+            {
+                sceneName = CutSceneController.loadSceneName;
+            }
+        }
+
         nextScene = sceneName;
 
         SceneManager.LoadScene("LoadingScene");
@@ -65,7 +73,7 @@ public class LoadingSceneController : MonoBehaviour
                 text_background.text = (progressbar.fillAmount * 100).ToString("N1") + " %";
                 text.text = (progressbar.fillAmount * 100).ToString("N1") + " %";
 
-                rascal.transform.localPosition = new Vector3(-912.0f + (1824 * (progressbar.fillAmount)), -645.7f, 0f);
+                rascal.transform.localPosition = new Vector3(-912.0f + (1824 * (progressbar.fillAmount)), -418.7f, 0f);
                 rascal.GetComponent<Animator>().SetFloat("speed", (0.9f - progressbar.fillAmount) * 1.2f);
             }
             else
@@ -75,7 +83,7 @@ public class LoadingSceneController : MonoBehaviour
                 text_background.text = (progressbar.fillAmount * 100).ToString("N1") + " %";
                 text.text = (progressbar.fillAmount * 100).ToString("N1") + " %";
                 
-                rascal.transform.localPosition = new Vector3(-912.0f + (1824 * (progressbar.fillAmount)), -645.7f, 0f);
+                rascal.transform.localPosition = new Vector3(-912.0f + (1824 * (progressbar.fillAmount)), -418.7f, 0f);
                 rascal.GetComponent<Animator>().SetFloat("speed", 1.0f);
 
                 if (progressbar.fillAmount >= 0.99f)

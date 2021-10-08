@@ -8,7 +8,7 @@ public class CutSceneTest : MonoBehaviour
     [SerializeField] private int cutNum;
     [SerializeField] private GameObject[] images;
     [SerializeField] private GameObject nextCut;
-    [SerializeField] private string loadSceneName;
+    
     private bool isEnd;
 
     private void Update()
@@ -46,7 +46,7 @@ public class CutSceneTest : MonoBehaviour
 
         if (nextCut == null)
         {
-            LoadingSceneController.LoadScene(loadSceneName);
+            LoadingSceneController.LoadScene(CutSceneController.loadSceneName);
             return;
         }
 

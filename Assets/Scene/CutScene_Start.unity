@@ -428,7 +428,6 @@ MonoBehaviour:
   - {fileID: 1996831774}
   - {fileID: 2091745429}
   nextCut: {fileID: 1953684740}
-  loadSceneName: 
 --- !u!1 &342429838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,6 +1187,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1322839261}
   m_CullTransparentMesh: 0
+--- !u!1 &1328784949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1328784951}
+  - component: {fileID: 1328784950}
+  m_Layer: 0
+  m_Name: CutSceneController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1328784950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1328784949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bee278831198ee4d895fd0d7991729d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_loadSceneName: LevelDesginTest_0927
+--- !u!4 &1328784951
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1328784949}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.4615557, y: -1.2503525, z: 505.17816}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1350606206
 GameObject:
   m_ObjectHideFlags: 0
@@ -1789,7 +1832,6 @@ MonoBehaviour:
   - {fileID: 400350992}
   - {fileID: 92288513}
   nextCut: {fileID: 0}
-  loadSceneName: LevelDesginTest_0927
 --- !u!95 &1953684743
 Animator:
   serializedVersion: 3
