@@ -96,17 +96,17 @@ public class Enemy_Type_C : Enemy
                 Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
 
                 //tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
-                float rndX = Random.Range(-15.0f, 15.0f);
-                float rndY = Random.Range(-20.0f, 20.0f);
-                if (Mathf.Abs(rndX) < 10)
-                {
-                    rndX = rndX < 0 ? Random.Range(-15, -10) : Random.Range(10, 15);
-                }
-                if (Mathf.Abs(rndY) < 15)
-                {
-                    rndY = rndY < 0 ? Random.Range(-20, -15) : Random.Range(15, 20);
-                }
-                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX, rndY, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
+                float rndX = Random.Range(10.0f, 20.0f);
+                float rndY = Random.Range(10.0f, 20.0f);
+                float dis =  Vector3.Distance(this.transform.position, target.position) / 15;
+                dis = Mathf.Clamp(dis, 0, 1);
+      
+                float randBuho = Random.Range(-1, 1);
+                rndX = randBuho < 0 ? rndX * -1 : rndX * 1;
+                randBuho = Random.Range(-1, 1);
+                rndY = randBuho < 0 ? rndY * -1 : rndY * 1;
+
+                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX * dis, rndY * dis, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
 
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.FutureGun_Fire, firePos.position, false);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);
