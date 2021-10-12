@@ -5,6 +5,8 @@ using UnityEngine;
 public class Enemy_Type_A : Enemy
 {
     [SerializeField] private Transform[] firePos;
+    [SerializeField] private Transform sandScatterPos;
+
     [SerializeField] private float fireRate;
     private float currentFireRate;
     [SerializeField] private float bulletSpeed;
@@ -113,6 +115,16 @@ public class Enemy_Type_A : Enemy
      
     }
 
+
+    void SandScatter()
+    {
+        if (!isDetect) return;
+
+        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Sand_Scatter_Small);
+        temp.transform.position = sandScatterPos.position;
+        temp.SetActive(true);
+    }
+
     public override void SetDead(bool value)
     {
         isDead = value;
@@ -133,6 +145,7 @@ public class Enemy_Type_A : Enemy
     //{
     //    this.gameObject.SetActive(false);
     //}
+
 
     void Attack1()
     {

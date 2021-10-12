@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy_Type_C : Enemy
 {
     [SerializeField] private Transform firePos;
+    [SerializeField] private Transform sandScatterPos;
     [SerializeField] private float coolTime_dodge;
     private float currentCoolTime_dodge;
     [SerializeField] private Transform mesh;
@@ -148,6 +149,15 @@ public class Enemy_Type_C : Enemy
 
         if (anim.GetBool("isIdle"))
             wings.rotation = Quaternion.LookRotation(this.transform.forward);
+    }
+
+    void SandScatter()
+    {
+        if (!isDetect) return;
+
+        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Sand_Scatter_Large);
+        temp.transform.position = sandScatterPos.position;
+        temp.SetActive(true);
     }
 
     public override void SetDead(bool value)

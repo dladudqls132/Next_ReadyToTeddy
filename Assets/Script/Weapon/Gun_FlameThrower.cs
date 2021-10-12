@@ -24,6 +24,8 @@ public class Gun_FlameThrower : Gun
             originSpeed_min.Add(fire.transform.GetChild(i).GetComponent<ParticleSystem>().main.startSpeed.constantMin);
             originSpeed_max.Add(fire.transform.GetChild(i).GetComponent<ParticleSystem>().main.startSpeed.constantMax);
         }
+
+        UI_gunsound = GameManager.Instance.GetGunSoundManager().GetGunSound(GunType.Flamethrower);
     }
 
     // Update is called once per frame
@@ -133,7 +135,12 @@ public class Gun_FlameThrower : Gun
                 currentRefillTime = 0;
 
                 if (currentAmmo < maxAmmo_aMag)
+                {
                     currentAmmo++;
+
+                    if(this.gameObject.activeSelf)
+                        UI_gunsound.DisplayImage_Reload();
+                }
 
                 GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_FT>().SetGauge((float)currentAmmo / (float)maxAmmo_aMag);
             }
@@ -186,8 +193,10 @@ public class Gun_FlameThrower : Gun
             if(currentFireSoundRate >= fireSoundRate)
             {
                 currentFireSoundRate = 0;
-                
+   
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.FlameThrower_Fire);
+
+                UI_gunsound.DisplayImage_Attack();
             }
 
 

@@ -29,6 +29,7 @@ public class InteractiveObject_TreasureBox : MonoBehaviour
                 {
                     GameManager.Instance.GetPlayer().GetInventory().AddWeapon(dropWeapon);
                     isOpened = true;
+                    this.gameObject.SetActive(false);
                 }
             }
         }

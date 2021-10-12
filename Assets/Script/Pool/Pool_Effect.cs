@@ -12,7 +12,9 @@ public enum EffectType
     Explosion_bomb_small,
     BulletHit_normal,
     Explosion_bomb_large,
-    Trail_Bullet
+    Trail_Bullet,
+    Sand_Scatter_Small,
+    Sand_Scatter_Large
 }
 
 public class Pool_Effect : MonoBehaviour

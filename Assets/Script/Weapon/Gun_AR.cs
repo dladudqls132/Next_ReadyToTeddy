@@ -5,10 +5,13 @@ using UnityEngine;
 public class Gun_AR : Gun
 {
     [SerializeField] private Trail_Bullet trail;
+   
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
+
+        UI_gunsound = GameManager.Instance.GetGunSoundManager().GetGunSound(GunType.AR);
     }
 
     // Update is called once per frame
@@ -35,26 +38,6 @@ public class Gun_AR : Gun
                     isRecoil = true;
                 }
             }
-
-            //if (isReload)
-            //{
-            //    currentReloadTime -= Time.deltaTime;
-
-            //    if (currentReloadTime <= 0)
-            //    {
-            //        currentReloadTime = reloadTime;
-            //        currentAmmo = maxAmmo;
-
-            //        if (currentAmmo >= maxAmmo)
-            //        {
-            //            isReload = false;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    currentReloadTime = reloadTime;
-            //}
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
             {
@@ -103,6 +86,8 @@ public class Gun_AR : Gun
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
+
+            UI_gunsound.DisplayImage_Attack();
 
             isReload = false;
             isRecoil = false;

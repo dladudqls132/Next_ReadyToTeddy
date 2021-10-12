@@ -12,6 +12,7 @@ public class Item : MonoBehaviour
 {
     [SerializeField] protected float dropRate;
     [SerializeField] protected ItemType itemType;
+
     protected float moveSpeed = 15.0f;
 
     protected PlayerController player;

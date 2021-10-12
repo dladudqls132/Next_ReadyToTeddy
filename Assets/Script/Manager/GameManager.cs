@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UI_SettingController UI_settingController;
     [SerializeField] private SoundManager soundManager;
     [SerializeField] private VideoController videoController;
+    [SerializeField] private UI_GunSoundManager UI_gunSoundManager;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour
     public SoundManager GetSoundManager() { return soundManager; }
     public UI_SettingController GetSettingController() { return UI_settingController; }
     public VideoController GetVideoController() { return videoController; }
+    public UI_GunSoundManager GetGunSoundManager() { return UI_gunSoundManager; }
   
     // Start is called before the first frame update
     void Awake()
@@ -113,6 +115,11 @@ public class GameManager : MonoBehaviour
 
         if (videoController != null)
             videoController.Init();
+
+        UI_gunSoundManager = FindObjectOfType<UI_GunSoundManager>();
+
+        if (UI_gunSoundManager != null)
+            UI_gunSoundManager.Init();
 
 
         if (isVisibleMousePoint)

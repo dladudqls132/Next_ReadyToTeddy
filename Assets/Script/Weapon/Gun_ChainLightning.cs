@@ -9,12 +9,15 @@ public class Gun_ChainLightning : Gun
     [SerializeField] float intensify = 0;
     [SerializeField] MeshRenderer mr;
     [SerializeField] private ParticleSystem spark;
+    private float chargeTick = 0.1f;
+    private float currentChargeTick;
 
     // Start is called before the first frame update
     protected override void Awake()
     {
         base.Awake();
         //audioSource.volume = GameManager.Instance.GetSettings().data.mainVolume;
+        UI_gunsound = GameManager.Instance.GetGunSoundManager().GetGunSound(GunType.ChainLightning);
     }
 
     // Update is called once per frame
@@ -106,6 +109,8 @@ public class Gun_ChainLightning : Gun
         hand.GetComponent<Animator>().SetBool("isReload_CL", value);
 
         this.GetComponent<Animator>().SetBool("isReload", value);
+
+        UI_gunsound.DisplayImage_Reload();
     }
 
     public override void SetIsReloadFinish()
@@ -130,6 +135,19 @@ public class Gun_ChainLightning : Gun
             //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
             //handFireRot = mainCam.SetFireRecoilRot(recoil, 5.0f, 5.0f);
 
+            if (currentChargeTick >= chargeTick)
+            {
+                if (Mathf.Clamp((int)(intensify / 0.3f), 0, 4) != 4)
+                    UI_gunsound.DisplayImage_Charge1();
+                else
+                    UI_gunsound.DisplayImage_Charge2();
+
+                currentChargeTick = 0;
+            }
+            else
+            {
+                currentChargeTick += Time.deltaTime;
+            }
 
             if (spark.isStopped)
                 spark.Play();
@@ -169,6 +187,7 @@ public class Gun_ChainLightning : Gun
             //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
             handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
 
+            UI_gunsound.DisplayImage_Attack();
 
             hand.GetComponent<Animator>().SetTrigger("Fire_CL");
 

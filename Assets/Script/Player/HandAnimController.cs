@@ -121,6 +121,7 @@ public class HandAnimController : MonoBehaviour
     void Reload_AR_2()
     {
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Reload_2);
+        player.GetGun().GetGunSound().DisplayImage_Reload();
         ResetMag();
     }
 

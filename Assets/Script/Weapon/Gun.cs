@@ -13,6 +13,7 @@ public enum GunType
 public class Gun : MonoBehaviour
 {
     [SerializeField] protected GunType gunType;
+    [SerializeField] protected UI_GunSound UI_gunsound;
     [SerializeField] protected Vector3 originPos;
     [SerializeField] protected Vector3 originRot;
     [SerializeField] protected Vector3 aimingPos;
@@ -65,6 +66,7 @@ public class Gun : MonoBehaviour
     public float GetReloadTime() { return reloadTime; }
     public string GetText() { return text; }
     public float GetRecoil() { return recoilMagnitude; }
+    public UI_GunSound GetGunSound() { return UI_gunsound; }
 
     protected Vector3 direction;
     [SerializeField] protected bool isAiming;

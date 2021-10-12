@@ -8,6 +8,8 @@ public class Gun_Test : Gun
     protected override void Awake()
     {
         base.Awake();
+
+        UI_gunsound = GameManager.Instance.GetGunSoundManager().GetGunSound(GunType.ShotGun);
     }
 
     // Update is called once per frame
@@ -34,26 +36,6 @@ public class Gun_Test : Gun
                     isRecoil = true;
                 }
             }
-
-            //if (isReload)
-            //{
-            //    currentReloadTime -= Time.deltaTime;
-
-            //    if (currentReloadTime <= 0)
-            //    {
-            //        currentReloadTime = reloadTime;
-            //        currentAmmo = maxAmmo;
-
-            //        if (currentAmmo >= maxAmmo)
-            //        {
-            //            isReload = false;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    currentReloadTime = reloadTime;
-            //}
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap() && hand.GetComponent<Animator>().GetBool("isIdle"))
             {
@@ -103,8 +85,8 @@ public class Gun_Test : Gun
                 mainCam.Shake(0.05f, 0.06f, false);
                 //handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f);
                 handFireRot = mainCam.SetFireRecoilRot(recoil, 30.0f, 20.0f);
-            
-          
+
+            UI_gunsound.DisplayImage_Attack();
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.ShotGun_Fire);
 
