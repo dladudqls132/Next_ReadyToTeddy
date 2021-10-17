@@ -19,14 +19,14 @@ public class UI_Pause : MonoBehaviour
             child.SetActiveFalse();
         }
 
-        this.transform.GetChild(0).gameObject.SetActive(false);
+        //this.transform.GetChild(0).gameObject.SetActive(false);
     }
 
     public void SetIsPause(bool value)
     {
         if (value)
         {
-            root.SetActive(true);
+           // this.transform.GetChild(0).gameObject.SetActive(true);
         }
         else
         {
@@ -35,7 +35,8 @@ public class UI_Pause : MonoBehaviour
                 child.SetActiveFalse();
             }
 
-            root.SetActive(false);
         }
+
+        root.GetComponent<Animator>().SetBool("isOn", value);
     }
 }

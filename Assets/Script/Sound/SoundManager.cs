@@ -220,12 +220,15 @@ public class SoundManager : MonoBehaviour
 
     public void UpdateSetting()
     {
-        if (allAudioSources.Length > 0)
+        if (allAudioSources != null)
         {
-            foreach (AudioSource audios in allAudioSources)
+            if (allAudioSources.Length > 0)
             {
-                if (audios.GetComponent<Sound>() != null)
-                    audios.volume = audios.GetComponent<Sound>().volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
+                foreach (AudioSource audios in allAudioSources)
+                {
+                    if (audios.GetComponent<Sound>() != null)
+                        audios.volume = audios.GetComponent<Sound>().volume * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
+                }
             }
         }
 

@@ -160,20 +160,26 @@ public class GameManager : MonoBehaviour
 
     public void SetIsPause(bool value)
     {
-        if (videoController.gameObject.activeSelf)
+        if (player == null) return;
+
+
+        if (videoController != null)
         {
-            videoController.StopVideo();
-            return;
+            if (videoController.gameObject.activeSelf)
+            {
+                videoController.StopVideo();
+                return;
+            }
         }
 
         if (UI_pause != null)
         {
             if (!value)
             {
-                if (UI_settingController.gameObject.activeSelf)
+                if (UI_settingController.GetComponent<Animator>().GetBool("isOn"))
                 {
                     UI_settingController.CancelInfo();
-                    UI_settingController.gameObject.SetActive(false);
+                    
                     return;
                 }
             }

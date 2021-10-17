@@ -15,10 +15,16 @@ public class UI_Setting : MonoBehaviour
 {
     [SerializeField] private Text text;
     [SerializeField] private Slider slider;
-    [SerializeField] SettingType settingType;
+    [SerializeField] private SettingType settingType;
+    [SerializeField] private Image muteImage;
+    [SerializeField] private Sprite mute_on;
+    [SerializeField] private Sprite mute_off;
+
     private Settings settings;
     float value;
     float originValue;
+    private bool isMute;
+    private float tempValue;
 
     public void Init()
     {
@@ -27,13 +33,15 @@ public class UI_Setting : MonoBehaviour
 
     private void Start()
     {
-        settings.SetData(settingType, value);
+        //settings.SetData(settingType, value);
     }
 
     private void OnEnable()
     {
         if (settings == null)
+        {
             settings = GameManager.Instance.GetSettings();
+        }
 
         UpdateInfo();
     }
@@ -80,15 +88,15 @@ public class UI_Setting : MonoBehaviour
         if (settingType == SettingType.MouseSensitive)
         {
             value = float.Parse(text.text) * 300;
-            if (originValue != value)
-                settings.SetData(settingType, value);
         }
         else
         {
             value = float.Parse(text.text);
 
-            if (originValue != value)
-                settings.SetData(settingType, value);
+            if (value == 0)
+                muteImage.sprite = mute_on;
+            else
+                muteImage.sprite = mute_off;
         }
     }
 
@@ -100,5 +108,24 @@ public class UI_Setting : MonoBehaviour
     public void CancelInfo()
     {
         settings.SetData(settingType, originValue);
+    }
+
+    public void MuteToggle()
+    {
+        isMute = !isMute;
+
+        if (isMute)
+        {
+            muteImage.sprite = mute_on;
+            tempValue = slider.value;
+            slider.value = 0;
+        }
+        else
+        {
+            muteImage.sprite = mute_off;
+            slider.value = tempValue;
+        }
+
+        SetInfo();
     }
 }

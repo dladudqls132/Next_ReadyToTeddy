@@ -147,20 +147,20 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
                         break;
                     case ButtonType.Settings:
+                        GameManager.Instance.GetSettingController().ToggleMenu();
                         eventData.pointerEnter.GetComponent<UI_Button>().setting.SetActive(true);
                         break;
                     case ButtonType.Setting_Apply:
-                        //GameManager.Instance.GetSettings().SaveData();
                         GameManager.Instance.GetSettingController().ApplyInfo();
                         eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
                         SetActiveFalse();
-                        setting.SetActive(false);
+                        //setting.SetActive(false);
                         break;
                     case ButtonType.Setting_Cancel:
                         GameManager.Instance.GetSettingController().CancelInfo();
                         eventData.pointerEnter.GetComponent<UI_Button>().SetActiveFalse();
                         SetActiveFalse();
-                        setting.SetActive(false);
+                        //setting.SetActive(false);
                         break;
                     case ButtonType.Question_On:
                         eventData.pointerEnter.GetComponent<UI_Button>().question.SetActive(false);
