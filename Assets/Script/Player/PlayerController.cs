@@ -917,72 +917,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-
-        //HandAnimation();
-    }
-
-    //public void SwapWeapon(GameObject weapon)
-    //{
-    //    if (weapon.GetComponent<Gun>() != null)
-    //    {
-    //        if (weapon.GetComponent<Gun>().GetIsReload())
-    //            return;
-
-    //        this.weapon.gameObject.SetActive(false);
-
-    //        this.weapon = weapon.GetComponent<Gun>();
-    //        this.projectile = null;
-
-    //        this.weapon.gameObject.SetActive(true);
-    //    }
-    //    else if (weapon.GetComponent<Projectile>() != null)
-    //    {
-    //        this.projectile.gameObject.SetActive(false);
-    //        this.weapon = null;
-    //        this.projectile = weapon.GetComponent<Projectile>();
-    //        this.projectile.gameObject.SetActive(true);
-    //    }
-    //    //if (currentWeaponNum == num || hand.childCount < num || hand.GetChild(num - 1).childCount == 0)
-    //    //    return;
-
-    //    //if (currentWeaponNum != 4)
-    //    //{
-    //    //    if (weapon.GetIsReload())
-    //    //        return;
-    //    //}
-
-    //    //if (num == 4)
-    //    //{
-    //    //    GameObject temp = hand.GetChild(num - 1).GetChild(0).gameObject;
-    //    //    if (temp.GetComponent<Projectile>().GetHaveNum() == 0)
-    //    //        return;
-    //    //}
-
-    //    //tempWeaponNum = num;
-
-    //    isSwap = true;
-
-    //    handFireRot = Quaternion.Euler(0, 0, 0);
-
-    //    isAiming = false;
-    //    mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-    //    mainCam.FovReset();
-
-    //    hand.GetComponent<Animator>().SetBool("isSwap", true);
-
-    //    ////weapon_gameObject = hand.GetChild(currentWeaponNum - 1).GetChild(0).GetChild(0).gameObject;
-    //    ////weapon = weapon_gameObject.GetComponent<Gun>();
-
-    //    ////if (weapon.GetOwner() == null)
-    //    ////    weapon.SetOwner(this.gameObject, hand);
-    //    ///
-
-    //}
-
-
-
+    
     private void CheckingHp()
     {
         if ((int)currentHP <= 0)

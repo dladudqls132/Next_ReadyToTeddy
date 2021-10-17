@@ -184,6 +184,7 @@ public class Gun_ChainLightning : Gun
 
         if (canShot)
         {
+            owner.GetComponent<Rigidbody>().AddForce(-owner.transform.forward * 50, ForceMode.Impulse);
             currentSpreadAngle = spreadAngle_normal;
             mainCam.FovMove(78, 0.05f, 0.23f, 0.4f);
             mainCam.Shake(0.6f, 0.07f, false);
