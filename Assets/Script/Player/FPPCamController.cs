@@ -82,6 +82,8 @@ public class FPPCamController : MonoBehaviour
 
     void Start()
     {
+        this.transform.rotation = GameManager.Instance.GetPlayer().transform.rotation;
+
         Vector3 rot = transform.localRotation.eulerAngles;
         rotY = rot.y;
         rotX = rot.x;

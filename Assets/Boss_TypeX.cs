@@ -55,6 +55,11 @@ public class Boss_TypeX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            isDetect = true;
+        }
+
         if (!isDetect) return;
 
         if (anim.GetBool("isWaiting"))
@@ -95,22 +100,16 @@ public class Boss_TypeX : MonoBehaviour
         }
     }
 
-    public void SetRot(Quaternion body, Quaternion hand_left, Quaternion hand_right)
-    {
-  
-    }
-
     private void LateUpdate()
     {
         if (isDetect)
         {
-            if (anim.GetBool("isCombat"))
-            {
+
                 
 
                 if (anim.GetBool("isAttack_EnergyBall"))
                 {
-                    Vector3 dir = (target.position - this.transform.position).normalized;
+                    Vector3 dir = (target.position - body.position).normalized;
                     Vector3 temp = body.localRotation.eulerAngles - originRot_body.eulerAngles;
 
                     tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 10);
@@ -129,7 +128,7 @@ public class Boss_TypeX : MonoBehaviour
                 }
                 else
                 {
-                    Vector3 dir = (target.position - this.transform.position).normalized;
+                    Vector3 dir = (target.position - body.position).normalized;
                     tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 10);
                     body.rotation = tempRot_body;
 
@@ -139,7 +138,8 @@ public class Boss_TypeX : MonoBehaviour
                     hand_left.rotation = tempRot_leftHand;
                     hand_right.rotation = tempRot_rightHand;
                 }
-            }
+            
         }
+
     }
 }
