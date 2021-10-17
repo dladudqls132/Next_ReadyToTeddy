@@ -9,6 +9,8 @@ public class Gun_ChainLightning : Gun
     [SerializeField] float intensify = 0;
     [SerializeField] MeshRenderer mr;
     [SerializeField] private ParticleSystem spark;
+    [SerializeField] private ParticleSystem shotEffect;
+
     private float chargeTick = 0.1f;
     private float currentChargeTick;
 
@@ -81,7 +83,8 @@ public class Gun_ChainLightning : Gun
                     this.GetComponent<AudioSource>().Stop();
             }
 
-
+            shotEffect.transform.position = mainCam.transform.position + mainCam.transform.forward * 2.5f;
+            shotEffect.transform.forward = mainCam.transform.forward;
             GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_CL>().SetCharging(Mathf.Clamp((int)(intensify / 0.3f), 0, 4));
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
@@ -195,6 +198,8 @@ public class Gun_ChainLightning : Gun
 
             if (spark.isPlaying)
                 spark.Stop();
+
+            shotEffect.Play();
 
             isCharge = false;
             isReload = false;

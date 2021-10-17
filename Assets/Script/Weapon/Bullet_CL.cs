@@ -58,6 +58,10 @@ public class Bullet_CL : Bullet
 
         if (LayerMask.LayerToName(other.gameObject.layer).Equals("Enemy"))
         {
+            GameObject tempExplosion = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_CL);
+            tempExplosion.transform.position = this.transform.position;
+            tempExplosion.SetActive(true);
+
             Collider[] coll = Physics.OverlapSphere(this.transform.position, 15, 1 << LayerMask.NameToLayer("Root"));
             Transform other_root = other.GetComponent<Enemy_Bone>().root;
        
@@ -91,7 +95,7 @@ public class Bullet_CL : Bullet
             GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Electric, other.transform, false);
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
 
-            if(!other_root.GetComponent<Enemy>().GetIsDead())
+            if (!other_root.GetComponent<Enemy>().GetIsDead())
                 GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
             else
                 GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
@@ -100,6 +104,10 @@ public class Bullet_CL : Bullet
         else if (LayerMask.LayerToName(other.gameObject.layer).Equals("Wall") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
+            GameObject tempExplosion = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_CL);
+            tempExplosion.transform.position = this.transform.position;
+            tempExplosion.SetActive(true);
+
             if (LayerMask.LayerToName(other.gameObject.layer).Equals("Shield"))
             {
                 if(other.GetComponent<Boss_EnergyShield>() != null)
