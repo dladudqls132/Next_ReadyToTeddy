@@ -105,7 +105,8 @@ public class Boss_TypeX : MonoBehaviour
         if (isDetect)
         {
 
-                
+            if (anim.GetBool("isCombat"))
+            {
 
                 if (anim.GetBool("isAttack_EnergyBall"))
                 {
@@ -130,6 +131,7 @@ public class Boss_TypeX : MonoBehaviour
                 {
                     Vector3 dir = (target.position - body.position).normalized;
                     tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 10);
+
                     body.rotation = tempRot_body;
 
                     tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.rotation, Time.deltaTime * 10);
@@ -138,7 +140,7 @@ public class Boss_TypeX : MonoBehaviour
                     hand_left.rotation = tempRot_leftHand;
                     hand_right.rotation = tempRot_rightHand;
                 }
-            
+            }
         }
 
     }
