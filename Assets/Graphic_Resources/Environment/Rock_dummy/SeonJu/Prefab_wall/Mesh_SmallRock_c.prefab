@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &6691412483848465304
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 474493224483957329}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2639241166356525208, guid: f13871668b2768342a7520f1dcab8fc8, type: 3}
 --- !u!1 &4274147051170630896
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,12 +23,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5949586226437109603}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: Mesh_SmallRock_c
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5949586226437109603
 Transform:
@@ -103,8 +117,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mesh_SmallRock_c
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f13871668b2768342a7520f1dcab8fc8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f13871668b2768342a7520f1dcab8fc8,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f13871668b2768342a7520f1dcab8fc8, type: 3}
+--- !u!1 &474493224483957329 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f13871668b2768342a7520f1dcab8fc8,
+    type: 3}
+  m_PrefabInstance: {fileID: 744453773375510272}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &999356831325384939 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f13871668b2768342a7520f1dcab8fc8,

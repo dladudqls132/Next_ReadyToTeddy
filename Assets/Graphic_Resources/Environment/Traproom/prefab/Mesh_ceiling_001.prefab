@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 5480335324564730646}
   - component: {fileID: 7776301179602225116}
   - component: {fileID: 8937360592339228965}
-  m_Layer: 0
+  - component: {fileID: -1353885650528588413}
+  m_Layer: 20
   m_Name: Mesh_ceiling_001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &8908635065097632947
 Transform:
@@ -92,5 +93,19 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1999267390280321194, guid: bbf3b563c860c4844a2c9cb064061a08, type: 3}
+--- !u!64 &-1353885650528588413
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8136320937362187785}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1999267390280321194, guid: bbf3b563c860c4844a2c9cb064061a08, type: 3}
