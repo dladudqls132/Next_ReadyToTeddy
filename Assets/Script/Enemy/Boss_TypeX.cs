@@ -118,12 +118,13 @@ public class Boss_TypeX : MonoBehaviour
                     body.localRotation = Quaternion.Euler(body.localEulerAngles + temp);
 
                     dir = (target.position - hand_left.position).normalized;
-                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, Quaternion.LookRotation(dir) * Quaternion.Euler(originRot_leftHand), Time.deltaTime * 10);
+                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 10);
 
                     hand_left.rotation = tempRot_leftHand;
 
                     dir = (target.position - hand_right.position).normalized;
-                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(originRot_rightHand), Time.deltaTime * 10);
+                    //tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(originRot_rightHand), Time.deltaTime * 10);
+                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 10);
 
                     hand_right.rotation = tempRot_rightHand;
                 }
