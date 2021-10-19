@@ -108,35 +108,40 @@ public class Boss_TypeX : MonoBehaviour
             if (anim.GetBool("isCombat"))
             {
 
-                if (anim.GetBool("isAttack_EnergyBall"))
+                if (anim.GetBool("isAttack_EnergyBall_LeftHand"))
                 {
                     Vector3 dir = (target.position - body.position).normalized;
                     Vector3 temp = body.localRotation.eulerAngles - originRot_body.eulerAngles;
 
-                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 10);
+                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 13);
                     body.rotation = tempRot_body;
                     body.localRotation = Quaternion.Euler(body.localEulerAngles + temp);
 
-                    dir = (target.position - hand_left.position).normalized;
-                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 10);
+             
+                        dir = (target.position - hand_left.position).normalized;
+
+                    if(anim.GetBool("isReload"))
+                        tempRot_leftHand = hand_left.parent.rotation * Quaternion.Euler(hand_left.localEulerAngles);
+                    else
+                        tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 13);
 
                     hand_left.rotation = tempRot_leftHand;
 
                     dir = (target.position - hand_right.position).normalized;
                     //tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(originRot_rightHand), Time.deltaTime * 10);
-                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 10);
+                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 13);
 
                     hand_right.rotation = tempRot_rightHand;
                 }
                 else
                 {
                     Vector3 dir = (target.position - body.position).normalized;
-                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 10);
+                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir), Time.deltaTime * 13);
 
                     body.rotation = tempRot_body;
 
-                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.rotation, Time.deltaTime * 10);
-                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.rotation, Time.deltaTime * 10);
+                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.rotation, Time.deltaTime * 13);
+                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.rotation, Time.deltaTime * 13);
 
                     hand_left.rotation = tempRot_leftHand;
                     hand_right.rotation = tempRot_rightHand;

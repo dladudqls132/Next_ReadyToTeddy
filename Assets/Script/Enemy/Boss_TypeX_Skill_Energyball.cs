@@ -12,11 +12,13 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
     public override void Use()
     {
         base.Use();
+
+        anim.SetBool("isReload", true);
     }
 
     protected override void ResetInfo()
     {
-        anim.SetBool("isAttack_EnergyBall", false);
+        anim.SetBool("isAttack_EnergyBall_LeftHand", false);
 
         base.ResetInfo();
     }
@@ -25,7 +27,7 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
     {
         currentAttackTime -= Time.deltaTime;
 
-        anim.SetBool("isAttack_EnergyBall", true);
+        anim.SetBool("isAttack_EnergyBall_LeftHand", true);
 
         if (currentAttackTime <= 0)
         {
