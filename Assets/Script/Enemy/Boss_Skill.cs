@@ -29,6 +29,8 @@ public class Boss_Skill : MonoBehaviour
 
     protected virtual void ResetInfo()
     {
+        anim.SetBool("isIdle", true);
+
         this.enabled = false;
         isActive = false;
         currentCoolTime = coolTime;
@@ -36,6 +38,7 @@ public class Boss_Skill : MonoBehaviour
 
     public virtual void Use()
     {
+        anim.SetBool("isIdle", false);
         this.enabled = true;
 
         isActive = true;
