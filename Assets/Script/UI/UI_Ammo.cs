@@ -50,21 +50,21 @@ public class UI_Ammo : MonoBehaviour
             text_ammoCount_max.text = gun.GetHaveAmmoCount().ToString();
             text_ammoCount_max_background.text = text_ammoCount_max.text;
 
-            if (gun.GetCurrentAmmoCount() <= gun.GetMaxAmmo_aMagCount() / 3)
+            if (gun.GetHaveAmmoCount() == 0 && gun.GetCurrentAmmoCount() == 0)
             {
                 image_lowAmmoCount.enabled = true;
 
-                if (!gun.GetIsReload() && gun.GetCurrentAmmoCount() <= 1)
-                {
-                    image_reload.enabled = true;
-                }
-                else
-                    image_reload.enabled = false;
+                //if (!gun.GetIsReload() && gun.GetCurrentAmmoCount() <= 1)
+                //{
+                //    image_reload.enabled = true;
+                //}
+                //else
+                //    image_reload.enabled = false;
             }
             else
             {
                 image_lowAmmoCount.enabled = false;
-                image_reload.enabled = false;
+                //image_reload.enabled = false;
             }
         }
         if(projectile != null)
