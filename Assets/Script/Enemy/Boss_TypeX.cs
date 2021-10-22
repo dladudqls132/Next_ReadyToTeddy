@@ -34,6 +34,7 @@ public class Boss_TypeX : MonoBehaviour
     [SerializeField] private Boss_Skill currentSkill;
     bool isStuned;
     int faceNum;
+    float animLerpSpeed;
     // Start is called before the first frame update
     void Start()
     {
@@ -84,7 +85,7 @@ public class Boss_TypeX : MonoBehaviour
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 6));
+            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
         }
 
         if (anim.GetBool("isWaiting"))
@@ -94,6 +95,7 @@ public class Boss_TypeX : MonoBehaviour
 
         if (!anim.GetBool("isCombat")) return;
 
+        if (isStuned) return;
 
         state = Boss_TypeX_State.Idle;
 
@@ -132,21 +134,47 @@ public class Boss_TypeX : MonoBehaviour
         tempDir.y = 0;
     }
 
+    public void ResetAnimLerpSpeed()
+    {
+        animLerpSpeed = 10;
+    }
+
     private void LateUpdate()
     {
         if (anim.GetBool("isCombat"))
         {
             //이동
-            tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 15);
-            hand_left.localPosition = tempPos_leftHand;
 
-            tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 15);
-            hand_right.localPosition = tempPos_rightHand;
+     
 
-            if (isStuned) return;
+
+            if (isStuned)
+            {
+                animLerpSpeed = 13;
+                tempPos_leftHand = hand_left.localPosition;
+                tempPos_rightHand = hand_right.localPosition;
+                return;
+            }
+            else
+            {
+                if (anim.GetBool("isIdle"))
+                {
+                    tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 13);
+                    tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 13);
+                }
+                //else
+                //{
+                //    tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 53);
+                //    tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 53);
+                //}
+
+                //hand_left.localPosition = tempPos_leftHand;
+                //hand_right.localPosition = tempPos_rightHand;
+            }
 
             if (!anim.GetBool("isIdle"))
             {
+                animLerpSpeed += Time.deltaTime * 20;
                 if (currentSkill != null)
                 {
                     if (currentSkill.GetComponent<Boss_TypeX_Skill_Energyball>())
@@ -194,20 +222,39 @@ public class Boss_TypeX : MonoBehaviour
                     //회전
                     Vector3 dir = (target.position - body.position).normalized;
                     dir.y = 0;
-                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 13);
+
+                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
 
                     body.rotation = tempRot_body;
 
-                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.parent.rotation * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 53);
-                    hand_left.rotation = hand_left.parent.rotation * Quaternion.Euler(hand_left.localEulerAngles);
+                    tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.parent.rotation * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                    hand_left.rotation = tempRot_leftHand;
 
 
-                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 53);
-                    hand_right.rotation = hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles);
+                    tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                    hand_right.rotation = tempRot_rightHand;
+
+                    ////회전
+                    //Vector3 dir = (target.position - body.position).normalized;
+                    //dir.y = 0;
+                    //tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 53);
+
+                    //body.rotation = tempRot_body;
+
+                    //Quaternion rotTemp = Quaternion.Euler(0, hand_left.parent.eulerAngles.y, hand_left.parent.eulerAngles.z);
+
+                    //tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, rotTemp * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 53);
+                    //hand_left.rotation = tempRot_leftHand;
+
+                    //rotTemp = Quaternion.Euler(0, hand_right.parent.eulerAngles.y, hand_right.parent.eulerAngles.z);
+                    //tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, rotTemp * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 53);
+                    //hand_right.rotation = tempRot_rightHand;
                 }
             }
             else
             {
+                animLerpSpeed = 13;
+
                 Vector3 dir = (target.position - body.position).normalized;
                 tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 13);
                 body.rotation = tempRot_body;
