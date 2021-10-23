@@ -17,10 +17,9 @@ public class Boss_TypeX : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private Transform hand_left;
     [SerializeField] private Transform hand_right;
-    [SerializeField] protected Renderer[] renderers;
-    [SerializeField] protected Color emissionColor_normal;
-    [SerializeField] protected Color emissionColor_angry;
-
+    [SerializeField] private Renderer[] renderers;
+    [SerializeField] private Color emissionColor_normal;
+    [SerializeField] private Color emissionColor_angry;
 
     private Quaternion tempRot_body;
     private Quaternion tempRot_leftHand;
@@ -58,11 +57,11 @@ public class Boss_TypeX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y)) //발견
         {
             isDetect = true;
         }
-        else if(Input.GetKeyDown(KeyCode.U))
+        else if(Input.GetKeyDown(KeyCode.U)) //스턴
         {
             isStuned = !isStuned;
             anim.enabled = !anim.enabled;
@@ -74,7 +73,7 @@ public class Boss_TypeX : MonoBehaviour
             hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         }
-        else if(Input.GetKeyDown(KeyCode.I))
+        else if (Input.GetKeyDown(KeyCode.I)) //얼굴 돌리기
         {
             faceNum++;
         }
@@ -85,7 +84,7 @@ public class Boss_TypeX : MonoBehaviour
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
+            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime / 10));
         }
 
         if (anim.GetBool("isWaiting"))
@@ -162,14 +161,14 @@ public class Boss_TypeX : MonoBehaviour
                     tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 13);
                     tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 13);
                 }
-                //else
-                //{
-                //    tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 53);
-                //    tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 53);
-                //}
+                else
+                {
+                    tempPos_leftHand = Vector3.Lerp(tempPos_leftHand, hand_left.localPosition, Time.deltaTime * 53);
+                    tempPos_rightHand = Vector3.Lerp(tempPos_rightHand, hand_right.localPosition, Time.deltaTime * 53);
+                }
 
-                //hand_left.localPosition = tempPos_leftHand;
-                //hand_right.localPosition = tempPos_rightHand;
+                hand_left.localPosition = tempPos_leftHand;
+                hand_right.localPosition = tempPos_rightHand;
             }
 
             if (!anim.GetBool("isIdle"))
