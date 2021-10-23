@@ -67,7 +67,7 @@ Shader "S_Base_alpha"
 		{
 			Name "ShadowCaster"
 			Tags{ "LightMode" = "ShadowCaster" }
-			ZWrite On
+			
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -93,6 +93,7 @@ Shader "S_Base_alpha"
 				float4 tSpace2 : TEXCOORD5;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
+
 			};
 			v2f vert( appdata_full v )
 			{

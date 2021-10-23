@@ -6,7 +6,7 @@ Shader "VFX/flowmap"
 	{
 		_speed("speed", Float) = 0.2
 		_Flowmap("Flow map", 2D) = "white" {}
-		_Tiling("Tiling", Float) = 1
+		//_Tiling("Tiling", Float) = 1
 		_Metallic("Metallic", Range( 0 , 1)) = 0
 		_Smoothness("Smoothness", Range( 0 , 1)) = 0
 		_strength("strength", Float) = 1
@@ -15,7 +15,8 @@ Shader "VFX/flowmap"
 		_normal("normal", 2D) = "white" {}
 		_diffuse("diffuse", 2D) = "white" {}
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
-		[HideInInspector] __dirty( "", Int ) = 1
+		[HideInInspector] __dirty("", Int) = 1
+		[ShowAsVector2] _Tiling("Tiling", Vector) = (1, 1, 0, 0)
 	}
 
 	SubShader
@@ -36,7 +37,7 @@ Shader "VFX/flowmap"
 		uniform float4 _Flowmap_ST;
 		uniform float _strength;
 		uniform float _speed;
-		uniform float _Tiling;
+		uniform float4 _Tiling;
 		uniform sampler2D _diffuse;
 		uniform sampler2D _emissive;
 		uniform float4 _Color0;
@@ -54,7 +55,7 @@ Shader "VFX/flowmap"
 			float temp_output_32_0 = (0.0 + (( ( temp_output_1_0_g3 - floor( ( temp_output_1_0_g3 + 0.5 ) ) ) * 2 ) - -1.0) * (1.0 - 0.0) / (1.0 - -1.0));
 			float TimeA34 = ( _strength * -temp_output_32_0 );
 			float2 lerpResult25 = lerp( i.uv_texcoord , temp_output_24_0 , TimeA34);
-			float2 temp_cast_0 = (_Tiling).xx;
+			float2 temp_cast_0 = float2(_Tiling.x, _Tiling.y);
 			float2 uv_TexCoord43 = i.uv_texcoord * temp_cast_0;
 			float2 Tiling44 = uv_TexCoord43;
 			float2 FlowA26 = ( lerpResult25 + Tiling44 );
