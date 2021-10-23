@@ -10,11 +10,17 @@ public class Boss_TypeX_Shield : MonoBehaviour
     [SerializeField] private Color emissionColor_normal;
     [SerializeField] private Color emissionColor_angry;
 
+    private Animator anim;
     private Vector3 tempPos;
     private Vector3 originPos_mesh;
     private bool isOn;
     private bool isAttack;
     private float speed = 2;
+
+    public void SetPickUp()
+    {
+        anim.SetBool("isOn", true);
+    }
 
     void SetOn()
     {
@@ -24,25 +30,34 @@ public class Boss_TypeX_Shield : MonoBehaviour
 
     private void Start()
     {
+        anim = this.GetComponent<Animator>();
         originPos_mesh = mesh.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            this.GetComponent<Animator>().SetBool("isOn", true);
-        }
+        //if(Input.GetKeyDown(KeyCode.H))
+        //{
+        //    this.GetComponent<Animator>().SetBool("isOn", true);
+        //}
 
-        if (isOn)
+        if (anim.GetBool("isOn"))
         {
             foreach (Renderer r in renderers)
             {
                 r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
             }
+        }
 
-            speed += Time.deltaTime * 3;
+        if (isOn)
+        {
+            //foreach (Renderer r in renderers)
+            //{
+            //    r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
+            //}
+
+            speed += Time.deltaTime * 5;
             speed = Mathf.Clamp(speed, 0, 15);
             this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * speed);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * speed);

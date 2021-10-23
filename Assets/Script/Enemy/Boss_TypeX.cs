@@ -20,6 +20,8 @@ public class Boss_TypeX : MonoBehaviour
     [SerializeField] private Renderer[] renderers;
     [SerializeField] private Color emissionColor_normal;
     [SerializeField] private Color emissionColor_angry;
+    [SerializeField] private Transform shield_left;
+    [SerializeField] private Transform shield_right;
 
     private Quaternion tempRot_body;
     private Quaternion tempRot_leftHand;
@@ -138,6 +140,12 @@ public class Boss_TypeX : MonoBehaviour
         animLerpSpeed = 10;
     }
 
+    void PickUpShield()
+    {
+        shield_left.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+        shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    }
+
     private void LateUpdate()
     {
         if (anim.GetBool("isCombat"))
@@ -173,7 +181,7 @@ public class Boss_TypeX : MonoBehaviour
 
             if (!anim.GetBool("isIdle"))
             {
-                animLerpSpeed += Time.deltaTime * 20;
+                animLerpSpeed += Time.deltaTime * 40;
                 if (currentSkill != null)
                 {
                     if (currentSkill.GetComponent<Boss_TypeX_Skill_Energyball>())
