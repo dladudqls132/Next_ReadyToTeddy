@@ -343,7 +343,7 @@ public class PlayerController : MonoBehaviour
                 if (!isClimbUp && !isJump && !isJumpByObject)
                 {
                     isCrouch = true;
-                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 2, 0), Time.deltaTime * 8);
+                    camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 1.5f, 0), Time.deltaTime * 8);
                     bodyCollider.center = new Vector3(0, 0.3922825f, 0);
                     bodyCollider.height = 0.9702759f;
                 }
