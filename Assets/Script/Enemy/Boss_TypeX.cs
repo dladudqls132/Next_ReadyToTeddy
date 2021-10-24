@@ -146,6 +146,16 @@ public class Boss_TypeX : MonoBehaviour
         shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
     }
 
+    void PickUpShieldLeft()
+    {
+        shield_left.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    }
+
+    void PickUpShieldRight()
+    {
+        shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    }
+
     private void LateUpdate()
     {
         if (anim.GetBool("isCombat"))
