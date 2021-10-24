@@ -16,8 +16,7 @@ public class UI_Ammo : MonoBehaviour
     [SerializeField] private Image image_lowAmmoCount = null;
     [SerializeField] private Image image_reload = null;
     [SerializeField] private Image image_gun = null;
-    [SerializeField] private Image image_panel = null;
-    [SerializeField] private Image image_q_on = null;
+
 
     // Update is called once per frame
     void Update()
@@ -76,15 +75,15 @@ public class UI_Ammo : MonoBehaviour
             image_reload.enabled = false;
         }
 
-        if (GameManager.Instance.GetPlayer().GetInventory().isOpen)
-        {
-            image_panel.enabled = true;
-            image_q_on.enabled = true;
-        }
-        else
-        {
-            image_panel.enabled = false;
-            image_q_on.enabled = false;
-        }
+        //if (GameManager.Instance.GetPlayer().GetInventory().isOpen)
+        //{
+        //    image_panel.enabled = true;
+        //    image_q_on.enabled = true;
+        //}
+        //else
+        //{
+        //    image_panel.enabled = false;
+        //    image_q_on.enabled = false;
+        //}
     }
 }

@@ -68,32 +68,32 @@ public class Inventory : MonoBehaviour
         {
             SwapWeapon(3);
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SwapWeapon(4);
-        }
+        //else if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    SwapWeapon(4);
+        //}
 
-        if (Input.GetKey(KeyCode.Q))
-        {
-            isOpen = true;
+        //if (Input.GetKey(KeyCode.Q))
+        //{
+        //    isOpen = true;
 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+        //    Cursor.lockState = CursorLockMode.None;
+        //    Cursor.visible = true;
 
-            GameManager.Instance.SetSlowMode(true);
-        }
-        else
-        {
-            if (isOpen)
-            {
-                isOpen = false;
+        //    GameManager.Instance.SetSlowMode(true);
+        //}
+        //else
+        //{
+        //    if (isOpen)
+        //    {
+        //        isOpen = false;
 
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+        //        Cursor.lockState = CursorLockMode.Locked;
+        //        Cursor.visible = false;
 
-                GameManager.Instance.SetSlowMode(false);
-            }
-        }
+        //        GameManager.Instance.SetSlowMode(false);
+        //    }
+        //}
 
 
         for (int i = 0; i < slots.Count; i++)

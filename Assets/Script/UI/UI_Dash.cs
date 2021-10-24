@@ -5,13 +5,20 @@ using UnityEngine.UI;
 
 public class UI_Dash : MonoBehaviour
 {
-    [SerializeField] private Text text;
-    [SerializeField] private Text text_background;
+    [SerializeField] private GameObject[] images;
 
     // Update is called once per frame
     void Update()
     {
-        text.text = GameManager.Instance.GetPlayer().GetCurrentDashCount().ToString();
-        text_background.text = GameManager.Instance.GetPlayer().GetCurrentDashCount().ToString();
+        for(int i = 0; i < images.Length; i++)
+        {
+            images[i].SetActive(false);
+        }
+
+        for(int i = 0; i < GameManager.Instance.GetPlayer().GetCurrentDashCount(); i++)
+        {
+            images[i].SetActive(true);
+        }
+
     }
 }
