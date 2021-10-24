@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UI_PlayerBarController : MonoBehaviour
 {
@@ -15,8 +16,8 @@ public class UI_PlayerBarController : MonoBehaviour
     private PlayerController player = null;
     [SerializeField] private Image image = null;
     //private Image image_comboResetTime = null;
-    [SerializeField] private Text text = null;
-    [SerializeField] private Text text_background = null;
+
+    [SerializeField] private TextMeshProUGUI textMesh;
     private RectTransform rectTransform = null;
     private float maxWidth;
 
@@ -48,10 +49,9 @@ public class UI_PlayerBarController : MonoBehaviour
 
         if (barType == BarType.HpBar)
         {
-            text.text = ((int)player.GetCurrentHp()).ToString();
-            text_background.text = text.text;
             //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(maxWidth * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
             image.fillAmount = Mathf.Lerp(image.fillAmount, player.GetCurrentHp() / player.GetMaxHp(), Time.deltaTime * 15);
+            textMesh.text = ((int)player.GetCurrentHp()).ToString();
         }
     }
 }

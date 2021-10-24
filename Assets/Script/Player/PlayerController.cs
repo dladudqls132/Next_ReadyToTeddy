@@ -124,11 +124,7 @@ public class PlayerController : MonoBehaviour
     public Inventory GetInventory() { return inventory; }
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
-
-
-    private static PlayerController instance;
-
-
+    public FPPCamController GetCam() { return mainCam; }
 
     // Start is called before the first frame update
     public void Init()

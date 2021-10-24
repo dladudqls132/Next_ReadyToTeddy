@@ -41,6 +41,11 @@ public class Door : MonoBehaviour
         }
     }
 
+    void ShakeCam()
+    {
+        GameManager.Instance.GetPlayer().GetCam().Shake(1.3f, 0.2f, true);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))

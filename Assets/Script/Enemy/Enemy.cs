@@ -141,7 +141,6 @@ public class Enemy : MonoBehaviour
         {
             if (hit.transform.CompareTag("Player") && Vector3.Distance(this.transform.position, target.position) < detectRange * 2)
             {
-                Debug.Log(hit.transform);
                 canSee = true;
             }
             else

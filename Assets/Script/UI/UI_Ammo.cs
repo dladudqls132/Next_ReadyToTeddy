@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UI_Ammo : MonoBehaviour
 {
     [SerializeField] private Gun gun = null;
     [SerializeField] private Projectile projectile = null;
-    [SerializeField] private Text text_ammoCount_current = null;
-    [SerializeField] private Text text_ammoCount_current_background = null;
-    [SerializeField] private Text text_ammoCount_max = null;
-    [SerializeField] private Text text_ammoCount_max_background = null;
+    [SerializeField] private TextMeshProUGUI textMesh_currentAmmo;
+    [SerializeField] private TextMeshProUGUI textMesh_haveAmmo;
     [SerializeField] private Text text_projectileCount = null;
     [SerializeField] private Text text_projectileCount_background = null;
     [SerializeField] private Image image_lowAmmoCount = null;
@@ -44,10 +43,8 @@ public class UI_Ammo : MonoBehaviour
             if(image_gun.sprite != gun.GetSprite())
                 image_gun.sprite = gun.GetSprite();
 
-            text_ammoCount_current.text = gun.GetCurrentAmmoCount().ToString();
-            text_ammoCount_current_background.text = text_ammoCount_current.text;
-            text_ammoCount_max.text = gun.GetHaveAmmoCount().ToString();
-            text_ammoCount_max_background.text = text_ammoCount_max.text;
+            textMesh_currentAmmo.text = gun.GetCurrentAmmoCount().ToString();
+            textMesh_haveAmmo.text = gun.GetHaveAmmoCount().ToString();
 
             if (gun.GetHaveAmmoCount() == 0 && gun.GetCurrentAmmoCount() == 0)
             {
