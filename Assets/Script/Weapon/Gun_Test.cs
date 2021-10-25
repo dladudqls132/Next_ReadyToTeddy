@@ -135,7 +135,7 @@ public class Gun_Test : Gun
                             if(enemy.GetEnemyType() != EnemyType.D)
                                 enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                             else
-                                enemy.DecreaseHp(1, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
+                                enemy.DecreaseHp(0.5f, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
                         else
                         {

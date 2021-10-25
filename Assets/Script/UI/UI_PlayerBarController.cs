@@ -14,7 +14,8 @@ public class UI_PlayerBarController : MonoBehaviour
 
     [SerializeField] private BarType barType = 0;
     private PlayerController player = null;
-    [SerializeField] private Image image = null;
+    [SerializeField] private Image image_normal = null;
+    [SerializeField] private Image image_warning = null;
     //private Image image_comboResetTime = null;
 
     [SerializeField] private TextMeshProUGUI textMesh;
@@ -33,7 +34,7 @@ public class UI_PlayerBarController : MonoBehaviour
         //if (this.transform.Find("Text") != null)
         //    text = this.transform.Find("Text").GetComponent<Text>();
 
-        maxWidth = image.rectTransform.rect.width;
+        maxWidth = image_normal.rectTransform.rect.width;
     }
 
     // Update is called once per frame
@@ -50,7 +51,15 @@ public class UI_PlayerBarController : MonoBehaviour
         if (barType == BarType.HpBar)
         {
             //image.rectTransform.sizeDelta = Vector2.Lerp(image.rectTransform.sizeDelta, new Vector2(maxWidth * (player.GetCurrentHp() / player.GetMaxHp()), image.rectTransform.rect.height), Time.deltaTime * 15);
-            image.fillAmount = Mathf.Lerp(image.fillAmount, player.GetCurrentHp() / player.GetMaxHp(), Time.deltaTime * 15);
+            if (player.GetCurrentHp() <= 30)
+            {
+                image_warning.enabled = true;
+            }
+            else
+                image_warning.enabled = false;
+            
+            image_normal.fillAmount = Mathf.Lerp(image_normal.fillAmount, player.GetCurrentHp() / player.GetMaxHp(), Time.deltaTime * 15);
+            image_warning.fillAmount = image_normal.fillAmount;
             textMesh.text = ((int)player.GetCurrentHp()).ToString();
         }
     }
