@@ -32,14 +32,14 @@ public class Trap_Bullet : MonoBehaviour
             }
             else
             {
-                if (Vector3.Distance(this.transform.position, GameManager.Instance.GetPlayer().transform.position) > 50.0f)
+                if (Vector3.Distance(this.transform.position, GameManager.Instance.GetPlayer().transform.position) > 30.0f)
                 {
                     cansee = false;
                 }
             }
         }
 
-        if (Vector3.Distance(this.transform.position, GameManager.Instance.GetPlayer().transform.position) <= 50.0f)
+        if (Vector3.Distance(this.transform.position, GameManager.Instance.GetPlayer().transform.position) <= 30.0f)
         {
             cansee = true;
         }

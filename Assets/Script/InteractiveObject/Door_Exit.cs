@@ -22,11 +22,13 @@ public class Door_Exit : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (isOpened) return;
+        if (isOpened)
+        {
+            f.enabled = false;
+            return;
+        }
 
-        Transform temp = other.transform;
-
-        if (temp.CompareTag("Player"))
+        if (other.transform.CompareTag("Player"))
         {
             f.enabled = true;
                 if (Input.GetKeyDown(KeyCode.F))
