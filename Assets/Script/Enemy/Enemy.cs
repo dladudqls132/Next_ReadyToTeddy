@@ -239,18 +239,21 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
 
         currentHp -= damage;
-        CheckingHp();
+        
         GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
-        if (effect == null)
+        if (effect != null)
         {
-            return;
-        }
+            if (effectType != EffectType.Damaged_lightning)
+                effect.transform.SetParent(null);
+            else
+                effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
 
-        if (effectType != EffectType.Damaged_lightning)
-            effect.transform.SetParent(null);
-        else
-            effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
+            effect.transform.position = damagedPos;
+            effect.transform.rotation = Quaternion.LookRotation(damagedVelocity.normalized);
+            effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
+            effect.SetActive(true);
+        }
 
         foreach (Renderer r in renderers)
         {
@@ -260,17 +263,14 @@ public class Enemy : MonoBehaviour
         //Invoke("ResetColor", 0.02f);
         StartCoroutine(ResetColor());
 
-        effect.transform.position = damagedPos;
-        effect.transform.rotation = Quaternion.LookRotation(damagedVelocity.normalized);
-        effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
-        effect.SetActive(true);
-
         isDetect = true;
         // whoAttackThis = attackObj;
         if (anim != null)
         {
             anim.SetTrigger("Damaged");
         }
+
+        CheckingHp();
     }
 
     public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType, float stunTime)
@@ -287,21 +287,21 @@ public class Enemy : MonoBehaviour
 
         GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
-        if (effect == null)
-            return;
-
-        if (effectType != EffectType.Damaged_lightning)
-            effect.transform.SetParent(null);
-        else
+        if (effect != null)
         {
-            effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);
+            if (effectType != EffectType.Damaged_lightning)
+                effect.transform.SetParent(null);
+            else
+            {
+                effect.GetComponent<HitEffect>().SetHitEffect(this.transform, stunTime);
+            }
+
+            effect.transform.position = damagedPos;
+            effect.transform.rotation = Quaternion.identity;
+            effect.SetActive(true);
         }
 
         SetRigidity(true, stunTime);
-
-        effect.transform.position = damagedPos;
-        effect.transform.rotation = Quaternion.identity;
-        effect.SetActive(true);
 
         isDetect = true;
         // whoAttackThis = attackObj;

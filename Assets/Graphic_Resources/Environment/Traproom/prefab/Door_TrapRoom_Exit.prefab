@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2086290807155361150}
   m_Layer: 20
   m_Name: Door_TrapRoom_Exit
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -144,6 +144,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12.841879, y: 7.798856, z: 11.992283}
   m_Center: {x: 0.0000033050596, y: -4.185161, z: 5.992824}
+--- !u!54 &6461033853415307283
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7375510815760200598}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!54 &6455196822739220832
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8944758921614880134}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &1255500984138709337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -246,6 +278,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8004034861317093349}
     m_Modifications:
+    - target: {fileID: -8557292685770663583, guid: 10e1d8b419da01248a865ea0fde907af,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -323,6 +360,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e1d8b419da01248a865ea0fde907af, type: 3}
+--- !u!1 &8944758921614880134 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1985150692946424982, guid: 10e1d8b419da01248a865ea0fde907af,
+    type: 3}
+  m_PrefabInstance: {fileID: 7471057062364797200}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8604683946018223932 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
@@ -336,6 +379,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8004034861317093349}
     m_Modifications:
+    - target: {fileID: -8557292685770663583, guid: 10e1d8b419da01248a865ea0fde907af,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -413,6 +461,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e1d8b419da01248a865ea0fde907af, type: 3}
+--- !u!1 &7375510815760200598 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1985150692946424982, guid: 10e1d8b419da01248a865ea0fde907af,
+    type: 3}
+  m_PrefabInstance: {fileID: 9067918732466128640}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7858997601780132140 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,

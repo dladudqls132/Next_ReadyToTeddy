@@ -17,18 +17,20 @@ public class Pool_Bullet : MonoBehaviour
     {
         public GameObject prefab;
         public BulletType bulletType;
+        public int bulletNum;
 
         public BulletInfo(BulletInfo info, Transform parent)
         {
             this.prefab = Instantiate(info.prefab, parent);
             this.bulletType = info.bulletType;
             this.prefab.transform.position = Vector3.up * 1000;
+            this.bulletNum = 0;
             //this.prefab.transform.position = Vector3.zero;
             //this.prefab.SetActive(false);
         }
     }
 
-    [SerializeField] private int bulletNum = 0;
+    //[SerializeField] private int bulletNum = 0;
     [SerializeField] private BulletInfo[] bulletInfos;
     private List<BulletInfo> bullets = new List<BulletInfo>();
 
@@ -36,7 +38,7 @@ public class Pool_Bullet : MonoBehaviour
     {
         for (int i = 0; i < bulletInfos.Length; i++)
         {
-            for (int j = 0; j < bulletNum; j++)
+            for (int j = 0; j < bulletInfos[i].bulletNum; j++)
             {
                 BulletInfo temp = new BulletInfo(bulletInfos[i], this.transform);
                 bullets.Add(temp);
