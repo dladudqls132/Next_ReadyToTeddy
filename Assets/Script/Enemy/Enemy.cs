@@ -239,11 +239,13 @@ public class Enemy : MonoBehaviour
         if (isDead || isGod) return;
 
         currentHp -= damage;
-
+        CheckingHp();
         GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
 
         if (effect == null)
+        {
             return;
+        }
 
         if (effectType != EffectType.Damaged_lightning)
             effect.transform.SetParent(null);
@@ -254,7 +256,7 @@ public class Enemy : MonoBehaviour
         {
             r.material.SetColor("_Color", Color.red * 35);
         }
-
+      
         //Invoke("ResetColor", 0.02f);
         StartCoroutine(ResetColor());
 
@@ -269,7 +271,6 @@ public class Enemy : MonoBehaviour
         {
             anim.SetTrigger("Damaged");
         }
-        CheckingHp();
     }
 
     public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType, float stunTime)
