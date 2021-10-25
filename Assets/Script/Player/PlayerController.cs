@@ -82,9 +82,9 @@ public class PlayerController : MonoBehaviour
     private float headOriginY;
     private Vector3 originAimPos;
     private Quaternion handFireRot;
-    private float pickupTime = 0.5f;
-    private float currentPickupTime;
-    private bool isPickup;
+    //private float pickupTime = 0.5f;
+    //private float currentPickupTime;
+    //private bool isPickup;
     [SerializeField] private bool isFever;
     [SerializeField] private float feverTime;
     [SerializeField] private float currentFeverTime;
@@ -92,8 +92,9 @@ public class PlayerController : MonoBehaviour
     private bool isInit = false;
     [SerializeField] private float canJumpTime = 0.1f;
     [SerializeField] private float currentCanJumpTime = 0.0f;
+    private bool isGod;
 
-    private List<GameObject> collisionWeapon = new List<GameObject>();
+    //private List<GameObject> collisionWeapon = new List<GameObject>();
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
@@ -295,6 +296,11 @@ public class PlayerController : MonoBehaviour
         //    }
         //}
 
+        if(Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            isGod = true;
+        }
+
         Vector3 forward = mainCam.transform.forward;
         Vector3 right = mainCam.transform.right;
 
@@ -340,8 +346,8 @@ public class PlayerController : MonoBehaviour
                 {
                     isCrouch = true;
                     camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 1.5f, 0), Time.deltaTime * 8);
-                    bodyCollider.center = new Vector3(0, 0.3922825f, 0);
-                    bodyCollider.height = 0.9702759f;
+                    bodyCollider.center = new Vector3(0, 0.5912783f, 0);
+                    bodyCollider.height = 1.194025f;
                 }
 
             }
@@ -944,6 +950,8 @@ public class PlayerController : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
+        if (isGod) return;
+
         isDamaged = true;
 
         Invoke("IsDamagedFalse", 0.8f);
