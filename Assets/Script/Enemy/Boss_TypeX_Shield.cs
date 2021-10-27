@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class Boss_TypeX_Shield : MonoBehaviour
 {
+    [SerializeField] private Boss_TypeX owner;
+    [SerializeField] private Transform target;
     [SerializeField] private Transform originPos;
-    [SerializeField] private Transform mesh;
+    
     [SerializeField] private Renderer[] renderers;
     [SerializeField] private Color emissionColor_normal;
     [SerializeField] private Color emissionColor_angry;
+    [SerializeField] private Boss_Skill[] skills;
+    [SerializeField] private Boss_Skill currentSkill;
 
     private Animator anim;
-    private Vector3 tempPos;
-    private Vector3 originPos_mesh;
-    private bool isOn;
-    private bool isAttack;
-    private float speed = 2;
+    [SerializeField] private bool isOn;
+    [SerializeField] private int currentPhase;
+
+    public Transform GetTraget() { return target; }
+
+    public int GetCurrentPhase()
+    {
+        return currentPhase;
+    }
 
     public void SetPickUp()
     {
@@ -24,54 +32,55 @@ public class Boss_TypeX_Shield : MonoBehaviour
 
     void SetOn()
     {
-        tempPos = mesh.localPosition;
         isOn = true;
     }
 
     private void Start()
     {
         anim = this.GetComponent<Animator>();
-        originPos_mesh = mesh.localPosition;
+
+        target = owner.GetTarget();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.H))
-        //{
-        //    this.GetComponent<Animator>().SetBool("isOn", true);
-        //}
-
-        if (anim.GetBool("isOn"))
+        if (!isOn)
         {
-            foreach (Renderer r in renderers)
+            return;
+        }
+
+        currentPhase = owner.GetCurrentPhase();
+
+        if (currentSkill != null)
+        {
+            if (!currentSkill.enabled)
             {
-                r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
+                currentSkill = null;
             }
         }
 
-        if (isOn)
+        if (currentSkill) return;
+
+        for (int i = 0; i < skills.Length; i++)
         {
-            //foreach (Renderer r in renderers)
-            //{
-            //    r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime * 2));
-            //}
-
-            speed += Time.deltaTime * 5;
-            speed = Mathf.Clamp(speed, 0, 15);
-            this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * speed);
-            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * speed);
-
+            if (skills[i].CoolDown())
+            {
+                if (currentSkill == null)
+                {
+                    currentSkill = skills[i];
+                    currentSkill.Use();
+                    break;
+                }
+            }
         }
 
+        this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 5);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * 5);
     }
 
     private void LateUpdate()
     {
-        if(isOn)
-        {
-            tempPos = Vector3.Lerp(tempPos, originPos_mesh, Time.deltaTime * speed);
-            mesh.localPosition = tempPos;
-        }
+
     }
 }

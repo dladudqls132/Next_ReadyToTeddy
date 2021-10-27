@@ -10,16 +10,12 @@ enum Boss_TypeX_State
     Attack
 }
 
-public class Boss_TypeX : MonoBehaviour
+public class Boss_TypeX : Enemy
 {
-    [SerializeField] private Boss_TypeX_State state;
+    [SerializeField] private new Boss_TypeX_State state;
     [SerializeField] private Transform body;
-    [SerializeField] private Transform target;
     [SerializeField] private Transform hand_left;
     [SerializeField] private Transform hand_right;
-    [SerializeField] private Renderer[] renderers;
-    [SerializeField] private Color emissionColor_normal;
-    [SerializeField] private Color emissionColor_angry;
     [SerializeField] private Transform shield_left;
     [SerializeField] private Transform shield_right;
 
@@ -29,18 +25,21 @@ public class Boss_TypeX : MonoBehaviour
     private Vector3 tempPos_leftHand;
     private Vector3 tempPos_rightHand;
 
-    private Animator anim;
-    [SerializeField] private bool isDetect;
     [SerializeField] private Boss_Skill[] skills;
     [SerializeField] private Boss_Skill currentSkill;
     bool isStuned;
     int faceNum;
     float animLerpSpeed;
+    bool canRot;
+    [SerializeField] private int currentPhase;
+
+    public Transform GetTarget() { return target; }
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         state = Boss_TypeX_State.Waiting;
-        anim = this.GetComponent<Animator>();
 
         anim.SetBool("isWaiting", true);
         
@@ -50,10 +49,10 @@ public class Boss_TypeX : MonoBehaviour
         tempPos_leftHand = hand_left.localPosition;
         tempPos_rightHand = hand_right.localPosition;
 
-        for (int i = 0; i < skills.Length; i++)
-        {
-            skills[i].enabled = false;
-        }
+        //for (int i = 0; i < skills.Length; i++)
+        //{
+        //    skills[i].enabled = false;
+        //}
     }
 
     // Update is called once per frame
@@ -96,22 +95,14 @@ public class Boss_TypeX : MonoBehaviour
 
         if (!anim.GetBool("isCombat")) return;
 
+        if((currentHp / maxHp) * 100 <= 70)
+        {
+            currentPhase = 2;
+        }
+
         if (isStuned) return;
 
         state = Boss_TypeX_State.Idle;
-
-
-        for (int i = 0; i < skills.Length; i++)
-        {
-            if (skills[i].CoolDown())
-            {
-                if (currentSkill == null)
-                {
-                    currentSkill = skills[i];
-                    currentSkill.Use();
-                }
-            }
-        }
 
         if (currentSkill != null)
         {
@@ -124,6 +115,20 @@ public class Boss_TypeX : MonoBehaviour
         }
         else
         {
+            for (int i = 0; i < skills.Length; i++)
+            {
+                if (skills[i].CoolDown())
+                {
+                    if (currentSkill == null)
+                    {
+                        currentSkill = skills[i];
+                        currentSkill.Use();
+                        break;
+                    }
+                }
+            }
+
+            canRot = true;
             state = Boss_TypeX_State.Idle;
         }
     }
@@ -140,11 +145,11 @@ public class Boss_TypeX : MonoBehaviour
         animLerpSpeed = 10;
     }
 
-    void PickUpShield()
-    {
-        shield_left.GetComponent<Boss_TypeX_Shield>().SetPickUp();
-        shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
-    }
+    //void PickUpShield()
+    //{
+    //    shield_left.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    //    shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    //}
 
     void PickUpShieldLeft()
     {
@@ -154,6 +159,18 @@ public class Boss_TypeX : MonoBehaviour
     void PickUpShieldRight()
     {
         shield_right.GetComponent<Boss_TypeX_Shield>().SetPickUp();
+    }
+
+    void SetCanRotFalse()
+    {
+        canRot = false;
+
+        SetTempBodyDir();
+    }
+
+    public int GetCurrentPhase()
+    {
+        return currentPhase;
     }
 
     private void LateUpdate()
@@ -194,7 +211,7 @@ public class Boss_TypeX : MonoBehaviour
                 animLerpSpeed += Time.deltaTime * 40;
                 if (currentSkill != null)
                 {
-                    if (currentSkill.GetComponent<Boss_TypeX_Skill_Energyball>())
+                    if (anim.GetBool("isAttack_EnergyBall_LeftHand") || anim.GetBool("isAttack_EnergyBall_RightHand"))
                     {
                         Vector3 dir = (target.position - body.position).normalized;
 
@@ -233,6 +250,24 @@ public class Boss_TypeX : MonoBehaviour
                             hand_left.rotation = tempRot_leftHand;
                         }
                     }
+                    else
+                    {
+                        Vector3 dir = (target.position - body.position).normalized;
+                        dir.y = 0;
+
+                        if (canRot)
+                            tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                        else
+                            tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                        body.rotation = tempRot_body;
+
+                        tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, hand_left.parent.rotation * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                        hand_left.rotation = tempRot_leftHand;
+
+
+                        tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                        hand_right.rotation = tempRot_rightHand;
+                    }
                 }
                 else
                 {
@@ -240,7 +275,10 @@ public class Boss_TypeX : MonoBehaviour
                     Vector3 dir = (target.position - body.position).normalized;
                     dir.y = 0;
 
-                    tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                    if(canRot)
+                        tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+                    else
+                        tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
 
                     body.rotation = tempRot_body;
 

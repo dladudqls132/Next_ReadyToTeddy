@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3408090555495188293}
-  - component: {fileID: 3408090555495188294}
   - component: {fileID: 1762083622747718215}
+  - component: {fileID: 3408090555495188294}
+  - component: {fileID: 475944044}
   m_Layer: 0
   m_Name: Boss_TypeX_Shield
   m_TagString: Untagged
@@ -27,31 +28,12 @@ Transform:
   m_GameObject: {fileID: 3408090555495188292}
   m_LocalRotation: {x: 0.72502536, y: -0.17151812, z: 0.38443947, w: 0.54509276}
   m_LocalPosition: {x: 77.46, y: 2.54, z: -76.75}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.2857143, y: 1.2857143, z: 1.2857144}
   m_Children:
   - {fileID: 6372214639173763026}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 112.737, y: -73.44, z: -26.159973}
---- !u!114 &3408090555495188294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3408090555495188292}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca22b51219962442935e918ff755fe3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originPos: {fileID: 0}
-  mesh: {fileID: 6372214639173763026}
-  renderers:
-  - {fileID: 5198714930154505405}
-  - {fileID: 9219371699956915718}
-  emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
-  emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
 --- !u!95 &1762083622747718215
 Animator:
   serializedVersion: 3
@@ -71,6 +53,51 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3408090555495188294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408090555495188292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca22b51219962442935e918ff755fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
+  originPos: {fileID: 0}
+  renderers:
+  - {fileID: 5198714930154505405}
+  - {fileID: 9219371699956915718}
+  emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
+  emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
+  skills:
+  - {fileID: 475944044}
+  currentSkill: {fileID: 0}
+  isOn: 0
+  currentPhase: 1
+--- !u!114 &475944044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408090555495188292}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccea75de9bf63884e82af23027f239df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolTime: 2
+  attackTime: 0
+  damage: 0
+  currentCoolTime: 0
+  activePhase: 1
+  target: {fileID: 0}
+  attackReadyTime: 2
+  attackReadyPos: []
+  tempPos: []
 --- !u!1001 &3408090554900847901
 PrefabInstance:
   m_ObjectHideFlags: 0

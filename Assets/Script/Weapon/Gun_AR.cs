@@ -95,7 +95,7 @@ public class Gun_AR : Gun
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Default") | 1 << LayerMask.NameToLayer("Wall") | 1 << LayerMask.NameToLayer("Enviroment") | 1 << LayerMask.NameToLayer("Enemy"))))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon") | 1 << LayerMask.NameToLayer("Root"))))
             {
                 direction = (hit.point - Camera.main.transform.position).normalized;
             }
@@ -115,7 +115,7 @@ public class Gun_AR : Gun
             tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
 
             RaycastHit hit2;
-            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon")), QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore))
             {
                 if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                 {

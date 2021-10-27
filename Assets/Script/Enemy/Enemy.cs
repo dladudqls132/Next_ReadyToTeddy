@@ -29,7 +29,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected EnemyType enemyType;
     [SerializeField] protected Enemy_State state;
     //[SerializeField] protected CharacterMaterial material;
-    [SerializeField] protected Transform eye;
+
     [SerializeField] protected Transform target;
 
     [SerializeField] protected bool canSee;
@@ -46,15 +46,8 @@ public class Enemy : MonoBehaviour
     private float currentDetectTime;
     [SerializeField] protected bool isDetect;
     [SerializeField] protected float attackRange;
-    //[SerializeField] protected float combatTime;
-    //protected float currentCombatTime;
-    //protected float returnToPatorlTime;
-    //protected float currentReturnToPatrolTime;
-    //protected Transform[] patrolNode;
-    //protected Transform currentDestPatrolNode;
-    protected int currentDestPatrolNodeIndex;
-    protected bool isRunAway;
-    protected float increaseSuccessRate;
+
+
     [SerializeField] protected float potionDropRate;
     [SerializeField] protected float magazineDropRate;
     [SerializeField] protected bool isRigidity;
@@ -73,10 +66,6 @@ public class Enemy : MonoBehaviour
 
     protected bool isGod;
 
-    [SerializeField] protected GameObject energyShield_prefab;
-    protected GameObject energyShield;
-    [SerializeField] protected int shieldHp;
-
     [SerializeField] protected Renderer[] renderers;
     [SerializeField] protected Color emissionColor_normal;
     [SerializeField] protected Color emissionColor_angry;
@@ -86,7 +75,6 @@ public class Enemy : MonoBehaviour
     public float GetMaxHp() { return maxHp; }
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
-    public GameObject GetEnergyShield() { return energyShield; }
     public EnemyType GetEnemyType() { return enemyType; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
@@ -257,7 +245,7 @@ public class Enemy : MonoBehaviour
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_Color", Color.red * 35);
+            r.material.SetColor("_Color", Color.white * 35);
         }
       
         //Invoke("ResetColor", 0.02f);

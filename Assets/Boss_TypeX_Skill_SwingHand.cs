@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_TypeX_Skill_Energyball : Boss_Skill
+public class Boss_TypeX_Skill_SwingHand : Boss_Skill
 {
     protected override void Start()
     {
@@ -15,17 +15,14 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
 
         int rndNum = Random.Range(0, 2);
 
-        if(rndNum == 0)
-            anim.SetBool("isAttack_EnergyBall_LeftHand", true);
+        if (rndNum == 0)
+            anim.SetTrigger("SwingHand_Left");
         else
-            anim.SetBool("isAttack_EnergyBall_RightHand", true);
+            anim.SetTrigger("SwingHand_Right");
     }
 
     protected override void ResetInfo()
     {
-        anim.SetBool("isAttack_EnergyBall_LeftHand", false);
-        anim.SetBool("isAttack_EnergyBall_RightHand", false);
-
         base.ResetInfo();
     }
 
