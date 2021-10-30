@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_TypeX_Shield_DropDown : Boss_Skill
+public class Boss_TypeX_Shield_HorizontalAttack : Boss_Skill
 {
     private Transform target;
     [SerializeField] private float attackReadyTime;
@@ -32,7 +32,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
 
     protected override void Start()
     {
-        
+
     }
 
     private void OnEnable()
@@ -42,13 +42,13 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
         for (int i = 0; i < tempPos.Count; i++)
         {
             for (int j = i; j < tempPos.Count; j++)
-            { 
-                if(Vector3.Distance(target.position, tempPos[i]) > Vector3.Distance(target.position, tempPos[j]))
+            {
+                if (Vector3.Distance(target.position, tempPos[i]) > Vector3.Distance(target.position, tempPos[j]))
                 {
                     Vector3 temp = tempPos[i];
                     tempPos[i] = tempPos[j];
                     tempPos[j] = temp;
-                }    
+                }
             }
         }
 
@@ -84,22 +84,19 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
     {
         if (isReady)
         {
-            this.transform.position = Vector3.Lerp(this.transform.position, tempPos[attackPosNum], Time.deltaTime * 5);
-            this.transform.rotation = Quaternion.LookRotation((target.position - this.transform.position).normalized);
+            this.transform.position = Vector3.Lerp(this.transform.position, new Vector3(tempPos[attackPosNum].x, target.position.y + 2f, tempPos[attackPosNum].z), Time.deltaTime * 2.5f);
+            this.transform.rotation = Quaternion.LookRotation((new Vector3(target.position.x, this.transform.position.y, target.position.z) - this.transform.position).normalized);
 
-            RaycastHit hit;
-            if (Physics.Raycast(this.transform.position, this.transform.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
-            {
-                destPos = hit.point;
-            }
+            destPos = this.transform.position + this.transform.forward * 80;
         }
 
-        if(isAttack && !isReset)
+        if (isAttack && !isReset)
         {
             speed += Time.deltaTime * 10;
-            this.transform.position = Vector3.MoveTowards(this.transform.position, destPos, speed);
 
-            if(Vector3.Distance(this.transform.position, destPos) < 0.5f)
+            this.transform.position = Vector3.Lerp(this.transform.position, destPos, Time.deltaTime * speed);
+
+            if (Vector3.Distance(this.transform.position, destPos) < 0.5f)
             {
                 isReset = true;
                 StartCoroutine(ResetDelay());

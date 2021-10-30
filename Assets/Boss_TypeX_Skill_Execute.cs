@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_TypeX_Skill_SwingHand : Boss_Skill
+public class Boss_TypeX_Skill_Execute : Boss_Skill
 {
     protected override void Start()
     {
@@ -13,16 +13,13 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
     {
         base.Use();
 
-        int rndNum = Random.Range(0, 2);
-
-        if (rndNum == 0)
-            anim.SetTrigger("SwingHand_Left");
-        else
-            anim.SetTrigger("SwingHand_Right");
+        anim.SetBool("isExecute", true);
     }
 
     protected override void ResetInfo()
     {
+        anim.SetBool("isExecute", false);
+
         base.ResetInfo();
     }
 

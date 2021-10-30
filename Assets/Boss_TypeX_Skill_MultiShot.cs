@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_TypeX_Skill_SwingHand : Boss_Skill
+public class Boss_TypeX_Skill_MultiShot : Boss_Skill
 {
     protected override void Start()
     {
@@ -16,15 +16,19 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
         int rndNum = Random.Range(0, 2);
 
         if (rndNum == 0)
-            anim.SetTrigger("SwingHand_Left");
+            anim.SetBool("isAttack_MultiShot_LeftHand", true);
         else
-            anim.SetTrigger("SwingHand_Right");
+            anim.SetBool("isAttack_MultiShot_RightHand", true);
     }
 
     protected override void ResetInfo()
     {
+        anim.SetBool("isAttack_MultiShot_LeftHand", false);
+        anim.SetBool("isAttack_MultiShot_RightHand", false);
+
         base.ResetInfo();
     }
+
 
     protected override void Update()
     {

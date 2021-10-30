@@ -12,7 +12,7 @@ enum Boss_TypeX_State
 
 public class Boss_TypeX : Enemy
 {
-    [SerializeField] private new Boss_TypeX_State state;
+    //[SerializeField] private new Boss_TypeX_State state;
     [SerializeField] private Transform body;
     [SerializeField] private Transform hand_left;
     [SerializeField] private Transform hand_right;
@@ -25,10 +25,10 @@ public class Boss_TypeX : Enemy
     private Vector3 tempPos_leftHand;
     private Vector3 tempPos_rightHand;
 
-    [SerializeField] private Boss_Skill[] skills;
+    [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
     bool isStuned;
-    int faceNum;
+    int faceNum = 1;
     float animLerpSpeed;
     bool canRot;
     [SerializeField] private int currentPhase;
@@ -39,7 +39,7 @@ public class Boss_TypeX : Enemy
     {
         base.Start();
 
-        state = Boss_TypeX_State.Waiting;
+        //state = Boss_TypeX_State.Waiting;
 
         anim.SetBool("isWaiting", true);
         
@@ -48,6 +48,9 @@ public class Boss_TypeX : Enemy
         tempRot_rightHand = hand_right.localRotation;
         tempPos_leftHand = hand_left.localPosition;
         tempPos_rightHand = hand_right.localPosition;
+
+        
+        skills.AddRange(this.GetComponents<Boss_Skill>());
 
         //for (int i = 0; i < skills.Length; i++)
         //{
@@ -79,7 +82,8 @@ public class Boss_TypeX : Enemy
             faceNum++;
         }
 
-        anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), (float)faceNum / 3, Time.deltaTime * 10));
+        anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
+        anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
 
         if (!isDetect) return;
 
@@ -102,11 +106,11 @@ public class Boss_TypeX : Enemy
 
         if (isStuned) return;
 
-        state = Boss_TypeX_State.Idle;
+       // state = Boss_TypeX_State.Idle;
 
         if (currentSkill != null)
         {
-            state = Boss_TypeX_State.Attack;
+            //state = Boss_TypeX_State.Attack;
 
             if (!currentSkill.enabled)
             {
@@ -115,7 +119,7 @@ public class Boss_TypeX : Enemy
         }
         else
         {
-            for (int i = 0; i < skills.Length; i++)
+            for (int i = 0; i < skills.Count; i++)
             {
                 if (skills[i].CoolDown())
                 {
@@ -129,7 +133,7 @@ public class Boss_TypeX : Enemy
             }
 
             canRot = true;
-            state = Boss_TypeX_State.Idle;
+            //state = Boss_TypeX_State.Idle;
         }
     }
 
@@ -211,14 +215,14 @@ public class Boss_TypeX : Enemy
                 animLerpSpeed += Time.deltaTime * 40;
                 if (currentSkill != null)
                 {
-                    if (anim.GetBool("isAttack_EnergyBall_LeftHand") || anim.GetBool("isAttack_EnergyBall_RightHand"))
+                    if (anim.GetBool("isAttack_EnergyBall_LeftHand") || anim.GetBool("isAttack_EnergyBall_RightHand") || anim.GetBool("isAttack_MultiShot_LeftHand") || anim.GetBool("isAttack_MultiShot_RightHand"))
                     {
                         Vector3 dir = (target.position - body.position).normalized;
 
                         tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 13);
                         body.rotation = tempRot_body;
 
-                        if (anim.GetBool("isAttack_EnergyBall_LeftHand"))
+                        if (anim.GetBool("isAttack_EnergyBall_LeftHand") || anim.GetBool("isAttack_MultiShot_LeftHand"))
                         {
                             //회전
                             dir = (target.position - hand_left.position).normalized;
@@ -234,7 +238,7 @@ public class Boss_TypeX : Enemy
                             tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 13);
                             hand_right.rotation = tempRot_rightHand;
                         }
-                        else if (anim.GetBool("isAttack_EnergyBall_RightHand"))
+                        else if (anim.GetBool("isAttack_EnergyBall_RightHand") || anim.GetBool("isAttack_MultiShot_RightHand"))
                         {
                             //회전
                             dir = (target.position - hand_right.position).normalized;

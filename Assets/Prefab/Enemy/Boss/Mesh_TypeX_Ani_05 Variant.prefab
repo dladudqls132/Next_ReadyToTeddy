@@ -1287,6 +1287,7 @@ GameObject:
   - component: {fileID: 1671861557}
   - component: {fileID: 1671861556}
   - component: {fileID: 1367557042}
+  - component: {fileID: 4656129977069813696}
   m_Layer: 17
   m_Name: Mesh_TypeX_Ani_05 Variant
   m_TagString: Enemy
@@ -1381,17 +1382,14 @@ MonoBehaviour:
   - {fileID: 5624502131902868594}
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
-  state: 0
   body: {fileID: 7592488057355984621}
   hand_left: {fileID: 5997327860876100626}
   hand_right: {fileID: 510579724346966090}
   shield_left: {fileID: 6392259123376055001}
   shield_right: {fileID: 1385121788}
-  skills:
-  - {fileID: 1671861556}
-  - {fileID: 1367557042}
+  skills: []
   currentSkill: {fileID: 0}
-  currentPhase: 1
+  currentPhase: 2
 --- !u!114 &1671861556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1426,6 +1424,23 @@ MonoBehaviour:
   damage: 0
   currentCoolTime: 0
   activePhase: 1
+--- !u!114 &4656129977069813696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996437084395877676}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd388528c6b133642a327e4b739db704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coolTime: 5
+  attackTime: 0
+  damage: 0
+  currentCoolTime: 0
+  activePhase: 2
 --- !u!1001 &3408090556795502777
 PrefabInstance:
   m_ObjectHideFlags: 0

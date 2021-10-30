@@ -13,25 +13,50 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
     {
         base.Use();
 
-        int rndNum = Random.Range(0, 2);
+        if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() < 3)
+        {
+            int rndNum = Random.Range(0, 4);
 
-        if(rndNum == 0)
-            anim.SetBool("isAttack_EnergyBall_LeftHand", true);
+            switch (rndNum)
+            {
+                case 0:
+                    anim.SetBool("isAttack_EnergyBall_LeftHand", true);
+                    break;
+                case 1:
+                    anim.SetBool("isAttack_EnergyBall_RightHand", true);
+                    break;
+                case 2:
+                    anim.SetBool("isAttack_MultiShot_LeftHand", true);
+                    break;
+                case 3:
+                    anim.SetBool("isAttack_MultiShot_RightHand", true);
+                    break;
+            }
+        }
         else
-            anim.SetBool("isAttack_EnergyBall_RightHand", true);
+        {
+            int rndNum = Random.Range(0, 2);
+
+            switch (rndNum)
+            {
+                case 0:
+                    anim.SetBool("isAttack_EnergyBall_LeftHand", true);
+                    break;
+                case 1:
+                    anim.SetBool("isAttack_MultiShot_LeftHand", true);
+                    break;
+            }
+        }
     }
 
     protected override void ResetInfo()
     {
         anim.SetBool("isAttack_EnergyBall_LeftHand", false);
         anim.SetBool("isAttack_EnergyBall_RightHand", false);
+        anim.SetBool("isAttack_MultiShot_LeftHand", false);
+        anim.SetBool("isAttack_MultiShot_RightHand", false);
 
         base.ResetInfo();
-    }
-
-    void SetIdle()
-    {
-        anim.SetBool("isIdle", true);
     }
 
     protected override void Update()

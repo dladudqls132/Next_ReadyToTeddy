@@ -7,12 +7,10 @@ public class Boss_Skill : MonoBehaviour
 {
     protected bool isActive;
     [SerializeField] protected float coolTime;
-    [SerializeField] protected float attackTime;
     [SerializeField] protected float damage;
     protected bool canUse;
 
     [SerializeField] protected float currentCoolTime;
-    protected float currentAttackTime;
     protected Animator anim;
     [SerializeField] private int activePhase;
 
@@ -53,7 +51,7 @@ public class Boss_Skill : MonoBehaviour
         isActive = true;
         canUse = false;
 
-        currentAttackTime = attackTime;
+        //currentAttackTime = attackTime;
 
         //currentCoolTime = coolTime;
     }
@@ -62,11 +60,11 @@ public class Boss_Skill : MonoBehaviour
     {
         if (this.GetComponent<Boss_TypeX>())
         {
-            if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() != activePhase) return false;
+            if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() < activePhase) return false;
         }
         else if (this.GetComponent<Boss_TypeX_Shield>())
         {
-            if (this.GetComponent<Boss_TypeX_Shield>().GetCurrentPhase() != activePhase) return false;
+            if (this.GetComponent<Boss_TypeX_Shield>().GetCurrentPhase() < activePhase) return false;
         }
 
         if(currentCoolTime <= 0)

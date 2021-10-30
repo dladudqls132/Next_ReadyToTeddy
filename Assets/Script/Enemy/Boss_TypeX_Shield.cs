@@ -11,7 +11,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
     [SerializeField] private Renderer[] renderers;
     [SerializeField] private Color emissionColor_normal;
     [SerializeField] private Color emissionColor_angry;
-    [SerializeField] private Boss_Skill[] skills;
+    [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
 
     private Animator anim;
@@ -40,6 +40,8 @@ public class Boss_TypeX_Shield : MonoBehaviour
         anim = this.GetComponent<Animator>();
 
         target = owner.GetTarget();
+
+        skills.AddRange(this.GetComponents<Boss_Skill>());
     }
 
     // Update is called once per frame
@@ -62,7 +64,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
 
         if (currentSkill) return;
 
-        for (int i = 0; i < skills.Length; i++)
+        for (int i = 0; i < skills.Count; i++)
         {
             if (skills[i].CoolDown())
             {
@@ -75,7 +77,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
             }
         }
 
-        this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 5);
+        this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 2.5f);
         this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * 5);
     }
 

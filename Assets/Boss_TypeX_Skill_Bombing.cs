@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss_TypeX_Skill_SwingHand : Boss_Skill
+public class Boss_TypeX_Skill_Bombing : Boss_Skill
 {
     protected override void Start()
     {
@@ -16,9 +16,9 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
         int rndNum = Random.Range(0, 2);
 
         if (rndNum == 0)
-            anim.SetTrigger("SwingHand_Left");
+            anim.SetTrigger("Bombing");
         else
-            anim.SetTrigger("SwingHand_Right");
+            anim.SetTrigger("Bombing2");
     }
 
     protected override void ResetInfo()
