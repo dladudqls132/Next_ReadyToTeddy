@@ -13,6 +13,7 @@ public class Boss_Skill : MonoBehaviour
     [SerializeField] protected float currentCoolTime;
     protected Animator anim;
     [SerializeField] private int activePhase;
+    protected Transform target;
 
     protected virtual void Awake()
     {
@@ -45,6 +46,8 @@ public class Boss_Skill : MonoBehaviour
 
     public virtual void Use()
     {
+        target = this.GetComponent<Enemy>().GetTarget();
+
         anim.SetBool("isIdle", false);
         this.enabled = true;
 

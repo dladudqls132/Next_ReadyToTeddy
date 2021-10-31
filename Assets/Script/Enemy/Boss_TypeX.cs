@@ -33,7 +33,6 @@ public class Boss_TypeX : Enemy
     bool canRot;
     [SerializeField] private int currentPhase;
 
-    public Transform GetTarget() { return target; }
     // Start is called before the first frame update
     protected override void Start()
     {

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Boss_TypeX_Shield_HorizontalAttack : Boss_Skill
 {
-    private Transform target;
     [SerializeField] private float attackReadyTime;
 
     [SerializeField] private List<Vector3> attackReadyPos = new List<Vector3>();

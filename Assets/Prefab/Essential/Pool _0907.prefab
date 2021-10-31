@@ -92,20 +92,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899098646332d8b438f48f3e37eb97c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletNum: 200
   bulletInfos:
   - prefab: {fileID: 6382321131620015618, guid: 8206a1a8713485c4389d0408b6ab5ca4,
       type: 3}
     bulletType: 0
+    bulletNum: 200
   - prefab: {fileID: 1034243819072066626, guid: 6b736e5323849bc4f986f21307d69814,
       type: 3}
     bulletType: 1
+    bulletNum: 20
   - prefab: {fileID: 5548856733561905487, guid: 63823399deeb64d42af1812761a922f8,
       type: 3}
     bulletType: 2
+    bulletNum: 30
   - prefab: {fileID: 6382321131620015618, guid: 8206a1a8713485c4389d0408b6ab5ca4,
       type: 3}
     bulletType: 3
+    bulletNum: 100
 --- !u!1 &7419428655994260221
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,40 +152,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2837dd50cb991bc44b2fd3df96914f8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectNum: 100
   effectsInfo:
   - prefab: {fileID: 347673330874353851, guid: 967aa67b68f062b4c8494ebc5e84d8c0, type: 3}
     effectType: 1
+    num: 100
   - prefab: {fileID: 2761942408571790906, guid: c8d282140d09915469d515bcd41bf26f,
       type: 3}
     effectType: 2
+    num: 30
   - prefab: {fileID: 9057846229181177281, guid: 339cc13b55d005a44a3a808e6d5ee55c,
       type: 3}
     effectType: 3
+    num: 100
   - prefab: {fileID: 3356514112422070926, guid: 68cae49e3e97deb4c96de5ef18a6281b,
       type: 3}
     effectType: 4
+    num: 30
   - prefab: {fileID: 5726090371489987405, guid: 7376f5af1bc70284aac6622889d7834c,
       type: 3}
     effectType: 5
+    num: 30
   - prefab: {fileID: 5915951415508446638, guid: 991165489bfe4a1429a03bfb738ab641,
       type: 3}
     effectType: 6
+    num: 100
   - prefab: {fileID: 1722843692163829717, guid: 9441fd50c9f131945925d3ba0130f222,
       type: 3}
     effectType: 7
+    num: 60
   - prefab: {fileID: 2891555634765489448, guid: 51bb796b3794d174291a19f4495000f0,
       type: 3}
     effectType: 8
+    num: 100
   - prefab: {fileID: 4272716204482052957, guid: 47ee308e693df3f488a3549d52ccef3d,
       type: 3}
     effectType: 9
+    num: 30
   - prefab: {fileID: 4272716204482052957, guid: 34c3501cbf5bca1498abad97d6f4fdaa,
       type: 3}
     effectType: 10
+    num: 30
   - prefab: {fileID: 1460985800418663560, guid: 93519d2408faf714c8dea7a93bc86a1c,
       type: 3}
     effectType: 11
+    num: 30
+  - prefab: {fileID: 5440560940372453759, guid: 456ed913dfc655d4e976cd4e52bd6157,
+      type: 3}
+    effectType: 12
+    num: 100
+  - prefab: {fileID: 9169857948509967904, guid: 6c272f814b49c8b46845c53f580607aa,
+      type: 3}
+    effectType: 13
+    num: 100
+  - prefab: {fileID: 1540849532128555978, guid: 581bd4a99f9ef6d4e8de25694e386d5f,
+      type: 3}
+    effectType: 14
+    num: 100
 --- !u!1 &7419428657027906351
 GameObject:
   m_ObjectHideFlags: 0

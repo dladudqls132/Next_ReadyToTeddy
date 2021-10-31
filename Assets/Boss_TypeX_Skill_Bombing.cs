@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Boss_TypeX_Skill_Bombing : Boss_Skill
 {
+    [SerializeField] private int bombNum_1;
+    [SerializeField] private int bombNum_2;
+    [SerializeField] private float bombTime;
+    [SerializeField] private float attackRange;
+
     protected override void Start()
     {
         base.Start();
@@ -19,6 +24,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
             anim.SetTrigger("Bombing");
         else
             anim.SetTrigger("Bombing2");
+
     }
 
     protected override void ResetInfo()
@@ -26,8 +32,38 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
         base.ResetInfo();
     }
 
+    void Fire_Bomb1()
+    {
+        for (int i = 0; i < bombNum_1; i++)
+        {
+            GameObject tempProjector = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Projector_Explosion_Large);
+            Vector2 rndVec = Random.insideUnitCircle * attackRange;
+            tempProjector.GetComponent<Explosion_Large>().SetActive(this.transform.position + new Vector3(rndVec.x, 0, rndVec.y) + Vector3.up * 3, bombTime, damage);
+        }
+    }
+
+    void Fire_Bomb2()
+    {
+        for (int i = 0; i < bombNum_2; i++)
+        {
+            Vector3 rndDir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
+            if (rndDir == Vector3.zero)
+                rndDir = new Vector3(1, 0, 1);
+            Vector2 rndVec = Random.insideUnitCircle * attackRange;
+
+            for (int j = 0; j < 3; j++)
+            {
+                GameObject tempProjector = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Projector_Explosion_Large);
+                tempProjector.GetComponent<Explosion_Large>().SetActive(this.transform.position + new Vector3(rndVec.x, 0, rndVec.y) + rndDir * j * 10 + Vector3.up * 3, bombTime, damage);
+            }
+        }
+    }
+
     protected override void Update()
     {
+       
+        
+
         //currentAttackTime -= Time.deltaTime;
 
         //anim.SetBool("isAttack_EnergyBall_LeftHand", true);

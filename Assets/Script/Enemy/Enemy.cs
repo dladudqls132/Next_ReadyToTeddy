@@ -76,6 +76,7 @@ public class Enemy : MonoBehaviour
     public void SetIsDead(bool value) { isDead = value; }
     public bool GetIsDead() { return isDead; }
     public EnemyType GetEnemyType() { return enemyType; }
+    public Transform GetTarget() { return target; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {

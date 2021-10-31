@@ -15,7 +15,10 @@ public enum EffectType
     Trail_Bullet,
     Sand_Scatter_Small,
     Sand_Scatter_Large,
-    Explosion_CL
+    Explosion_CL,
+    Explosion_EnergyBall,
+    AttackSpark_EnergyBall,
+    Projector_Explosion_Large
 }
 
 public class Pool_Effect : MonoBehaviour
@@ -25,18 +28,17 @@ public class Pool_Effect : MonoBehaviour
     {
         public GameObject prefab;
         public EffectType effectType;
+        public int num;
 
         public EffectInfo(EffectInfo info)
         {
             this.prefab = Instantiate(info.prefab);
-            //this.prefab.SetActive(false);
             this.prefab.transform.position = Vector3.up * 1000;
-            //this.prefab.transform.position = Vector3.zero;
             this.effectType = info.effectType;
+            num = 0;
         }
     }
 
-    [SerializeField] private int effectNum = 0;
     [SerializeField] private EffectInfo[] effectsInfo;
     private List<EffectInfo> effects = new List<EffectInfo>();
 
@@ -45,7 +47,7 @@ public class Pool_Effect : MonoBehaviour
     {
         for (int i = 0; i < effectsInfo.Length; i++)
         {
-            for (int j = 0; j < effectNum; j++)
+            for (int j = 0; j < effectsInfo[i].num; j++)
             {
                 EffectInfo temp = new EffectInfo(effectsInfo[i]);
          
