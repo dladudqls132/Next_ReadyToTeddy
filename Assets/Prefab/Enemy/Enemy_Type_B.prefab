@@ -232,7 +232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   state: 0
-  eye: {fileID: 0}
   target: {fileID: 0}
   canSee: 0
   isDead: 0
@@ -248,15 +247,14 @@ MonoBehaviour:
   isRigidity: 0
   rigidityTime: 0
   dropItem_prefab: []
-  energyShield_prefab: {fileID: 0}
-  shieldHp: 0
-  renderers: []
+  renderers:
+  - {fileID: 5313451913390094616}
+  - {fileID: 8807382281900705931}
+  - {fileID: 660383616774422771}
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
   firePos: []
   fireRate: 5
-  projector: {fileID: 1544604933886426598, guid: 581bd4a99f9ef6d4e8de25694e386d5f,
-    type: 3}
   bombTime: 1
   bombSize: 10
 --- !u!65 &7694364915619411279
@@ -549,6 +547,24 @@ GameObject:
 --- !u!1 &2767004368683071896 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3701466520501326517, guid: 0e87e69612444ec4c8bc55d00a6de5f8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7694364915201119443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &5313451913390094616 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6666791711534551605, guid: 0e87e69612444ec4c8bc55d00a6de5f8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7694364915201119443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &8807382281900705931 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1224411313347255384, guid: 0e87e69612444ec4c8bc55d00a6de5f8,
+    type: 3}
+  m_PrefabInstance: {fileID: 7694364915201119443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &660383616774422771 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2022741334114610144, guid: 0e87e69612444ec4c8bc55d00a6de5f8,
     type: 3}
   m_PrefabInstance: {fileID: 7694364915201119443}
   m_PrefabAsset: {fileID: 0}

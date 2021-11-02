@@ -23,6 +23,15 @@ public class Bullet_Boss : MonoBehaviour
         this.gameObject.SetActive(true);
         rigid.velocity = Vector3.zero;
         rigid.AddForce(dir * speed, ForceMode.Impulse);
+
+        StartCoroutine(ActiveFalse());
+    }
+
+    IEnumerator ActiveFalse()
+    {
+        yield return new WaitForSeconds(3);
+
+        this.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
