@@ -18,10 +18,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.94
+    value: 1.67
   threshold:
     overrideState: 1
-    value: 0.91
+    value: 1
   softKnee:
     overrideState: 0
     value: 0.276
@@ -35,8 +35,8 @@ MonoBehaviour:
     overrideState: 0
     value: 0
   color:
-    overrideState: 0
-    value: {r: 1, g: 1, b: 1, a: 1}
+    overrideState: 1
+    value: {r: 0, g: 1.3997087, b: 1.7411011, a: 1}
   fastMode:
     overrideState: 0
     value: 0
@@ -105,8 +105,8 @@ MonoBehaviour:
     overrideState: 1
     value: 14
   colorFilter:
-    overrideState: 0
-    value: {r: 1, g: 1, b: 1, a: 1}
+    overrideState: 1
+    value: {r: 1, g: 0.96158683, b: 0.9292453, a: 1}
   hueShift:
     overrideState: 0
     value: 6
@@ -151,13 +151,13 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 1
-    value: {x: 1, y: 1, z: 1, w: 0}
+    value: {x: 1, y: 0.9871358, z: 0.88899696, w: -0.02098636}
   gamma:
     overrideState: 1
-    value: {x: 1, y: 1, z: 1, w: 0.41036713}
+    value: {x: 0.88192177, y: 0.9023189, z: 1, w: 0.074585356}
   gain:
     overrideState: 1
-    value: {x: 1, y: 0.973263, z: 0.5120567, w: 0.12599683}
+    value: {x: 1, y: 0.98143363, z: 0.8386966, w: 0.00007865875}
   masterCurve:
     overrideState: 0
     value:
@@ -1374,6 +1374,51 @@ MonoBehaviour:
   - {fileID: -411320439301203256}
   - {fileID: 4746783782901117363}
   - {fileID: -53554154614670708}
+  - {fileID: 2286585646793310113}
+--- !u!114 &2286585646793310113
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b924e2dad56384a8df2a1e111bb675, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 1
+    value: 0
+  color:
+    overrideState: 1
+    value: {r: 0, g: 0, b: 0, a: 1}
+  center:
+    overrideState: 1
+    value: {x: 0.5, y: 0.5}
+  intensity:
+    overrideState: 1
+    value: 0.404
+  smoothness:
+    overrideState: 1
+    value: 0.223
+  roundness:
+    overrideState: 1
+    value: 1
+  rounded:
+    overrideState: 0
+    value: 0
+  mask:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  opacity:
+    overrideState: 0
+    value: 1
 --- !u!114 &4746783782901117363
 MonoBehaviour:
   m_ObjectHideFlags: 3

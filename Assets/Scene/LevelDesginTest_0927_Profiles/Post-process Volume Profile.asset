@@ -104,13 +104,13 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 1
-    value: {x: 1, y: 1, z: 1, w: 0}
+    value: {x: 1, y: 0.9588854, z: 0.8844509, w: 3.0834454e-10}
   gamma:
     overrideState: 1
-    value: {x: 1, y: 1, z: 1, w: 0.41036713}
+    value: {x: 1, y: 0.96366286, z: 0.87895995, w: 0.24227616}
   gain:
     overrideState: 1
-    value: {x: 1, y: 0.973263, z: 0.5120567, w: 0.12599683}
+    value: {x: 1, y: 0.96314543, z: 0.68253094, w: 0.54672444}
   masterCurve:
     overrideState: 0
     value:
@@ -1311,34 +1311,6 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
---- !u!114 &-1174843889820554022
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
-  m_Name: DepthOfField
-  m_EditorClassIdentifier: 
-  active: 0
-  enabled:
-    overrideState: 1
-    value: 1
-  focusDistance:
-    overrideState: 1
-    value: 3.1
-  aperture:
-    overrideState: 1
-    value: 9.1
-  focalLength:
-    overrideState: 1
-    value: 50
-  kernelSize:
-    overrideState: 1
-    value: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1355,7 +1327,7 @@ MonoBehaviour:
   - {fileID: 7162070901584530855}
   - {fileID: 6737827600839658524}
   - {fileID: -2625815095197667112}
-  - {fileID: -1174843889820554022}
+  - {fileID: 6834178182711825379}
 --- !u!114 &6737827600839658524
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1405,6 +1377,50 @@ MonoBehaviour:
   quality:
     overrideState: 0
     value: 2
+--- !u!114 &6834178182711825379
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b924e2dad56384a8df2a1e111bb675, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  mode:
+    overrideState: 0
+    value: 0
+  color:
+    overrideState: 1
+    value: {r: 0.14150941, g: 0.11547702, b: 0.11547702, a: 1}
+  center:
+    overrideState: 1
+    value: {x: 0.5, y: 0.5}
+  intensity:
+    overrideState: 1
+    value: 0.455
+  smoothness:
+    overrideState: 1
+    value: 0.127
+  roundness:
+    overrideState: 1
+    value: 1
+  rounded:
+    overrideState: 0
+    value: 0
+  mask:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  opacity:
+    overrideState: 0
+    value: 1
 --- !u!114 &7162070901584530855
 MonoBehaviour:
   m_ObjectHideFlags: 3
