@@ -11,7 +11,6 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected bool isFire;
     protected Rigidbody rigid;
     [SerializeField] protected float lifeTime = 8.0f;
-    protected float currentLifeTime = 0;
     [SerializeField] protected bool isDestroyed;
     protected SphereCollider coll;
     [SerializeField] protected TrailRenderer trail;
@@ -32,6 +31,11 @@ public class Bullet : MonoBehaviour
             trail = this.GetComponent<TrailRenderer>();
 
         rndlimitTurnSpeed = Random.Range(1.0f, 2.5f);
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(ActiveFalse_LifeTime());
     }
 
     virtual protected void Update()
@@ -60,15 +64,19 @@ public class Bullet : MonoBehaviour
                     ResetInfo();
                 }
             }
-        }
-        else
-        {
-            currentLifeTime += Time.deltaTime;
-            if (currentLifeTime >= lifeTime)
+            else
             {
-                ActiveFalse();
+                ResetInfo();
             }
         }
+        //else
+        //{
+        //    currentLifeTime += Time.deltaTime;
+        //    if (currentLifeTime >= lifeTime)
+        //    {
+        //        ActiveFalse();
+        //    }
+        //}
     }
 
     public void SetFire(Vector3 pos, Vector3 direction, float speed, float damage)
@@ -159,6 +167,21 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    IEnumerator ActiveFalse_LifeTime()
+    {
+        yield return new WaitForSeconds(lifeTime);
+
+        if (!isDestroyed)
+        {
+            isFire = false;
+            rigid.velocity = Vector3.zero;
+            coll.enabled = false;
+            isDestroyed = true;
+
+            turnSpeed = 0;
+        }
+    }
+
     virtual protected void ActiveFalse()
     {
         isFire = false;
@@ -166,20 +189,18 @@ public class Bullet : MonoBehaviour
         coll.enabled = false;
         isDestroyed = true;
 
-        currentLifeTime = 0;
         turnSpeed = 0;
-        //this.GetComponent<MeshRenderer>().enabled = false;
 
+        StopAllCoroutines();
     }
 
     virtual protected void ResetInfo()
     {
-        currentLifeTime = 0;
         rigid.velocity = Vector3.zero;
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
-
+        StopAllCoroutines();
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
     }

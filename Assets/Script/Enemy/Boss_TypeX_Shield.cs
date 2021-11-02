@@ -18,7 +18,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
     [SerializeField] private bool isOn;
     [SerializeField] private int currentPhase;
 
-    public Transform GetTraget() { return target; }
+    public Transform GetTarget() { return target; }
 
     public int GetCurrentPhase()
     {
@@ -39,14 +39,15 @@ public class Boss_TypeX_Shield : MonoBehaviour
     {
         anim = this.GetComponent<Animator>();
 
-        target = owner.GetTarget();
-
         skills.AddRange(this.GetComponents<Boss_Skill>());
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(target == null)
+            target = owner.GetTarget();
+
         if (!isOn)
         {
             return;

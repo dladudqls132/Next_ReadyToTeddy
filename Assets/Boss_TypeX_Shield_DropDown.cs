@@ -36,7 +36,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
 
     private void OnEnable()
     {
-        target = this.GetComponent<Boss_TypeX_Shield>().GetTraget();
+        target = this.GetComponent<Boss_TypeX_Shield>().GetTarget();
 
         for (int i = 0; i < tempPos.Count; i++)
         {
