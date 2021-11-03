@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float canJumpTime = 0.1f;
     [SerializeField] private float currentCanJumpTime = 0.0f;
     private bool isGod;
-    private float accelation = 1;
+    [SerializeField] private float accelation = 1;
     //private List<GameObject> collisionWeapon = new List<GameObject>();
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
@@ -532,13 +532,14 @@ public class PlayerController : MonoBehaviour
         if (useGravity)
         {
 
-            accelation += Time.deltaTime / 1.35f;
+            accelation += Time.deltaTime / 1.55f;
+            accelation = Mathf.Clamp(accelation, 0, 2);
             if (!isJump && !isJumpByObject)
                 rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y * accelation, rigid.velocity.z), Time.deltaTime);
         }
         else
         {
-            accelation = 1.8f;
+            accelation = 1.5f;
         }
 
         if (isDash)
@@ -675,7 +676,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        accelation = 1.8f;
+                        accelation = 1.5f;
                         canJump = false;
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
                     }
@@ -684,7 +685,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                accelation = 1.8f;
+                accelation = 1.5f;
                 canJump = false;
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
             }
