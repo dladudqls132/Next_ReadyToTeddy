@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float canJumpTime = 0.1f;
     [SerializeField] private float currentCanJumpTime = 0.0f;
     private bool isGod;
-
+    private float accelation = 1;
     //private List<GameObject> collisionWeapon = new List<GameObject>();
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
@@ -346,8 +346,8 @@ public class PlayerController : MonoBehaviour
                 {
                     isCrouch = true;
                     camPos.localPosition = Vector3.Lerp(camPos.localPosition, new Vector3(0, headOriginY / 1.5f, 0), Time.deltaTime * 8);
-                    bodyCollider.center = new Vector3(0, 0.5912783f, 0);
-                    bodyCollider.height = 1.194025f;
+                    bodyCollider.center = new Vector3(0, 0.4691301f, 0);
+                    bodyCollider.height = 0.9497328f;
                 }
 
             }
@@ -412,6 +412,7 @@ public class PlayerController : MonoBehaviour
             //{
             //    rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
             //}
+
             currentCanJumpTime -= Time.deltaTime;
             isGrounded = false;
             isLanding = false;
@@ -530,8 +531,14 @@ public class PlayerController : MonoBehaviour
 
         if (useGravity)
         {
+
+            accelation += Time.deltaTime / 1.2f;
             if (!isJump && !isJumpByObject)
-                rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y, rigid.velocity.z), Time.deltaTime);
+                rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y * accelation, rigid.velocity.z), Time.deltaTime);
+        }
+        else
+        {
+            accelation = 2f;
         }
 
         if (isDash)
@@ -668,6 +675,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
+                        accelation = 2f;
                         canJump = false;
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
                     }
@@ -676,6 +684,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
+                accelation = 2f;
                 canJump = false;
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
             }
@@ -743,7 +752,7 @@ public class PlayerController : MonoBehaviour
             }
 
             rigid.velocity = new Vector3(rigid.velocity.x, currentJumpPower, rigid.velocity.z);
-            currentJumpPower += Time.deltaTime * Physics.gravity.y;
+            currentJumpPower += Time.deltaTime * Physics.gravity.y * accelation;
         }
         else
         {

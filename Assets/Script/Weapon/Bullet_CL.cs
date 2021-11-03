@@ -17,14 +17,6 @@ public class Bullet_CL : Bullet
                 ResetInfo();
             }
         }
-        else
-        {
-            currentLifeTime += Time.deltaTime;
-            if (currentLifeTime >= lifeTime)
-            {
-                ActiveFalse();
-            }
-        }
 
         if (isFire)
         {

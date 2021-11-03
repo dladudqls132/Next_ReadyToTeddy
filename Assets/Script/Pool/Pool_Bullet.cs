@@ -7,7 +7,8 @@ public enum BulletType
     Normal,
     CL,
     Energy,
-    Normal_small
+    Normal_small,
+    Plasma
 }
 
 public class Pool_Bullet : MonoBehaviour

@@ -118,7 +118,7 @@ public class Enemy : MonoBehaviour
             dropItem[i].SetActive(false);
         }
 
-        renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
+        //renderers = this.transform.GetChild(0).GetComponentsInChildren<Renderer>();
     }
 
     public virtual void SetDead(bool value) { }
@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour
         {
             if (hit.transform.CompareTag("Player") && Vector3.Distance(this.transform.position, target.position) < detectRange * 2)
             {
-                canSee = true;
+                canSee = true; 
             }
             else
             {

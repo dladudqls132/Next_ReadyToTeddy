@@ -148,7 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 5
   state: 0
-  eye: {fileID: 0}
   target: {fileID: 0}
   canSee: 0
   isDead: 0
@@ -164,9 +163,9 @@ MonoBehaviour:
   isRigidity: 0
   rigidityTime: 0
   dropItem_prefab: []
-  energyShield_prefab: {fileID: 0}
-  shieldHp: 0
-  renderers: []
+  renderers:
+  - {fileID: 368437389456948172}
+  - {fileID: 857360947203214289}
   emissionColor_normal: {r: 0, g: 0.13710785, b: 1, a: 1}
   emissionColor_angry: {r: 0.8235294, g: 0, b: 0, a: 1}
   attackReadyRange: 4

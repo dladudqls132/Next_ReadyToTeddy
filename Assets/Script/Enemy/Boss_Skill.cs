@@ -46,7 +46,10 @@ public class Boss_Skill : MonoBehaviour
 
     public virtual void Use()
     {
-        target = this.GetComponent<Enemy>().GetTarget();
+        if (this.GetComponent<Enemy>())
+            target = this.GetComponent<Enemy>().GetTarget();
+        else
+            target = this.GetComponent<Boss_TypeX_Shield>().GetTarget();
 
         anim.SetBool("isIdle", false);
         this.enabled = true;
