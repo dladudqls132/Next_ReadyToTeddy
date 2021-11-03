@@ -532,13 +532,13 @@ public class PlayerController : MonoBehaviour
         if (useGravity)
         {
 
-            accelation += Time.deltaTime / 1.2f;
+            accelation += Time.deltaTime / 1.35f;
             if (!isJump && !isJumpByObject)
                 rigid.velocity = Vector3.Lerp(rigid.velocity, new Vector3(rigid.velocity.x, rigid.velocity.y + Physics.gravity.y * accelation, rigid.velocity.z), Time.deltaTime);
         }
         else
         {
-            accelation = 2f;
+            accelation = 1.8f;
         }
 
         if (isDash)
@@ -675,7 +675,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        accelation = 2f;
+                        accelation = 1.8f;
                         canJump = false;
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
                     }
@@ -684,7 +684,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                accelation = 2f;
+                accelation = 1.8f;
                 canJump = false;
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
             }
