@@ -93,7 +93,7 @@ public class Enemy_Type_C : Enemy
         {
             if (currentFireRate >= fireRate)
             {
-                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
+                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
 
                 //tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
                 float rndX = Random.Range(10.0f, 20.0f);
