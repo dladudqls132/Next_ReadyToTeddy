@@ -149,7 +149,8 @@ public class Gun_AR : Gun
                 }
                 else if (hit2.transform.CompareTag("InteractiveObject"))
                 {
-                    hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+                    hit2.transform.GetComponentInChildren<InteractiveObject>().DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                 }
                 else
                 {

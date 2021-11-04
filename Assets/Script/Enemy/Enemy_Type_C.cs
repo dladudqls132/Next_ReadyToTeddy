@@ -106,7 +106,7 @@ public class Enemy_Type_C : Enemy
                 randBuho = Random.Range(-1, 1);
                 rndY = randBuho < 0 ? rndY * -1 : rndY * 1;
 
-                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX * dis, rndY * dis, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
+                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX * dis, rndY * dis, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage, Random.Range(1.0f, 2.5f));
 
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.FutureGun_Fire, firePos.position, false);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);

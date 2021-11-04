@@ -15,6 +15,8 @@ public class Boss_Skill : MonoBehaviour
     [SerializeField] private int activePhase;
     protected Transform target;
 
+    public float GetCurrentCoolTime() { return currentCoolTime; }
+
     protected virtual void Awake()
     {
         currentCoolTime = coolTime;

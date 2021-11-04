@@ -158,7 +158,7 @@ public class Gun_Test : Gun
                     }
                     else if(hit2.transform.CompareTag("InteractiveObject"))
                     {
-                        hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet);
+                        hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                     }
                     else
                     {

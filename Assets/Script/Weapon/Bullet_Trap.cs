@@ -11,16 +11,7 @@ public class Bullet_Trap : Bullet
 
     override protected void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            other.GetComponent<PlayerController>().DecreaseHp(damage);
-            GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.BulletHit_Trap);
-            temp.transform.position = this.transform.position;
-            temp.SetActive(true);
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_2, this.transform.position, false);
-            ActiveFalse();
-        }
-        else if (/*LayerMask.LayerToName(other.gameObject.layer).Equals("Default") ||*/ LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Wall"))
+        if (other.CompareTag("Player") || /*LayerMask.LayerToName(other.gameObject.layer).Equals("Default") ||*/ LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Wall"))
         //else if (other.CompareTag("Enviroment") || LayerMask.LayerToName(other.gameObject.layer).Equals("Enviroment"))
         {
 
