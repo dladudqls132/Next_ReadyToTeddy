@@ -106,14 +106,18 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
             }
             else
             {
-                Bullet_Boss tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_leftHand.position, (target.position - firePos_leftHand.position).normalized, speed, damage);
+                Bullet_Boss tempBullet = null;
+                for (int i = 0; i < 3; i++)
+                {
+                    tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
+                    tempBullet.Fire(firePos_leftHand.position, Quaternion.Euler(0, 15 * i, 0) * (target.position - firePos_leftHand.position).normalized, speed, damage);
 
-                tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_leftHand.position, Quaternion.Euler(0, 30, 0) * (target.position - firePos_leftHand.position).normalized, speed, damage);
-
-                tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_leftHand.position, Quaternion.Euler(0, -30, 0) * (target.position - firePos_leftHand.position).normalized, speed, damage);
+                    if (i != 0)
+                    {
+                        tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
+                        tempBullet.Fire(firePos_leftHand.position, Quaternion.Euler(0, 15 * -i, 0) * (target.position - firePos_leftHand.position).normalized, speed, damage);
+                    }
+                }
 
                 GameObject tempAttackSpark = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_EnergyBall);
                 tempAttackSpark.transform.position = firePos_leftHand.position;
@@ -135,14 +139,19 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
             }
             else
             {
-                Bullet_Boss tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_rightHand.position, (target.position - firePos_rightHand.position).normalized, speed, damage);
+                Bullet_Boss tempBullet = null;
+                for (int i =0; i < 3; i++)
+                {
+                    tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
+                    tempBullet.Fire(firePos_rightHand.position, Quaternion.Euler(0, 15 * i, 0) * (target.position - firePos_rightHand.position).normalized, speed, damage);
 
-                tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_rightHand.position, Quaternion.Euler(0, 30, 0) * (target.position - firePos_rightHand.position).normalized, speed, damage);
-
-                tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_rightHand.position, Quaternion.Euler(0, -30, 0) * (target.position - firePos_rightHand.position).normalized, speed, damage);
+                    if(i != 0)
+                    {
+                        tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
+                        tempBullet.Fire(firePos_rightHand.position, Quaternion.Euler(0, 15 * -i, 0) * (target.position - firePos_rightHand.position).normalized, speed, damage);
+                    }
+                }
+             
 
                 GameObject tempAttackSpark = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_EnergyBall);
                 tempAttackSpark.transform.position = firePos_rightHand.position;

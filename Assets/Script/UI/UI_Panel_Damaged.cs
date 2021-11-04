@@ -14,13 +14,13 @@ public class UI_Panel_Damaged : MonoBehaviour
     {
         if (GameManager.Instance.GetPlayer().GetIsDamaged())
         {
-            image.color = Color.Lerp(image.color, Color.white, Time.deltaTime * 12);
+            image.color = Color.Lerp(image.color, Color.red, Time.deltaTime * 12);
         }
         else
         {
             if (GameManager.Instance.GetPlayer().GetCurrentHp() <= 30)
             {
-                image.color = Color.Lerp(image.color, new Color(1, 1, 1, 0.4f), Time.deltaTime * 12);
+                image.color = Color.Lerp(image.color, new Color(1, 0, 0, 0.6f), Time.deltaTime * 12);
 
                 if (!isHeartBeat)
                 {
@@ -38,7 +38,7 @@ public class UI_Panel_Damaged : MonoBehaviour
                 }
 
                 isHeartBeat = false;
-                image.color = Color.Lerp(image.color, new Color(1, 1, 1, 0), Time.deltaTime * 12);
+                image.color = Color.Lerp(image.color, new Color(1, 0, 0, 0), Time.deltaTime * 12);
             }
         }
     }

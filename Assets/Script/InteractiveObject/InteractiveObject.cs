@@ -4,25 +4,48 @@ using UnityEngine;
 
 public class InteractiveObject : MonoBehaviour
 {
-    [SerializeField] protected bool canDestroyed;
     [SerializeField] protected bool isDestroyed;
     [SerializeField] protected float maxHp;
     [SerializeField] protected float currentHp;
 
-    public bool GetCanDetroy() { return canDestroyed; }
     public bool GetIsDestroy() { return isDestroyed; }
 
-    virtual public void DecreaseHp(float value)
+    private void Start()
     {
-        if (!isDestroyed && canDestroyed)
+        currentHp = maxHp;
+    }
+
+    virtual public void DecreaseHp(float damage, Vector3 damagedPos, Transform damagedTrs, Vector3 damagedVelocity, EffectType effectType)
+    {
+        if (!isDestroyed)
         {
-            currentHp -= value;
+            currentHp -= damage;
+
+            GameObject effect = GameManager.Instance.GetPoolEffect().GetEffect(effectType);
+
+            if (effect != null)
+            {
+                if (effectType != EffectType.Damaged_lightning)
+                    effect.transform.SetParent(null);
+                else
+                    effect.GetComponent<HitEffect>().SetHitEffect(this.transform, 3.0f);
+
+                effect.transform.position = damagedPos;
+                effect.transform.rotation = Quaternion.LookRotation(damagedVelocity.normalized);
+                effect.transform.rotation = Quaternion.Euler(effect.transform.eulerAngles.x - 90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
+                effect.SetActive(true);
+            }
 
             if (currentHp <= 0)
             {
-                isDestroyed = true;
-                currentHp = 0;
+                ActiveFalse();
             }
         }
+    }
+
+    virtual protected void ActiveFalse()
+    {
+        isDestroyed = true;
+        currentHp = 0;
     }
 }

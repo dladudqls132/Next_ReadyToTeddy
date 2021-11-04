@@ -93,7 +93,7 @@ public class Enemy_Type_C : Enemy
         {
             if (currentFireRate >= fireRate)
             {
-                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal_small).GetComponent<Bullet>();
+                Bullet tempBullet1 = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Normal).GetComponent<Bullet>();
 
                 //tempBullet1.SetFire(firePos.position, ((target.position + Random.insideUnitSphere * 2) - firePos.position).normalized, bulletSpeed, damage);
                 float rndX = Random.Range(10.0f, 20.0f);
@@ -106,7 +106,7 @@ public class Enemy_Type_C : Enemy
                 randBuho = Random.Range(-1, 1);
                 rndY = randBuho < 0 ? rndY * -1 : rndY * 1;
 
-                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX * dis, rndY * dis, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage);
+                tempBullet1.SetFire(firePos.position, Quaternion.Euler(rndX * dis, rndY * dis, 0) * (target.position - firePos.position).normalized, target, bulletSpeed, damage, Random.Range(1.0f, 2.5f));
 
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.FutureGun_Fire, firePos.position, false);
                 GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.AttackSpark_normal);

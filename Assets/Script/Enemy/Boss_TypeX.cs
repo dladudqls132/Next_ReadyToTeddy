@@ -27,11 +27,15 @@ public class Boss_TypeX : Enemy
 
     [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
+    [SerializeField] private Boss_Skill prevSkill;
+    [SerializeField] private Boss_Skill nextSkill;
     bool isStuned;
     int faceNum = 1;
     float animLerpSpeed;
     bool canRot;
     [SerializeField] private int currentPhase;
+    [SerializeField] private float coolTime;
+    private float currentCoolTime;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -47,7 +51,7 @@ public class Boss_TypeX : Enemy
         tempRot_rightHand = hand_right.localRotation;
         tempPos_leftHand = hand_left.localPosition;
         tempPos_rightHand = hand_right.localPosition;
-
+        currentCoolTime = coolTime;
         
         skills.AddRange(this.GetComponents<Boss_Skill>());
 
@@ -105,7 +109,22 @@ public class Boss_TypeX : Enemy
 
         if (isStuned) return;
 
-       // state = Boss_TypeX_State.Idle;
+        // state = Boss_TypeX_State.Idle;
+
+        for (int i = 0; i < skills.Count; i++)
+        {
+            if (skills[i] != currentSkill)
+            {
+                if (skills[i].CoolDown())
+                {
+                    if (nextSkill == null && prevSkill != skills[i])
+                    {
+                        nextSkill = skills[i];
+                        break;
+                    }
+                }
+            }
+        }
 
         if (currentSkill != null)
         {
@@ -113,22 +132,20 @@ public class Boss_TypeX : Enemy
 
             if (!currentSkill.enabled)
             {
+                prevSkill = currentSkill;
                 currentSkill = null;
             }
         }
         else
         {
-            for (int i = 0; i < skills.Count; i++)
+            currentCoolTime -= Time.deltaTime;
+
+            if (currentCoolTime <= 0)
             {
-                if (skills[i].CoolDown())
-                {
-                    if (currentSkill == null)
-                    {
-                        currentSkill = skills[i];
-                        currentSkill.Use();
-                        break;
-                    }
-                }
+                currentSkill = nextSkill;
+                currentSkill.Use();
+                currentCoolTime = coolTime;
+                nextSkill = null;
             }
 
             canRot = true;
