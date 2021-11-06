@@ -960,7 +960,7 @@ public class PlayerController : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
-        if (isGod) return;
+        if (isGod || value == 0) return;
 
         isDamaged = true;
 

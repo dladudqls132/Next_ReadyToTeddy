@@ -16,6 +16,7 @@ public class Boss_Skill : MonoBehaviour
     protected Transform target;
 
     public float GetCurrentCoolTime() { return currentCoolTime; }
+    public int GetActivePhase() { return activePhase; }
 
     protected virtual void Awake()
     {

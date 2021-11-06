@@ -29,13 +29,15 @@ public class Boss_TypeX : Enemy
     [SerializeField] private Boss_Skill currentSkill;
     [SerializeField] private Boss_Skill prevSkill;
     [SerializeField] private Boss_Skill nextSkill;
-    bool isStuned;
+    
     int faceNum = 1;
     float animLerpSpeed;
-    bool canRot;
+    [SerializeField] bool canRot;
     [SerializeField] private int currentPhase;
     [SerializeField] private float coolTime;
     private float currentCoolTime;
+
+    public void SetPhase(int phase) { currentPhase = phase; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -64,29 +66,50 @@ public class Boss_TypeX : Enemy
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y)) //발견
+        if(isRigidity)
         {
-            isDetect = true;
-        }
-        else if(Input.GetKeyDown(KeyCode.U)) //스턴
-        {
-            isStuned = !isStuned;
-            anim.enabled = !anim.enabled;
-            hand_left.GetComponent<Rigidbody>().useGravity = !hand_left.GetComponent<Rigidbody>().useGravity;
-            hand_right.GetComponent<Rigidbody>().useGravity = !hand_right.GetComponent<Rigidbody>().useGravity;
-            hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            
+                if (anim.enabled)
+                {
+                    hand_left.GetComponent<Rigidbody>().useGravity = true;
+                    hand_right.GetComponent<Rigidbody>().useGravity = true;
+                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
 
-        }
-        else if (Input.GetKeyDown(KeyCode.I)) //얼굴 돌리기
-        {
-            faceNum++;
+                anim.enabled = false;
+
+                currentRigidityTime += Time.deltaTime;
+
+                if (currentRigidityTime >= rigidityTime)
+                {
+                    isRigidity = false;
+                    anim.enabled = true;
+                    hand_left.GetComponent<Rigidbody>().useGravity = false;
+                    hand_right.GetComponent<Rigidbody>().useGravity = false;
+                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
+            
         }
 
-        anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
-        anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
+        //if(Input.GetKeyDown(KeyCode.U)) //스턴
+        //{
+        //    isRigidity = !isRigidity;
+        //    anim.enabled = !anim.enabled;
+        //    hand_left.GetComponent<Rigidbody>().useGravity = !hand_left.GetComponent<Rigidbody>().useGravity;
+        //    hand_right.GetComponent<Rigidbody>().useGravity = !hand_right.GetComponent<Rigidbody>().useGravity;
+        //    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        //    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+        //}
+
 
         if (!isDetect) return;
 
@@ -102,29 +125,70 @@ public class Boss_TypeX : Enemy
 
         if (!anim.GetBool("isCombat")) return;
 
-        if((currentHp / maxHp) * 100 <= 70)
+
+        if (isRigidity || currentPhase == 5) return;
+
+
+        if (currentPhase != 5)
         {
-            currentPhase = 2;
+            if ((currentHp / maxHp) * 100 <= 10)
+            {
+                currentPhase = 4;
+                faceNum = 4;
+            }
+            else if ((currentHp / maxHp) * 100 <= 40)
+            {
+                currentPhase = 3;
+                faceNum = 3;
+            }
+            else if ((currentHp / maxHp) * 100 <= 70)
+            {
+                currentPhase = 2;
+                faceNum = 2;
+            }
+
+            anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
+            anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
         }
 
-        if (isStuned) return;
 
-        // state = Boss_TypeX_State.Idle;
-
-        for (int i = 0; i < skills.Count; i++)
+        if (currentPhase == 4)
         {
-            if (skills[i] != currentSkill)
+            for (int i = 0; i < skills.Count; i++)
             {
-                if (skills[i].CoolDown())
+
+                if (skills[i].GetActivePhase() == currentPhase)
                 {
-                    if (nextSkill == null && prevSkill != skills[i])
+
+                    nextSkill = skills[i];
+                    break;
+
+                }
+
+            }
+
+        }
+        else
+        {
+            for (int i = 0; i < skills.Count; i++)
+            {
+                if (skills[i] != currentSkill)
+                {
+                    if (skills[i] != prevSkill)
                     {
-                        nextSkill = skills[i];
-                        break;
+                        if (skills[i].CoolDown())
+                        {
+                            if (nextSkill == null)
+                            {
+                                nextSkill = skills[i];
+                                break;
+                            }
+                        }
                     }
                 }
             }
         }
+
 
         if (currentSkill != null)
         {
@@ -140,7 +204,7 @@ public class Boss_TypeX : Enemy
         {
             currentCoolTime -= Time.deltaTime;
 
-            if (currentCoolTime <= 0)
+            if ((currentCoolTime <= 0 || currentPhase == 4) && nextSkill != null)
             {
                 currentSkill = nextSkill;
                 currentSkill.Use();
@@ -195,14 +259,23 @@ public class Boss_TypeX : Enemy
 
     private void LateUpdate()
     {
+        if (currentPhase == 5)
+        {
+            if (!canRot)
+            {
+                tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+
+                body.rotation = tempRot_body;
+            }
+
+            return;
+        }
+
         if (anim.GetBool("isCombat"))
         {
             //이동
 
-     
-
-
-            if (isStuned)
+            if (isRigidity)
             {
                 animLerpSpeed = 13;
                 tempPos_leftHand = hand_left.localPosition;
