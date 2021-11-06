@@ -74,12 +74,6 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
         {
             if (eattenBallNum >= useNum)
             {
-                if (barrier.activeSelf)
-                {
-                    GameManager.Instance.GetPlayer().GetCam().Shake(0, 0, true);
-
-                    barrier.SetActive(false);
-                }
                 Debug.LogError("use");
             }
             else
