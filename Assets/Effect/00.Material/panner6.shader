@@ -18,7 +18,7 @@ Shader "panner1"
 	SubShader
 	{
 		Tags{ "RenderType" = "Transparent"  "Queue" = "Transparent+0" "IgnoreProjector" = "True" "IsEmissive" = "true"  }
-		Cull Back
+		Cull Off
 		CGINCLUDE
 		#include "UnityShaderVariables.cginc"
 		#include "UnityPBSLighting.cginc"

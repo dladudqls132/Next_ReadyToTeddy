@@ -40,6 +40,7 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
 
         barrier.SetActive(true);
         anim.SetBool("isExecute", true);
+        this.GetComponent<Boss_TypeX>().SetIsGod(true);
 
         GameManager.Instance.GetPlayer().GetCam().Shake(100, 0.15f, true);
 

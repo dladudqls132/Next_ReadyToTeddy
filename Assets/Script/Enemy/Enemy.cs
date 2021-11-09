@@ -77,6 +77,7 @@ public class Enemy : MonoBehaviour
     public bool GetIsDead() { return isDead; }
     public EnemyType GetEnemyType() { return enemyType; }
     public Transform GetTarget() { return target; }
+    public void SetIsGod(bool value) { isGod = value; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
@@ -149,11 +150,6 @@ public class Enemy : MonoBehaviour
                 canSee = false;
             }
         }
-
-        //if (Vector3.Distance(this.transform.position, target.position) <= detectRange)
-        //{
-        //    canSee = true;
-        //}
 
         if (canSee)
         {

@@ -49,7 +49,7 @@ public class Explosion_Large : MonoBehaviour
                 if (Physics.Raycast(this.transform.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
                 {
                     temp.transform.position = hit.point;
-                    mainCam.Shake(0.2f, 0.4f, false);
+                    mainCam.Shake(0.2f, 0.25f, false);
 
                     temp.GetComponent<Explosion>().SetDamage(damage);
                     temp.SetActive(true);

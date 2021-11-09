@@ -27,9 +27,8 @@ public class Boss_TypeX : Enemy
 
     [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
-    [SerializeField] private Boss_Skill prevSkill;
-    [SerializeField] private Boss_Skill nextSkill;
-    
+    [SerializeField] private Queue<Boss_Skill> skillOrder = new Queue<Boss_Skill>();
+
     int faceNum = 1;
     float animLerpSpeed;
     [SerializeField] bool canRot;
@@ -129,7 +128,7 @@ public class Boss_TypeX : Enemy
         if (isRigidity || currentPhase == 5) return;
 
 
-        if (currentPhase != 5)
+        if (currentPhase != 5 && currentSkill == null)
         {
             if ((currentHp / maxHp) * 100 <= 10)
             {
@@ -152,68 +151,44 @@ public class Boss_TypeX : Enemy
         }
 
 
-        if (currentPhase == 4)
+        for (int i = 0; i < skills.Count; i++)
         {
-            for (int i = 0; i < skills.Count; i++)
+            if (skills[i] != currentSkill)
             {
-
-                if (skills[i].GetActivePhase() == currentPhase)
+                if (skills[i].CoolDown())
                 {
-
-                    nextSkill = skills[i];
-                    break;
-
-                }
-
-            }
-
-        }
-        else
-        {
-            for (int i = 0; i < skills.Count; i++)
-            {
-                if (skills[i] != currentSkill)
-                {
-                    if (skills[i] != prevSkill)
+                    if (!skillOrder.Contains(skills[i]))
                     {
-                        if (skills[i].CoolDown())
-                        {
-                            if (nextSkill == null)
-                            {
-                                nextSkill = skills[i];
-                                break;
-                            }
-                        }
+                        skillOrder.Enqueue(skills[i]);
                     }
                 }
             }
         }
 
 
-        if (currentSkill != null)
+        if (currentPhase != 5)
         {
-            //state = Boss_TypeX_State.Attack;
-
-            if (!currentSkill.enabled)
+            if (currentSkill != null)
             {
-                prevSkill = currentSkill;
-                currentSkill = null;
+                if (!currentSkill.enabled)
+                {
+                    currentSkill = null;
+                }
             }
-        }
-        else
-        {
-            currentCoolTime -= Time.deltaTime;
-
-            if ((currentCoolTime <= 0 || currentPhase == 4) && nextSkill != null)
+            else
             {
-                currentSkill = nextSkill;
-                currentSkill.Use();
-                currentCoolTime = coolTime;
-                nextSkill = null;
-            }
+                currentCoolTime -= Time.deltaTime;
 
-            canRot = true;
-            //state = Boss_TypeX_State.Idle;
+                if (currentCoolTime <= 0 && skillOrder.Count != 0)
+                {
+                    currentSkill = skillOrder.Dequeue();
+                    currentSkill.Use();
+                    currentCoolTime = coolTime;
+                }
+
+                canRot = true;
+                //state = Boss_TypeX_State.Idle;
+            }
         }
     }
 
@@ -381,22 +356,6 @@ public class Boss_TypeX : Enemy
 
                     tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * animLerpSpeed);
                     hand_right.rotation = tempRot_rightHand;
-
-                    ////회전
-                    //Vector3 dir = (target.position - body.position).normalized;
-                    //dir.y = 0;
-                    //tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 53);
-
-                    //body.rotation = tempRot_body;
-
-                    //Quaternion rotTemp = Quaternion.Euler(0, hand_left.parent.eulerAngles.y, hand_left.parent.eulerAngles.z);
-
-                    //tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, rotTemp * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 53);
-                    //hand_left.rotation = tempRot_leftHand;
-
-                    //rotTemp = Quaternion.Euler(0, hand_right.parent.eulerAngles.y, hand_right.parent.eulerAngles.z);
-                    //tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, rotTemp * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 53);
-                    //hand_right.rotation = tempRot_rightHand;
                 }
             }
             else

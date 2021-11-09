@@ -45,70 +45,11 @@ public class Gun_FlameThrower : Gun
                 {
                     currentAmmo--;
 
-   
+
                     GameManager.Instance.GetCrosshairController().GetCrosshair(gunType).GetComponent<UI_Crosshair_FT>().SetGauge((float)currentAmmo / (float)maxAmmo_aMag);
                     currentShotDelay = shotDelay;
                 }
             }
-            //else
-            //{
-            //    currentRefillTime += Time.deltaTime;
-
-            //    if(currentRefillTime >= refillTime)
-            //    {
-            //        currentRefillTime = 0;
-
-            //        if(currentAmmo < maxAmmo_aMag)
-            //            currentAmmo++;
-            //    }
-            //}
-
-            //if (isShot)
-            //{
-            //    currentShotDelay -= Time.deltaTime;
-
-            //    if (currentShotDelay <= 0)
-            //    {
-            //        isShot = false;
-            //        isRecoil = false;
-            //        //Debug.Log("asd");
-            //        currentShotDelay = shotDelay;
-            //    }
-
-            //    if (currentShotDelay <= shotDelay / 1.6f)
-            //    {
-            //        isRecoil = true;
-            //    }
-            //}
-            //else
-            //{
-            //    //fire.Stop();
-            //}
-
-            //if (isReload)
-            //{
-            //    currentReloadTime -= Time.deltaTime;
-
-            //    if (currentReloadTime <= 0)
-            //    {
-            //        currentReloadTime = reloadTime;
-            //        currentAmmo = maxAmmo;
-
-            //        if (currentAmmo >= maxAmmo)
-            //        {
-            //            isReload = false;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    currentReloadTime = reloadTime;
-            //}
-
-            //if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
-            //{
-            //    SetIsReload(true);
-            //}
 
             if (currentAmmo > 0)
                 canShot = true;
@@ -138,7 +79,7 @@ public class Gun_FlameThrower : Gun
                 {
                     currentAmmo++;
 
-                    if(this.gameObject.activeSelf)
+                    if (this.gameObject.activeSelf)
                         UI_gunsound.DisplayImage_Reload();
                 }
 
@@ -165,7 +106,7 @@ public class Gun_FlameThrower : Gun
     public void Off()
     {
         isShot = false;
-        if(fire != null)
+        if (fire != null)
             fire.Stop();
     }
 
@@ -181,53 +122,26 @@ public class Gun_FlameThrower : Gun
 
         if (canShot)
         {
-            
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.1f, 0.03f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
-       
 
-            //hand.GetComponent<Animator>().SetTrigger("Fire_FT");
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.Shake(0.1f, 0.03f, false);
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
+            handFireRot = mainCam.SetFireRecoilRot(recoil, 3.0f, 3.0f);
 
-            if(currentFireSoundRate >= fireSoundRate)
+            if (currentFireSoundRate >= fireSoundRate)
             {
                 currentFireSoundRate = 0;
-   
+
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.FlameThrower_Fire);
 
                 UI_gunsound.DisplayImage_Attack();
             }
 
-
-
             isReload = false;
             isRecoil = false;
-            
-            if(fire.transform.parent != null)
+
+            if (fire.transform.parent != null)
                 fire.transform.SetParent(null);
-
-            //if (GameManager.Instance.GetPlayer().moveInput.y > 0)
-            //{
-            //    for (int i = 0; i < fire.transform.childCount; i++)
-            //    {
-            //        float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
-            //        var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
-            //        main.startSpeed = rnd + GameManager.Instance.GetPlayer().GetWalkSpeed();
-            //    }
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < fire.transform.childCount; i++)
-            //    {
-            //        float rnd = Random.Range(originSpeed_min[i], originSpeed_max[i]);
-            //        var main = fire.transform.GetChild(i).GetComponent<ParticleSystem>().main;
-            //        main.startSpeed = rnd;
-            //    }
-            //}
-
-            //var main = fire.main;
-            //main.startSpeed = 3;
 
             fire.transform.position = shotPos.position;
             fire.transform.rotation = Camera.main.transform.rotation;

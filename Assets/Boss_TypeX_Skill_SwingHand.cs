@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Boss_TypeX_Skill_SwingHand : Boss_Skill
 {
+    [SerializeField] private Boss_TypeX_Skill_SwingHand_AttackRange attackRange;
+    [SerializeField] private Targeting targetingObj;
+    [SerializeField] private ParticleSystem sandWind;
+
     protected override void Start()
     {
         base.Start();
@@ -19,10 +23,29 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
             anim.SetTrigger("SwingHand_Left");
         else
             anim.SetTrigger("SwingHand_Right");
+
+        targetingObj.SetCanRot(false);
+    }
+
+    void SwingHand_VisibleAttackRange()
+    {
+        attackRange.ActiveTrue();
+    }
+
+    void SwingHand_InvisibleAttackRange()
+    {
+        attackRange.ActiveFalse();
+    }
+
+    void SwingHand_Attack()
+    {
+        attackRange.Attack(damage);
+        sandWind.Play();
     }
 
     protected override void ResetInfo()
     {
+        targetingObj.SetCanRot(true);
         base.ResetInfo();
     }
 

@@ -10,25 +10,6 @@ public class Data
     public float mainVolume;
     public float effectVolume;
     public float backgroundVolume;
-
-    //public void UpdateData(SettingType settingType, float value)
-    //{
-    //    switch (settingType)
-    //    {
-    //        case SettingType.MouseSensitive:
-    //            mouseMoveSpeeds = value;
-    //            break;
-    //        case SettingType.Volume_Main:
-    //            mainVolume = value;
-    //            break;
-    //        case SettingType.Volume_Effect:
-    //            effectVolume = value;
-    //            break;
-    //        case SettingType.Volume_Background:
-    //            backgroundVolume = value;
-    //            break;
-    //    }
-    //}
 }
 
 public class Settings : MonoBehaviour

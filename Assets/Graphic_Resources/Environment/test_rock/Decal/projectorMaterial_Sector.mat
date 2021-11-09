@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: panner 6
-  m_Shader: {fileID: 4800000, guid: 1033c5efaf6a77a44afd715a4c225437, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 0
+  m_Name: projectorMaterial_Sector
+  m_Shader: {fileID: 4800000, guid: 7bb640d0e33314db2baaf128c3b2fd39, type: 3}
+  m_ShaderKeywords: _EMISSION
+  m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -20,6 +20,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DecalTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -35,12 +39,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _EffectTex:
+        m_Texture: {fileID: 2800000, guid: e7e1e096020d1483db9c15484548aa28, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FalloffTex:
+        m_Texture: {fileID: 2800000, guid: 23740055e2b119e40a939138ab8070f8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 08162b9f91161ec419a299d79f9ce64b, type: 3}
+        m_Texture: {fileID: 2800000, guid: e0b409d92cff0894fbfcdf38434c7129, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -55,29 +67,13 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TextureSample0:
-        m_Texture: {fileID: 2800000, guid: 290f909e9286f2945b51df13fd24ea27, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextureSample1:
-        m_Texture: {fileID: 2800000, guid: 3834faa1335fb3941a824e384077d049, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _TextureSample3:
-        m_Texture: {fileID: 2800000, guid: b2e3075485469244c8c2313d89c34e61, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _flow1:
-        m_Texture: {fileID: 2800000, guid: dbec9039c70e09e47b8ff15d508f39ac, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
+    - _ShadowTex:
+        m_Texture: {fileID: 2800000, guid: 56a484d89b205a14b9945be67a7d9615, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - PixelSnap: 0
     - _BumpScale: 1
-    - _ChromaticAberration: 0.1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -89,19 +85,15 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Shininess: 0.7
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - __dirty: 0
-    - _dist1: 0.1
-    - _x: 2
-    - _y: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Color0: {r: 0, g: 2.4711914, b: 20.520832, a: 1}
+    - _Color: {r: 1, g: 0, b: 0, a: 0.39607844}
+    - _Emission: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _StartColor: {r: 0.745283, g: 0.43478623, b: 0.35506406, a: 0.74509805}
-    - _StartColor1: {r: 0.8679245, g: 0.44891843, b: 0.118725546, a: 0.4117647}
-    - _TintColor: {r: 1, g: 1, b: 1, a: 0.5}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
