@@ -36,6 +36,7 @@ public class Boss_TypeX : Enemy
     [SerializeField] private float coolTime;
     private float currentCoolTime;
 
+    public Boss_Skill GetCurrentSkill() { return currentSkill; }
     public void SetPhase(int phase) { currentPhase = phase; }
 
     // Start is called before the first frame update

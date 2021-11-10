@@ -35,6 +35,7 @@ public class Boss_TypeX_Skill_SwingHand_AttackRange : MonoBehaviour
             {
                 isAttack = true;
                 other.GetComponent<PlayerController>().DecreaseHp(damage);
+                other.GetComponent<Rigidbody>().AddForce(this.transform.parent.forward * 300, ForceMode.Impulse);
             }
         }
     }

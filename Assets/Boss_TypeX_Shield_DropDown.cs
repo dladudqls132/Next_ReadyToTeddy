@@ -7,7 +7,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
     [SerializeField] private GameObject projection;
     [SerializeField] private float attackReadyTime;
 
-    [SerializeField] private ParticleSystem particle;
+    [SerializeField] private GameObject particle;
     [SerializeField] private List<Vector3> attackReadyPos = new List<Vector3>();
     [SerializeField] List<Vector3> tempPos = new List<Vector3>();
     private Vector3 destPos;
@@ -33,7 +33,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
         projection = Instantiate(projection);
         projection.SetActive(false);
         particle = Instantiate(particle);
-        particle.Stop();
+        particle.SetActive(false);
     }
 
     protected override void Start()
@@ -114,7 +114,8 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
                 projection.SetActive(false);
                 isReset = true;
                 particle.transform.position = destPos;
-                particle.Play();
+                particle.GetComponent<Explosion>().SetDamage(damage);
+                particle.SetActive(true);
                 StartCoroutine(ResetDelay());
             }
         }

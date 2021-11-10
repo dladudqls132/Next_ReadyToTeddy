@@ -8,6 +8,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
     [SerializeField] private int bombNum_2;
     [SerializeField] private float bombTime;
     [SerializeField] private float attackRange;
+    private int fireNum;
 
     protected override void Start()
     {
@@ -21,7 +22,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
         int rndNum = Random.Range(0, 2);
 
         if (rndNum == 0)
-            anim.SetTrigger("Bombing");
+            anim.SetTrigger("Bombing2");
         else
             anim.SetTrigger("Bombing2");
 
@@ -30,6 +31,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
     protected override void ResetInfo()
     {
         base.ResetInfo();
+        fireNum = 0;
     }
 
     IEnumerator Fire_Bomb1_Delay(float time)
@@ -53,16 +55,13 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
     {
         for (int i = 0; i < bombNum_2; i++)
         {
-            Vector3 rndDir = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f)).normalized;
-            if (rndDir == Vector3.zero)
-                rndDir = new Vector3(1, 0, 1);
-
-            for (int j = 0; j < 4; j++)
+            for (int j = 1; j < 4; j++)
             {
                 GameObject tempProjector = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Projector_Explosion_Large);
-                tempProjector.GetComponent<Explosion_Large>().SetActive(this.transform.position + rndDir * j * 10 + Vector3.up * 3, bombTime, damage);
+                tempProjector.GetComponent<Explosion_Large>().SetActive(this.transform.position + Quaternion.Euler(0, (360 / bombNum_2 / 3) * fireNum + 360 / bombNum_2 * i, 0) * Vector3.forward * j * 10 + Vector3.up * 3, bombTime, damage);
             }
         }
+        fireNum++;
     }
 
     protected override void Update()
