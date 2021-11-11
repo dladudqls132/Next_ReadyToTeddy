@@ -27,6 +27,7 @@ public class Gun_Sniper : Gun
 
                 if (currentShotDelay <= 0)
                 {
+                    hand.GetComponent<Animator>().SetBool("isFire_SN", false);
                     isShot = false;
                     isRecoil = false;
                     //Debug.Log("asd");
@@ -37,6 +38,11 @@ public class Gun_Sniper : Gun
                 {
                     isRecoil = true;
                 }
+            }
+
+            if(GameManager.Instance.GetPlayer().GetIsSwap() || hand.GetComponent<Animator>().GetBool("isPakour"))
+            {
+                hand.GetComponent<Animator>().SetBool("isFire_SN", false);
             }
 
             if (CanReload() && currentAmmo <= 0 && !GameManager.Instance.GetPlayer().GetIsSwap())
@@ -80,10 +86,12 @@ public class Gun_Sniper : Gun
         {
             currentSpreadAngle = spreadAngle_normal;
             mainCam.Shake(0.02f, 0.02f, false);
-            handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
+            //handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
+            mainCam.GetComponent<Animator>().SetTrigger("Fire_SN");
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_SN");
+            hand.GetComponent<Animator>().SetBool("isFire_SN", true);
 
             UI_gunsound.DisplayImage_Attack();
 

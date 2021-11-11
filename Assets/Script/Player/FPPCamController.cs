@@ -249,6 +249,11 @@ public class FPPCamController : MonoBehaviour
                     if (!this.GetComponent<Animator>().GetBool("isReload_CL"))
                         this.GetComponent<Animator>().SetBool("isReload_CL", true);
                 }
+                else if(GameManager.Instance.GetPlayer().GetGun().GetGunType() == GunType.Sniper)
+                {
+                    if (!this.GetComponent<Animator>().GetBool("isReload_SN"))
+                        this.GetComponent<Animator>().SetBool("isReload_SN", true);
+                }
                 else
                 {
                     if (!this.GetComponent<Animator>().GetBool("isReload"))
@@ -263,6 +268,8 @@ public class FPPCamController : MonoBehaviour
                     this.GetComponent<Animator>().SetBool("isReload", false);
                 if (this.GetComponent<Animator>().GetBool("isReload_CL"))
                     this.GetComponent<Animator>().SetBool("isReload_CL", false);
+                if (this.GetComponent<Animator>().GetBool("isReload_SN"))
+                    this.GetComponent<Animator>().SetBool("isReload_SN", false);
 
                 transform.localRotation = Quaternion.Euler(new Vector3(rotX, rotY) + transform.localRotation.eulerAngles);
             }

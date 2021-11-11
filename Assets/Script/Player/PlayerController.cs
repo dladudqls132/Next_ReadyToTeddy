@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
         //    inventory.AddWeapon(temp);
         //}
 
-        GameObject temp = Instantiate(weapons[0]);
+        GameObject temp = Instantiate(weapons[5]);
         inventory.AddWeapon(temp);
         inventory.SwapWeapon(0);
     }
@@ -866,13 +866,13 @@ public class PlayerController : MonoBehaviour
 
 
                     if (gun.GetGunType() == GunType.ChainLightning)
-                        lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + mainCam.shakeVec / 2, Time.deltaTime * 20);
+                        lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + mainCam.shakeVec / 2, Time.deltaTime * 30);
                     else
                     {
                         if (isGrounded)
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition /*+ new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0)*/, Time.deltaTime * 25);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition /*+ new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 100f, 0)*/, Time.deltaTime * 30);
                         else
-                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
+                            lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 30);
                     }
 
                     hand.localRotation = lastAngle_hand;
