@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Boss_Skill : MonoBehaviour
 {
+    [SerializeField] private int activePhase;
     protected bool isActive;
     [SerializeField] protected float coolTime;
     [SerializeField] protected float damage;
@@ -12,10 +13,10 @@ public class Boss_Skill : MonoBehaviour
 
     [SerializeField] protected float currentCoolTime;
     protected Animator anim;
-    [SerializeField] private int activePhase;
     protected Transform target;
 
     public float GetCurrentCoolTime() { return currentCoolTime; }
+    public int GetActivePhase() { return activePhase; }
 
     protected virtual void Awake()
     {

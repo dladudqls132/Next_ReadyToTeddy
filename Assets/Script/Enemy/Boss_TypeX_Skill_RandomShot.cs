@@ -8,6 +8,9 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     [SerializeField] private Transform firePos_middle;
     [SerializeField] private Transform firePos_top;
     [SerializeField] private Transform firePos_top2;
+    [SerializeField] private GameObject wall_1;
+    [SerializeField] private GameObject wall_2;
+    [SerializeField] private GameObject barrier;
     [SerializeField] private float speed;
     [SerializeField] private float attackTime;
     private float currentAttackTime;
@@ -31,6 +34,9 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
         base.Use();
         currentAttackTime = attackTime;
         currentDelay = delay;
+        wall_1.SetActive(true);
+        wall_2.SetActive(true);
+        barrier.SetActive(true);
 
         StartCoroutine(AttackRnd());
         anim.SetBool("isRandomShot", true);
@@ -38,6 +44,10 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
 
     protected override void ResetInfo()
     {
+        wall_1.SetActive(false);
+        wall_2.SetActive(false);
+        barrier.SetActive(false);
+
         anim.SetBool("isRandomShot", false);
 
         base.ResetInfo();

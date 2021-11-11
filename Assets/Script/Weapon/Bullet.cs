@@ -67,14 +67,6 @@ public class Bullet : MonoBehaviour
                 ResetInfo();
             }
         }
-        //else
-        //{
-        //    currentLifeTime += Time.deltaTime;
-        //    if (currentLifeTime >= lifeTime)
-        //    {
-        //        ActiveFalse();
-        //    }
-        //}
     }
 
     public void SetFire(Vector3 startPos, Vector3 direction, float speed, float damage)

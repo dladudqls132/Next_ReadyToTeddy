@@ -34,40 +34,6 @@ public class Enemy_Type_B : Enemy
             }
         }
 
-        //if (isAttack)
-        //{
-        //    currentBombTime += Time.deltaTime;
-
-        //    projector.GetComponent<Projector>().orthographicSize = Mathf.Lerp(projector.GetComponent<Projector>().orthographicSize, bombSize, Time.deltaTime * 10);
-        //    projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
-
-        //    if (currentBombTime >= bombTime)
-        //    {
-        //        currentBombTime = 0;
-        //        projector.GetComponent<Projector>().orthographicSize = 1;
-        //        projector.GetChild(0).GetComponent<Projector>().orthographicSize = projector.GetComponent<Projector>().orthographicSize;
-        //        GameObject temp = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Explosion_bomb_large);
-        //        RaycastHit hit;
-        //        if (Physics.Raycast(projector.position, Vector3.down, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
-        //        {
-        //            temp.transform.position = hit.point;
-        //            mainCam.Shake(0.2f, 0.4f, false);
-
-
-        //            //Collider[] c = Physics.OverlapSphere(hit.point, bombSize / 2, 1 << LayerMask.NameToLayer("Player"));
-        //            //if (c.Length != 0)
-        //            //{
-        //            //    c[0].GetComponent<PlayerController>().DecreaseHp(damage);
-        //            //}
-        //            temp.GetComponent<Explosion>().SetDamage(damage);
-        //            temp.SetActive(true);
-        //            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion, hit.point, false);
-        //        }
-        //        projector.gameObject.SetActive(false);
-        //        isAttack = false;
-        //    }
-        //}
-
         if (!isDetect || isDead || isRigidity)
         {
             return;

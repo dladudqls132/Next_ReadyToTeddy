@@ -13,6 +13,9 @@ public class Boss_TypeX_Shield : MonoBehaviour
     [SerializeField] private Color emissionColor_angry;
     [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
+    [SerializeField] private Queue<Boss_Skill> skillOrder = new Queue<Boss_Skill>();
+    [SerializeField] private float coolTime;
+    private float currentCoolTime;
 
     private Animator anim;
     [SerializeField] private bool isOn;
@@ -46,7 +49,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
     void Update()
     {
         if(target == null)
-            target = owner.GetTarget();
+            target = owner.GetTarget().parent;
 
         if (!isOn)
         {
@@ -55,31 +58,48 @@ public class Boss_TypeX_Shield : MonoBehaviour
 
         currentPhase = owner.GetCurrentPhase();
 
-        if (currentSkill != null)
-        {
-            if (!currentSkill.enabled)
-            {
-                currentSkill = null;
-            }
-        }
-
-        if (currentSkill) return;
-
         for (int i = 0; i < skills.Count; i++)
         {
-            if (skills[i].CoolDown())
+            if (skills[i] != currentSkill)
             {
-                if (currentSkill == null)
+                if (skills[i].CoolDown())
                 {
-                    currentSkill = skills[i];
-                    currentSkill.Use();
-                    break;
+                    if (!skillOrder.Contains(skills[i]))
+                    {
+                        skillOrder.Enqueue(skills[i]);
+                    }
                 }
             }
         }
 
-        this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 2.5f);
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * 5);
+
+        if (currentPhase != 5)
+        {
+            if (currentSkill != null)
+            {
+                if (!currentSkill.enabled)
+                {
+                    currentSkill = null;
+                }
+            }
+            else
+            {
+                currentCoolTime -= Time.deltaTime;
+
+                if (currentCoolTime <= 0 && skillOrder.Count != 0)
+                {
+                    currentSkill = skillOrder.Dequeue();
+                    currentSkill.Use();
+                    currentCoolTime = coolTime;
+                }
+            }
+        }
+
+        if (!currentSkill)
+        {
+            this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 2.5f);
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * 5);
+        }
     }
 
     private void LateUpdate()

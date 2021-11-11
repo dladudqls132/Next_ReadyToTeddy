@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Boss_TypeX_Shield_DropDown : Boss_Skill
 {
+    [SerializeField] private GameObject projection;
     [SerializeField] private float attackReadyTime;
 
+    [SerializeField] private GameObject particle;
     [SerializeField] private List<Vector3> attackReadyPos = new List<Vector3>();
     [SerializeField] List<Vector3> tempPos = new List<Vector3>();
     private Vector3 destPos;
@@ -27,6 +29,11 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
             attackReadyPos.Add(tempObject[i].transform.position);
             tempPos.Add(attackReadyPos[i]);
         }
+
+        projection = Instantiate(projection);
+        projection.SetActive(false);
+        particle = Instantiate(particle);
+        particle.SetActive(false);
     }
 
     protected override void Start()
@@ -56,7 +63,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
         isReady = true;
         isAttack = false;
         speed = 3;
-
+        projection.SetActive(true);
         StartCoroutine(AttackReady());
     }
 
@@ -90,6 +97,10 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
             if (Physics.Raycast(this.transform.position, this.transform.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Enviroment")))
             {
                 destPos = hit.point;
+
+                projection.transform.position = destPos + Vector3.up * 2;
+
+
             }
         }
 
@@ -100,7 +111,11 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
 
             if(Vector3.Distance(this.transform.position, destPos) < 0.5f)
             {
+                projection.SetActive(false);
                 isReset = true;
+                particle.transform.position = destPos;
+                particle.GetComponent<Explosion>().SetDamage(damage);
+                particle.SetActive(true);
                 StartCoroutine(ResetDelay());
             }
         }

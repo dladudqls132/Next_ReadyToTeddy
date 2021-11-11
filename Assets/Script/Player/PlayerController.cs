@@ -340,8 +340,6 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKey(KeyCode.LeftControl))
             {
-
-
                 if (!isClimbUp && !isJump && !isJumpByObject)
                 {
                     isCrouch = true;
@@ -349,7 +347,6 @@ public class PlayerController : MonoBehaviour
                     bodyCollider.center = new Vector3(0, 0.4691301f, 0);
                     bodyCollider.height = 0.9497328f;
                 }
-
             }
 
             if (isCrouch)
@@ -441,32 +438,26 @@ public class PlayerController : MonoBehaviour
                     //Debug.DrawRay(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, forward * 0.35f);
                     if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, moveDirection, out wallHit, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                     {
-
-
                         if (moveDirection != Vector3.zero && Vector3.Dot(moveDirection, new Vector3(mainCam.transform.forward.x, moveDirection.y, mainCam.transform.forward.z)) >= 0.5f)
                         {
                             if (!Physics.Raycast(this.transform.position + (Vector3.up * 0.1f * (i - 1) + Vector3.up * 0.45f), moveDirection, 0.38f, 1 << LayerMask.NameToLayer("Enviroment")))
                             {
-
                                 continue;
                             }
 
-
-
                             if (Physics.BoxCast(this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f, new Vector3(0.5f, 0.5f, 0.5f), Vector3.up, Quaternion.identity, 1.6f, 1 << LayerMask.NameToLayer("Enviroment")))
                             {
-
                                 break;
                             }
 
                             if (!gun.GetIsReload())
                                 mainCam.GetComponent<Animator>().SetTrigger("Parkour");
+
                             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Parkour);
 
                             isClimbUp = true;
                             rigid.velocity = Vector3.zero;
                             climbUpPos = this.transform.position + (Vector3.up * 0.1f * i) + Vector3.up * 0.45f + moveDirection * 0.38f;
-
 
                             break;
                         }
@@ -554,8 +545,6 @@ public class PlayerController : MonoBehaviour
 
             if (currentDashPower <= walkSpeed)
             {
-                //mainCam.GetComponent<Animator>().SetBool("isDash_Right", false);
-                //mainCam.GetComponent<Animator>().SetBool("isDash_Left", false);
                 isDash = false;
                 currentDashPower = dashPower;
             }
@@ -582,15 +571,6 @@ public class PlayerController : MonoBehaviour
                         handFireRot = gun.GetHandFireRot();
                     }
                 }
-            }
-            else if (projectile != null)
-            {
-                //if (projectileController.AimingProjectile())
-                //    isAimingProjectile = true;
-                //else
-                //{
-                //    isAimingProjectile = false;
-                //}
             }
         }
         else if (!Input.GetMouseButtonDown(0) && isPressMouseButton)
@@ -895,19 +875,8 @@ public class PlayerController : MonoBehaviour
                             lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 25);
                     }
 
-                    //if (moveInput == Vector2.zero)
-                    //{
-                    //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition, Time.deltaTime * 15);
-                    //}
-                    //else
-                    //{
-                    //    lastPos_hand = Vector3.Lerp(lastPos_hand, hand.localPosition + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 15);
-                    //    //lastPos_hand = Vector3.Lerp(lastPos_hand, new Vector3(lastPos_hand.x, handOriginPos.y, lastPos_hand.z) + new Vector3(Mathf.Sin(headBobValue) / 200, Mathf.Abs(Mathf.Sin(headBobValue)) / 50f, 0), Time.deltaTime * 10);
-
-                    //}
                     hand.localRotation = lastAngle_hand;
                     hand.localPosition = lastPos_hand;
-
                 }
                 else
                 {
@@ -960,7 +929,7 @@ public class PlayerController : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
-        if (isGod) return;
+        if (isGod || value == 0) return;
 
         isDamaged = true;
 

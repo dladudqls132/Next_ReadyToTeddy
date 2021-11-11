@@ -80,11 +80,10 @@ public class Gun_Test : Gun
 
         if (canShot)
         {
-            
-                currentSpreadAngle = spreadAngle_normal;
-                mainCam.Shake(0.05f, 0.06f, false);
-                //handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f);
-                handFireRot = mainCam.SetFireRecoilRot(recoil, 30.0f, 20.0f);
+            currentSpreadAngle = spreadAngle_normal;
+            mainCam.Shake(0.05f, 0.06f, false);
+            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(8.0f, 2.5f, 0.0f), 30.0f, 20.0f);
+            handFireRot = mainCam.SetFireRecoilRot(recoil, 30.0f, 20.0f);
 
             UI_gunsound.DisplayImage_Attack();
 
@@ -97,7 +96,6 @@ public class Gun_Test : Gun
 
             bool isHit = false;
             bool headShot = false;
-            bool isDead = false;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -109,7 +107,7 @@ public class Gun_Test : Gun
             else
                 direction = Camera.main.transform.forward;
 
-                bool checkingDead = false;
+            bool checkingDead = false;
             for (int i = 0; i < fireNum; i++)
             {
                 float temp = Random.Range(-Mathf.PI, Mathf.PI);
@@ -132,7 +130,7 @@ public class Gun_Test : Gun
 
                         if (!hit2.transform.CompareTag("Head"))
                         {
-                            if(enemy.GetEnemyType() != EnemyType.D)
+                            if (enemy.GetEnemyType() != EnemyType.D)
                                 enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                             else
                                 enemy.DecreaseHp(0.5f, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
@@ -156,7 +154,7 @@ public class Gun_Test : Gun
                             checkingDead = true;
                         }
                     }
-                    else if(hit2.transform.CompareTag("InteractiveObject"))
+                    else if (hit2.transform.CompareTag("InteractiveObject"))
                     {
                         hit2.transform.GetComponent<InteractiveObject>().DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                     }
@@ -179,7 +177,7 @@ public class Gun_Test : Gun
 
             currentAmmo--;
 
-            if(isHit)
+            if (isHit)
             {
                 GameManager.Instance.GetCrosshairController().ResetAttack();
 
@@ -188,11 +186,11 @@ public class Gun_Test : Gun
                     GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                 }
-                else if(checkingDead)
+                else if (checkingDead)
                 {
                     GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
 
-                    if(headShot)
+                    if (headShot)
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     else
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);

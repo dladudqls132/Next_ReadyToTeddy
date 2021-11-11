@@ -27,15 +27,17 @@ public class Boss_TypeX : Enemy
 
     [SerializeField] private List<Boss_Skill> skills = new List<Boss_Skill>();
     [SerializeField] private Boss_Skill currentSkill;
-    [SerializeField] private Boss_Skill prevSkill;
-    [SerializeField] private Boss_Skill nextSkill;
-    bool isStuned;
+    [SerializeField] private Queue<Boss_Skill> skillOrder = new Queue<Boss_Skill>();
+
     int faceNum = 1;
     float animLerpSpeed;
-    bool canRot;
+    [SerializeField] bool canRot;
     [SerializeField] private int currentPhase;
     [SerializeField] private float coolTime;
     private float currentCoolTime;
+
+    public Boss_Skill GetCurrentSkill() { return currentSkill; }
+    public void SetPhase(int phase) { currentPhase = phase; }
 
     // Start is called before the first frame update
     protected override void Start()
@@ -64,29 +66,50 @@ public class Boss_TypeX : Enemy
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y)) //발견
+        if(isRigidity)
         {
-            isDetect = true;
-        }
-        else if(Input.GetKeyDown(KeyCode.U)) //스턴
-        {
-            isStuned = !isStuned;
-            anim.enabled = !anim.enabled;
-            hand_left.GetComponent<Rigidbody>().useGravity = !hand_left.GetComponent<Rigidbody>().useGravity;
-            hand_right.GetComponent<Rigidbody>().useGravity = !hand_right.GetComponent<Rigidbody>().useGravity;
-            hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-            hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            
+                if (anim.enabled)
+                {
+                    hand_left.GetComponent<Rigidbody>().useGravity = true;
+                    hand_right.GetComponent<Rigidbody>().useGravity = true;
+                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
 
-        }
-        else if (Input.GetKeyDown(KeyCode.I)) //얼굴 돌리기
-        {
-            faceNum++;
+                anim.enabled = false;
+
+                currentRigidityTime += Time.deltaTime;
+
+                if (currentRigidityTime >= rigidityTime)
+                {
+                    isRigidity = false;
+                    anim.enabled = true;
+                    hand_left.GetComponent<Rigidbody>().useGravity = false;
+                    hand_right.GetComponent<Rigidbody>().useGravity = false;
+                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
+            
         }
 
-        anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
-        anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
+        //if(Input.GetKeyDown(KeyCode.U)) //스턴
+        //{
+        //    isRigidity = !isRigidity;
+        //    anim.enabled = !anim.enabled;
+        //    hand_left.GetComponent<Rigidbody>().useGravity = !hand_left.GetComponent<Rigidbody>().useGravity;
+        //    hand_right.GetComponent<Rigidbody>().useGravity = !hand_right.GetComponent<Rigidbody>().useGravity;
+        //    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        //    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+        //}
+
 
         if (!isDetect) return;
 
@@ -102,14 +125,32 @@ public class Boss_TypeX : Enemy
 
         if (!anim.GetBool("isCombat")) return;
 
-        if((currentHp / maxHp) * 100 <= 70)
+
+        if (isRigidity || currentPhase == 5) return;
+
+
+        if (currentPhase != 5 && currentSkill == null)
         {
-            currentPhase = 2;
+            if ((currentHp / maxHp) * 100 <= 10)
+            {
+                currentPhase = 4;
+                faceNum = 4;
+            }
+            else if ((currentHp / maxHp) * 100 <= 40)
+            {
+                currentPhase = 3;
+                faceNum = 3;
+            }
+            else if ((currentHp / maxHp) * 100 <= 70)
+            {
+                currentPhase = 2;
+                faceNum = 2;
+            }
+
+            anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
+            anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
         }
 
-        if (isStuned) return;
-
-        // state = Boss_TypeX_State.Idle;
 
         for (int i = 0; i < skills.Count; i++)
         {
@@ -117,39 +158,38 @@ public class Boss_TypeX : Enemy
             {
                 if (skills[i].CoolDown())
                 {
-                    if (nextSkill == null && prevSkill != skills[i])
+                    if (!skillOrder.Contains(skills[i]))
                     {
-                        nextSkill = skills[i];
-                        break;
+                        skillOrder.Enqueue(skills[i]);
                     }
                 }
             }
         }
 
-        if (currentSkill != null)
+
+        if (currentPhase != 5)
         {
-            //state = Boss_TypeX_State.Attack;
-
-            if (!currentSkill.enabled)
+            if (currentSkill != null)
             {
-                prevSkill = currentSkill;
-                currentSkill = null;
+                if (!currentSkill.enabled)
+                {
+                    currentSkill = null;
+                }
             }
-        }
-        else
-        {
-            currentCoolTime -= Time.deltaTime;
-
-            if (currentCoolTime <= 0)
+            else
             {
-                currentSkill = nextSkill;
-                currentSkill.Use();
-                currentCoolTime = coolTime;
-                nextSkill = null;
-            }
+                currentCoolTime -= Time.deltaTime;
 
-            canRot = true;
-            //state = Boss_TypeX_State.Idle;
+                if (currentCoolTime <= 0 && skillOrder.Count != 0)
+                {
+                    currentSkill = skillOrder.Dequeue();
+                    currentSkill.Use();
+                    currentCoolTime = coolTime;
+                }
+
+                canRot = true;
+                //state = Boss_TypeX_State.Idle;
+            }
         }
     }
 
@@ -195,14 +235,23 @@ public class Boss_TypeX : Enemy
 
     private void LateUpdate()
     {
+        if (currentPhase == 5)
+        {
+            if (!canRot)
+            {
+                tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
+
+                body.rotation = tempRot_body;
+            }
+
+            return;
+        }
+
         if (anim.GetBool("isCombat"))
         {
             //이동
 
-     
-
-
-            if (isStuned)
+            if (isRigidity)
             {
                 animLerpSpeed = 13;
                 tempPos_leftHand = hand_left.localPosition;
@@ -308,22 +357,6 @@ public class Boss_TypeX : Enemy
 
                     tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * animLerpSpeed);
                     hand_right.rotation = tempRot_rightHand;
-
-                    ////회전
-                    //Vector3 dir = (target.position - body.position).normalized;
-                    //dir.y = 0;
-                    //tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * 53);
-
-                    //body.rotation = tempRot_body;
-
-                    //Quaternion rotTemp = Quaternion.Euler(0, hand_left.parent.eulerAngles.y, hand_left.parent.eulerAngles.z);
-
-                    //tempRot_leftHand = Quaternion.Lerp(tempRot_leftHand, rotTemp * Quaternion.Euler(hand_left.localEulerAngles), Time.deltaTime * 53);
-                    //hand_left.rotation = tempRot_leftHand;
-
-                    //rotTemp = Quaternion.Euler(0, hand_right.parent.eulerAngles.y, hand_right.parent.eulerAngles.z);
-                    //tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, rotTemp * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 53);
-                    //hand_right.rotation = tempRot_rightHand;
                 }
             }
             else

@@ -19,7 +19,7 @@ public enum EffectType
     Explosion_EnergyBall,
     AttackSpark_EnergyBall,
     Projector_Explosion_Large,
-    BulletHit_Trap,
+    BulletHit_Trap
 }
 
 public class Pool_Effect : MonoBehaviour

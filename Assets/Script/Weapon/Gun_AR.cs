@@ -80,9 +80,7 @@ public class Gun_AR : Gun
         {
             currentSpreadAngle = spreadAngle_normal;
             mainCam.Shake(0.02f, 0.02f, false);
-            //handFireRot = mainCam.SetFireRecoilRot(new Vector3(2.0f, 1.5f, 0), 15.0f, 3.0f);
             handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
-
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
             hand.GetComponent<Animator>().SetTrigger("Fire_AR");
@@ -102,14 +100,9 @@ public class Gun_AR : Gun
             else
                 direction = Camera.main.transform.forward;
 
-            //GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
-            //tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, direction);
-
             float temp = Random.Range(-Mathf.PI, Mathf.PI);
 
             Vector3 shotDir = direction + (Camera.main.transform.up * Mathf.Sin(temp) + Camera.main.transform.right * Mathf.Cos(temp)) * Random.Range(0.0f, currentSpreadAngle / 180);
-            //Debug.DrawRay(Camera.main.transform.position, shotDir * 100, Color.red);
-            //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
             GameObject tempTrail = GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Trail_Bullet);
             tempTrail.GetComponent<Trail_Bullet>().SetFire(shotPos.position, shotDir);
