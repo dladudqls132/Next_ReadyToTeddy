@@ -89,7 +89,7 @@ public class Gun_Sniper : Gun
             //handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
             mainCam.GetComponent<Animator>().SetTrigger("Fire_SN");
 
-            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.AutoRifle_Fire);
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.EnergyGun_Fire2);
             hand.GetComponent<Animator>().SetTrigger("Fire_SN");
             hand.GetComponent<Animator>().SetBool("isFire_SN", true);
 
