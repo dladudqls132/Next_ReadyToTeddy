@@ -30,9 +30,9 @@ public class Boss_TypeX_Pulse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        coll.radius = coll.radius + Time.deltaTime * 23.5f / 2;
+        coll.radius = coll.radius + Time.deltaTime * 33f / 2;
 
-        if (coll.radius >= 23.5f)
+        if (coll.radius >= 33f)
         {
             p.Play();
             coll.radius = 0;

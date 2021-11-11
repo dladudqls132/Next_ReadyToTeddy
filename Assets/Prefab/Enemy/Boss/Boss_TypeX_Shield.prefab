@@ -40,7 +40,6 @@ GameObject:
   - component: {fileID: 3408090555495188294}
   - component: {fileID: 475944044}
   - component: {fileID: 64001215}
-  - component: {fileID: 1639456109}
   m_Layer: 18
   m_Name: Boss_TypeX_Shield
   m_TagString: Untagged
@@ -106,7 +105,7 @@ MonoBehaviour:
   skills: []
   currentSkill: {fileID: 0}
   coolTime: 2
-  isOn: 1
+  isOn: 0
   currentPhase: 1
 --- !u!114 &475944044
 MonoBehaviour:
@@ -152,25 +151,6 @@ MonoBehaviour:
   isReady: 0
   attackTick: 0
   attackPos: {fileID: 0}
---- !u!114 &1639456109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3408090555495188292}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f565081390c3bd74abe829d236d87be0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  activePhase: 2
-  coolTime: 5
-  damage: 0
-  currentCoolTime: 0
-  attackReadyTime: 2
-  attackReadyPos: []
-  tempPos: []
 --- !u!1001 &3408090554804982073
 PrefabInstance:
   m_ObjectHideFlags: 0
