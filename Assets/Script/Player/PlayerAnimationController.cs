@@ -28,6 +28,7 @@ public class PlayerAnimationController : MonoBehaviour
                 anim.SetBool("SG", false);
                 anim.SetBool("CL", false);
                 anim.SetBool("FT", false);
+                anim.SetBool("SN", false);
             }
             else if(player.GetGun().GetGunType() == GunType.ShotGun)
             {
@@ -36,6 +37,7 @@ public class PlayerAnimationController : MonoBehaviour
                 anim.SetBool("SG", true);
                 anim.SetBool("CL", false);
                 anim.SetBool("FT", false);
+                anim.SetBool("SN", false);
             }
             else if(player.GetGun().GetGunType() == GunType.ChainLightning)
             {
@@ -44,6 +46,7 @@ public class PlayerAnimationController : MonoBehaviour
                 anim.SetBool("SG", false);
                 anim.SetBool("CL", true);
                 anim.SetBool("FT", false);
+                anim.SetBool("SN", false);
             }
             else if(player.GetGun().GetGunType() == GunType.Flamethrower)
             {
@@ -52,6 +55,16 @@ public class PlayerAnimationController : MonoBehaviour
                 anim.SetBool("SG", false);
                 anim.SetBool("CL", false);
                 anim.SetBool("FT", true);
+                anim.SetBool("SN", false);
+            }
+            else if (player.GetGun().GetGunType() == GunType.Sniper)
+            {
+                this.transform.localPosition = originPos;
+                anim.SetBool("AR", false);
+                anim.SetBool("SG", false);
+                anim.SetBool("CL", false);
+                anim.SetBool("FT", false);
+                anim.SetBool("SN", true);
             }
 
             anim.SetBool("isReload", player.GetGun().GetIsReload());

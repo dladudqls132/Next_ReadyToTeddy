@@ -7,7 +7,8 @@ public enum GunType
     AR,
     ShotGun,
     ChainLightning,
-    Flamethrower
+    Flamethrower,
+    Sniper
 }
 
 public class Gun : MonoBehaviour
