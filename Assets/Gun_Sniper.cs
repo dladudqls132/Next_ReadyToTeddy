@@ -56,6 +56,11 @@ public class Gun_Sniper : Gun
             {
                 canShot = false;
             }
+
+            if (!isAiming)
+                currentSpreadAngle = spreadAngle_normal;
+            else
+                currentSpreadAngle = spreadAngle_aiming;
         }
         else
         {
@@ -84,14 +89,17 @@ public class Gun_Sniper : Gun
 
         if (canShot)
         {
-            currentSpreadAngle = spreadAngle_normal;
             mainCam.Shake(0.02f, 0.02f, false);
             //handFireRot = mainCam.SetFireRecoilRot(recoil, 60.0f, 3.0f);
             mainCam.GetComponent<Animator>().SetTrigger("Fire_SN");
 
             GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.EnergyGun_Fire2);
-            hand.GetComponent<Animator>().SetTrigger("Fire_SN");
-            hand.GetComponent<Animator>().SetBool("isFire_SN", true);
+                hand.GetComponent<Animator>().SetBool("isFire_SN", true);
+
+            if (!isAiming)
+            {
+                hand.GetComponent<Animator>().SetTrigger("Fire_SN");
+            }
 
             UI_gunsound.DisplayImage_Attack();
 

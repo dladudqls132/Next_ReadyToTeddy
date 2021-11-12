@@ -62,7 +62,7 @@ public class FPPCamController : MonoBehaviour
     public float GetRealOriginFov() { return realOriginFov; }
     public void SetOriginFov(float value) { originFov = value; }
     public void SetCameraMoveSpeed(float value) { cameraMoveSpeed = value; }
-
+    public float GetCameraMoveSpeed() { return cameraMoveSpeed; }
   
 
     // Start is called before the first frame update
@@ -325,6 +325,18 @@ public class FPPCamController : MonoBehaviour
         destFov = 0;
         this.timeToDest = 0;
         this.timeToOrigin = 0.1f;
+        fovStopTime = 0;
+        fovTimer = 0;
+    }
+
+    public void FovReset(float time)
+    {
+        isFovMove = false;
+
+        originFov = realOriginFov;
+        destFov = 0;
+        this.timeToDest = 0;
+        this.timeToOrigin = time;
         fovStopTime = 0;
         fovTimer = 0;
     }

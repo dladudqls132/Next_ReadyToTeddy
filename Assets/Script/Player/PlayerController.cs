@@ -497,13 +497,16 @@ public class PlayerController : MonoBehaviour
                 mainCam.GetComponent<Animator>().SetTrigger("Dash_Left");
             }
 
-            if (Vector3.Dot(forward, moveDirection) > 0.5f)
+            if (!gun.GetIsAiming())
             {
-                mainCam.FovMove(mainCam.GetCurrentFov() - 5.0f, 0.05f, 0.16f, 0.04f);
-            }
-            if (Vector3.Dot(forward, moveDirection) < 0)
-            {
-                mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
+                if (Vector3.Dot(forward, moveDirection) > 0.5f)
+                {
+                    mainCam.FovMove(mainCam.GetCurrentFov() - 5.0f, 0.05f, 0.16f, 0.04f);
+                }
+                if (Vector3.Dot(forward, moveDirection) < 0)
+                {
+                    mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
+                }
             }
 
 
@@ -590,7 +593,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (gun != null)
@@ -637,8 +639,11 @@ public class PlayerController : MonoBehaviour
         {
             mainCam.GetComponent<Animator>().SetTrigger("Jump");
 
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            if (!gun.GetIsAiming())
+            {
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
+            }
 
             if (!isJump)
             {
@@ -696,8 +701,11 @@ public class PlayerController : MonoBehaviour
             isJump = false;
             isJumpByObject = false;
             isDash = false;
-            mainCam.SetOriginFov(mainCam.GetRealOriginFov());
-            mainCam.FovReset();
+            if (!gun.GetIsAiming())
+            {
+                mainCam.SetOriginFov(mainCam.GetRealOriginFov());
+                mainCam.FovReset();
+            }
             currentClimbUpTime -= Time.deltaTime;
 
             if (currentClimbuUpPower <= 2)
@@ -858,8 +866,6 @@ public class PlayerController : MonoBehaviour
 
                 if (!isSwap)
                 {
-
-                    gun.SetIsAiming(false);
 
 
                     lastAngle_hand = Quaternion.Lerp(lastAngle_hand, Quaternion.Euler(hand.localRotation.eulerAngles + -handFireRot.eulerAngles), Time.deltaTime * 30);

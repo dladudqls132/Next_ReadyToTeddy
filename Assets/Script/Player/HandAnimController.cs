@@ -10,6 +10,7 @@ public class HandAnimController : MonoBehaviour
     [SerializeField] private UnityEngine.Animations.Rigging.Rig handIK;
     [SerializeField] public Transform weaponLeftGrip;
     [SerializeField] public Transform weaponRightGrip;
+    [SerializeField] private GameObject scope;
 
     Animator anim;
     private float horizontal;
@@ -155,7 +156,27 @@ public class HandAnimController : MonoBehaviour
         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Walk);
     }
 
+    float tempCamSpeed;
+    void ScopeOn()
+    {
+        scope.SetActive(true);
+        Camera.main.depth = 2;
+        player.GetCam().FovMove(30, 0.01f, 100000);
+        tempCamSpeed = player.GetCam().GetCameraMoveSpeed();
+        player.GetCam().SetCameraMoveSpeed(player.GetCam().GetCameraMoveSpeed() / 3f);
+    }
+
+    IEnumerator ScopeOff()
+    {
+        yield return new WaitForSeconds(0.1f);
+        player.GetCam().FovReset();
+        scope.SetActive(false);
+        Camera.main.depth = 1;
+        player.GetCam().SetCameraMoveSpeed(tempCamSpeed);
+    }
+
     bool temp;
+    bool isAiming;
     private void Update()
     {
         if (player.GetIsClimbUp() && !player.GetGun().GetIsReload() && !player.GetIsSwap())
@@ -169,7 +190,53 @@ public class HandAnimController : MonoBehaviour
             temp = false;
         }
 
-        horizontal = Mathf.Lerp(horizontal, GameManager.Instance.GetPlayer().moveInput.x, Time.deltaTime * 20);
+        if (player.GetGun())
+        {
+            if (player.GetGun().GetGunType() == GunType.Sniper)
+            {
+                if (Input.GetMouseButtonDown(1) && !anim.GetBool("isReload_SN"))
+                {
+                    if (isAiming)
+                        StartCoroutine(ScopeOff());
+
+                    isAiming = !isAiming;
+                }
+
+                if (!isAiming || anim.GetBool("isReload_SN") || anim.GetBool("isSwap"))
+                {
+                    if (isAiming)
+                        StartCoroutine(ScopeOff());
+
+                    isAiming = false;
+                }
+            }
+            else
+            {
+                if (isAiming)
+                    StartCoroutine(ScopeOff());
+                isAiming = false;
+            }
+
+            player.GetGun().SetIsAiming(isAiming);
+        }
+        else
+        {
+            if (isAiming)
+                StartCoroutine(ScopeOff());
+            isAiming = false;
+        }
+
+        if (!anim.GetBool("isAiming"))
+        {
+            horizontal = Mathf.Lerp(horizontal, GameManager.Instance.GetPlayer().moveInput.x, Time.deltaTime * 20);
+        }
+        else
+        {
+            horizontal = Mathf.Lerp(horizontal, 0, Time.deltaTime * 20);
+        }
+
+
+        anim.SetBool("isAiming", isAiming);
         anim.SetFloat("horizontal", horizontal);
     }
 }
