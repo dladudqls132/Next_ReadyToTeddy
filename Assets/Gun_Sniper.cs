@@ -99,9 +99,9 @@ public class Gun_Sniper : Gun
             if (!isAiming)
             {
                 hand.GetComponent<Animator>().SetTrigger("Fire_SN");
+                UI_gunsound.DisplayImage_Attack();
             }
 
-            UI_gunsound.DisplayImage_Attack();
 
             isReload = false;
             isRecoil = false;
