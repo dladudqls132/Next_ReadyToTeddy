@@ -196,7 +196,7 @@ public class HandAnimController : MonoBehaviour
         {
             if (player.GetGun().GetGunType() == GunType.Sniper)
             {
-                if (Input.GetMouseButtonDown(1) && !anim.GetBool("isReload_SN"))
+                if (Input.GetMouseButtonDown(1) && !anim.GetBool("isReload_SN") && !player.GetIsSwap())
                 {
                     if (isAiming)
                         StartCoroutine(ScopeOff());

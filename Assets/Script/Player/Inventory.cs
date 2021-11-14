@@ -68,6 +68,10 @@ public class Inventory : MonoBehaviour
         {
             SwapWeapon(3);
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            SwapWeapon(4);
+        }
         //else if (Input.GetKeyDown(KeyCode.Q))
         //{
         //    SwapWeapon(4);
