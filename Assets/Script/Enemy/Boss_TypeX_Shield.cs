@@ -51,12 +51,16 @@ public class Boss_TypeX_Shield : MonoBehaviour
         if(target == null)
             target = owner.GetTarget().parent;
 
-        if (!isOn)
+        currentPhase = owner.GetCurrentPhase();
+
+        if (currentPhase >= 3)
+            isOn = true;
+
+        if (!isOn || owner.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
         {
             return;
         }
 
-        currentPhase = owner.GetCurrentPhase();
 
         for (int i = 0; i < skills.Count; i++)
         {

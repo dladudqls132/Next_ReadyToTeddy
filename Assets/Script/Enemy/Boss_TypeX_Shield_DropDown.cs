@@ -116,6 +116,7 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
                 particle.transform.position = destPos;
                 particle.GetComponent<Explosion>().SetDamage(damage);
                 particle.SetActive(true);
+                GameManager.Instance.GetPlayer().GetCam().Shake(0.2f, 0.25f, true);
                 StartCoroutine(ResetDelay());
             }
         }

@@ -68,7 +68,7 @@ public class Boss_TypeX_Shield_Laser : Boss_Skill
         }
         else
         {
-            tempRot = Quaternion.RotateTowards(tempRot, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 25);
+            tempRot = Quaternion.RotateTowards(tempRot, Quaternion.LookRotation((target.position - this.transform.position).normalized), Time.deltaTime * 15);
             this.transform.rotation = tempRot;
             this.transform.localRotation = Quaternion.Euler(this.transform.localEulerAngles.x + 89, this.transform.localEulerAngles.y, this.transform.localEulerAngles.z);
         }
