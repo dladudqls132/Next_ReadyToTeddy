@@ -752,6 +752,13 @@ public class PlayerController : MonoBehaviour
         HandAnimation();
 
         mainCam.GetComponent<Animator>().SetFloat("horizontal", Mathf.Lerp(mainCam.GetComponent<Animator>().GetFloat("horizontal"), moveInput.x, Time.deltaTime * 10));
+        mainCam.GetComponent<Animator>().SetFloat("vertical", Mathf.Lerp(mainCam.GetComponent<Animator>().GetFloat("horizontal"), moveInput.y, Time.deltaTime * 10));
+
+        if (moveInput != Vector2.zero)
+            mainCam.GetComponent<Animator>().SetBool("isMove", true);
+        else
+            mainCam.GetComponent<Animator>().SetBool("isMove", false);
+
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, 28.0f);
 
 

@@ -21,6 +21,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource_BGM;
     private BGMSoundType bgm;
     private AudioSource[] allAudioSources;
+    private bool isPause;
 
     // Start is called before the first frame update
     public void Init()
@@ -50,6 +51,8 @@ public class SoundManager : MonoBehaviour
                 audios.UnPause();
             }
         }
+
+        isPause = value;
     }
 
     public void SetSlowAll(bool value)
@@ -78,7 +81,7 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot(SoundType soundName)
     {
-        if (audioSourceController_SFX.GetAudioSource() == null) return;
+        if (audioSourceController_SFX.GetAudioSource() == null || isPause) return;
 
         if (!audioSourceController_SFX.GetAudioSource().gameObject.activeSelf)
             audioSourceController_SFX.GetAudioSource().gameObject.SetActive(true);
@@ -97,7 +100,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioSource AudioPlayOneShot(SoundType soundName, bool loop)
     {
-        if (audioSourceController_SFX.GetAudioSource() == null) return null;
+        if (audioSourceController_SFX.GetAudioSource() == null || isPause) return null;
 
         if (!audioSourceController_SFX.GetAudioSource().gameObject.activeSelf)
             audioSourceController_SFX.GetAudioSource().gameObject.SetActive(true);
@@ -119,7 +122,7 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot3D(SoundType soundName, Vector3 pos, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
+        if (audioSourceController_SFX_3D.GetAudioSource() == null || isPause) return;
 
         if (!audioSourceController_SFX_3D.GetAudioSource().gameObject.activeSelf)
             audioSourceController_SFX_3D.GetAudioSource().gameObject.SetActive(true);
@@ -141,7 +144,7 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayOneShot3D(SoundType soundName, Transform parent, bool loop)
     {
-        if (audioSourceController_SFX_3D.GetAudioSource() == null) return;
+        if (audioSourceController_SFX_3D.GetAudioSource() == null || isPause) return;
 
         if (!audioSourceController_SFX_3D.GetAudioSource().gameObject.activeSelf)
             audioSourceController_SFX_3D.GetAudioSource().gameObject.SetActive(true);
@@ -163,6 +166,8 @@ public class SoundManager : MonoBehaviour
 
     public void AudioPlayBGM(BGMSoundType soundName, bool loop)
     {
+        if (audioSource_BGM == null || isPause) return;
+
         audioSource_BGM.Stop();
 
         audioSource_BGM.clip = bgmSoundInfo.GetInfo(soundName).clip;
@@ -172,6 +177,11 @@ public class SoundManager : MonoBehaviour
         bgm = soundName;
 
         audioSource_BGM.Play();
+    }
+
+    public AudioSource GetBGMSource()
+    {
+        return audioSource_BGM;
     }
 
     public void UpdateSetting()

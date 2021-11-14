@@ -3,7 +3,13 @@
 public enum BGMSoundType
 {
     BGM_Field1,
-    BGM_Boss1
+    BGM_Boss1,
+    BGM_Field2,
+    BGM_CutScene,
+    BGM_Boss2,
+    BGM_Credit,
+    BGM_Field3,
+    BGM_Field4,
 }
 
 [System.Serializable]

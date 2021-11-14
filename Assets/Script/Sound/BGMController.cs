@@ -4,11 +4,26 @@ using UnityEngine;
 
 public class BGMController : MonoBehaviour
 {
-    [SerializeField] private BGMSoundType bgmType;
+    [SerializeField] private BGMSoundType[] bgmType;
+    int playNum;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.GetSoundManager().AudioPlayBGM(bgmType, true);
+        playNum = 0;
+        GameManager.Instance.GetSoundManager().AudioPlayBGM(bgmType[0], false);
+    }
+
+    private void Update()
+    {
+        if (!GameManager.Instance.GetIsPause())
+        {
+            if (!GameManager.Instance.GetSoundManager().GetBGMSource().isPlaying)
+            {
+                playNum++;
+                playNum %= bgmType.Length;
+                GameManager.Instance.GetSoundManager().AudioPlayBGM(bgmType[playNum], false);
+            }
+        }
     }
 }

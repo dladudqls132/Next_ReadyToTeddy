@@ -10,7 +10,7 @@ public class InteractiveObject : MonoBehaviour
 
     public bool GetIsDestroy() { return isDestroyed; }
 
-    private void Start()
+    virtual protected void Start()
     {
         currentHp = maxHp;
     }
