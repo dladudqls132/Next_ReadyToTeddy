@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
         //    inventory.AddWeapon(temp);
         //}
 
-        GameObject temp = Instantiate(weapons[5]);
+        GameObject temp = Instantiate(weapons[0]);
         inventory.AddWeapon(temp);
         inventory.SwapWeapon(0);
     }
@@ -620,9 +620,15 @@ public class PlayerController : MonoBehaviour
             hand.GetComponent<Animator>().SetBool("isMove", false);
 
         if (!isCrouch)
+        {
+            mainCam.GetComponent<Animator>().SetFloat("walkSpeed", walkSpeed / walkSpeed_min);
             hand.GetComponent<Animator>().SetFloat("walkSpeed", walkSpeed / walkSpeed_min);
+        }
         else
+        {
+            mainCam.GetComponent<Animator>().SetFloat("walkSpeed", walkSpeed * 0.85f / walkSpeed_min);
             hand.GetComponent<Animator>().SetFloat("walkSpeed", walkSpeed * 0.85f / walkSpeed_min);
+        }
 
         hand.GetComponent<Animator>().SetBool("isGrounded", isGrounded);
 

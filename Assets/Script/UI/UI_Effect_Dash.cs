@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UI_Effect_Dash : MonoBehaviour
 {
+    [SerializeField] private Color dashEffectColor;
     private Image image;
 
     private void Start()
@@ -16,7 +17,7 @@ public class UI_Effect_Dash : MonoBehaviour
     {
         if (GameManager.Instance.GetPlayer().GetIsDash())
         {
-            image.color = Color.Lerp(image.color, Color.white, Time.deltaTime * 15); 
+            image.color = Color.Lerp(image.color, dashEffectColor, Time.deltaTime * 15); 
         }
         else
         {

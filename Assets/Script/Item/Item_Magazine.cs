@@ -5,6 +5,7 @@ using UnityEngine;
 public class Item_Magazine : Item
 {
     [SerializeField] private GunType gunType;
+    [SerializeField] private int addAmmoNum;
 
     public GunType GetMagType()
     {
@@ -53,7 +54,7 @@ public class Item_Magazine : Item
                     
                     Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
-                    temp.AddAmmo(2);
+                    temp.AddAmmo(addAmmoNum);
                     this.gameObject.SetActive(false);
                 }
             }

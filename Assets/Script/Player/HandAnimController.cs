@@ -21,6 +21,8 @@ public class HandAnimController : MonoBehaviour
         player = GameManager.Instance.GetPlayer();
 
         anim = this.GetComponent<Animator>();
+        scope = GameObject.Find("Scope");
+        scope.SetActive(false);
     }
 
 

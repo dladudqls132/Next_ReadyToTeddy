@@ -68,6 +68,17 @@ public class VideoController : MonoBehaviour
                 text_ex.text = videoInfo.GetVideo(GunType.Flamethrower).text_ex;
                 video.Play();
                 break;
+            //case GunType.Sniper:
+            //    Cursor.visible = true;
+            //    Cursor.lockState = CursorLockMode.None;
+            //    Time.timeScale = 0;
+            //    GameManager.Instance.GetSoundManager().SetPauseAll(true);
+            //    this.gameObject.SetActive(true);
+            //    video.clip = videoInfo.GetVideo(GunType.Sniper).clip;
+            //    name_FT.SetActive(true);
+            //    text_ex.text = videoInfo.GetVideo(GunType.Sniper).text_ex;
+            //    video.Play();
+            //    break;
         }
     }
 
