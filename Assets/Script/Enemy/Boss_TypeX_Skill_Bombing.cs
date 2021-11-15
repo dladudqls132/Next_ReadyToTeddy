@@ -22,16 +22,16 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
         int rndNum = Random.Range(0, 2);
 
         if (rndNum == 0)
-            anim.SetTrigger("Bombing2");
+            anim.SetTrigger("Bombing");
         else
             anim.SetTrigger("Bombing2");
 
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
-        base.ResetInfo();
         fireNum = 0;
+        base.ResetInfo();
     }
 
     IEnumerator Fire_Bomb1_Delay(float time)

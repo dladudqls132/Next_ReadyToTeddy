@@ -56,7 +56,7 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
         //}
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         anim.SetBool("isExecute", false);
 

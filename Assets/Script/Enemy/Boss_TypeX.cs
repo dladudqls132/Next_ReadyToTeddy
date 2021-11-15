@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 enum Boss_TypeX_State
 {
@@ -34,7 +35,11 @@ public class Boss_TypeX : Enemy
     [SerializeField] bool canRot;
     [SerializeField] private int currentPhase;
     [SerializeField] private float coolTime;
+    [SerializeField] private Animator timelineMeshAnim;
+    private Timeline_Boss_TypeX timeLine;
     private float currentCoolTime;
+    private bool isOn;
+    private Image f;
 
     public Boss_Skill GetCurrentSkill() { return currentSkill; }
     public void SetPhase(int phase) { currentPhase = phase; }
@@ -47,54 +52,58 @@ public class Boss_TypeX : Enemy
         //state = Boss_TypeX_State.Waiting;
 
         anim.SetBool("isWaiting", true);
-        
+
         tempRot_body = body.localRotation;
         tempRot_leftHand = hand_left.localRotation;
         tempRot_rightHand = hand_right.localRotation;
         tempPos_leftHand = hand_left.localPosition;
         tempPos_rightHand = hand_right.localPosition;
         currentCoolTime = coolTime;
-        
+
         skills.AddRange(this.GetComponents<Boss_Skill>());
 
         //for (int i = 0; i < skills.Length; i++)
         //{
         //    skills[i].enabled = false;
         //}
+
+        f = GameObject.Find("F").GetComponent<Image>();
+        isGod = true;
+        timeLine = GameObject.FindGameObjectWithTag("Timeline").GetComponent<Timeline_Boss_TypeX>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(isRigidity)
+        if (isRigidity)
         {
-            
-                if (anim.enabled)
-                {
-                    hand_left.GetComponent<Rigidbody>().useGravity = true;
-                    hand_right.GetComponent<Rigidbody>().useGravity = true;
-                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                }
 
-                anim.enabled = false;
+            if (anim.enabled)
+            {
+                hand_left.GetComponent<Rigidbody>().useGravity = true;
+                hand_right.GetComponent<Rigidbody>().useGravity = true;
+                hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            }
 
-                currentRigidityTime += Time.deltaTime;
+            anim.enabled = false;
 
-                if (currentRigidityTime >= rigidityTime)
-                {
-                    isRigidity = false;
-                    anim.enabled = true;
-                    hand_left.GetComponent<Rigidbody>().useGravity = false;
-                    hand_right.GetComponent<Rigidbody>().useGravity = false;
-                    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-                }
-            
+            currentRigidityTime += Time.deltaTime;
+
+            if (currentRigidityTime >= rigidityTime)
+            {
+                isRigidity = false;
+                anim.enabled = true;
+                hand_left.GetComponent<Rigidbody>().useGravity = false;
+                hand_right.GetComponent<Rigidbody>().useGravity = false;
+                hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            }
+
         }
 
         //if(Input.GetKeyDown(KeyCode.U)) //스턴
@@ -110,8 +119,7 @@ public class Boss_TypeX : Enemy
 
         //}
 
-
-        if (!isDetect) return;
+        if (!isOn) return;
 
         foreach (Renderer r in renderers)
         {
@@ -133,22 +141,34 @@ public class Boss_TypeX : Enemy
         {
             if ((currentHp / maxHp) * 100 <= 10)
             {
-                currentPhase = 4;
-                faceNum = 4;
+                if (currentPhase != 4)
+                {
+                    currentPhase = 4;
+                    faceNum = 4;
+                }
             }
             else if ((currentHp / maxHp) * 100 <= 40)
             {
-                currentPhase = 3;
-                faceNum = 3;
+                if (currentPhase != 3)
+                {
+                    timeLine.PlayTimeline(0, true);
+                    currentPhase = 3;
+                    faceNum = 3;
+                }
             }
             else if ((currentHp / maxHp) * 100 <= 70)
             {
-                currentPhase = 2;
-                faceNum = 2;
+                if (currentPhase != 2)
+                {
+                    currentPhase = 2;
+                    faceNum = 2;
+                }
             }
 
-            anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
-            anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
+       
+                anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
+                anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
+            
         }
 
 
@@ -193,6 +213,32 @@ public class Boss_TypeX : Enemy
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (isOn) return;
+
+        if (other.CompareTag("Player"))
+        {
+            if (Vector3.Dot(Camera.main.transform.forward, (body.position - Camera.main.transform.position).normalized) >= 0.9f)
+            {
+                f.enabled = true;
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    f.enabled = false;
+                    isOn = true;
+                    this.GetComponent<BoxCollider>().enabled = false;
+                }
+            }
+            else
+                f.enabled = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        f.enabled = false;
+    }
+
     Vector3 tempDir;
     void SetTempBodyDir()
     {
@@ -226,6 +272,16 @@ public class Boss_TypeX : Enemy
         canRot = false;
 
         SetTempBodyDir();
+    }
+
+    void SetIsGodTrue()
+    {
+        isGod = true;
+    }
+
+    void SetIsGodFalse()
+    {
+        isGod = false;
     }
 
     public int GetCurrentPhase()
@@ -309,7 +365,7 @@ public class Boss_TypeX : Enemy
                             dir = (target.position - hand_right.position).normalized;
 
                             if (anim.GetBool("isReload"))
-                                tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles) , Time.deltaTime * 13);
+                                tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, hand_right.parent.rotation * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 13);
                             else
                                 tempRot_rightHand = Quaternion.Lerp(tempRot_rightHand, Quaternion.LookRotation(dir) * Quaternion.Euler(hand_right.localEulerAngles), Time.deltaTime * 13);
 
@@ -344,7 +400,7 @@ public class Boss_TypeX : Enemy
                     Vector3 dir = (target.position - body.position).normalized;
                     dir.y = 0;
 
-                    if(canRot)
+                    if (canRot)
                         tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(dir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);
                     else
                         tempRot_body = Quaternion.Lerp(tempRot_body, Quaternion.LookRotation(tempDir) * Quaternion.Euler(body.localEulerAngles), Time.deltaTime * animLerpSpeed);

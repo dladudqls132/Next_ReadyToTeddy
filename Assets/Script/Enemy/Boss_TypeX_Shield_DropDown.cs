@@ -41,6 +41,14 @@ public class Boss_TypeX_Shield_DropDown : Boss_Skill
         
     }
 
+    public override void ResetInfo()
+    {
+        projection.SetActive(false);
+        StopAllCoroutines();
+
+        base.ResetInfo();
+    }
+
     private void OnEnable()
     {
         target = this.GetComponent<Boss_TypeX_Shield>().GetTarget();

@@ -29,7 +29,7 @@ public class Bullet_Boss : MonoBehaviour
 
     IEnumerator ActiveFalse()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
         this.gameObject.SetActive(false);
     }

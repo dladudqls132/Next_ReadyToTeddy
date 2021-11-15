@@ -42,7 +42,7 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
         anim.SetBool("isRandomShot", true);
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         wall_1.SetActive(false);
         wall_2.SetActive(false);
@@ -57,15 +57,15 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 10; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5 * i, 0) * firePos_bottom.forward, speed, damage);
+            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3 * i, 0) * firePos_bottom.forward, speed, damage);
 
             if (i != 0)
             {
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5 * -i, 0) * firePos_bottom.forward, speed, damage);
+                tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3 * -i, 0) * firePos_bottom.forward, speed, damage);
             }
         }
         
@@ -75,15 +75,15 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 10; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 5f * i, 0) * firePos_middle.forward, speed, damage);
+            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 3f * i, 0) * firePos_middle.forward, speed, damage);
 
             if (i != 0)
             {
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0,5f * -i, 0) * firePos_middle.forward, speed, damage);
+                tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0,3f * -i, 0) * firePos_middle.forward, speed, damage);
             }
         }
     }
@@ -92,24 +92,24 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 10; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top.forward, speed, damage);
+            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top.forward, speed, damage);
 
             if (i != 0)
             {
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top.forward, speed, damage);
+                tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top.forward, speed, damage);
             }
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top2.forward, speed, damage);
+            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top2.forward, speed, damage);
 
             if (i != 0)
             {
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top2.forward, speed, damage);
+                tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top2.forward, speed, damage);
             }
         }
     }
@@ -118,33 +118,33 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top2.forward, speed, damage);
+            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top2.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top.forward, speed, damage);
+            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 5f * i, 0) * firePos_middle.forward, speed, damage);
+            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 3f * i, 0) * firePos_middle.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5f * i, 0) * firePos_bottom.forward, speed, damage);
+            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3f * i, 0) * firePos_bottom.forward, speed, damage);
 
             if (i != 0)
             {
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top2.forward, speed, damage);
+                tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top2.forward, speed, damage);
 
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top.forward, speed, damage);
+                tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top.forward, speed, damage);
 
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_middle.forward, speed, damage);
+                tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_middle.forward, speed, damage);
 
                 tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-                tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_bottom.forward, speed, damage);
+                tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_bottom.forward, speed, damage);
             }
         }
     }
@@ -153,19 +153,19 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 2; i < 7; i++)
+        for (int i = 2; i < 10; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top2.forward, speed, damage);
+            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top2.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * i, 0) * firePos_top.forward, speed, damage);
+            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * i, 0) * firePos_top.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 5f * i, 0) * firePos_middle.forward, speed, damage);
+            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 3f * i, 0) * firePos_middle.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5f * i, 0) * firePos_bottom.forward, speed, damage);
+            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3f * i, 0) * firePos_bottom.forward, speed, damage);
         }
     }
 
@@ -173,19 +173,19 @@ public class Boss_TypeX_Skill_RandomShot : Boss_Skill
     {
         Bullet_Boss tempBullet = null;
 
-        for (int i = 2; i < 7; i++)
+        for (int i = 2; i < 10; i++)
         {
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top2.forward, speed, damage);
+            tempBullet.Fire(firePos_top2.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top2.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_top.forward, speed, damage);
+            tempBullet.Fire(firePos_top.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_top.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_middle.forward, speed, damage);
+            tempBullet.Fire(firePos_middle.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_middle.forward, speed, damage);
 
             tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Energy).GetComponent<Bullet_Boss>();
-            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 5f * -i, 0) * firePos_bottom.forward, speed, damage);
+            tempBullet.Fire(firePos_bottom.position, Quaternion.Euler(0, 3f * -i, 0) * firePos_bottom.forward, speed, damage);
         }
     }
  

@@ -56,50 +56,64 @@ public class Boss_TypeX_Shield : MonoBehaviour
         if (currentPhase >= 3)
             isOn = true;
 
-        if (!isOn || owner.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
+        if (!isOn)
         {
             return;
         }
 
-
-        for (int i = 0; i < skills.Count; i++)
-        {
-            if (skills[i] != currentSkill)
-            {
-                if (skills[i].CoolDown())
-                {
-                    if (!skillOrder.Contains(skills[i]))
-                    {
-                        skillOrder.Enqueue(skills[i]);
-                    }
-                }
-            }
-        }
-
-
-        if (currentPhase != 5)
+        if (owner.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
         {
             if (currentSkill != null)
             {
+                currentSkill.ResetInfo();
+
                 if (!currentSkill.enabled)
                 {
                     currentSkill = null;
                 }
             }
-            else
+        }
+        else
+        {
+            for (int i = 0; i < skills.Count; i++)
             {
-                currentCoolTime -= Time.deltaTime;
-
-                if (currentCoolTime <= 0 && skillOrder.Count != 0)
+                if (skills[i] != currentSkill)
                 {
-                    currentSkill = skillOrder.Dequeue();
-                    currentSkill.Use();
-                    currentCoolTime = coolTime;
+                    if (skills[i].CoolDown())
+                    {
+                        if (!skillOrder.Contains(skills[i]))
+                        {
+                            skillOrder.Enqueue(skills[i]);
+                        }
+                    }
+                }
+            }
+
+
+            if (currentPhase != 5)
+            {
+                if (currentSkill != null)
+                {
+                    if (!currentSkill.enabled)
+                    {
+                        currentSkill = null;
+                    }
+                }
+                else
+                {
+                    currentCoolTime -= Time.deltaTime;
+
+                    if (currentCoolTime <= 0 && skillOrder.Count != 0)
+                    {
+                        currentSkill = skillOrder.Dequeue();
+                        currentSkill.Use();
+                        currentCoolTime = coolTime;
+                    }
                 }
             }
         }
 
-        if (!currentSkill)
+        if (currentSkill == null)
         {
             this.transform.position = Vector3.Lerp(this.transform.position, originPos.position, Time.deltaTime * 2.5f);
             this.transform.rotation = Quaternion.Lerp(this.transform.rotation, originPos.rotation, Time.deltaTime * 5);
