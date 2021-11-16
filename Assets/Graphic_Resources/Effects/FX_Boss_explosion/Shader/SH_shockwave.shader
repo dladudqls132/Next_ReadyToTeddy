@@ -14,6 +14,7 @@ Shader "SH_shockwave"
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 		[HideInInspector] _tex4coord( "", 2D ) = "white" {}
 		[HideInInspector] __dirty( "", Int ) = 1
+		_UnscaledTime("UnscaledTime", Float) = 0
 	}
 
 	SubShader
@@ -44,6 +45,7 @@ Shader "SH_shockwave"
 		uniform float _dissolve;
 		uniform float _Float2;
 		uniform float _gradientpower;
+		uniform float _UnscaledTime;
 
 		inline half4 LightingUnlit( SurfaceOutput s, half3 lightDir, half atten )
 		{
@@ -52,7 +54,8 @@ Shader "SH_shockwave"
 
 		void surf( Input i , inout SurfaceOutput o )
 		{
-			float2 panner62 = ( 1.0 * _Time.y * _dissovespeed + i.uv_texcoord);
+
+			float2 panner62 = ( 1.0 * _UnscaledTime * _dissovespeed + i.uv_texcoord);
 			float clampResult58 = clamp( pow( ( tex2D( _TextureSample1, ( ( tex2D( _TextureSample3, panner62 ).r * _dissolve ) + ( (i.uv_tex4coord).xy + i.uv_tex4coord.z + i.uv_tex4coord.w ) ) ).r * _Float2 ) , _gradientpower ) , 0.0 , 1.0 );
 			o.Emission = ( _Color1 * clampResult58 * i.vertexColor ).rgb;
 			o.Alpha = ( clampResult58 * i.vertexColor.a * i.vertexColor.a );

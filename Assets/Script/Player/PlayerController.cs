@@ -132,7 +132,6 @@ public class PlayerController : MonoBehaviour
     {
         rigid = this.GetComponent<Rigidbody>();
 
-
         mainCam = Camera.main.transform.GetComponent<FPPCamController>();
         if (hand == null)
             hand = mainCam.transform.Find("HandPos");
@@ -178,6 +177,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Time.timeScale == 0) return;
+
         if (isFever)
         {
             currentFeverTime -= Time.deltaTime;

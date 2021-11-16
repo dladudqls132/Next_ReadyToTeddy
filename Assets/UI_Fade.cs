@@ -15,7 +15,7 @@ public class UI_Fade : MonoBehaviour
 {
     [SerializeField] private FadeState state;
     private Image fadeImage;
-    private float fadeSpeed = 6;
+    private float fadeSpeed = 4.5f;
 
     // Start is called before the first frame update
     void Start()

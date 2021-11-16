@@ -123,7 +123,7 @@ public class Boss_TypeX : Enemy
 
         foreach (Renderer r in renderers)
         {
-            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime / 10));
+            r.material.SetColor("_EmissionColor", Color.Lerp(r.material.GetColor("_EmissionColor"), (emissionColor_angry * 35f), Time.deltaTime / 4));
         }
 
         if (anim.GetBool("isWaiting"))
@@ -137,7 +137,7 @@ public class Boss_TypeX : Enemy
         if (isRigidity || currentPhase == 5) return;
 
 
-        if (currentPhase != 5 && currentSkill == null)
+        if (currentPhase != 5)
         {
             if ((currentHp / maxHp) * 100 <= 10)
             {
@@ -151,6 +151,7 @@ public class Boss_TypeX : Enemy
             {
                 if (currentPhase != 3)
                 {
+                    timeLine.PlayTimeline(2, true);
                     currentPhase = 3;
                     faceNum = 3;
                 }
@@ -159,7 +160,7 @@ public class Boss_TypeX : Enemy
             {
                 if (currentPhase != 2)
                 {
-                    timeLine.PlayTimeline(0, true);
+                    timeLine.PlayTimeline(1, true);
                     currentPhase = 2;
                     faceNum = 2;
                 }
@@ -224,9 +225,11 @@ public class Boss_TypeX : Enemy
                 f.enabled = true;
                 if (Input.GetKeyDown(KeyCode.F))
                 {
+
                     f.enabled = false;
                     isOn = true;
                     this.GetComponent<BoxCollider>().enabled = false;
+                    timeLine.PlayTimeline(0, true);
                 }
             }
             else

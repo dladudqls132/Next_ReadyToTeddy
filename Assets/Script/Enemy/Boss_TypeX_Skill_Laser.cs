@@ -7,6 +7,7 @@ public class Boss_TypeX_Skill_Laser : MonoBehaviour
     private float attackTick;
     [SerializeField] private float currentTick;
     private float damage;
+    [SerializeField] private Renderer[] ren;
 
     public void SetAttackTrue(float damage, float attackTick)
     {
@@ -23,6 +24,18 @@ public class Boss_TypeX_Skill_Laser : MonoBehaviour
 
     private void Update()
     {
+        if(GameManager.Instance.GetIsPause())
+        {
+            this.GetComponent<ParticleSystem>().Pause();
+        }
+        else
+        {
+            for (int i = 0; i < ren.Length; i++)
+            {
+                ren[i].material.SetFloat("_UnscaledTime", Time.unscaledTime);
+            }
+        }
+
         currentTick += Time.deltaTime;
     }
 

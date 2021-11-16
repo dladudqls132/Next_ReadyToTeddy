@@ -25,8 +25,8 @@ public class Timeline_Boss_TypeX : MonoBehaviour
         if (fadeOut)
         {
             SetIsPlayTrue();
-            GameManager.Instance.GetFade().SetFade(FadeState.FadeOut, 6);
-            StartCoroutine(FadeDelay(0.5f));
+            GameManager.Instance.GetFade().SetFade(FadeState.FadeOut, 4.5f);
+            StartCoroutine(FadeDelay(0.7f));
         }
         else
         {
