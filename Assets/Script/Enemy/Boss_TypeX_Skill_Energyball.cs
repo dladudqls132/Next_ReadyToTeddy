@@ -80,7 +80,7 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
         }
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         anim.SetBool("isAttack_EnergyBall_LeftHand", false);
         anim.SetBool("isAttack_EnergyBall_RightHand", false);

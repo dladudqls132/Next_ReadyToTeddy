@@ -43,7 +43,7 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
         sandWind.Play();
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         targetingObj.SetCanRot(true);
         base.ResetInfo();

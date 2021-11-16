@@ -19,7 +19,7 @@ public class Boss_TypeX_Shield_Laser : Boss_Skill
 
     protected override void Start()
     {
-
+        
     }
 
     private void OnEnable()
@@ -50,10 +50,18 @@ public class Boss_TypeX_Shield_Laser : Boss_Skill
     IEnumerator ResetDelay()
     {
         yield return new WaitForSeconds(5.5f);
+
+        ResetInfo();
+    }
+
+    public override void ResetInfo()
+    {
         laser.GetComponent<Boss_TypeX_Skill_Laser>().SetAttackFalse();
 
         laser.SetActive(false);
-        ResetInfo();
+
+        StopAllCoroutines();
+        base.ResetInfo();
     }
 
     Quaternion tempRot;
@@ -72,6 +80,7 @@ public class Boss_TypeX_Shield_Laser : Boss_Skill
             this.transform.rotation = tempRot;
             this.transform.localRotation = Quaternion.Euler(this.transform.localEulerAngles.x + 89, this.transform.localEulerAngles.y, this.transform.localEulerAngles.z);
         }
+
 
     }
     // Update is called once per frame

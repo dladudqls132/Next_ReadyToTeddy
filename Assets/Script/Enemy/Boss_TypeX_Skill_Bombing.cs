@@ -19,19 +19,26 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
     {
         base.Use();
 
-        int rndNum = Random.Range(0, 2);
+        if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() >= 3)
+        {
+            int rndNum = Random.Range(0, 2);
 
-        if (rndNum == 0)
+            if (rndNum == 0)
+                anim.SetTrigger("Bombing");
+            else
+                anim.SetTrigger("Bombing2");
+        }
+        else if(this.GetComponent<Boss_TypeX>().GetCurrentPhase() > 1)
+        {
             anim.SetTrigger("Bombing2");
-        else
-            anim.SetTrigger("Bombing2");
+        }
 
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
-        base.ResetInfo();
         fireNum = 0;
+        base.ResetInfo();
     }
 
     IEnumerator Fire_Bomb1_Delay(float time)

@@ -35,7 +35,7 @@ public class Boss_Skill : MonoBehaviour
        
     }
 
-    protected virtual void ResetInfo()
+    public virtual void ResetInfo()
     {
         if (this.enabled)
         {

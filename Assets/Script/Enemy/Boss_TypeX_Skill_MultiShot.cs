@@ -21,7 +21,7 @@ public class Boss_TypeX_Skill_MultiShot : Boss_Skill
             anim.SetBool("isAttack_MultiShot_RightHand", true);
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         anim.SetBool("isAttack_MultiShot_LeftHand", false);
         anim.SetBool("isAttack_MultiShot_RightHand", false);

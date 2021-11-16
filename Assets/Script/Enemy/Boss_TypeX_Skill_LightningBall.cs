@@ -26,7 +26,7 @@ public class Boss_TypeX_Skill_LightningBall : Boss_Skill
         base.ResetInfo();
     }
 
-    protected override void ResetInfo()
+    public override void ResetInfo()
     {
         base.ResetInfo();
     }
