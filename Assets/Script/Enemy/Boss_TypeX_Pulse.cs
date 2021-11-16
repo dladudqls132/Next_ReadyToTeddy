@@ -7,11 +7,14 @@ public class Boss_TypeX_Pulse : MonoBehaviour
     private SphereCollider coll;
     private ParticleSystem p;
     private float damage;
+    private float delay;
+    private float currentDelay;
 
-    public void SetActiveTrue(float damage)
+    public void SetActiveTrue(float damage, float delay)
     {
         this.gameObject.SetActive(true);
         this.damage = damage;
+        this.delay = delay;
 
         if (coll == null || p == null)
         {
@@ -30,15 +33,22 @@ public class Boss_TypeX_Pulse : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        coll.radius = coll.radius + Time.deltaTime * 33f / 2;
-
         if (coll.radius >= 33f)
         {
-            p.Play();
-            coll.radius = 0;
+            currentDelay += Time.deltaTime;
+
+            if (currentDelay >= delay)
+            {
+                p.Play();
+                coll.radius = 0;
+                currentDelay = 0;
+            }
+         
         }
         else
         {
+            coll.radius = coll.radius + Time.deltaTime * 33f / 2;
+
             if (!p.isPlaying)
                 p.Play();
         }

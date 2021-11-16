@@ -7,6 +7,7 @@ public class Boss_TypeX_Skill_Pulse : MonoBehaviour
     [SerializeField] private int activePhase;
     [SerializeField] private GameObject pulse;
     [SerializeField] private float damage;
+    [SerializeField] private float delay;
 
     private void Update()
     {
@@ -15,7 +16,7 @@ public class Boss_TypeX_Skill_Pulse : MonoBehaviour
             if (!this.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
             {
                 if (!pulse.activeSelf)
-                    pulse.GetComponent<Boss_TypeX_Pulse>().SetActiveTrue(damage);
+                    pulse.GetComponent<Boss_TypeX_Pulse>().SetActiveTrue(damage, delay);
             }
             else
             {

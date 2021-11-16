@@ -53,7 +53,7 @@ public class Boss_TypeX_Shield : MonoBehaviour
 
         currentPhase = owner.GetCurrentPhase();
 
-        if (currentPhase >= 3)
+        if (currentPhase >= 2)
             isOn = true;
 
         if (!isOn)

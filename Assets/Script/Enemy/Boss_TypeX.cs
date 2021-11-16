@@ -151,7 +151,6 @@ public class Boss_TypeX : Enemy
             {
                 if (currentPhase != 3)
                 {
-                    timeLine.PlayTimeline(0, true);
                     currentPhase = 3;
                     faceNum = 3;
                 }
@@ -160,6 +159,7 @@ public class Boss_TypeX : Enemy
             {
                 if (currentPhase != 2)
                 {
+                    timeLine.PlayTimeline(0, true);
                     currentPhase = 2;
                     faceNum = 2;
                 }
