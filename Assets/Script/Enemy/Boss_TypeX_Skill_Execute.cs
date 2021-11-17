@@ -42,7 +42,7 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
         anim.SetBool("isExecute", true);
         this.GetComponent<Boss_TypeX>().SetIsGod(true);
 
-        GameManager.Instance.GetPlayer().GetCam().Shake(100, 0.15f, true);
+        GameManager.Instance.GetPlayer().GetCam().Shake(100, 0.07f, true);
 
         for(int i = 0; i < executeBalls.Count; i++)
         {

@@ -67,6 +67,12 @@ public class Boss_TypeX_Shield_Laser : Boss_Skill
     Quaternion tempRot;
     protected override void Update()
     {
+        if(this.GetComponent<Boss_TypeX_Shield>().GetCurrentPhase() == 5)
+        {
+            ResetInfo();
+            return;
+        }
+
         if (isReady)
         {
             this.transform.position = Vector3.Lerp(this.transform.position, attackPos.position, Time.deltaTime * 10);

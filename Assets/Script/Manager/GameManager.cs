@@ -144,6 +144,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(!isPause)
+        {
+            if (Time.timeScale == 0)
+                return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SetIsPause(!isPause);

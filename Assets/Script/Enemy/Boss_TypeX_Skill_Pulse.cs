@@ -11,6 +11,12 @@ public class Boss_TypeX_Skill_Pulse : MonoBehaviour
 
     private void Update()
     {
+        if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() == 5)
+        {
+            pulse.SetActive(false);
+            return;
+        }
+
         if (this.GetComponent<Boss_TypeX>().GetCurrentPhase() >= activePhase)
         {
             if (!this.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)

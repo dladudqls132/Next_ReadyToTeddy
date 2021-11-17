@@ -60,6 +60,20 @@ public class Boss_TypeX_Shield : MonoBehaviour
         {
             return;
         }
+        else
+        {
+            if (currentPhase == 5)
+            {
+                skillOrder.Clear();
+                this.GetComponent<Rigidbody>().isKinematic = false;
+                this.GetComponent<Animator>().enabled = false;
+                this.GetComponent<BoxCollider>().enabled = true;
+                isOn = false;
+                currentSkill = null;
+
+                return;
+            }
+        }
 
         if (owner.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
         {

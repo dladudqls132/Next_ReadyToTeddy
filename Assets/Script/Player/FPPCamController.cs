@@ -346,10 +346,13 @@ public class FPPCamController : MonoBehaviour
     {
         if (!overWrite && isShake) return;
 
-        this.isShake = true;
-        this.shakeTime = shakeTime;
-        this.shakeAmount = shakeAmount;
+        if (this.shakeTime <= 2f)
+        {
+            this.isShake = true;
+            this.shakeTime = shakeTime;
+            this.shakeAmount = shakeAmount;
 
-        currentShakeTime = shakeTime;
+            currentShakeTime = shakeTime;
+        }
     }
 }

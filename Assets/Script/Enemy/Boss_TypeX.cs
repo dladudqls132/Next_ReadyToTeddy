@@ -36,6 +36,7 @@ public class Boss_TypeX : Enemy
     [SerializeField] private int currentPhase;
     [SerializeField] private float coolTime;
     [SerializeField] private Animator timelineMeshAnim;
+    [SerializeField] private BGMController bgmController;
     private Timeline_Boss_TypeX timeLine;
     private float currentCoolTime;
     private bool isOn;
@@ -106,19 +107,6 @@ public class Boss_TypeX : Enemy
 
         }
 
-        //if(Input.GetKeyDown(KeyCode.U)) //스턴
-        //{
-        //    isRigidity = !isRigidity;
-        //    anim.enabled = !anim.enabled;
-        //    hand_left.GetComponent<Rigidbody>().useGravity = !hand_left.GetComponent<Rigidbody>().useGravity;
-        //    hand_right.GetComponent<Rigidbody>().useGravity = !hand_right.GetComponent<Rigidbody>().useGravity;
-        //    hand_left.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //    hand_right.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //    hand_left.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        //    hand_right.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-
-        //}
-
         if (!isOn) return;
 
         foreach (Renderer r in renderers)
@@ -131,73 +119,88 @@ public class Boss_TypeX : Enemy
             anim.SetBool("isWaiting", false);
         }
 
-        if (!anim.GetBool("isCombat")) return;
-
-
-        if (isRigidity || currentPhase == 5) return;
-
-
-        if (currentPhase != 5)
+        if (isRigidity || currentPhase == 5 || !anim.GetBool("isCombat"))
         {
-            if ((currentHp / maxHp) * 100 <= 10)
-            {
-
-                if (currentPhase != 4)
-                {
-                    isGod = true;
-
-                    if (currentSkill == null)
-                    {
-                        timeLine.PlayTimeline(3, true);
-                        currentPhase = 4;
-                        faceNum = 4;
-                    }
-                }
-                
-            }
-            else if ((currentHp / maxHp) * 100 <= 40)
-            {
-                if (currentPhase != 3)
-                {
-                    timeLine.PlayTimeline(2, true);
-                    currentPhase = 3;
-                    faceNum = 3;
-                }
-            }
-            else if ((currentHp / maxHp) * 100 <= 70)
-            {
-                if (currentPhase != 2)
-                {
-                    timeLine.PlayTimeline(1, true);
-                    currentPhase = 2;
-                    faceNum = 2;
-                }
-            }
-
-       
-                anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
-                anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
-            
+            if(currentPhase == 5)
+                bgmController.StopBGM();
+            return;
         }
 
-
-        for (int i = 0; i < skills.Count; i++)
+        if ((currentHp / maxHp) * 100 <= 10)
         {
-            if (skills[i] != currentSkill)
+            if (currentPhase != 4)
             {
-                if (skills[i].CoolDown())
+                isGod = true;
+
+                if (currentSkill == null)
                 {
-                    if (!skillOrder.Contains(skills[i]))
-                    {
-                        skillOrder.Enqueue(skills[i]);
-                    }
+                    timeLine.PlayTimeline(3, true);
+                    currentPhase = 4;
+                    faceNum = 4;
+                    skillOrder.Clear();
+                    currentSkill = null;
                 }
+            }
+
+        }
+        else if ((currentHp / maxHp) * 100 <= 40)
+        {
+            if (currentPhase != 3)
+            {
+                timeLine.PlayTimeline(2, true);
+                currentPhase = 3;
+                faceNum = 3;
+            }
+        }
+        else if ((currentHp / maxHp) * 100 <= 70)
+        {
+            if (currentPhase != 2)
+            {
+                timeLine.PlayTimeline(1, true);
+                currentPhase = 2;
+                faceNum = 2;
             }
         }
 
+        anim.SetFloat("Phase", Mathf.Lerp(anim.GetFloat("Phase"), currentPhase, Time.deltaTime * 10));
+        anim.SetFloat("FaceType", Mathf.Lerp(anim.GetFloat("FaceType"), faceNum, Time.deltaTime * 10));
 
-        if (currentPhase != 5)
+        if (currentPhase >= 4)
         {
+            if (currentPhase == 4 && currentSkill == null)
+            {
+                if (!timeLine.GetIsPlay())
+                {
+                    for (int i = 0; i < skills.Count; i++)
+                    {
+                        if (skills[i].GetActivePhase() == currentPhase)
+                        {
+                            currentSkill = skills[i];
+                            currentSkill.Use();
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+
+
+            for (int i = 0; i < skills.Count; i++)
+            {
+                if (skills[i] != currentSkill)
+                {
+                    if (skills[i].CoolDown())
+                    {
+                        if (!skillOrder.Contains(skills[i]))
+                        {
+                            skillOrder.Enqueue(skills[i]);
+                        }
+                    }
+                }
+            }
+
+
             if (currentSkill != null)
             {
                 if (!currentSkill.enabled)
@@ -219,7 +222,7 @@ public class Boss_TypeX : Enemy
                 canRot = true;
                 //state = Boss_TypeX_State.Idle;
             }
-        }
+        
     }
 
     private void OnTriggerStay(Collider other)
@@ -233,7 +236,7 @@ public class Boss_TypeX : Enemy
                 f.enabled = true;
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-
+                    bgmController.PlayBGM(0, true);
                     f.enabled = false;
                     isOn = true;
                     this.GetComponent<BoxCollider>().enabled = false;

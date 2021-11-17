@@ -179,6 +179,29 @@ public class SoundManager : MonoBehaviour
         audioSource_BGM.Play();
     }
 
+    float currentBGMVolume;
+    IEnumerator StopBGM()
+    {
+        currentBGMVolume = audioSource_BGM.volume;
+        while(true)
+        {
+            audioSource_BGM.volume -= currentBGMVolume * Time.deltaTime / 10;
+
+            if(audioSource_BGM.volume <= 0)
+            {
+                audioSource_BGM.Stop();
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    public void AudioStopBGM()
+    {
+        StartCoroutine(StopBGM());
+    }
+
     public AudioSource GetBGMSource()
     {
         return audioSource_BGM;
