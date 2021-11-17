@@ -20,7 +20,7 @@ public class Boss_TypeX_Skill_LightningBall : Boss_Skill
         for (int i = 0; i < num; i++)
         {
             GameObject tempBullet = GameManager.Instance.GetPoolBullet().GetBullet(BulletType.Plasma);
-            tempBullet.GetComponent<Bullet>().SetFire(center.position + Random.insideUnitSphere * 4, (target.position - this.transform.position).normalized, target, speed, damage, 999);
+            tempBullet.GetComponent<Bullet>().SetFire(center.position + Vector3.up * 2 + Random.insideUnitSphere * 6, (target.position - this.transform.position).normalized, target, speed, damage, 999);
         }
 
         base.ResetInfo();

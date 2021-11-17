@@ -117,6 +117,7 @@ public class PlayerController : MonoBehaviour
     public bool GetIsDash() { return isDash; }
 
     public bool GetIsClimbUp() { return isClimbUp; }
+    public GameObject[] GetWeapons() { return weapons; }
 
 
     public Transform GetAimPos() { return aimPos; }
@@ -179,6 +180,18 @@ public class PlayerController : MonoBehaviour
     {
         if (Time.timeScale == 0) return;
 
+        if (isDead || GameManager.Instance.GetIsPause())
+        {
+            if (isDead)
+            {
+                mainCam.GetComponent<Animator>().SetFloat("walkSpeed", 0);
+                hand.GetComponent<Animator>().SetFloat("walkSpeed", 0);
+                rigid.velocity = Vector3.zero;
+            }
+
+            return;
+        }
+
         if (isFever)
         {
             currentFeverTime -= Time.deltaTime;
@@ -207,14 +220,6 @@ public class PlayerController : MonoBehaviour
         else
         {
             currentDashRefillTime = 0;
-        }
-
-        if (isDead || GameManager.Instance.GetIsPause())
-        {
-            if (isDead)
-                rigid.velocity = Vector3.zero;
-
-            return;
         }
 
         if (!isSwap)
@@ -934,6 +939,7 @@ public class PlayerController : MonoBehaviour
 
             isDead = true;
 
+            GameManager.Instance.GetSoundManager().AudioStopBGM();
             GameManager.Instance.SetIsGameOver(true);
         }
         else if (currentHP > maxHP)

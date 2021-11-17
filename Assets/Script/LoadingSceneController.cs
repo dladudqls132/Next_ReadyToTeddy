@@ -33,6 +33,11 @@ public class LoadingSceneController : MonoBehaviour
         SceneManager.LoadScene("LoadingScene");
     }
 
+    public static void LoadSceneSkipLoading(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
     public static void ReloadScene()
     {
         nextScene = SceneManager.GetActiveScene().name;

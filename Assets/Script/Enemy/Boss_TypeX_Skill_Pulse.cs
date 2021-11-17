@@ -8,6 +8,7 @@ public class Boss_TypeX_Skill_Pulse : MonoBehaviour
     [SerializeField] private GameObject pulse;
     [SerializeField] private float damage;
     [SerializeField] private float delay;
+    [SerializeField] private GameObject[] lightning;
 
     private void Update()
     {
@@ -22,7 +23,20 @@ public class Boss_TypeX_Skill_Pulse : MonoBehaviour
             if (!this.GetComponent<Boss_TypeX_Skill_RandomShot>().enabled)
             {
                 if (!pulse.activeSelf)
+                {
                     pulse.GetComponent<Boss_TypeX_Pulse>().SetActiveTrue(damage, delay);
+                    for(int i = 0; i < lightning.Length; i++)
+                    {
+                        lightning[i].SetActive(true);
+                    }
+                }
+                else
+                {
+                    if(this.GetComponent<Boss_TypeX>().GetCurrentPhase() == 4)
+                    {
+                        pulse.GetComponent<Boss_TypeX_Pulse>().SetDelay(0);
+                    }
+                }
             }
             else
             {

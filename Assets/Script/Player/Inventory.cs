@@ -139,6 +139,19 @@ public class Inventory : MonoBehaviour
     //    }
     //}
 
+    public List<GameObject> GetWeapons()
+    {
+        List<GameObject> guns = new List<GameObject>();
+
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if(slots[i].weapon != null)
+                guns.Add(slots[i].weapon);
+        }
+
+        return guns;
+    }
+
     public Gun GetWeapon(GunType type)
     {
         for (int i = 0; i < slots.Count; i++)
@@ -331,6 +344,27 @@ public class Inventory : MonoBehaviour
             //        }
             //    }
             //}
+        }
+    }
+
+    public void AddWeaponSkipVideo(GameObject weapon)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (slots[i].isEmpty)
+            {
+                if (weapon.GetComponent<Gun>() != null)
+                {
+                    if (slots[i].slotType == SlotType.Gun)
+                    {
+                        slots[i].weapon = weapon;
+                        slots[i].isEmpty = false;
+                        weapon.gameObject.SetActive(false);
+                        weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
+                        return;
+                    }
+                }
+            }
         }
     }
 

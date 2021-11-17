@@ -148,6 +148,9 @@ public class GameManager : MonoBehaviour
         {
             if (Time.timeScale == 0)
                 return;
+
+            if (player.GetIsDead())
+                return;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

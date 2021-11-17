@@ -7,8 +7,10 @@ public class Boss_TypeX_Pulse : MonoBehaviour
     private SphereCollider coll;
     private ParticleSystem p;
     private float damage;
-    private float delay;
+    [SerializeField] private float delay;
     private float currentDelay;
+
+    public void SetDelay(float value) { delay = value; }
 
     public void SetActiveTrue(float damage, float delay)
     {

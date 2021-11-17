@@ -17,6 +17,7 @@ public class Door_LoadScene : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.F))
             {
+                this.GetComponent<SavePlayerData>().SaveData();
                 isOpened = true;
                 LoadingSceneController.LoadScene("Bosszone");
             }

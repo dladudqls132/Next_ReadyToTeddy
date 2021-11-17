@@ -63,6 +63,13 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
         base.ResetInfo();
     }
 
+    IEnumerator DeadPlayer()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        GameManager.Instance.GetPlayer().DecreaseHp(1000);
+    }
+
     protected override void Update()
     {
         bool isEnd = true;
@@ -75,7 +82,9 @@ public class Boss_TypeX_Skill_Execute : Boss_Skill
         {
             if (eattenBallNum >= useNum)
             {
-                Debug.LogError("use");
+                GameManager.Instance.GetFade().SetFade(FadeState.FadeOut_White, 4.5f);
+
+                StartCoroutine(DeadPlayer());
             }
             else
             {

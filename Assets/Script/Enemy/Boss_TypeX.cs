@@ -121,8 +121,11 @@ public class Boss_TypeX : Enemy
 
         if (isRigidity || currentPhase == 5 || !anim.GetBool("isCombat"))
         {
-            if(currentPhase == 5)
+            if (currentPhase == 5)
+            {
+                this.GetComponent<BoxCollider>().enabled = true;
                 bgmController.StopBGM();
+            }
             return;
         }
 
@@ -227,25 +230,48 @@ public class Boss_TypeX : Enemy
 
     private void OnTriggerStay(Collider other)
     {
-        if (isOn) return;
-
-        if (other.CompareTag("Player"))
+        if (isOn)
         {
-            if (Vector3.Dot(Camera.main.transform.forward, (body.position - Camera.main.transform.position).normalized) >= 0.9f)
+            if (currentPhase == 5)
             {
-                f.enabled = true;
-                if (Input.GetKeyDown(KeyCode.F))
+                if (other.CompareTag("Player"))
                 {
-                    bgmController.PlayBGM(0, true);
-                    f.enabled = false;
-                    isOn = true;
-                    this.GetComponent<BoxCollider>().enabled = false;
-                    timeLine.PlayTimeline(0, true);
+                    if (Vector3.Dot(Camera.main.transform.forward, (body.position - Camera.main.transform.position).normalized) >= 0.9f)
+                    {
+                        f.enabled = true;
+                        if (Input.GetKeyDown(KeyCode.F))
+                        {
+                            f.enabled = false;
+                            timeLine.PlayTimeline(4, true);
+                        }
+                    }
+                    else
+                        f.enabled = false;
                 }
             }
-            else
-                f.enabled = false;
         }
+        else
+        {
+            if (other.CompareTag("Player"))
+            {
+                if (Vector3.Dot(Camera.main.transform.forward, (body.position - Camera.main.transform.position).normalized) >= 0.9f)
+                {
+                    f.enabled = true;
+                    if (Input.GetKeyDown(KeyCode.F))
+                    {
+                        bgmController.PlayBGM(0, true);
+                        f.enabled = false;
+                        isOn = true;
+                        this.GetComponent<BoxCollider>().enabled = false;
+                        timeLine.PlayTimeline(0, true);
+                    }
+                }
+                else
+                    f.enabled = false;
+            }
+        }
+
+ 
     }
 
     private void OnTriggerExit(Collider other)
