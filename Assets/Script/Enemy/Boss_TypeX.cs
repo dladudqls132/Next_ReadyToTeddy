@@ -141,11 +141,19 @@ public class Boss_TypeX : Enemy
         {
             if ((currentHp / maxHp) * 100 <= 10)
             {
+
                 if (currentPhase != 4)
                 {
-                    currentPhase = 4;
-                    faceNum = 4;
+                    isGod = true;
+
+                    if (currentSkill == null)
+                    {
+                        timeLine.PlayTimeline(3, true);
+                        currentPhase = 4;
+                        faceNum = 4;
+                    }
                 }
+                
             }
             else if ((currentHp / maxHp) * 100 <= 40)
             {
