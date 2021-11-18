@@ -262,6 +262,7 @@ public class Boss_TypeX : Enemy
                         bgmController.PlayBGM(0, true);
                         f.enabled = false;
                         isOn = true;
+                        isDetect = true;
                         this.GetComponent<BoxCollider>().enabled = false;
                         timeLine.PlayTimeline(0, true);
                     }

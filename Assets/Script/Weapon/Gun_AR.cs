@@ -128,7 +128,7 @@ public class Gun_AR : Gun
                     else
                     {
                         GameManager.Instance.GetCrosshairController().SetAttack_Kill(true);
-                        enemy.DecreaseHp(damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
+                        enemy.DecreaseHp(damagePerBullet * 5, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 5, 5), EffectType.Damaged_normal);
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     }
 

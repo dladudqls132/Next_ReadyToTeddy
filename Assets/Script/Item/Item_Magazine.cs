@@ -14,11 +14,13 @@ public class Item_Magazine : Item
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
+
         if (player.GetInventory().GetWeapon(gunType) != null)
         {
             if (Vector3.Distance(this.transform.position, player.transform.position) <= 7.0f)
             {
-                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() - (player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()) < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
                 {
                     UpdateMoveSpeed();
                     this.GetComponent<Collider>().isTrigger = true;
@@ -48,13 +50,14 @@ public class Item_Magazine : Item
         {
             if (player.GetInventory().GetWeapon(gunType) != null)
             {
-                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() - (player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()) < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
                 {
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.GetMag);
                     
                     Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
-                    temp.AddAmmo(addAmmoNum);
+                    temp.AddAmmo((player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()));
+                    ResetInfo();
                     this.gameObject.SetActive(false);
                 }
             }

@@ -78,6 +78,7 @@ public class Enemy : MonoBehaviour
     public EnemyType GetEnemyType() { return enemyType; }
     public Transform GetTarget() { return target; }
     public void SetIsGod(bool value) { isGod = value; }
+    public bool GetIsDetect() { return isDetect; }
 
     public void SetInfo(EnemyType enemyType,/* EffectType effectType, */float damage, float hp, float speed, float detectRange, float attackRange, float potionDropRate, float magazineDropRate)
     {
