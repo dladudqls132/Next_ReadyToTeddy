@@ -16,7 +16,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         LoadScene,
         Exit,
         Setting_Apply,
-        Setting_Cancel
+        Setting_Cancel,
+        LoadScene_SkipLoading
     }
 
     [SerializeField] private ButtonType buttonType;
@@ -177,6 +178,9 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                         break;
                     case ButtonType.Exit:
                         Application.Quit();
+                        break;
+                    case ButtonType.LoadScene_SkipLoading:
+                        LoadingSceneController.LoadSceneSkipLoading(loadSceneName);
                         break;
                 }
 
