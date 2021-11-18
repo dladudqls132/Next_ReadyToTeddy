@@ -232,7 +232,7 @@ public class Gun : MonoBehaviour
     public int GetMaxAmmoCount() { return maxAmmo; }
     public int GetMaxAmmo_aMagCount() { return maxAmmo_aMag; }
     public void SetMaxAmmoCount(int ammo) { maxAmmo = ammo; }
-    public void AddAmmo(int ammo) { haveAmmo += ammo; if (haveAmmo > maxAmmo) haveAmmo = maxAmmo; }
+    public void AddAmmo(int ammo) { haveAmmo += ammo; /*if (haveAmmo > maxAmmo) haveAmmo = maxAmmo;*/ }
     public int GetHaveAmmoCount() { return haveAmmo; }
     public int GetCurrentAmmoCount() { return currentAmmo; }
     public bool GetIsReload() { return isReload; }

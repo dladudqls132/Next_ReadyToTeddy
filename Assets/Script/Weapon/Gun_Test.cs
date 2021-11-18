@@ -138,7 +138,7 @@ public class Gun_Test : Gun
                         else
                         {
                             headShot = true;
-                            enemy.DecreaseHp(damagePerBullet * 2, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
+                            enemy.DecreaseHp(damagePerBullet * 5, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 70, 70), EffectType.Damaged_normal);
                         }
 
                         isHit = true;

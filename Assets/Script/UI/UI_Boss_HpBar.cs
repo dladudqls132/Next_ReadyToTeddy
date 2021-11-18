@@ -11,6 +11,17 @@ public class UI_Boss_HpBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gauge.fillAmount = boss.GetCurrentHp() / boss.GetMaxHp();
+        if (boss.GetIsDetect())
+        {
+            if (!this.transform.GetChild(0).gameObject.activeSelf)
+            {
+                for (int i = 0; i < this.transform.childCount; i++)
+                {
+                    this.transform.GetChild(i).gameObject.SetActive(true);
+                }
+            }
+
+            gauge.fillAmount = boss.GetCurrentHp() / boss.GetMaxHp();
+        }
     }
 }

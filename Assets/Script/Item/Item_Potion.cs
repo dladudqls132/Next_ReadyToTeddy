@@ -14,8 +14,13 @@ public class Item_Potion : Item
 
     private void FixedUpdate()
     {
+        if (!canMove) return;
+
         //rigid.position = Vector3.Lerp(rigid.position, player.GetAimPos().position, Time.deltaTime * 12);
-        rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+        if (Vector3.Distance(this.transform.position, player.transform.position) <= 7.0f)
+        {
+            rigid.velocity = (player.GetAimPos().position - rigid.position).normalized * moveSpeed;
+        }
     }
 
     // Update is called once per frame
@@ -29,7 +34,8 @@ public class Item_Potion : Item
             if (potionType == PotionType.Hp)
             {
                 player.IncreaseHp(increaseValue);
-                Destroy(this.gameObject);
+                ResetInfo();
+                this.gameObject.SetActive(false);
             }
         }
     }
