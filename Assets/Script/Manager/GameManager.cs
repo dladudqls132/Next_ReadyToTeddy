@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private Pool_BulletHit pool_bulletHit;
     private Pool_Effect pool_effect;
     private ItemManager itemManager;
-    private Settings settings;
+    [SerializeField] private Settings settings;
     private UI_SettingController UI_settingController;
     private SoundManager soundManager;
     private VideoController videoController;
