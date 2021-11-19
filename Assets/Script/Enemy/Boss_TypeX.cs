@@ -107,7 +107,20 @@ public class Boss_TypeX : Enemy
 
         }
 
-        if (!isOn) return;
+        if (!isOn)
+        {
+            foreach (Renderer r in renderers)
+            {
+                r.material.SetColor("_ASEOutlineColor", Color.red);
+            }
+
+            return;
+        }
+
+        foreach (Renderer r in renderers)
+        {
+            r.material.SetColor("_ASEOutlineColor", Color.black);
+        }
 
         foreach (Renderer r in renderers)
         {
