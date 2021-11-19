@@ -26,4 +26,9 @@ public class UI_CreditController : MonoBehaviour
             anim.speed = originAnimSpeed;
         }
     }
+
+    void LoadMainMenu()
+    {
+        LoadingSceneController.LoadSceneSkipLoading("MainMenu");
+    }
 }
