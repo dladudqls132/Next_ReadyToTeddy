@@ -18,20 +18,21 @@ public class GameManager : MonoBehaviour
         set { instance = value; }
     }
 
-    [SerializeField] private PlayerController player;
-    [SerializeField] private UI_Pause UI_pause;
-    [SerializeField] private UI_CrosshairController UI_crosshairController;
-    [SerializeField] private Pool_Enemy pool_enemy;
-    [SerializeField] private Pool_Bullet pool_bullet;
-    [SerializeField] private Pool_BulletHit pool_bulletHit;
-    [SerializeField] private Pool_Effect pool_effect;
-    [SerializeField] private ItemManager itemManager;
-    [SerializeField] private Settings settings;
-    [SerializeField] private UI_SettingController UI_settingController;
-    [SerializeField] private SoundManager soundManager;
-    [SerializeField] private VideoController videoController;
-    [SerializeField] private UI_GunSoundManager UI_gunSoundManager;
-    [SerializeField] private UI_Fade UI_Fade;
+    private PlayerController player;
+    private UI_Pause UI_pause;
+    private UI_CrosshairController UI_crosshairController;
+    private Pool_Enemy pool_enemy;
+    private Pool_Bullet pool_bullet;
+    private Pool_BulletHit pool_bulletHit;
+    private Pool_Effect pool_effect;
+    private ItemManager itemManager;
+    private Settings settings;
+    private UI_SettingController UI_settingController;
+    private SoundManager soundManager;
+    private VideoController videoController;
+    private UI_GunSoundManager UI_gunSoundManager;
+    private UI_Fade UI_Fade;
+    private UI_RemainingEnemy UI_RemainingEnemy;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
     public VideoController GetVideoController() { return videoController; }
     public UI_GunSoundManager GetGunSoundManager() { return UI_gunSoundManager; }
     public UI_Fade GetFade() { return UI_Fade; }
+    public UI_RemainingEnemy GetRemainingEnemy() { return UI_RemainingEnemy; }
 
     // Start is called before the first frame update
     void Awake()
@@ -124,6 +126,11 @@ public class GameManager : MonoBehaviour
             UI_gunSoundManager.Init();
 
         UI_Fade = FindObjectOfType<UI_Fade>();
+
+        UI_RemainingEnemy = FindObjectOfType<UI_RemainingEnemy>();
+
+        if (UI_RemainingEnemy != null)
+            UI_RemainingEnemy.Init();
 
         if (isVisibleMousePoint)
         {

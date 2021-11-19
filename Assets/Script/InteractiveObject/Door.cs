@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
     [SerializeField] private bool isOpened;
     private Collider[] coll;
     private Animator anim;
+    private bool isEnter;
 
     private void Start()
     {
@@ -35,9 +36,27 @@ public class Door : MonoBehaviour
                 coll[i].enabled = false;
             }
 
+            GameManager.Instance.GetRemainingEnemy().gameObject.SetActive(false);
+            isEnter = false;
             isOpened = true;
             anim.SetBool("isOpened", true);
             this.enabled = false;
+        }
+
+        if(isEnter)
+        {
+            int aliveNum = 0;
+
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                if(enemies[i].gameObject.activeSelf)
+                {
+                    aliveNum++;
+                }
+            }
+
+            GameManager.Instance.GetRemainingEnemy().gameObject.SetActive(true);
+            GameManager.Instance.GetRemainingEnemy().SetNum(aliveNum);
         }
     }
 
@@ -54,6 +73,10 @@ public class Door : MonoBehaviour
             {
                 enemies.Add(other.transform);
             }
+        }
+        if(other.CompareTag("Player"))
+        {
+            isEnter = true;
         }
     }
 }
