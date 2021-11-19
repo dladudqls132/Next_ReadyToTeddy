@@ -20,7 +20,7 @@ public class Item_Magazine : Item
         {
             if (Vector3.Distance(this.transform.position, player.transform.position) <= 7.0f)
             {
-                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() - (player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()) < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                if (player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmo_aMagCount() || player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
                 {
                     UpdateMoveSpeed();
                     this.GetComponent<Collider>().isTrigger = true;
@@ -50,13 +50,17 @@ public class Item_Magazine : Item
         {
             if (player.GetInventory().GetWeapon(gunType) != null)
             {
-                if (player.GetInventory().GetWeapon(gunType).GetHaveAmmoCount() - (player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()) < player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount())
+                    Gun temp = player.GetInventory().GetWeapon(gunType);
+                if (temp.GetCurrentAmmoCount() < temp.GetMaxAmmo_aMagCount() || temp.GetHaveAmmoCount() < temp.GetMaxAmmoCount())
                 {
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.GetMag);
                     
-                    Gun temp = player.GetInventory().GetWeapon(gunType);
                     //temp.SetHaveAmmoCount(temp.GetMaxAmmoCount() + temp.GetMaxAmmo_aMagCount());
-                    temp.AddAmmo((player.GetInventory().GetWeapon(gunType).GetMaxAmmoCount() - player.GetInventory().GetWeapon(gunType).GetCurrentAmmoCount()));
+
+                    int addNum = (temp.GetMaxAmmo_aMagCount() - temp.GetHaveAmmoCount()) + (temp.GetMaxAmmo_aMagCount() - temp.GetCurrentAmmoCount());
+                    addNum = Mathf.Clamp(addNum, 0, temp.GetMaxAmmo_aMagCount());
+                    temp.AddAmmo(addNum);
+
                     ResetInfo();
                     this.gameObject.SetActive(false);
                 }
