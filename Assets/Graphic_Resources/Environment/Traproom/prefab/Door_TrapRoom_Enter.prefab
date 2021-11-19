@@ -50,6 +50,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies: []
+  renderers:
+  - {fileID: 2678552832311277181}
+  - {fileID: 5445759096298626427}
+  - {fileID: 5445759096768487780}
   isOpened: 0
 --- !u!65 &3660883981274892759
 BoxCollider:
@@ -221,6 +225,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5413161215648900393}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &2678552832311277181 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7940770755169162068, guid: 40dadb1a010c4f54fbb3c6815e232209,
+    type: 3}
+  m_PrefabInstance: {fileID: 5413161215648900393}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5413161215723729959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -322,6 +332,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5413161215723729959}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &5445759096768487780 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 39494980047115587, guid: 10e1d8b419da01248a865ea0fde907af,
+    type: 3}
+  m_PrefabInstance: {fileID: 5413161215723729959}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5413161216327927864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -420,6 +436,12 @@ GameObject:
 --- !u!4 &6618063666642462228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
+    type: 3}
+  m_PrefabInstance: {fileID: 5413161216327927864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5445759096298626427 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 39494980047115587, guid: 10e1d8b419da01248a865ea0fde907af,
     type: 3}
   m_PrefabInstance: {fileID: 5413161216327927864}
   m_PrefabAsset: {fileID: 0}

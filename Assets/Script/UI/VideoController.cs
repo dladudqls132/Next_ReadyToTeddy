@@ -13,6 +13,7 @@ public class VideoController : MonoBehaviour
     [SerializeField] private GameObject name_SG;
     [SerializeField] private GameObject name_CL;
     [SerializeField] private GameObject name_FT;
+    [SerializeField] private GameObject name_SR;
 
     [SerializeField] private Text text_ex;
 
@@ -66,6 +67,17 @@ public class VideoController : MonoBehaviour
                 video.clip = videoInfo.GetVideo(GunType.Flamethrower).clip;
                 name_FT.SetActive(true);
                 text_ex.text = videoInfo.GetVideo(GunType.Flamethrower).text_ex;
+                video.Play();
+                break;
+            case GunType.Sniper:
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                Time.timeScale = 0;
+                GameManager.Instance.GetSoundManager().SetPauseAll(true);
+                this.gameObject.SetActive(true);
+                video.clip = videoInfo.GetVideo(GunType.Sniper).clip;
+                name_SR.SetActive(true);
+                text_ex.text = videoInfo.GetVideo(GunType.Sniper).text_ex;
                 video.Play();
                 break;
             //case GunType.Sniper:
