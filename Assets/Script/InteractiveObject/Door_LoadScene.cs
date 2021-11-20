@@ -1,10 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Door_LoadScene : MonoBehaviour
 {
     private bool isOpened;
+    private Image f;
+
+    private void Start()
+    {
+        f = GameObject.Find("F").GetComponent<Image>();
+    }
 
     private void OnTriggerStay(Collider other)
     {
@@ -14,6 +21,7 @@ public class Door_LoadScene : MonoBehaviour
 
         if (temp.CompareTag("Player"))
         {
+            f.enabled = true;
 
             if (Input.GetKeyDown(KeyCode.F))
             {
@@ -23,5 +31,10 @@ public class Door_LoadScene : MonoBehaviour
             }
 
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        f.enabled = false;
     }
 }

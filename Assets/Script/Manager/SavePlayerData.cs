@@ -14,14 +14,22 @@ public class SavePlayerData : MonoBehaviour
     private string path;
     private PlayerData data;
     [SerializeField] private bool loadData;
+    private bool isLoad;
 
     private void Start()
     {
         path = Application.dataPath + "/PlayerData.json";
+    }
 
-        if(loadData)
+    private void Update()
+    {
+        if(!isLoad)
         {
-            LoadData();
+            if (loadData)
+            {
+                isLoad = true;
+                LoadData();
+            }
         }
     }
 

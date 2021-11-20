@@ -197,10 +197,15 @@ public class Gun_Test : Gun
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     else
                     {
-                        if(enemy.GetEnemyType() != EnemyType.Boss)
-                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                        if (enemy != null)
+                        {
+                            if (enemy.GetEnemyType() != EnemyType.Boss)
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                            else
+                                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                        }
                         else
-                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
                     }
 
                     return true;
@@ -209,10 +214,17 @@ public class Gun_Test : Gun
                 {
                     GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
 
-                    if (enemy.GetEnemyType() != EnemyType.Boss)
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                    if (enemy != null)
+                    {
+                        if (enemy.GetEnemyType() != EnemyType.Boss)
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                        else
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                    }
                     else
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                    {
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                    }
                 }
             }
 
