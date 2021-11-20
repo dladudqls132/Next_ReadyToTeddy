@@ -91,6 +91,7 @@ public class Enemy_Type_B : Enemy
 
     void Attack()
     {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_Fire, this.transform.position, false);
         GameManager.Instance.GetPoolEffect().GetEffect(EffectType.Projector_Explosion_Large).GetComponent<Explosion_Large>().SetActive(target.position + new Vector3(target.parent.GetComponent<Rigidbody>().velocity.x, 0, target.parent.GetComponent<Rigidbody>().velocity.z) / 2 + Vector3.up * 3, bombTime, damage);
 
         anim.SetTrigger("Attack");

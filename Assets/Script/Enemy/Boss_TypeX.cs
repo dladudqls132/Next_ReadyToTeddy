@@ -241,6 +241,11 @@ public class Boss_TypeX : Enemy
         
     }
 
+    void PlayWakeUpAudio()
+    {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Boss_TypeX_WakeUp, this.transform.position + Vector3.up * 2, false);
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (isOn)

@@ -28,7 +28,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
             else
                 anim.SetTrigger("Bombing2");
         }
-        else if(this.GetComponent<Boss_TypeX>().GetCurrentPhase() > 1)
+        else
         {
             anim.SetTrigger("Bombing2");
         }
@@ -52,6 +52,8 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
 
     void Fire_Bomb1()
     {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_Fire, this.transform.position + Vector3.up * 3, false);
+
         for (int i = 0; i < bombNum_1; i++)
         {
             StartCoroutine(Fire_Bomb1_Delay(i * 0.2f));
@@ -68,6 +70,8 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
                 tempProjector.GetComponent<Explosion_Large>().SetActive(this.transform.position + Quaternion.Euler(0, (360 / bombNum_2 / 3) * fireNum + 360 / bombNum_2 * i, 0) * Vector3.forward * j * 10 + Vector3.up * 3, bombTime, damage);
             }
         }
+
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Explosion_Fire, this.transform.position + Vector3.up * 3, false);
         fireNum++;
     }
 

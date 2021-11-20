@@ -135,10 +135,21 @@ public class Gun_Sniper : Gun
                     if (!hit2.transform.CompareTag("Head"))
                     {
                         GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
-                 
-                            enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
 
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                        if (enemy.GetEnemyType() == EnemyType.Boss)
+                        {
+                            enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                        }
+                        else
+                        {
+                            if (enemy.GetEnemyType() != EnemyType.D)
+                                enemy.DecreaseHp(damagePerBullet, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+                            else
+                                enemy.DecreaseHp(0.5f, hit2.point, hit2.transform, Vector3.ClampMagnitude(ray.direction * 20, 20), EffectType.Damaged_normal);
+
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                        }
                     }
                     else
                     {

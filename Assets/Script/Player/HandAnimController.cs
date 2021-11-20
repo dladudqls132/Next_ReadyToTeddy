@@ -144,7 +144,12 @@ public class HandAnimController : MonoBehaviour
 
     void LoadMag()
     {
-        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Gun_load);
+        if(player.GetGun().GetGunType() == GunType.Sniper)
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Sniper_Reload);
+        else if(player.GetGun().GetGunType() == GunType.ChainLightning)
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.ChainLightning_Reload);
+        else
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Gun_load);
     }
 
     public void Pakour_End()

@@ -124,6 +124,8 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
                 tempAttackSpark.transform.rotation = firePos_leftHand.rotation;
                 tempAttackSpark.SetActive(true);
             }
+
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.EnergyBall_Fire, firePos_leftHand.position, false);
         }
         else
         {
@@ -158,6 +160,8 @@ public class Boss_TypeX_Skill_Energyball : Boss_Skill
                 tempAttackSpark.transform.rotation = firePos_rightHand.rotation;
                 tempAttackSpark.SetActive(true);
             }
+
+            GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.EnergyBall_Fire, firePos_rightHand.position, false);
         }
         //tempBullet.GetComponent<Bullet_Boss>().Fire(firePos_leftHand)
     }

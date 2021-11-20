@@ -35,7 +35,14 @@ public enum SoundType
     Timer,
     Enemy_roll,
     EnergyGun_Charge,
-    EnergyGun_Fire2
+    EnergyGun_Fire2,
+    Bullet_BounceOff,
+    Player_Damaged,
+    Explosion_Fire,
+    ChainLightning_Reload,
+    EnergyBall_Fire,
+    Sniper_Reload,
+    Boss_TypeX_WakeUp
 }
 
 [System.Serializable]

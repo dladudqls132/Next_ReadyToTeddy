@@ -107,6 +107,7 @@ public class Gun_Test : Gun
             else
                 direction = Camera.main.transform.forward;
 
+            Enemy enemy = null;
             bool checkingDead = false;
             for (int i = 0; i < fireNum; i++)
             {
@@ -120,11 +121,12 @@ public class Gun_Test : Gun
                 //Debug.DrawRay(shotPos.position, shotDir * 1000);
 
                 RaycastHit hit2;
+
                 if (Physics.Raycast(Camera.main.transform.position, shotDir, out hit2, Mathf.Infinity, ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Weapon") | 1 << LayerMask.NameToLayer("Root")), QueryTriggerInteraction.Ignore))
                 {
                     if (LayerMask.LayerToName(hit2.transform.gameObject.layer).Equals("Enemy"))
                     {
-                        Enemy enemy = hit2.transform.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>();
+                        enemy = hit2.transform.GetComponent<Enemy_Bone>().root.GetComponent<Enemy>();
 
                         //audioSource.PlayOneShot(GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).clip, GameManager.Instance.GetSoundInfo().GetInfo(SoundType.Hit).volume * GameManager.Instance.GetSettings().data.effectVolume);
 
@@ -194,14 +196,23 @@ public class Gun_Test : Gun
                     if (headShot)
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.WeaknessHit);
                     else
-                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                    {
+                        if(enemy.GetEnemyType() != EnemyType.Boss)
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                        else
+                            GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
+                    }
 
                     return true;
                 }
                 else
                 {
                     GameManager.Instance.GetCrosshairController().SetAttack_Normal(true);
-                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+
+                    if (enemy.GetEnemyType() != EnemyType.Boss)
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Hit);
+                    else
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Bullet_BounceOff);
                 }
             }
 

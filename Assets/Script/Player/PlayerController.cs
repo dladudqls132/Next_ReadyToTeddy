@@ -962,7 +962,7 @@ public class PlayerController : MonoBehaviour
 
     public void DecreaseHp(float value)
     {
-        if (isGod || value == 0) return;
+        if (isGod || value == 0 || isDead) return;
 
         isDamaged = true;
 
@@ -971,6 +971,8 @@ public class PlayerController : MonoBehaviour
         mainCam.Shake(0.1f, 0.8f, true);
 
         currentHP -= value;
+
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Damaged, false);
 
         CheckingHp();
     }
