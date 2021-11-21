@@ -104,13 +104,13 @@ MonoBehaviour:
     value: 100
   lift:
     overrideState: 1
-    value: {x: 0.9061933, y: 0.91586334, z: 1, w: -6.5698336e-10}
+    value: {x: 0.777641, y: 0.8456964, z: 1, w: -0.20661691}
   gamma:
     overrideState: 1
-    value: {x: 0.9832097, y: 0.94741774, z: 1, w: 0.18879779}
+    value: {x: 0.6881118, y: 0.76162136, z: 1, w: -0.18731065}
   gain:
     overrideState: 1
-    value: {x: 1, y: 0.96150494, z: 0.8869443, w: 0.75885344}
+    value: {x: 1, y: 0.9543403, z: 0.9382729, w: 0.35095134}
   masterCurve:
     overrideState: 0
     value:
@@ -1325,7 +1325,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
   - {fileID: 7162070901584530855}
-  - {fileID: 6737827600839658524}
   - {fileID: -2625815095197667112}
   - {fileID: 6834178182711825379}
   - {fileID: 4480277529954712091}
@@ -1353,59 +1352,10 @@ MonoBehaviour:
     value: 32
   focalLength:
     overrideState: 1
-    value: 17
+    value: 16
   kernelSize:
     overrideState: 1
     value: 1
---- !u!114 &6737827600839658524
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
-  m_Name: AmbientOcclusion
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  mode:
-    overrideState: 1
-    value: 1
-  intensity:
-    overrideState: 1
-    value: 0.34
-  color:
-    overrideState: 1
-    value: {r: 0.2735849, g: 0.1117041, b: 0.058072276, a: 1}
-  ambientOnly:
-    overrideState: 0
-    value: 1
-  noiseFilterTolerance:
-    overrideState: 0
-    value: 0
-  blurTolerance:
-    overrideState: 0
-    value: -4.6
-  upsampleTolerance:
-    overrideState: 0
-    value: -12
-  thicknessModifier:
-    overrideState: 1
-    value: 1.37
-  directLightingStrength:
-    overrideState: 0
-    value: 0
-  radius:
-    overrideState: 0
-    value: 0.25
-  quality:
-    overrideState: 0
-    value: 2
 --- !u!114 &6834178182711825379
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1433,10 +1383,10 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.28
+    value: 0.42
   smoothness:
     overrideState: 1
-    value: 0.11
+    value: 0.08
   roundness:
     overrideState: 1
     value: 1
@@ -1468,10 +1418,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 2.21
+    value: 0.8
   threshold:
     overrideState: 1
-    value: 2.98
+    value: 1
   softKnee:
     overrideState: 0
     value: 0.276
