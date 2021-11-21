@@ -18,7 +18,7 @@ Shader "FX/Particle Additive Smoke"
 		Tags{ "RenderType" = "Custom"  "Queue" = "Transparent+0" "IsEmissive" = "true"  }
 		Cull Off
 		ZWrite Off
-		ZTest Always
+		
 		Blend SrcAlpha One
 		CGPROGRAM
 		#pragma target 2.0
