@@ -44,7 +44,8 @@ public enum SoundType
     Sniper_Reload,
     Boss_TypeX_WakeUp,
     Swing,
-    Boss_TypeX_Idle
+    Boss_TypeX_Idle,
+    Drink
 }
 
 [System.Serializable]
