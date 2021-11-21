@@ -39,6 +39,7 @@ public class Boss_TypeX_Skill_SwingHand : Boss_Skill
 
     void SwingHand_Attack()
     {
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot3D(SoundType.Swing, this.transform.position, false);
         attackRange.Attack(damage);
         sandWind.Play();
     }

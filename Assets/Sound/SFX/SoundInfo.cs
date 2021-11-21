@@ -42,7 +42,9 @@ public enum SoundType
     ChainLightning_Reload,
     EnergyBall_Fire,
     Sniper_Reload,
-    Boss_TypeX_WakeUp
+    Boss_TypeX_WakeUp,
+    Swing,
+    Boss_TypeX_Idle
 }
 
 [System.Serializable]
