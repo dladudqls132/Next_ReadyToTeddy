@@ -35,6 +35,7 @@ public class Item_Potion : Item
             {
                 player.IncreaseHp(increaseValue);
                 ResetInfo();
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Drink, false);
                 this.gameObject.SetActive(false);
             }
         }
