@@ -9,6 +9,7 @@ public class Door : MonoBehaviour
     private Collider[] coll;
     private Animator anim;
     private bool isEnter;
+    [SerializeField] private int stageNum;
 
     private void Start()
     {
@@ -36,6 +37,7 @@ public class Door : MonoBehaviour
                 coll[i].enabled = false;
             }
 
+            GameManager.Instance.GetPlayerSaveData().SaveData(stageNum);
             GameManager.Instance.GetRemainingEnemy().gameObject.SetActive(false);
             isEnter = false;
             isOpened = true;

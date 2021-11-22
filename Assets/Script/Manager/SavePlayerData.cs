@@ -7,6 +7,7 @@ using System.IO;
 public class PlayerData
 {
     public List<GunType> gunType = new List<GunType>();
+    public int stageNum;
 }
 
 public class SavePlayerData : MonoBehaviour
@@ -16,7 +17,7 @@ public class SavePlayerData : MonoBehaviour
     [SerializeField] private bool loadData;
     private bool isLoad;
 
-    private void Start()
+    public void Init()
     {
         path = Application.dataPath + "/PlayerData.json";
     }
@@ -52,19 +53,41 @@ public class SavePlayerData : MonoBehaviour
                     }
                 }
             }
+
+            GameManager.Instance.GetPlayer().SetSaveStageNum(data.stageNum);
         }
     }
 
-    public void SaveData()
+    //public void SaveData()
+    //{
+    //    data = new PlayerData();
+    //    List<GameObject> guns = GameManager.Instance.GetPlayer().GetInventory().GetWeapons();
+
+    //    for(int i = 0; i < guns.Count; i++)
+    //    {
+    //        data.gunType.Add(guns[i].GetComponent<Gun>().GetGunType());
+    //    }
+
+    //    File.WriteAllText(path, JsonUtility.ToJson(data));
+    //}
+
+    public void SaveData(int stageNum)
     {
         data = new PlayerData();
         List<GameObject> guns = GameManager.Instance.GetPlayer().GetInventory().GetWeapons();
 
-        for(int i = 0; i < guns.Count; i++)
+        for (int i = 0; i < guns.Count; i++)
         {
             data.gunType.Add(guns[i].GetComponent<Gun>().GetGunType());
         }
-        
+
+        data.stageNum = stageNum;
+
         File.WriteAllText(path, JsonUtility.ToJson(data));
+    }
+
+    private void OnApplicationQuit()
+    {
+        File.Delete(path);
     }
 }
