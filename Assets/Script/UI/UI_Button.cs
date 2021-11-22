@@ -117,6 +117,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             image_on.GetComponent<Image>().color = Color.white;
         }
+
+        GameManager.Instance.GetSoundManager().AudioPlayOneShot_UI(SoundType.UI_Over);
     }
 
     public void OnPointerExit(PointerEventData eventData)

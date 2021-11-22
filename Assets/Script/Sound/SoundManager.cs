@@ -79,6 +79,25 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void AudioPlayOneShot_UI(SoundType soundName)
+    {
+        if (audioSourceController_SFX.GetAudioSource() == null) return;
+
+        if (!audioSourceController_SFX.GetAudioSource().gameObject.activeSelf)
+            audioSourceController_SFX.GetAudioSource().gameObject.SetActive(true);
+
+        audioSource_SFX = audioSourceController_SFX.GetAudioSource().GetComponent<AudioSource>();
+        audioSource_SFX.Stop();
+
+        audioSource_SFX.loop = false;
+        audioSource_SFX.pitch = Random.Range(soundInfo.GetInfo(soundName).pitch_min, soundInfo.GetInfo(soundName).pitch_max);
+        audioSource_SFX.volume = Random.Range(soundInfo.GetInfo(soundName).volume - 0.01f, soundInfo.GetInfo(soundName).volume + 0.01f) * GameManager.Instance.GetSettings().data.mainVolume * GameManager.Instance.GetSettings().data.effectVolume;
+        audioSource_SFX.clip = soundInfo.GetInfo(soundName).clip;
+        audioSource_SFX.Play();
+
+        audioSource_SFX.GetComponent<Sound>().SetInfo(soundInfo.GetInfo(soundName).volume, audioSource_SFX.pitch);
+    }
+
     public void AudioPlayOneShot(SoundType soundName)
     {
         if (audioSourceController_SFX.GetAudioSource() == null || isPause) return;

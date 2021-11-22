@@ -45,7 +45,8 @@ public enum SoundType
     Boss_TypeX_WakeUp,
     Swing,
     Boss_TypeX_Idle,
-    Drink
+    Drink,
+    UI_Over
 }
 
 [System.Serializable]
