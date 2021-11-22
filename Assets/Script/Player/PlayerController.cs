@@ -95,6 +95,7 @@ public class PlayerController : MonoBehaviour
     private bool isGod;
     [SerializeField] private float accelation = 1;
     //private List<GameObject> collisionWeapon = new List<GameObject>();
+    private int saveStageNum;
 
     public void SetIsGrounded(bool value) { isGrounded = value; }
     public GameObject GetWeaponGameObject() { return weapon_gameObject; }
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour
     public int GetCurrentDashCount() { return currentDashCount; }
     public bool GetIsSwap() { return isSwap; }
     public FPPCamController GetCam() { return mainCam; }
+    public void SetSaveStageNum(int stageNum) { saveStageNum = stageNum; }
 
     // Start is called before the first frame update
     public void Init()
@@ -163,6 +165,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
+
         //for (int i = 0; i < weapons.Length; i++)
         //{
         //    GameObject temp = Instantiate(weapons[i]);
@@ -173,6 +177,14 @@ public class PlayerController : MonoBehaviour
         GameObject temp = Instantiate(weapons[0]);
         inventory.AddWeapon(temp);
         inventory.SwapWeapon(0);
+
+        GameManager.Instance.GetPlayerSaveData().LoadData();
+
+        if (saveStageNum != 0)
+        {
+            this.transform.position = GameManager.Instance.GetStageManager().GetStageStartPos(saveStageNum).position;
+            this.transform.rotation = GameManager.Instance.GetStageManager().GetStageStartPos(saveStageNum).rotation;
+        }
     }
 
     // Update is called once per frame
@@ -968,7 +980,7 @@ public class PlayerController : MonoBehaviour
 
         Invoke("IsDamagedFalse", 0.8f);
 
-        mainCam.Shake(0.1f, 0.8f, true);
+        mainCam.Shake(0.1f, 0.6f, true);
 
         currentHP -= value;
 

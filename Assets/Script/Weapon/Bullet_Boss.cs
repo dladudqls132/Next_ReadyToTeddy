@@ -13,6 +13,11 @@ public class Bullet_Boss : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        this.transform.rotation = Quaternion.Euler(this.transform.eulerAngles + Vector3.forward * 60 * Time.deltaTime);
+    }
+
     public void Fire(Vector3 startPos, Vector3 dir, float speed, float damage)
     {
         this.damage = damage;

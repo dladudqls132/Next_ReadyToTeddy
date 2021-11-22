@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     private UI_GunSoundManager UI_gunSoundManager;
     private UI_Fade UI_Fade;
     private UI_RemainingEnemy UI_RemainingEnemy;
+    private SavePlayerData playerSaveData;
+    private StageManager stageManager;
     [SerializeField] private bool isPause;
     [SerializeField] private bool isGameOver;
     [SerializeField] private bool isCombat;
@@ -54,11 +56,20 @@ public class GameManager : MonoBehaviour
     public UI_GunSoundManager GetGunSoundManager() { return UI_gunSoundManager; }
     public UI_Fade GetFade() { return UI_Fade; }
     public UI_RemainingEnemy GetRemainingEnemy() { return UI_RemainingEnemy; }
+    public SavePlayerData GetPlayerSaveData() { return playerSaveData; }
+    public StageManager GetStageManager() { return stageManager; }
 
     // Start is called before the first frame update
     void Awake()
     {
         Time.timeScale = 1;
+
+        playerSaveData = FindObjectOfType<SavePlayerData>();
+
+        if (playerSaveData != null)
+            playerSaveData.Init();
+
+        stageManager = FindObjectOfType<StageManager>();
 
         player = FindObjectOfType<PlayerController>();
 
