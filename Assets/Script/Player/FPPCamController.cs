@@ -139,17 +139,17 @@ public class FPPCamController : MonoBehaviour
 
         if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause() && !GameManager.Instance.GetVideoController().gameObject.activeSelf)
         {
-            rotY += mouseX * cameraMoveSpeed * Time.deltaTime;
-            rotX += mouseY * cameraMoveSpeed * Time.deltaTime;
+            rotY += mouseX * cameraMoveSpeed * Time.fixedDeltaTime;
+            rotX += mouseY * cameraMoveSpeed * Time.fixedDeltaTime;
         }
 
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
 
 
-        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
-        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.deltaTime);
+        //currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, (returnSpeed + currentReturnSpeed) * Time.deltaTime);
+        //rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.deltaTime);
 
-        currentReturnSpeed += Time.deltaTime;
+        //currentReturnSpeed += Time.deltaTime;
         Vector3 temp = this.transform.right * currentTempDir.x + this.transform.up * (currentTempDir.y / 2);
         if (isShake)
 

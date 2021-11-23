@@ -256,4 +256,9 @@ public class GameManager : MonoBehaviour
     {
         return isPause;
     }
+
+    private void OnApplicationQuit()
+    {
+        Time.timeScale = 1;
+    }
 }
