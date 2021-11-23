@@ -134,8 +134,8 @@ public class FPPCamController : MonoBehaviour
 
         ////////////////////////////////////////////////////
 
-        mouseX = Input.GetAxis("Mouse X");
-        mouseY = Input.GetAxis("Mouse Y");
+        mouseX = Input.GetAxisRaw("Mouse X");
+        mouseY = Input.GetAxisRaw("Mouse Y");
 
         if (!GameManager.Instance.GetPlayer().GetInventory().isOpen && !GameManager.Instance.GetIsPause() && !GameManager.Instance.GetVideoController().gameObject.activeSelf)
         {
