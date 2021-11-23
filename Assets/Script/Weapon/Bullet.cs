@@ -181,7 +181,8 @@ public class Bullet : MonoBehaviour
         rigid.velocity = Vector3.zero;
         coll.enabled = false;
         isDestroyed = true;
-
+        target = null;
+        stunTime = 0;
         turnSpeed = 0;
 
         StopAllCoroutines();
@@ -193,6 +194,8 @@ public class Bullet : MonoBehaviour
         isFire = false;
         coll.enabled = true;
         isDestroyed = false;
+        target = null;
+        stunTime = 0;
         StopAllCoroutines();
         //this.GetComponent<MeshRenderer>().enabled = true;
         this.gameObject.SetActive(false);
