@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerController : MonoBehaviour
 {
@@ -165,15 +166,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
-
-        //for (int i = 0; i < weapons.Length; i++)
-        //{
-        //    GameObject temp = Instantiate(weapons[i]);
-
-        //    inventory.AddWeapon(temp);
-        //}
-
         GameObject temp = Instantiate(weapons[0]);
         inventory.AddWeapon(temp);
         inventory.SwapWeapon(0);
@@ -519,11 +511,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (Vector3.Dot(forward, moveDirection) > 0.5f)
                 {
-                    mainCam.FovMove(mainCam.GetCurrentFov() - 5.0f, 0.05f, 0.16f, 0.04f);
+                    mainCam.FovMove(mainCam.GetCurrentFov() - 15.0f, 0.05f, 0.16f, 0.04f);
                 }
                 if (Vector3.Dot(forward, moveDirection) < 0)
                 {
-                    mainCam.FovMove(mainCam.GetCurrentFov() + 5.0f, 0.05f, 0.16f, 0.04f);
+                    mainCam.FovMove(mainCam.GetCurrentFov() + 15.0f, 0.05f, 0.16f, 0.04f);
                 }
             }
 
