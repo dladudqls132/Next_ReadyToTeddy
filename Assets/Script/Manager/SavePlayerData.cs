@@ -7,6 +7,9 @@ using System.IO;
 public class PlayerData
 {
     public List<GunType> gunType = new List<GunType>();
+    public List<int> currentAmmo = new List<int>();
+    public List<int> haveAmmo = new List<int>();
+    public float hp;
     public int stageNum;
 }
 
@@ -50,10 +53,13 @@ public class SavePlayerData : MonoBehaviour
                     {
                         GameObject temp = Instantiate(GameManager.Instance.GetPlayer().GetWeapons()[j]);
                         GameManager.Instance.GetPlayer().GetInventory().AddWeaponSkipVideo(temp);
+                        temp.GetComponent<Gun>().SetCurrentAmmo(data.currentAmmo[i]);
+                        temp.GetComponent<Gun>().SetHaveAmmo(data.haveAmmo[i]);
                     }
                 }
             }
 
+            GameManager.Instance.GetPlayer().SetCurrentHp(data.hp);
             GameManager.Instance.GetPlayer().SetSaveStageNum(data.stageNum);
         }
     }
@@ -79,8 +85,11 @@ public class SavePlayerData : MonoBehaviour
         for (int i = 0; i < guns.Count; i++)
         {
             data.gunType.Add(guns[i].GetComponent<Gun>().GetGunType());
+            data.currentAmmo.Add(guns[i].GetComponent<Gun>().GetCurrentAmmoCount());
+            data.haveAmmo.Add(guns[i].GetComponent<Gun>().GetHaveAmmoCount());
         }
 
+        data.hp = GameManager.Instance.GetPlayer().GetCurrentHp();
         data.stageNum = stageNum;
 
         File.WriteAllText(path, JsonUtility.ToJson(data));

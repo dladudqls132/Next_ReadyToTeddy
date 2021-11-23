@@ -68,6 +68,8 @@ public class Gun : MonoBehaviour
     public string GetText() { return text; }
     public float GetRecoil() { return recoilMagnitude; }
     public UI_GunSound GetGunSound() { return UI_gunsound; }
+    public void SetCurrentAmmo(int value) { currentAmmo = value; }
+    public void SetHaveAmmo(int value) { haveAmmo = value; }
 
     protected Vector3 direction;
     [SerializeField] protected bool isAiming;

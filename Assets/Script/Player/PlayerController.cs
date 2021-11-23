@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
     public bool GetIsClimbUp() { return isClimbUp; }
     public GameObject[] GetWeapons() { return weapons; }
 
-
+    public void SetCurrentHp(float value) { currentHP = value; }
     public Transform GetAimPos() { return aimPos; }
     public void SetIsSwap(bool value) { isSwap = value; }
     public Transform GetHand() { return hand; }
