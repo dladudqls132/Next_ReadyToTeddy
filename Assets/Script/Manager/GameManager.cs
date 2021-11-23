@@ -155,10 +155,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //private void Start()
-    //{
-    //    allAudioSources = FindObjectsOfType<AudioSource>();
-    //}
+    private void Start()
+    {
+        Application.targetFrameRate = 144;
+    }
 
     private void Update()
     {
