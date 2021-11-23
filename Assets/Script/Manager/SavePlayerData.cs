@@ -36,14 +36,14 @@ public class SavePlayerData : MonoBehaviour
 
     private void Update()
     {
-        if(!isLoad)
-        {
-            if (loadData)
-            {
-                isLoad = true;
-                LoadData();
-            }
-        }
+        //if(!isLoad)
+        //{
+        //    if (loadData)
+        //    {
+        //        isLoad = true;
+        //        LoadData();
+        //    }
+        //}
     }
 
     public void LoadData()
@@ -64,6 +64,7 @@ public class SavePlayerData : MonoBehaviour
                         GameManager.Instance.GetPlayer().GetInventory().AddWeaponSkipVideo(temp);
                         temp.GetComponent<Gun>().SetCurrentAmmo(data.currentAmmo[i]);
                         temp.GetComponent<Gun>().SetHaveAmmo(data.haveAmmo[i]);
+                        break;
                     }
                 }
             }

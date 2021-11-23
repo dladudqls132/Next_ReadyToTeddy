@@ -145,6 +145,7 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                         GameManager.Instance.SetIsPause(false);
                         break;
                     case ButtonType.Restart:
+                        GameManager.Instance.GetPlayerSaveData().ResetInfo();
                         GameManager.Instance.SetIsPause(false);
                         LoadingSceneController.ReloadScene();
 
