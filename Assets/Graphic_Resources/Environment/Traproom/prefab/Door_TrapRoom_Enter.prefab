@@ -50,11 +50,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemies: []
-  renderers:
-  - {fileID: 2678552832311277181}
-  - {fileID: 5445759096298626427}
-  - {fileID: 5445759096768487780}
   isOpened: 0
+  stageNum: 0
 --- !u!65 &3660883981274892759
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -225,12 +222,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5413161215648900393}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &2678552832311277181 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7940770755169162068, guid: 40dadb1a010c4f54fbb3c6815e232209,
-    type: 3}
-  m_PrefabInstance: {fileID: 5413161215648900393}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5413161215723729959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -318,6 +309,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mesh_Tenter_door (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 1985150692946424982, guid: 10e1d8b419da01248a865ea0fde907af,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e1d8b419da01248a865ea0fde907af, type: 3}
 --- !u!1 &5806201479258914993 stripped
@@ -329,12 +325,6 @@ GameObject:
 --- !u!4 &6618063665635727883 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
-    type: 3}
-  m_PrefabInstance: {fileID: 5413161215723729959}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &5445759096768487780 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 39494980047115587, guid: 10e1d8b419da01248a865ea0fde907af,
     type: 3}
   m_PrefabInstance: {fileID: 5413161215723729959}
   m_PrefabAsset: {fileID: 0}
@@ -425,6 +415,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mesh_Tenter_door (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1985150692946424982, guid: 10e1d8b419da01248a865ea0fde907af,
+        type: 3}
+      propertyPath: m_Layer
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 10e1d8b419da01248a865ea0fde907af, type: 3}
 --- !u!1 &5806201479460355246 stripped
@@ -436,12 +431,6 @@ GameObject:
 --- !u!4 &6618063666642462228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1209072073285135916, guid: 10e1d8b419da01248a865ea0fde907af,
-    type: 3}
-  m_PrefabInstance: {fileID: 5413161216327927864}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &5445759096298626427 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 39494980047115587, guid: 10e1d8b419da01248a865ea0fde907af,
     type: 3}
   m_PrefabInstance: {fileID: 5413161216327927864}
   m_PrefabAsset: {fileID: 0}

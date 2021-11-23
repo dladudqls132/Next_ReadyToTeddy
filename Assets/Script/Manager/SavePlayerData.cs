@@ -18,11 +18,20 @@ public class SavePlayerData : MonoBehaviour
     private string path;
     private PlayerData data;
     [SerializeField] private bool loadData;
+    [SerializeField] private bool resetInfo;
     private bool isLoad;
 
     public void Init()
     {
         path = Application.dataPath + "/PlayerData.json";
+
+        if (resetInfo)
+        {
+            if (File.Exists(path))
+            {
+                ResetInfo();
+            }
+        }
     }
 
     private void Update()
@@ -95,8 +104,19 @@ public class SavePlayerData : MonoBehaviour
         File.WriteAllText(path, JsonUtility.ToJson(data));
     }
 
+    public void ResetInfo()
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
     private void OnApplicationQuit()
     {
-        File.Delete(path);
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
     }
 }

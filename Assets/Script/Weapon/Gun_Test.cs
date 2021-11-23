@@ -150,7 +150,7 @@ public class Gun_Test : Gun
                             if (!checkingDead)
                             {
                                 owner.GetComponent<PlayerController>().IncreaseSpeed();
-                                owner.GetComponent<PlayerController>().IncreaseHp(10);
+                                owner.GetComponent<PlayerController>().IncreaseHp(15);
                             }
 
                             checkingDead = true;
