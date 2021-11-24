@@ -17,7 +17,8 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Exit,
         Setting_Apply,
         Setting_Cancel,
-        LoadScene_SkipLoading
+        LoadScene_SkipLoading,
+        Restart_KeepItem
     }
 
     [SerializeField] private ButtonType buttonType;
@@ -148,7 +149,10 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                         GameManager.Instance.GetPlayerSaveData().ResetInfo();
                         GameManager.Instance.SetIsPause(false);
                         LoadingSceneController.ReloadScene();
-
+                        break;
+                    case ButtonType.Restart_KeepItem:
+                        GameManager.Instance.SetIsPause(false);
+                        LoadingSceneController.ReloadScene();
                         break;
                     case ButtonType.Settings:
                         GameManager.Instance.GetSettingController().ToggleMenu();
@@ -179,11 +183,11 @@ public class UI_Button : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                     case ButtonType.LoadScene:
                         LoadingSceneController.LoadScene(loadSceneName);
                         break;
-                    case ButtonType.Exit:
-                        Application.Quit();
-                        break;
                     case ButtonType.LoadScene_SkipLoading:
                         LoadingSceneController.LoadSceneSkipLoading(loadSceneName);
+                        break;
+                    case ButtonType.Exit:
+                        Application.Quit();
                         break;
                 }
 
