@@ -16,7 +16,7 @@ public class Enemy_Type_B : Enemy
     {
         base.Start();
 
-        currentFireRate = Random.Range(0, fireRate);
+        currentFireRate = Random.Range(fireRate / 2, fireRate);
     }
 
     // Update is called once per frame
