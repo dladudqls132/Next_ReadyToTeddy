@@ -679,6 +679,7 @@ public class PlayerController : MonoBehaviour
                 {
                     canJump = true;
                     GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
+                    GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Jump);
                 }
                 else
                 {
@@ -686,6 +687,7 @@ public class PlayerController : MonoBehaviour
                     {
                         canJump = true;
                         GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Jump);
+                        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Jump);
                     }
                     else
                     {
@@ -703,11 +705,10 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.DoubleJump);
             }
 
+
             isJump = true;
             hand.GetComponent<Animator>().SetTrigger("Jump");
             //if(!isGrounded)
-
-
 
             if (isJumpByObject)
             {
@@ -976,7 +977,17 @@ public class PlayerController : MonoBehaviour
 
         currentHP -= value;
 
-        GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Damaged, false);
+        int rndNum = Random.Range(0, 2);
+
+        switch (rndNum)
+        {
+            case 0:
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Damaged1, false);
+                break;
+            case 1:
+                GameManager.Instance.GetSoundManager().AudioPlayOneShot(SoundType.Player_Damaged2, false);
+                break;
+        }
 
         CheckingHp();
     }

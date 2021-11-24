@@ -37,7 +37,7 @@ public enum SoundType
     EnergyGun_Charge,
     EnergyGun_Fire2,
     Bullet_BounceOff,
-    Player_Damaged,
+    Player_Damaged1,
     Explosion_Fire,
     ChainLightning_Reload,
     EnergyBall_Fire,
@@ -46,7 +46,9 @@ public enum SoundType
     Swing,
     Boss_TypeX_Idle,
     Drink,
-    UI_Over
+    UI_Over,
+    Player_Damaged2,
+    Player_Jump
 }
 
 [System.Serializable]
