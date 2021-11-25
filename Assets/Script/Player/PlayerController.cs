@@ -306,10 +306,10 @@ public class PlayerController : MonoBehaviour
         //    }
         //}
 
-        if(Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            isGod = true;
-        }
+        //if(Input.GetKeyDown(KeyCode.Alpha0))
+        //{
+        //    isGod = !isGod;
+        //}
 
         Vector3 forward = mainCam.transform.forward;
         Vector3 right = mainCam.transform.right;

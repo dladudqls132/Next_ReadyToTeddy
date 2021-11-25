@@ -25,6 +25,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private PlayerController player;
     [SerializeField] public bool isOpen;
     [SerializeField] private UI_Inventory UI_Inventory;
+    private int getWeaponNum;
 
     public List<Slot> GetSlots() { return slots; }
     public int GetCurrentSlotNum() { return currentSlotNum; }
@@ -71,6 +72,27 @@ public class Inventory : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
             SwapWeapon(4);
+        }
+
+        if (!player.GetIsSwap())
+        {
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                int temp = currentSlotNum + 1;
+
+                if (temp >= getWeaponNum)
+                    temp = 0;
+
+                SwapWeapon(temp);
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                int temp = currentSlotNum - 1;
+                if (temp < 0)
+                    temp = getWeaponNum - 1;
+
+                SwapWeapon(temp);
+            }
         }
         //else if (Input.GetKeyDown(KeyCode.Q))
         //{
@@ -313,7 +335,7 @@ public class Inventory : MonoBehaviour
                         weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
                         GameManager.Instance.GetVideoController().PlayVideo(weapon.GetComponent<Gun>().GetGunType());
                         //UI_Inventory.UpdateSlot(i);
-
+                        getWeaponNum++;
                         SwapWeapon(i);
                         return;
                     }
@@ -361,6 +383,7 @@ public class Inventory : MonoBehaviour
                         slots[i].isEmpty = false;
                         weapon.gameObject.SetActive(false);
                         weapon.GetComponent<Gun>().SetOwner(player.gameObject, player.GetHand(), slots[i].transform);
+                        getWeaponNum++;
                         return;
                     }
                 }
