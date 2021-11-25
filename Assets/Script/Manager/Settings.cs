@@ -32,7 +32,7 @@ public class Settings : MonoBehaviour
             data.mouseMoveSpeed = 150;
             data.mainVolume = 0.8f;
             data.effectVolume = 1.0f;
-            data.backgroundVolume = 0.3f;
+            data.backgroundVolume = 0.2f;
         }
     }
 

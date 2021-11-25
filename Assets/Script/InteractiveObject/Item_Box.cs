@@ -158,6 +158,10 @@ public class Item_Box : InteractiveObject
     {
         yield return new WaitForSeconds(5.0f);
 
+        for (int i = 0; i < parts.Length - 1; i++)
+        {
+            parts[i].gameObject.SetActive(false);
+        }
         this.gameObject.SetActive(false);
     }
 }

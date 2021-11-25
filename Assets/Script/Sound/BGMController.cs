@@ -17,10 +17,10 @@ public class BGMController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playNum = 0;
+        playNum = Random.Range(0, bgmType.Length);
 
         if(playOnWake)
-            GameManager.Instance.GetSoundManager().AudioPlayBGM(bgmType[0], false);
+            GameManager.Instance.GetSoundManager().AudioPlayBGM(bgmType[playNum], false);
     }
 
     public void StopBGM()
