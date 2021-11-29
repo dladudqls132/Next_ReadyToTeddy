@@ -15,6 +15,7 @@ public class Item : MonoBehaviour
 
     protected float delay = 1.0f;
     protected float moveSpeed = 15.0f;
+    protected Collider collider;
 
     protected PlayerController player;
     protected Rigidbody rigid;
@@ -27,6 +28,7 @@ public class Item : MonoBehaviour
     {
         player = GameManager.Instance.GetPlayer();
         rigid = this.GetComponent<Rigidbody>();
+        collider = this.GetComponent<Collider>();
     }
 
     public void SetInfo(ItemType itemType, float dropRate)
@@ -40,6 +42,10 @@ public class Item : MonoBehaviour
         if (rigid == null)
             rigid = this.GetComponent<Rigidbody>();
 
+        if (collider == null)
+            collider = this.GetComponent<Collider>();
+
+        collider.isTrigger = false;
         canMove = false;
         rigid.velocity = Vector3.zero;
         moveSpeed = 15.0f;
