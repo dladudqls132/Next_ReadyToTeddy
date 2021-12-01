@@ -56,7 +56,7 @@ public class Boss_TypeX_Skill_Bombing : Boss_Skill
 
         for (int i = 0; i < bombNum_1; i++)
         {
-            StartCoroutine(Fire_Bomb1_Delay(i * 0.2f));
+            StartCoroutine(Fire_Bomb1_Delay(i * 0.31f));
         }
     }
 
